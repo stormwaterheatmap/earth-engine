@@ -1,15 +1,11 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var imageVisParam = {"opacity":1,"bands":["b1"],"min":73448,"max":2511963,"palette":["ab5050","b1b1b1"]},
-    fc = ee.FeatureCollection("ft:1HLVl8Re8JCTkOTBzCFcZPMh9JgukQUTEfTH_hc8Z"),
     imageVisParam3 = {"opacity":1,"bands":["b1"],"min":1,"max":94,"gamma":1},
-    water = ee.FeatureCollection("users/cnilsen/fixedwater"),
     imageVisParam2 = {"opacity":1,"bands":["first"],"min":93,"max":93,"palette":["a7daff"]},
     traffic = ee.FeatureCollection("users/cnilsen/traffic_polygon"),
-    lakes = ee.FeatureCollection("ft:1DsWLna4Acv5NOmULm48uM17YXW_MV1hKt82nL49f"),
     lu = ee.Image("users/cnilsen/lu_5m_pyramid"),
     imageVisParam4 = {"opacity":1,"bands":["mean"],"min":2166.6666666666665,"max":215000,"palette":["165b33","f8b229","bb2528"]},
     imageVisParam5 = {"opacity":1,"bands":["b1"],"min":93,"max":93,"palette":["a7daff"]},
-    PSImage = ee.Image("users/cnilsen/PSRaster_no_mask"),
     Region = 
     /* color: #d63000 */
     /* displayProperties: [
