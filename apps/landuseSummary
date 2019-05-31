@@ -1,0 +1,259 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var imageVisParam = {"opacity":1,"bands":["b1"],"min":73448,"max":2511963,"palette":["ab5050","b1b1b1"]},
+    fc = ee.FeatureCollection("ft:1HLVl8Re8JCTkOTBzCFcZPMh9JgukQUTEfTH_hc8Z"),
+    imageVisParam3 = {"opacity":1,"bands":["b1"],"min":1,"max":94,"gamma":1},
+    water = ee.FeatureCollection("users/cnilsen/fixedwater"),
+    imageVisParam2 = {"opacity":1,"bands":["first"],"min":93,"max":93,"palette":["a7daff"]},
+    traffic = ee.FeatureCollection("users/cnilsen/traffic_polygon"),
+    lakes = ee.FeatureCollection("ft:1DsWLna4Acv5NOmULm48uM17YXW_MV1hKt82nL49f"),
+    lu = ee.Image("users/cnilsen/lu_5m_pyramid"),
+    imageVisParam4 = {"opacity":1,"bands":["mean"],"min":2166.6666666666665,"max":215000,"palette":["165b33","f8b229","bb2528"]},
+    imageVisParam5 = {"opacity":1,"bands":["b1"],"min":93,"max":93,"palette":["a7daff"]},
+    PSImage = ee.Image("users/cnilsen/PSRaster_no_mask"),
+    Region = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-123.11394677517688, 48.08352279709834],
+          [-123.11394677517688, 48.07076331019925],
+          [-123.09060082791126, 48.07076331019925],
+          [-123.09060082791126, 48.08352279709834]]], null, false),
+    geometry = /* color: #d63000 */ee.Geometry.MultiPoint();
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+
+// Select the land/water mask. 
+//var datamask = lu.select(B1);
+ 
+// Create a binary mask.
+var mask = lu.neq(0);
+var maskedComposite = lu.updateMask(mask);
+var nullarea = lu.eq(0);
+Map.addLayer(lu,{},'landuse',false); 
+
+//remap landuse to broad categories 
+
+var generalizedLU = lu.remap(
+  [11, 12,  15,  18, 19,                            //Residential
+  21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 39, //Industrial
+  41, 42, 43, 44, 45, 46, 47, 48, 49,                             //Transportation 
+  13, 14, 16, 17, 51, 52, 53, 54, 55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 66, 67, 68, 69,             //Commercial
+  81, 82, 83,                                                     //Agricultural 
+  84, 85, 87, 88, 89,                 //Timber and Resource Extraction
+  93,                                 //water
+  71, 72, 74, 75, 76, 91, 92, 94, 95],                       //open space 
+  
+  [1, 1, 1, 1, 1,  
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, //Industrial
+  3, 3, 3, 3, 3, 3, 3, 3, 3,                             //Transportation 
+  4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,              //Commercial
+  5, 5, 5,                                                     //Agricultural 
+  6, 6, 6, 6, 6,                 //Timber and Resource Extraction
+  7,                                 //water
+  8, 8, 8, 8, 8, 8, 8, 8, 8]  //open space
+);  
+
+var landUseCats = lu.remap(
+  [11, 12, 13, 14, 15, 16, 17, 18, 21, 28, 29, 32, 34, 35, 39, 41, 42, 43, 44, 45, 46,
+    47, 48, 51, 52, 53, 54, 55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 66, 67, 68,
+    69, 71, 72, 73, 74, 75, 76, 79, 81, 82, 83, 85, 87, 88, 91, 93, 94, 99],
+  [1, 2, 2, 2, 3, 4, 2, 5, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 8, 7, 6, 6, 9, 4, 4, 4, 4,
+    4, 4, 4, 4, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 11, 11,
+    11, 12, 12, 12, 13, 14, 15, 13]
+  ); 
+//var waterImage = water.reduceToImage({properties: ['Rast'],reducer: ee.Reducer.first()});
+//var trafficImage = traffic.reduceToImage({properties: ['AADT'],reducer: ee.Reducer.mean()});
+
+Map.addLayer(landUseCats,{},'lanUseCats',false); 
+
+
+
+
+
+var AOI = Region; 
+//Map.addLayer(AOI,{},'AOI'); 
+//Map.centerObject(AOI,17);
+//Summarize with a histogram reducer 
+var frequency = landUseCats.reduceRegion({
+  reducer:ee.Reducer.frequencyHistogram(),
+  geometry:AOI,
+  scale:10
+});
+
+//Create Dictonary 
+var dict = ee.Dictionary(frequency.get('remapped'));
+var sum = ee.Array(dict.values()).reduce(ee.Reducer.sum(),[0]).get([0]);
+var new_dict = dict.map(function(k,v) {
+  return ee.Number(v).divide(sum);//.multiply(100);
+});
+print('Landuse',new_dict);
+//print('HRU (%)',new_dict.get([1]));
+
+
+
+//print ('to array', new_dict.toArray(luList));  
+//print(dict); 
+//for display 
+var mc = maskedComposite; 
+
+
+
+///var landuse = generalizedLU;
+
+var area_image_with_landuseCats = (ee.Image.pixelArea().divide(4046.856)).addBands(landUseCats);//gives area in acres
+//Map.addLayer(area_image_with_landuseCats,{},'xxx')
+var reduction_results = area_image_with_landuseCats.reduceRegion({
+  reducer: ee.Reducer.sum().group({
+    groupField: 1,
+    groupName: 'landuseCats_value',
+  }),
+  geometry: AOI,
+  scale: 30,
+  bestEffort: true,
+});
+print('reduction_results', reduction_results);
+var roi_stats = ee.List(reduction_results.get('groups'));
+print(roi_stats); 
+
+//////////////////////////////////////////////////////////////
+// Calculations
+//////////////////////////////////////////////////////////////
+
+// Create a dictionary for looking up names of landuse codes.
+var lucodes = ee.List(
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]); 
+var landuseNames = ee.List(
+['SF Residential',
+'MF Residential',
+'LD Residential',
+'Retail',
+'Resmisc',
+'Industrial',
+'TransRelated',
+'Road',
+'Commercial',
+'Public/Recreation',
+'Agriculture',
+'Timber-ResourceExtraction',
+'Undeveloped',
+'Water',
+'Open Space',
+ 
+]); 
+var landusePaletteviz = (
+['5F4690',
+'1D6996',
+'38A6A5',
+'0F8554',
+'73AF48',
+'EDAD08',
+'E17C05',
+'CC503E',
+'94346E',
+'6F4070',
+'994E95',
+'666666',
+'D3B484',
+'6799CA',
+'117733'
+]); 
+var landusePalette = ee.List(landusePaletteviz); 
+ 
+
+var lookup_names = ee.Dictionary.fromLists(
+   lucodes.map(ee.String),
+    landuseNames
+);
+
+Map.addLayer(landUseCats, {palette: landusePaletteviz}, 'landUseCats');
+
+// Create a dictionary for looking up colors of landuse classes.
+var lookup_palette = ee.Dictionary.fromLists(
+    lucodes.map(ee.String),
+    landusePalette
+);
+print('palette', lookup_palette); 
+//////////////////////////////////////////////////////////////
+// Helper functions
+//////////////////////////////////////////////////////////////
+
+// Create a feature for a landuse class that includes the area covered.
+function createFeature(landuse_class_stats) {
+  landuse_class_stats = ee.Dictionary(landuse_class_stats);
+  var class_number = landuse_class_stats.get('landuseCats_value');
+  var result = {
+      landuse_class_number: class_number,
+      landuse_class_name: lookup_names.get(class_number),
+      landuse_class_palette: lookup_palette.get(class_number),
+      area_acres: landuse_class_stats.get('sum'),
+      //area_acres: (landuse_class_stats.get('sum'))//.divide(4046.856)
+  };
+  return ee.Feature(null, result);   // Creates a feature without a geometry.
+}
+
+// Create a JSON dictionary that defines piechart colors based on the
+// landuse class palette.
+// https://developers.google.com/chart/interactive/docs/gallery/piechart
+function createPieChartSliceDictionary(fc) {
+  return ee.List(fc.aggregate_array("landuse_class_palette"))
+    .map(function(p) { return {'color': p}; }).getInfo();
+}
+
+var Landuse_fc = ee.FeatureCollection(roi_stats.map(createFeature));
+//make an acres column
+//var Landuse_fc = 
+print('Landuse_fc', Landuse_fc);
+
+// Add a summary chart.
+var landuse_summary_chart = ui.Chart.feature.byFeature({
+    features: Landuse_fc,
+    xProperty: 'landuse_class_name',
+    yProperties: ['area_acres', 'landuse_class_number']
+  })
+  .setChartType('PieChart')
+  .setOptions({
+    title: 'Summary of landuse',
+    slices: createPieChartSliceDictionary(Landuse_fc),
+    sliceVisibilityThreshold: 0  // Don't group small slices.
+  });
+//make a different kind of chart
+
+// Add a summary chart.
+/*
+var landuse_summary_chart = ui.Chart.feature.byFeature({
+    features: Landuse_fc,
+    xProperty: 'landuse_class_name',
+    yProperties: ['area_acres']
+  })
+  .setChartType('ColumnChart')
+  .setOptions({
+    title: 'Summary of landuse',
+    //slices: createPieChartSliceDictionary(Landuse_fc),
+    //sliceVisibilityThreshold: 0  // Don't group small slices.
+  });
+  
+*/
+// Create a panel to hold the chart.
+var panel = ui.Panel();
+panel.style().set({
+  width: '300px',
+  position: 'bottom-right'
+});
+Map.add(panel);
+
+panel.add(landuse_summary_chart);
+
+
+//# Get a download URL for an image.
+var image1 = landUseCats.clip(Region); 
+var path = image1.getDownloadURL({
+    'scale': 30,
+    'crs': 'EPSG:4326',
+    'region': '[[-123.1139467, 48.083], [-123.090600, 48.083], [-123.090600, 48.070], [-123.1139467, 48.070]]'
+})
+print(path)
+
