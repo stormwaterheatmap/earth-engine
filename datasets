@@ -24,7 +24,8 @@ var NED = ee.Image("USGS/NED"),
 
 //Image Collections 
 var populationDataset = ee.ImageCollection('CIESIN/GPWv4/population-count');
-exports.population = populationDataset.select('population-count');
+var population = populationDataset.select('population-count');
+exports.population = population
 
 //
 //exports.landuse = 
@@ -35,7 +36,7 @@ exports.soils = ee.Image("users/stormwaterheatmap/soils");
 
 //Generate slopes from USGS DEM 
 var thresholds = ee.Image([5.0, 15, 100]);
-exports.slope = ee.Terrain.slope(DEM).gt(thresholds).reduce('sum'); 
+exports.slope = ee.Terrain.slope(NED).gt(thresholds).reduce('sum'); 
 
 exports.mean_annual_runoff_byHRU = ee.Image("users/stormwaterheatmap/q1980sbyHRU");
 
@@ -45,6 +46,6 @@ exports.mean_annual_runoff_byHRU = ee.Image("users/stormwaterheatmap/q1980sbyHRU
 
 exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select('built');
 
-exports.population2020 = populationCount.filter(ee.Filter.eq('system:index', '2020')).first();
+exports.population2020 = population.filter(ee.Filter.eq('system:index', '2020')).first();
 
 exports.precip = precip.select('b0').resample(); 
