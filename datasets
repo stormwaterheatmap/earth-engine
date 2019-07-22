@@ -1,0 +1,42 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var NED = ee.Image("USGS/NED");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// ---------------------------
+// Author: Christian Nilsen, Geosyntec Consultants 
+// Email: cnilsen@geosyntec.com
+// Date Created: 2019-07-19
+// ---------------------------
+//This program is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, version 3.0 
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//For a copy of the GNU General Public License 
+//  see <https://www.gnu.org/licenses/>.
+// ---------------------------
+
+//
+exports.landuse = 
+
+exports.landcover = 
+
+exports.soils = 1
+
+//Generate slopes from USGS DEM 
+var thresholds = ee.Image([5.0, 15, 100]);
+exports.slope = ee.Terrain.slope(DEM).gt(thresholds).reduce('sum'); 
+
+exports.mean_annual_runoff = 
+
+exports.imperv = 
+
+exports.hrus = 
+
+exports.age_of_development = 
+
+exports.population = 
+
+exports.precip = 
