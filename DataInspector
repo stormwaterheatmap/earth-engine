@@ -1,0 +1,117 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var imageCollection = ee.ImageCollection("CIESIN/GPWv4/population-count");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// Load modules
+//var utils = require('users/giswqs/public:Modules/utils');
+var datasets = require('users/stormwaterheatmap/Modules:datasets');
+Map.addLayer(datasets.precip,{},'precip')
+
+
+
+
+// ---------------------------------------------------------------------------------------------------- //
+// Interactive UI
+// ---------------------------------------------------------------------------------------------------- //
+/*
+ * Style defaults
+ */
+
+var colors = {'cyan': '#24C1E0', 'transparent': '#11ffee00', 'gray': '#F8F9FA', 'white': '#ffffff' };
+
+var TITLE_STYLE = {
+  fontWeight: '300',
+  fontSize: '32px',
+  padding: '10px',
+  color: '#616161',
+  backgroundColor: colors.white,
+};
+
+var PARAGRAPH_STYLE = {
+  fontSize: '14px',
+  fontWeight: '50',
+  color: '#9E9E9E',
+  padding: '8px',
+  backgroundColor: colors.white,
+};
+
+var LABEL_STYLE = {
+  fontWeight: '50',
+  textAlign: 'center',
+  fontSize: '11px',
+  backgroundColor: colors.white,
+};
+
+var THUMBNAIL_WIDTH = 128;
+
+var BORDER_STYLE = '4px solid rgba(97, 97, 97, 0.05)';
+
+
+// This script allows you to interactively explore the effects
+// of mosaicking different Landsat 8 TOA images using ee.Reducer.median().
+ 
+
+
+
+/*
+ * Collection display defaults
+ */
+
+
+function makeSidePanel() {
+  // Create the base side panel, into which other widgets will be added
+  var mainPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('vertical', true),
+    style: {
+      stretch: 'horizontal',
+      height: '100%',
+      width: '550px',
+      backgroundColor: colors.white,
+      border: BORDER_STYLE,
+    }
+  });
+
+   // Add the app title to the side panel
+  var titleLabel = ui.Label('Data Inspector', TITLE_STYLE);
+  mainPanel.add(titleLabel);
+
+  // Add the app description to the main panel
+  var descriptionText =
+      'This app allows you to interactively explore the tree canopy coverage ' +
+      'of stream and wetland buffers. ' +
+      'To xxxxxxxx.';
+  var descriptionLabel = ui.Label(descriptionText, PARAGRAPH_STYLE);
+  mainPanel.add(descriptionLabel);
+
+  return mainPanel;
+}
+
+/*
+ * Map panel setup
+ */
+
+/** Returns a ui.Map with some UI configuration in place */
+function makeMapPanel() {
+  var map = ui.Map();
+  // Add an informational label
+  
+  map.style().set('cursor', 'crosshair');
+  // Don't show the layer list for this app.
+  map.setControlVisibility({layerList: false});
+  return map;
+}
+
+
+
+
+// Clear the default UI since we're adding our own side and map panels.
+ui.root.clear();
+
+// Create the app's two panels and add them to the ui.root
+var sidePanel = makeSidePanel();
+var mapPanel = makeMapPanel();
+
+
+// Use a SplitPanel so it's possible to resize the two panels.
+ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
+
+
