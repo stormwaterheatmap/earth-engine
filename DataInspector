@@ -93,10 +93,9 @@ function makeSidePanel() {
 function makeMapPanel() {
   var map = ui.Map();
   // Add an informational label
-  
-  map.style().set('cursor', 'crosshair');
+    map.style().set('cursor', 'crosshair');
   // Don't show the layer list for this app.
-  map.setControlVisibility({layerList: false});
+  map.setControlVisibility({layerList: true});
   return map;
 }
 
