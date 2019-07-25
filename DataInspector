@@ -137,10 +137,11 @@ var buttonPanel = ui.Panel({
       
 var handle_map_click = function(location) {    
         // get clicked subbasin info
+       // var selected_WS = watershedSelect.getValue()
         var clicked_point      = ee.Geometry.Point(location.lon, location.lat);
-       // var clicked_basin_fc   = selected_WS.filterBounds(clicked_point);
-        //var clicked_basin      = ee.Feature(clicked_basin_fc.first());
-        //var clicked_basin_geom = clicked_basin.geometry();
+        var clicked_basin_fc   = selected_WS.filterBounds(clicked_point);
+        var clicked_basin      = ee.Feature(clicked_basin_fc.first());
+        var clicked_basin_geom = clicked_basin.geometry();
         print('Click')
         print(clicked_point)
 }
