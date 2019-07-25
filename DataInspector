@@ -8,16 +8,18 @@ var charts = require('users/stormwaterheatmap/Modules:chart');
 
 //Load vectors 
 var HUC12 = datasets.HUC12
-Map.addLayer(HUC12)
 var NHDPlus = datasets.NHDPlus
+var studyArea = datasets.PugetSound
+var WRIA = datasets.WRIA
+var PSAU = datasets.PS_AU
 //Load images
 var precip = datasets.precip
 var soils = datasets.soils
 var slope = datasets.slope 
-var studyArea = datasets.PugetSound
+
 var mapCenterLon = -122.423145
 var mapCenterLat = 47.612410
-var WRIA = datasets.WRIA
+
 //var 
 
 // Style defaults 
@@ -69,7 +71,6 @@ var BUTTON_STYLE = {
 ///UI Helper functions 
 //redraw function redraws map based on watershed selected. 
 
-
 //UI Variables
 var mainPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('vertical', true),
@@ -91,13 +92,16 @@ var watershedSelectLabel = ui.Label({
     value: 'Select a watershed dataset:',
     style: PARAGRAPH_STYLE
     });
-    
-var watershedSelect = ui.Select({
+
+//set up watershed drop down menu     
+var watershedSelect = ui.Select({ 
     items: ['HUC 12', 'NHDPlus', 'Watershed Assessment Units', 'WRIA'],
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: redraw
   });   
+  
+//function to redraw the map with the selected watershed.     
 function redraw() {
   Map.layers().reset()
   var layer = watershedSelect.getValue();
@@ -113,9 +117,10 @@ function redraw() {
   mapPanel.clear()
   mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
   mapPanel.addLayer(WS,{},'layer name')
+  return WS
   }
 
-//function - what happens when changing watershed select
+
 var buttonPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal', true),
     style: {
@@ -126,10 +131,32 @@ var buttonPanel = ui.Panel({
         //border: BORDER_STYLE,
     }
 });
+
+//var label = 'choose a watershed and activate inspector'
+//var inspectorHelperPanel = new ui.Panel(label);
+//var inspectHelperTitle = 'Click on a watershed'
 var inspect_button = ui.Button({ 
     label: 'Activate inspector',
-    style: BUTTON_STYLE
-});
+    onClick: function() {
+  // register a callback on the map to be invoked when the map is clicked
+      print('inspector Activated')
+      var selected_WS = watershedSelect.getValue();
+      Map.onClick(function(coords) {
+        // get clicked subbasin info
+        var clicked_point      = ee.Geometry.Point(coords.lon, coords.lat);
+        var clicked_basin_fc   = HUC10.filterBounds(clicked_point);
+        var clicked_basin      = ee.Feature(clicked_basin_fc.first());
+        var clicked_basin_geom = clicked_basin.geometry();
+        print('Click')
+        })
+}
+})
+
+
+
+
+  
+
 var deactiv_button = ui.Button({
     label: 'Deactivate inspector',
     style: BUTTON_STYLE
