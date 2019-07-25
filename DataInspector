@@ -5,30 +5,33 @@ var imageCollection = ee.ImageCollection("CIESIN/GPWv4/population-count");
 //var utils = require('users/giswqs/public:Modules/utils');
 var datasets = require('users/stormwaterheatmap/Modules:datasets');
 var charts = require('users/stormwaterheatmap/Modules:chart');
+
+//Load vectors 
+var HUC12 = datasets.HUC12
+Map.addLayer(HUC12)
+var NHDPlus = datasets.NHDPlus
+//Load images
 var precip = datasets.precip
 var soils = datasets.soils
 var slope = datasets.slope 
 
 
-
-// ---------------------------------------------------------------------------------------------------- //
-// Interactive UI
-// ---------------------------------------------------------------------------------------------------- //
 // Style defaults 
+// ---------------------------------------------------------------------------------------------------- //
 var colors = { 'cyan': '#24C1E0', 'transparent': '#11ffee00', 'gray': '#F8F9FA', 'white': '#ffffff' };
 
 var TITLE_STYLE = {
     fontWeight: '300',
     fontSize: '32px',
     padding: '10px',
-    color: '#616161',
+    //color: '#616161',
     backgroundColor: colors.white,
 };
 
 var PARAGRAPH_STYLE = {
     fontSize: '14px',
-    fontWeight: '100',
-    color: '#9E9E9E',
+    //fontWeight: '100',
+    //color: '#9E9E9E',
     padding: '8px',
     backgroundColor: colors.white,
 };
@@ -43,73 +46,107 @@ var LABEL_STYLE = {
 var BORDER_STYLE = '4px solid rgba(97, 97, 97, 0.05)'
 
 var BUTTON_STYLE = {
-  //color: 'white',
-  //backgroundColor: "green", /* Green */
-  border: 'none',
-  //color: 'white',
-  padding: '15px',
-  //text-align: center;
-  //text-decoration: none;
-  //display: inline-block;
- // fontSize: '16px',
-  fontWeight: '50',
-  stretch: 'horizontal'
-} /* Green */
+    //color: 'white',
+    //backgroundColor: "green", /* Green */
+    border: 'none',
+    //color: 'white',
+    //padding: '15px',
+    //text-align: center;
+    //text-decoration: none;
+    //display: inline-block;
+    // fontSize: '16px',
+    //fontWeight: '50',
+    //stretch: 'horizontal'
+};
 
-var mainPanel = 
+// ---------------------------------------------------------------------------------------------------- //
+// UI
+// ---------------------------------------------------------------------------------------------------- //
+///UI Helper functions 
+//redraw function redraws map based on watershed selected. 
 
+
+//UI Variables
+var mainPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('vertical', true),
+    style: {
+        stretch: 'horizontal',
+        height: '100%',
+        width: '550px',
+        backgroundColor: colors.white,
+        border: BORDER_STYLE,
+    }
+});
+
+// Add the app title to the side panel
+var titleLabel = ui.Label('Watershed Inspector', TITLE_STYLE);
+var descriptionText =
+    'This app allows you to interactively explore heatmap data by watershed.'
+var descriptionLabel = ui.Label(descriptionText, PARAGRAPH_STYLE);
+var watershedSelectLabel = ui.Label({
+    value: 'Select a watershed dataset:',
+    style: PARAGRAPH_STYLE
+    });
+    
+var watershedSelect = ui.Select({
+    items: ['HUC 12', 'NHDPlus', 'Watershed Assessment Units', 'WRIA'],
+    placeholder: 'Select a value',
+    //value: 'HUC 12'
+    onChange: redraw
+  });   
+function redraw() {
+  Map.layers().reset()
+  var layer = watershedSelect.getValue();
+ // var image; 
+  if (layer =='HUC 12') {
+  var  image = HUC12;
+  } else if (layer =='NHDPlus') {
+    image = NHDPlus; 
+  } else if (layer == 'Watershed Assessment Units') {
+    image = PSAU;
+  } else if (layer == 'WRIA')
+    image = WRIA
+    print(image)
+  }
+
+//function - what happens when changing watershed select
+
+  
+var buttonPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('horizontal', true),
+    style: {
+        //stretch: 'both',
+        //height: '100px',
+        //width: '400px',
+        backgroundColor: colors.white,
+        //border: BORDER_STYLE,
+    }
+});
+var inspect_button = ui.Button({ 
+    label: 'Activate inspector',
+    style: BUTTON_STYLE
+});
+var deactiv_button = ui.Button({
+    label: 'Deactivate inspector',
+    style: BUTTON_STYLE
+});
+
+
+
+//UI functions
 function makeSidePanel() {
     // Create the base side panel, into which other widgets will be added
-    var mainPanel = ui.Panel({
-        layout: ui.Panel.Layout.flow('vertical', true),
-        style: {
-            stretch: 'horizontal',
-            height: '100%',
-            width: '550px',
-            backgroundColor: colors.white,
-            border: BORDER_STYLE,
-        }
-    });
-
-    // Add the app title to the side panel
-    var titleLabel = ui.Label('Watershed Inspector', TITLE_STYLE);
     mainPanel.add(titleLabel);
-
-    // Add the app description to the main panel
-    var descriptionText =
-        'This app allows you to interactively explore heatmap data by watershed.' 
-    var descriptionLabel = ui.Label(descriptionText, PARAGRAPH_STYLE);
     mainPanel.add(descriptionLabel);
-    //add buttons 
-        var buttonPanel = ui.Panel({
-        layout: ui.Panel.Layout.flow('horizontal', true),
-        style: {
-            //stretch: 'both',
-            height: '100px',
-            width: '400px',
-            backgroundColor: colors.cyan,
-            border: BORDER_STYLE,
-        }
-        }); 
-  mainPanel.add(buttonPanel);
-var inspect_button  = ui.Button({label: 'Activate inspector'}); 
-var deactiv_button  = ui.Button({label: 'Deactivate inspector',
-                          style: BUTTON_STYLE
-}); 
- 
-buttonPanel.add(inspect_button)
-buttonPanel.add(deactiv_button)
-
+    mainPanel.add(watershedSelectLabel);
+    mainPanel.add(watershedSelect); 
+    mainPanel.add(buttonPanel);
+    buttonPanel.add(inspect_button)
+    buttonPanel.add(deactiv_button)
     return mainPanel;
 }
 
-//Add buttons to panel 
 
-
-
-/*
- * Map panel setup
- */
 
 /** Returns a ui.Map with some UI configuration in place */
 function makeMapPanel() {
