@@ -1,0 +1,268 @@
+/**
+ * JavaScript Helpers
+ * 
+ * Author: Rodrigo E. Principe
+ * email: fitoprincipe82@gmail.com
+ * license: MIT
+ **/
+
+var PixelSize = function(number) {
+  if (object.is(number, 'Number')) {
+    this.number = Number(number)
+  } else {
+    this.number = Number(number.replace('px', ''))
+  }
+  
+  this.value = function() {
+    return this.number.toString()+'px'
+  }
+  
+  this.add = function(another) {
+    var other = another.number || another
+    return new PixelSize(this.number + other)
+  }
+  
+  this.multiply = function(another) {
+    var other = another.number || another
+    return new PixelSize(this.number * other)
+  }
+  
+  this.divide = function(another) {
+    var other = another.number || another
+    return new PixelSize(this.number / other)
+  }
+  
+  this.subtract = function(another) {
+    var other = another.number || another
+    return new PixelSize(this.number - other)
+  }
+}
+exports.PixelSize = PixelSize
+
+// UUID4
+// from https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript#answer-21963136
+var uuid4 = function() {
+    var lut = []; for (var i=0; i<256; i++) { lut[i] = (i<16?'0':'')+(i).toString(16); }
+    var d0 = Math.random()*0x100000000|0;
+    var d1 = Math.random()*0x100000000|0;
+    var d2 = Math.random()*0x100000000|0;
+    var d3 = Math.random()*0x100000000|0;
+    return lut[d0&0xff]+lut[d0>>8&0xff]+lut[d0>>16&0xff]+lut[d0>>24&0xff]+'-'+
+      lut[d1&0xff]+lut[d1>>8&0xff]+'-'+lut[d1>>16&0x0f|0x40]+lut[d1>>24&0xff]+'-'+
+      lut[d2&0x3f|0x80]+lut[d2>>8&0xff]+'-'+lut[d2>>16&0xff]+lut[d2>>24&0xff]+
+      lut[d3&0xff]+lut[d3>>8&0xff]+lut[d3>>16&0xff]+lut[d3>>24&0xff];
+  }
+exports.uuid4 = uuid4
+
+// Catch Widget Object Type
+var isWidget = function(obj) {
+  try {
+    var o = obj.Ab().split('.')[0]
+    if (o === 'ui') {
+      n = true
+    }
+    else {
+      n = false
+    }
+  } catch(err) {
+    var n = false
+  }
+  return n
+}
+exports.isWidget = isWidget
+
+// KEEP IN CASE BROKEN APPS
+var get_options_old = function(def, options) {
+  // fill options dict with default values if not present
+  
+  if (options !== undefined) {
+    var opt = options
+    
+    for (var key in def) {
+      var value = def[key]
+      if (opt[key] === undefined) {opt[key] = value}
+    }
+  } else {var opt = def}
+  return opt
+}
+exports.get_options_simple = get_options_old
+
+
+// Get Options
+var get_options = function(defaults, options) {
+  // fill options dict with default values if not present
+  if (options !== undefined) {
+    var opt = options
+    
+    for (var key in defaults) {
+      var def_value = defaults[key]
+      var opt_value = opt[key]
+      
+      var def_type = object.getType(def_value)
+      var opt_type = object.getType(opt_value)
+      
+      if (def_type === 'Object' && opt_type === 'Object' && !isWidget(def_value)) {
+        def_value = get_options(def_value, opt_value)
+      }
+      
+      if (opt[key] === undefined) {
+        opt[key] = def_value
+      }
+    }
+  } else {var opt = defaults}
+  return opt 
+}
+exports.get_options = get_options
+//
+
+// Objects
+var object = {}
+
+object.getType = function(obj) {
+  return Object.prototype.toString.call(obj).slice(8, -1);
+}
+
+object.is = function (obj, type) {
+    var clas = object.getType(obj)
+    return obj !== undefined && obj !== null && clas === type;
+}
+
+object.keys = function(obj) {
+  return Object.keys(obj)
+}
+
+object.values = function(obj) {
+  var v = []
+  for (var key in obj) {
+    var value = obj[key]
+    v.push(value)
+  }
+  return v
+}
+
+object.remove = function(obj, key) {
+  var newobj = {}
+  for (var k in obj) {
+    var val = obj[k]
+    if (k !== key) {
+      newobj[k] = val
+    }
+  }
+  return newobj
+}
+
+object.insert = function(obj, key, value) {
+  var newobj = {}
+  for (var k in obj) {
+    newobj[k] = obj[k]
+  }
+  newobj[key] = value
+  return newobj
+}
+
+exports.object = object
+
+// Arrays
+var array = {}
+
+array.insert = function(array, index, element) {
+  var firstPart = array.slice(0, index)
+  var lastPart = array.slice(index, array.length)
+  
+  firstPart.push(element)
+  for (var i in lastPart) {
+    var rest = lastPart[i]
+    firstPart.push(rest)
+  }
+  return firstPart
+}
+
+array.toString = function(array) {
+  var str = array.toString()
+  return '['+str+']'
+}
+
+array.countArraysInside = function(array) {
+  // Count the number of arrays inside another array
+  var arrays = 0
+  for (var i in array) {
+    var element = array[i]
+    if (object.is(element, 'Array')) {
+      arrays += 1
+    } 
+  }
+  return arrays
+}
+
+var writeableArray = function(array) {
+  // Make an array writeable
+  var ini = []
+  
+  for (var i in array) {ini.push(0)}
+  
+  for (var i in array) {
+    var e = array[i]
+    if (object.is(e, 'Array')) {
+      ini[i] = writeableArray(e)
+    } else {
+      ini[i] = e
+    }
+  }
+  return ini
+}
+
+array.writeableArray = writeableArray
+
+var arrayToString = function(arr) {
+  // make sure it is writeable
+  arr = array.writeableArray(arr)
+  for (var i in arr) {
+    var element = arr[i]
+    if (object.is(element, 'Array')) {
+      var n = array.countArraysInside(element)
+      if (n === 0) {
+        var str = element.toString()
+        str = '['+str+']'
+        arr[i] = str
+      } else {
+        arr[i] = arrayToString(element)
+      }
+    } 
+  }
+  var str = arr.toString()
+  str = '['+str+']'
+  return str
+}
+
+array.toString = arrayToString
+
+exports.array = array
+
+// Strings
+var string = {}
+
+string.format = function(str, arr) {
+  if (typeof(arr) === 'array') {
+    return str.replace(/{(\d+)}/g, function (match, number) {
+      return typeof arr[number] != 'undefined' ? arr[number] : match;
+    })}
+  else if (typeof(arr) === 'object') {
+    return str.replace(/{(\w+)}/g, function (match, str) {
+      return typeof arr[str] != 'undefined' ? arr[str] : match;
+    });
+  };
+}
+
+string._str = function(str) {
+  return str.replace(/(\s)/g, function(match, result) {
+    return '_'
+  })
+}
+
+string.formatTask = function(str) {
+  return str.replace(/(\/)/g, function(match, result) {
+    return '_'
+  })
+}
+  
+exports.string = string
