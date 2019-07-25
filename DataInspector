@@ -15,7 +15,6 @@ var precip = datasets.precip
 var soils = datasets.soils
 var slope = datasets.slope 
 
-
 // Style defaults 
 // ---------------------------------------------------------------------------------------------------- //
 var colors = { 'cyan': '#24C1E0', 'transparent': '#11ffee00', 'gray': '#F8F9FA', 'white': '#ffffff' };
@@ -97,16 +96,16 @@ var watershedSelect = ui.Select({
 function redraw() {
   Map.layers().reset()
   var layer = watershedSelect.getValue();
- // var image; 
+  //var WS
   if (layer =='HUC 12') {
-  var  image = HUC12;
+  var  WS = HUC12;
   } else if (layer =='NHDPlus') {
-    image = NHDPlus; 
+  var  WS = NHDPlus; 
   } else if (layer == 'Watershed Assessment Units') {
-    image = PSAU;
+  var  WS = PSAU;
   } else if (layer == 'WRIA')
-    image = WRIA
-    print(image)
+  var  WS = WRIA; 
+  mapPanel.addLayer(WS)
   }
 
 //function - what happens when changing watershed select
