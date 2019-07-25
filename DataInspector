@@ -8,6 +8,8 @@ var precip = datasets.precip
 var soils = datasets.soils
 var slope = datasets.slope 
 
+
+
 // ---------------------------------------------------------------------------------------------------- //
 // Interactive UI
 // ---------------------------------------------------------------------------------------------------- //
@@ -53,6 +55,21 @@ var BUTTON_STYLE = {
   stretch: 'horizontal'
 } /* Green */
 
+
+function makeSidePanel() {
+    // Create the base side panel, into which other widgets will be added
+    var mainPanel = ui.Panel({
+        layout: ui.Panel.Layout.flow('vertical', true),
+        style: {
+            stretch: 'horizontal',
+            height: '100%',
+            width: '550px',
+            backgroundColor: colors.white,
+            border: BORDER_STYLE,
+        }
+    });
+
+    // Add the app title to the side panel
     var titleLabel = ui.Label('Data Inspector', TITLE_STYLE);
     mainPanel.add(titleLabel);
 
@@ -114,6 +131,6 @@ var mapPanel = makeMapPanel();
 
 
 // Use a SplitPanel so it's possible to resize the two panels.
-ui.root.add(ui.SplitPanel(mapPanel,sidePanel));
+ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
 
 
