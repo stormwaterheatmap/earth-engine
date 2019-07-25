@@ -4,6 +4,7 @@ var imageCollection = ee.ImageCollection("CIESIN/GPWv4/population-count");
 // Load modules
 //var utils = require('users/giswqs/public:Modules/utils');
 var datasets = require('users/stormwaterheatmap/Modules:datasets');
+var charts = require('users/stormwaterheatmap/Modules:chart');
 var precip = datasets.precip
 var soils = datasets.soils
 var slope = datasets.slope 
