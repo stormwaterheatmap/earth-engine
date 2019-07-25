@@ -14,6 +14,11 @@ var NHDPlus = datasets.NHDPlus
 var precip = datasets.precip
 var soils = datasets.soils
 var slope = datasets.slope 
+var studyArea = datasets.PugetSound
+var mapCenterLon = -122.423145
+var mapCenterLat = 47.612410
+var WRIA = datasets.WRIA
+//var 
 
 // Style defaults 
 // ---------------------------------------------------------------------------------------------------- //
@@ -96,21 +101,21 @@ var watershedSelect = ui.Select({
 function redraw() {
   Map.layers().reset()
   var layer = watershedSelect.getValue();
-  //var WS
+  var WS
   if (layer =='HUC 12') {
-  var  WS = HUC12;
+    WS = HUC12;
   } else if (layer =='NHDPlus') {
-  var  WS = NHDPlus; 
+    WS = NHDPlus; 
   } else if (layer == 'Watershed Assessment Units') {
-  var  WS = PSAU;
+    WS = PSAU;
   } else if (layer == 'WRIA')
-  var  WS = WRIA; 
-  mapPanel.addLayer(WS)
+    WS = WRIA; 
+  mapPanel.clear()
+  mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
+  mapPanel.addLayer(WS,{},'layer name')
   }
 
 //function - what happens when changing watershed select
-
-  
 var buttonPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal', true),
     style: {
@@ -130,8 +135,6 @@ var deactiv_button = ui.Button({
     style: BUTTON_STYLE
 });
 
-
-
 //UI functions
 function makeSidePanel() {
     // Create the base side panel, into which other widgets will be added
@@ -145,8 +148,6 @@ function makeSidePanel() {
     return mainPanel;
 }
 
-
-
 /** Returns a ui.Map with some UI configuration in place */
 function makeMapPanel() {
     var map = ui.Map();
@@ -154,6 +155,7 @@ function makeMapPanel() {
     map.style().set('cursor', 'crosshair');
     // Don't show the layer list for this app.
     map.setControlVisibility({ layerList: true });
+    
     return map;
 }
 
@@ -164,9 +166,10 @@ ui.root.clear();
 var sidePanel = makeSidePanel();
 var mapPanel = makeMapPanel();
 
-
-
 // Use a SplitPanel so it's possible to resize the two panels.
 ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
+
+//mapPanel.centerObject(studyArea,12); 
+//mapPanel.add(studyArea)
 
 
