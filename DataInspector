@@ -56,6 +56,7 @@ var BUTTON_STYLE = {
   stretch: 'horizontal'
 } /* Green */
 
+var mainPanel = 
 
 function makeSidePanel() {
     // Create the base side panel, into which other widgets will be added
@@ -71,14 +72,12 @@ function makeSidePanel() {
     });
 
     // Add the app title to the side panel
-    var titleLabel = ui.Label('Data Inspector', TITLE_STYLE);
+    var titleLabel = ui.Label('Watershed Inspector', TITLE_STYLE);
     mainPanel.add(titleLabel);
 
     // Add the app description to the main panel
     var descriptionText =
-        'This app allows you to interactively explore the tree canopy coverage ' +
-        'of stream and wetland buffers. ' +
-        'To xxxxxxxx.';
+        'This app allows you to interactively explore heatmap data by watershed.' 
     var descriptionLabel = ui.Label(descriptionText, PARAGRAPH_STYLE);
     mainPanel.add(descriptionLabel);
     //add buttons 
