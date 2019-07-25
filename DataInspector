@@ -120,7 +120,6 @@ function redraw() {
   return WS
   }
 
-
 var buttonPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal', true),
     style: {
@@ -135,27 +134,31 @@ var buttonPanel = ui.Panel({
 //var label = 'choose a watershed and activate inspector'
 //var inspectorHelperPanel = new ui.Panel(label);
 //var inspectHelperTitle = 'Click on a watershed'
-var inspect_button = ui.Button({ 
-    label: 'Activate inspector',
-    onClick: function() {
-  // register a callback on the map to be invoked when the map is clicked
+      
+var handle_map_click = function(location) {    
+        // get clicked subbasin info
+        var clicked_point      = ee.Geometry.Point(location.lon, location.lat);
+       // var clicked_basin_fc   = selected_WS.filterBounds(clicked_point);
+        //var clicked_basin      = ee.Feature(clicked_basin_fc.first());
+        //var clicked_basin_geom = clicked_basin.geometry();
+        print('Click')
+        print(clicked_point)
+}
+
+var handle_inspect_click = function() {
       print('inspector Activated')
       var selected_WS = watershedSelect.getValue();
-      Map.onClick(function(coords) {
-        // get clicked subbasin info
-        var clicked_point      = ee.Geometry.Point(coords.lon, coords.lat);
-        var clicked_basin_fc   = HUC10.filterBounds(clicked_point);
-        var clicked_basin      = ee.Feature(clicked_basin_fc.first());
-        var clicked_basin_geom = clicked_basin.geometry();
-        print('Click')
-        })
-}
-})
+      print(selected_WS)
+      mapPanel.onClick(handle_map_click)
+} 
+
+var inspect_button = ui.Button({ 
+    label: 'Activate inspector',
+    onClick: handle_inspect_click 
+}) 
 
 
-
-
-  
+ 
 
 var deactiv_button = ui.Button({
     label: 'Deactivate inspector',
