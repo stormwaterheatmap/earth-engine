@@ -104,6 +104,7 @@ var watershedSelect = ui.Select({
   }); 
   
 var WS
+var clicked_basin
   
 //function to redraw the map with the selected watershed.     
 function redraw() {
@@ -134,17 +135,7 @@ var layerSelect = ui.Select({
   
 
   
-//function to add user layer to the map
-function addUserLayer() {
-  //Map.layers().reset()
-  var layer = layerSelect.getValue();
-  print(layer)
-  if (layer =='Precipitation') {
-  var  image = precip;
-    } 
-  mapPanel.addLayer(image) //todo: need to clip to ws 
- // handle_map_click(WS)
-  }  
+
 
 var buttonPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal', true),
@@ -161,7 +152,7 @@ var buttonPanel = ui.Panel({
 //var inspectorHelperPanel = new ui.Panel(label);
 //var inspectHelperTitle = 'Click on a watershed'
 
-      
+     
 var handle_map_click = function(location) {    
         // get clicked subbasin info
        // var selected_WS = watershedSelect.getValue()
@@ -201,8 +192,18 @@ var inspect_button = ui.Button({
     label: 'Activate inspector',
     onClick: handle_inspect_click 
 }) 
-
-
+var image 
+//function to add user layer to the map
+function addUserLayer() {
+  //Map.layers().reset()
+  var layer = layerSelect.getValue();
+  print(layer)
+  if (layer =='Precipitation') {
+  var  image = precip.clip(clicked_basin);
+    } 
+  mapPanel.addLayer(image) //todo: need to clip to ws 
+ // handle_map_click(WS)
+  }  
  
 
 var deactiv_button = ui.Button({
