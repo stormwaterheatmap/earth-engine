@@ -14,24 +14,63 @@ var studyArea = datasets.PugetSound
 var WRIA = datasets.WRIA
 var PSAU = datasets.PS_AU
 //Load images
-var precip = datasets.precip
-var soils = datasets.soils
-var slope = datasets.slope 
-var landcover = datasets.landcover
-var hruBands = datasets.hruBands
+var precip = {'layer': datasets.precip, 'name': 'Precipitation', 'viz': {min: 30, max: 120, palette: palettes.misc.jet[7]} }; 
+var soils = {'layer': datasets.soils, 'name': 'Soils', 'viz': palettes.misc.jet[7] };
+var slope = {'layer': datasets.slope, 'name': 'Slope', 'viz': palettes.misc.jet[7] };
+var landcover = {'layer': datasets.landcover, 'name': 'Land Cover', 'viz': palettes.misc.jet[7] };
+var hruBands = {'layer': datasets.hruBands, 'name': 'HRUs', 'viz': palettes.misc.jet[7] };
+
+//try dictions of layers 
+var layerDict = ee.Dictionary({'Num': [1, 2, 3, 4,5], 
+                'layers': [datasets.precip,datasets.soils,datasets.slope,datasets.landcover,datasets.hruBands],
+                'names': ['Precipitation', 'Soils', 'Slope', 'Land Cover', 'HRUs'], 
+                'viz':[{min: 30, max: 120, palette: palettes.misc.jet[7]},{},{},{},{},{}]
+} )
+
+var layers = layerDict.get('layers')
+var names = layerDict.get('names')
+
+
+var layerProperties = {
+  'Precipitation': {
+    layer: datasets.precip,
+    visParams: {min: 0, max: 120, palette: ['yellow', 'orange', 'red']},
+    legend: [
+      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
+      {'No loss': 'black'}, {'Water or no data': 'grey'}
+    ],
+    defaultVisibility: true
+  }}
+  /*,
+  'Loss': {
+    name: 'loss',
+    visParams: {min: 0, max: 1, palette: ['black', 'red']},
+    legend:
+        [{'Loss': 'red'}, {'No loss': 'black'}, {'Water or no data': 'grey'}],
+    defaultVisibility: false
+  },
+  'Percent Tree Cover': {
+    name: 'treecover2000',
+    visParams: {min: 0, max: 100, palette: ['black', 'green']},
+    legend: [
+      {'75-100%': '#00ff00'}, {'50-75%': '#00aa00'}, {'25-50%': '#005500'},
+      {'0-25%': '#000000'}, {'Water or no data': '#404040'}
+    ],
+    defaultVisibility: false
+  }*/
+
+print(layerProperties)
+
+
 
 var mapCenterLon = -122.423145
 var mapCenterLat = 47.612410
 
-//Dictionary of layers, names, and palettes 
-var layerDict = ee.Dictionary({
-  layers: [precip, soils, slope, landcover, hruBands],
-  names: ['Precipitation', 'Soils', 'Slope', 'Land Cover', "HRUs"],  
-  palettes: [palettes.misc.jet[7], 'that', 'the other thing']
-});
 
-print(layerDict)
-print(layerDict.get('names'))
+
+
+//Dictionary of layers, names, and palettes 
+
 //var 
 
 // Style defaults 
@@ -100,11 +139,21 @@ function function2(val)
   var variableOfFunction1 = val;
 }
 */ 
+//helper function for dictionary lookup
+function findWithAttr(array, attr, value) {
+    for(var i = 0; i < array.length; i += 1) {
+        if(array[i][attr] === value) {
+            return i;
+        }
+    }
+    return -1;
+}
+
 
 //global variables 
 var clicked_basin
 var WS
-var names = ee.List(layerDict.get('names'))
+
 //UI Variables
 var mainPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('vertical', true),
@@ -129,7 +178,7 @@ var watershedSelectLabel = ui.Label({
 
 //set up watershed drop down menu     
 var watershedSelect = ui.Select({ 
-    items: names,
+    items: ['HUC 12','NHDPlus'],
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: redraw
@@ -155,15 +204,62 @@ function redraw() {
   mapPanel.addLayer(WS,{},'layer name')
  // handle_map_click(WS)
   }
-  
-  
+
+
+// Create a layer selector pulldown.
+// The elements of the pulldown are the keys of the layerProperties dictionary.
+var selectItems = Object.keys(layerProperties);
+print(selectItems)
+var layerDict = ee.Dictionary(layerProperties);  
+// Define the pulldown menu.  Changing the pulldown menu changes the map layer
+// and legend.
+
 var layerSelect = ui.Select({ 
-    items: ee.Array(layerDict.get('names')),
+    //items: ee.List(layerDict.get('names')),
+    items: selectItems, 
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: addUserLayer
   }); 
   
+function addUserLayer() {
+  //Map.layers().reset()
+  var selected = layerSelect.getValue();
+ 
+  var userLayer = layerProperties[selected]
+   print("Layer to be clipped:", userLayer)
+  var image = userLayer.layer;
+  var name = userLayer.name
+  print(image)
+  print(name)
+  /* 
+  
+  if (layer == precip.name) {
+      image = clipBasin(precip.layer)
+    mapPanel.addLayer(image,precip.viz,precip.name)
+    } 
+    if (layer == soils.name) {
+      image = clipBasin(soils.layer)
+    mapPanel.addLayer(image,soils.viz,soils.name)
+    } 
+      if (layer == slope.name) {
+      image = clipBasin(slope.layer)
+      mapPanel.addLayer(image,slope.viz,slope.name)
+    } 
+          if (layer == landcover.name) {
+      image = clipBasin(landcover.layer)
+    label = landcover.name
+    viz = landcover.viz;
+    } 
+     if (layer == hruBands.name) {
+      image = clipBasin(hruBands.layer)
+    label = hruBands.name
+    viz = hruBands.viz;
+    } 
+    */
+  mapPanel.addLayer(image,viz,label) //todo: need to clip to ws 
+ // handle_map_click(WS)
+  }    
 
 var buttonPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal', true),
@@ -222,19 +318,9 @@ var inspect_button = ui.Button({
     label: 'Activate inspector',
     onClick: handle_inspect_click 
 }) 
-
+var image 
 //function to add user layer to the map
-function addUserLayer() {
-  //Map.layers().reset()
-  var layer = layerSelect.getValue();
-  print("Layer to be clipped:", layer)
-  print('Cliping layer:')
-  if (layer =='Precipitation') {
-  var  image = clipBasin(precip);
-    } 
-  mapPanel.addLayer(image) //todo: need to clip to ws 
- // handle_map_click(WS)
-  }  
+
 
 function clipBasin(imageToClip) {
   var clippedImage = imageToClip.clip(clicked_basin)
