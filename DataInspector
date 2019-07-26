@@ -5,6 +5,7 @@ var imageCollection = ee.ImageCollection("CIESIN/GPWv4/population-count");
 //var utils = require('users/giswqs/public:Modules/utils');
 var datasets = require('users/stormwaterheatmap/Modules:datasets');
 var charts = require('users/stormwaterheatmap/Modules:chart');
+var palettes = require('users/gena/packages:palettes');
 
 //Load vectors 
 var HUC12 = datasets.HUC12
@@ -22,6 +23,15 @@ var hruBands = datasets.hruBands
 var mapCenterLon = -122.423145
 var mapCenterLat = 47.612410
 
+//Dictionary of layers, names, and palettes 
+var layerDict = ee.Dictionary({
+  layers: [precip, soils, slope, landcover, hruBands],
+  names: ['Precipitation', 'Soils', 'Slope', 'Land Cover', "HRUs"],  
+  palettes: [palettes.misc.jet[7], 'that', 'the other thing']
+});
+
+print(layerDict)
+print(layerDict.get('names'))
 //var 
 
 // Style defaults 
@@ -66,13 +76,35 @@ var BUTTON_STYLE = {
     //fontWeight: '50',
     //stretch: 'horizontal'
 };
+//Create a dictionary of layers and descriptions 
+// Use curly brackets {} to make a dictionary of key:value pairs.
+
+
+
 
 // ---------------------------------------------------------------------------------------------------- //
 // UI
 // ---------------------------------------------------------------------------------------------------- //
 ///UI Helper functions 
 //redraw function redraws map based on watershed selected. 
+/*
+Pass vairaibles this way 
+function function1()
+{
+  var variable1=12;
+  function2(variable1);
+}
 
+function function2(val)
+{
+  var variableOfFunction1 = val;
+}
+*/ 
+
+//global variables 
+var clicked_basin
+var WS
+var names = ee.List(layerDict.get('names'))
 //UI Variables
 var mainPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('vertical', true),
@@ -97,14 +129,13 @@ var watershedSelectLabel = ui.Label({
 
 //set up watershed drop down menu     
 var watershedSelect = ui.Select({ 
-    items: ['HUC 12', 'NHDPlus', 'Watershed Assessment Units', 'WRIA'],
+    items: names,
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: redraw
   }); 
-  
-var WS
-//var clicked_basin = ee.FeatureCollection()
+
+
   
 //function to redraw the map with the selected watershed.     
 function redraw() {
@@ -127,15 +158,12 @@ function redraw() {
   
   
 var layerSelect = ui.Select({ 
-    items: ['Precipitation', 'Land Use', 'Landcover', 'Soils', 'Slope'],
+    items: ee.Array(layerDict.get('names')),
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: addUserLayer
   }); 
   
-
-  
-
 
 var buttonPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal', true),
@@ -153,7 +181,7 @@ var buttonPanel = ui.Panel({
 //var inspectHelperTitle = 'Click on a watershed'
 
      
-var handle_map_click = function(location) {    
+function  handle_map_click(location) {    
         // get clicked subbasin info
        // var selected_WS = watershedSelect.getValue()
        //var selected_WS = WS;
@@ -161,10 +189,11 @@ var handle_map_click = function(location) {
       //mapPanel.addLayer(WS)
         var clicked_point      = ee.Geometry.Point(location.lon, location.lat);
         var clicked_basin_fc   = WS.filterBounds(clicked_point);
-        var clicked_basin      = ee.Feature(clicked_basin_fc.first());
+           clicked_basin      = ee.Feature(clicked_basin_fc.first());
         var clicked_basin_geom = clicked_basin.geometry();
         print('Click')
         print(clicked_point),
+        print('Clicked Basin', clicked_basin)
         mapPanel.clear()
         mapPanel.addLayer(clicked_basin)
         mapPanel.centerObject(clicked_basin)
@@ -182,7 +211,7 @@ var handle_map_click = function(location) {
         
 }
 
-var handle_inspect_click = function() {
+function handle_inspect_click() {
       print('inspector Activated')
       var selected_WS = watershedSelect.getValue();
       print(selected_WS)
@@ -193,19 +222,24 @@ var inspect_button = ui.Button({
     label: 'Activate inspector',
     onClick: handle_inspect_click 
 }) 
-var image 
+
 //function to add user layer to the map
-function addUserLayer(clicked_basin) {
+function addUserLayer() {
   //Map.layers().reset()
   var layer = layerSelect.getValue();
-  print(layer)
+  print("Layer to be clipped:", layer)
+  print('Cliping layer:')
   if (layer =='Precipitation') {
-  var  image = precip.clip(clicked_basin);
+  var  image = clipBasin(precip);
     } 
   mapPanel.addLayer(image) //todo: need to clip to ws 
  // handle_map_click(WS)
   }  
- 
+
+function clipBasin(imageToClip) {
+  var clippedImage = imageToClip.clip(clicked_basin)
+  return clippedImage
+}
 
 var deactiv_button = ui.Button({
     label: 'Deactivate inspector',
