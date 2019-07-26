@@ -228,36 +228,12 @@ function addUserLayer() {
  
   var userLayer = layerProperties[selected]
    print("Layer to be clipped:", userLayer)
-  var image = userLayer.layer;
-  var name = userLayer.name
+  var image = clipBasin(userLayer.layer);
+  var name = selected
+  var viz = userLayer.visParams
   print(image)
   print(name)
-  /* 
-  
-  if (layer == precip.name) {
-      image = clipBasin(precip.layer)
-    mapPanel.addLayer(image,precip.viz,precip.name)
-    } 
-    if (layer == soils.name) {
-      image = clipBasin(soils.layer)
-    mapPanel.addLayer(image,soils.viz,soils.name)
-    } 
-      if (layer == slope.name) {
-      image = clipBasin(slope.layer)
-      mapPanel.addLayer(image,slope.viz,slope.name)
-    } 
-          if (layer == landcover.name) {
-      image = clipBasin(landcover.layer)
-    label = landcover.name
-    viz = landcover.viz;
-    } 
-     if (layer == hruBands.name) {
-      image = clipBasin(hruBands.layer)
-    label = hruBands.name
-    viz = hruBands.viz;
-    } 
-    */
-  mapPanel.addLayer(image,viz,label) //todo: need to clip to ws 
+  mapPanel.addLayer(image,viz,name) 
  // handle_map_click(WS)
   }    
 
