@@ -104,7 +104,7 @@ var watershedSelect = ui.Select({
   }); 
   
 var WS
-var clicked_basin
+//var clicked_basin = ee.FeatureCollection()
   
 //function to redraw the map with the selected watershed.     
 function redraw() {
@@ -171,6 +171,7 @@ var handle_map_click = function(location) {
         
         //add layer dropdown 
         mainPanel.add(layerSelect)
+        addUserLayer(clicked_basin)
         //mapPanel.addLayer(precip.clip(clicked_basin),{},'Precipitation',false)
         //mapPanel.addLayer(landcover.clip(clicked_basin,{},'Land Cover',false))
         //var hruBandsclipped = hruBands.clip(clicked_basin)
@@ -194,7 +195,7 @@ var inspect_button = ui.Button({
 }) 
 var image 
 //function to add user layer to the map
-function addUserLayer() {
+function addUserLayer(clicked_basin) {
   //Map.layers().reset()
   var layer = layerSelect.getValue();
   print(layer)
