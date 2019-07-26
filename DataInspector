@@ -16,7 +16,8 @@ var PSAU = datasets.PS_AU
 var precip = datasets.precip
 var soils = datasets.soils
 var slope = datasets.slope 
-var landcover = datasets.landcover 
+var landcover = datasets.landcover
+var hruBands = datasets.hruBands
 
 var mapCenterLon = -122.423145
 var mapCenterLat = 47.612410
@@ -122,6 +123,28 @@ function redraw() {
   mapPanel.addLayer(WS,{},'layer name')
  // handle_map_click(WS)
   }
+  
+  
+var layerSelect = ui.Select({ 
+    items: ['Precipitation', 'Land Use', 'Landcover', 'Soils', 'Slope'],
+    placeholder: 'Select a value',
+    //value: 'HUC 12'
+    onChange: addUserLayer
+  }); 
+  
+
+  
+//function to add user layer to the map
+function addUserLayer() {
+  //Map.layers().reset()
+  var layer = layerSelect.getValue();
+  print(layer)
+  if (layer =='Precipitation') {
+  var  image = precip;
+    } 
+  mapPanel.addLayer(image) //todo: need to clip to ws 
+ // handle_map_click(WS)
+  }  
 
 var buttonPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal', true),
@@ -151,10 +174,20 @@ var handle_map_click = function(location) {
         var clicked_basin_geom = clicked_basin.geometry();
         print('Click')
         print(clicked_point),
+        mapPanel.clear()
         mapPanel.addLayer(clicked_basin)
-        //add a layer and clip to clicked basin 
-        mapPanel.addLayer(precip.clip(clicked_basin),{},'Precipitation',false)
-        mapPanel.addLayer(landcover.clip(clicked_basin,{},'Land Cover',false))
+        mapPanel.centerObject(clicked_basin)
+        
+        //add layer dropdown 
+        mainPanel.add(layerSelect)
+        //mapPanel.addLayer(precip.clip(clicked_basin),{},'Precipitation',false)
+        //mapPanel.addLayer(landcover.clip(clicked_basin,{},'Land Cover',false))
+        //var hruBandsclipped = hruBands.clip(clicked_basin)
+        //var hruChart = ui.Chart.image.byRegion(hruBandsclipped)
+        //mainPanel.add(hruChart)
+        //var precipChart = ui.Chart.image.regions(precip)
+        //mainPanel.add(precipChart)
+        
 }
 
 var handle_inspect_click = function() {
