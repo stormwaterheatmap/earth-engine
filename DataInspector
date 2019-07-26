@@ -16,6 +16,7 @@ var PSAU = datasets.PS_AU
 var precip = datasets.precip
 var soils = datasets.soils
 var slope = datasets.slope 
+var landcover = datasets.landcover 
 
 var mapCenterLon = -122.423145
 var mapCenterLat = 47.612410
@@ -99,13 +100,15 @@ var watershedSelect = ui.Select({
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: redraw
-  });   
+  }); 
+  
+var WS
   
 //function to redraw the map with the selected watershed.     
 function redraw() {
   Map.layers().reset()
   var layer = watershedSelect.getValue();
-  var WS
+  
   if (layer =='HUC 12') {
     WS = HUC12;
   } else if (layer =='NHDPlus') {
@@ -117,7 +120,7 @@ function redraw() {
   mapPanel.clear()
   mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
   mapPanel.addLayer(WS,{},'layer name')
-  return WS
+ // handle_map_click(WS)
   }
 
 var buttonPanel = ui.Panel({
@@ -134,16 +137,24 @@ var buttonPanel = ui.Panel({
 //var label = 'choose a watershed and activate inspector'
 //var inspectorHelperPanel = new ui.Panel(label);
 //var inspectHelperTitle = 'Click on a watershed'
+
       
 var handle_map_click = function(location) {    
         // get clicked subbasin info
        // var selected_WS = watershedSelect.getValue()
+       //var selected_WS = WS;
+      // print(selected_WS)
+      //mapPanel.addLayer(WS)
         var clicked_point      = ee.Geometry.Point(location.lon, location.lat);
-        var clicked_basin_fc   = selected_WS.filterBounds(clicked_point);
+        var clicked_basin_fc   = WS.filterBounds(clicked_point);
         var clicked_basin      = ee.Feature(clicked_basin_fc.first());
         var clicked_basin_geom = clicked_basin.geometry();
         print('Click')
-        print(clicked_point)
+        print(clicked_point),
+        mapPanel.addLayer(clicked_basin)
+        //add a layer and clip to clicked basin 
+        mapPanel.addLayer(precip.clip(clicked_basin),{},'Precipitation',false)
+        mapPanel.addLayer(landcover.clip(clicked_basin,{},'Land Cover',false))
 }
 
 var handle_inspect_click = function() {
