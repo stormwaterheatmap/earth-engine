@@ -14,85 +14,91 @@ var studyArea = datasets.PugetSound
 var WRIA = datasets.WRIA
 var PSAU = datasets.PS_AU
 //Load images
-var precip = {'layer': datasets.precip, 'name': 'Precipitation', 'viz': {min: 30, max: 120, palette: palettes.misc.jet[7]} }; 
-var soils = {'layer': datasets.soils, 'name': 'Soils', 'viz': palettes.misc.jet[7] };
-var slope = {'layer': datasets.slope, 'name': 'Slope', 'viz': palettes.misc.jet[7] };
-var landcover = {'layer': datasets.landcover, 'name': 'Land Cover', 'viz': palettes.misc.jet[7] };
-var hruBands = {'layer': datasets.hruBands, 'name': 'HRUs', 'viz': palettes.misc.jet[7] };
+var precip = { 'layer': datasets.precip, 'name': 'Precipitation', 'viz': { min: 30, max: 120, palette: palettes.misc.jet[7] } };
+var soils = { 'layer': datasets.soils, 'name': 'Soils', 'viz': palettes.misc.jet[7] };
+var slope = { 'layer': datasets.slope, 'name': 'Slope', 'viz': palettes.misc.jet[7] };
+var landcover = { 'layer': datasets.landcover, 'name': 'Land Cover', 'viz': palettes.misc.jet[7] };
+var hruBands = { 'layer': datasets.hruBands, 'name': 'HRUs', 'viz': palettes.misc.jet[7] };
 
 //try dictions of layers 
-var layerDict = ee.Dictionary({'Num': [1, 2, 3, 4,5], 
-                'layers': [datasets.precip,datasets.soils,datasets.slope,datasets.landcover,datasets.hruBands],
-                'names': ['Precipitation', 'Soils', 'Slope', 'Land Cover', 'HRUs'], 
-                'viz':[{min: 30, max: 120, palette: palettes.misc.jet[7]},{},{},{},{},{}]
-} )
+var layerDict = ee.Dictionary({
+    'Num': [1, 2, 3, 4, 5],
+    'layers': [datasets.precip, datasets.soils, datasets.slope, datasets.landcover, datasets.hruBands],
+    'names': ['Precipitation', 'Soils', 'Slope', 'Land Cover', 'HRUs'],
+    'viz': [{ min: 30, max: 120, palette: palettes.misc.jet[7] }, {}, {}, {}, {}, {}]
+})
 
 var layers = layerDict.get('layers')
 var names = layerDict.get('names')
 
 
 var layerProperties = {
-  'Precipitation': {
-    layer: datasets.precip,
-    palette: ['yellow', 'orange', 'red'],
-    legend: [
-      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
-      {'No loss': 'black'}, {'Water or no data': 'grey'}
-    ]},
+    'Precipitation': {
+        layer: datasets.precip,
+        palette: ['yellow', 'orange', 'red'],
+        legend: [
+            { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
+            { 'No loss': 'black' }, { 'Water or no data': 'grey' }
+        ]
+    },
     'Soils': {
-    layer: datasets.soils,
-    palette: ['yellow', 'orange', 'red'],
-    legend: [
-      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
-      {'No loss': 'black'}, {'Water or no data': 'grey'}
-    ]},
-     'Slopes': {
-    layer: datasets.slopes,
-    palette: ['yellow', 'orange', 'red'],
-    legend: [
-      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
-      {'No loss': 'black'}, {'Water or no data': 'grey'}
-    ]},
-     'Land Cover': {
-    layer: datasets.landcover,
-    palette: ['yellow', 'orange', 'red'],
-    legend: [
-      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
-      {'No loss': 'black'}, {'Water or no data': 'grey'}
-    ]},
-    
-  'HRUs': {
-    layer: datasets.HRUBands,
-    palette: ['yellow', 'orange', 'red'],
-    legend: [
-      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
-      {'No loss': 'black'}, {'Water or no data': 'grey'}
-    ]},
-     'Population': {
-    layer: datasets.population,
-    palette: ['yellow', 'orange', 'red'],
-    legend: [
-      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
-      {'No loss': 'black'}, {'Water or no data': 'grey'}
-    ]},
+        layer: datasets.soils,
+        palette: ['yellow', 'orange', 'red'],
+        legend: [
+            { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
+            { 'No loss': 'black' }, { 'Water or no data': 'grey' }
+        ]
+    },
+    'Slopes': {
+        layer: datasets.slopes,
+        palette: ['yellow', 'orange', 'red'],
+        legend: [
+            { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
+            { 'No loss': 'black' }, { 'Water or no data': 'grey' }
+        ]
+    },
+    'Land Cover': {
+        layer: datasets.landcover,
+        palette: ['yellow', 'orange', 'red'],
+        legend: [
+            { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
+            { 'No loss': 'black' }, { 'Water or no data': 'grey' }
+        ]
+    },
+    'HRUs': {
+        layer: datasets.HRUBands,
+        palette: ['yellow', 'orange', 'red'],
+        legend: [
+            { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
+            { 'No loss': 'black' }, { 'Water or no data': 'grey' }
+        ]
+    },
+    'Population': {
+        layer: datasets.population,
+        palette: ['yellow', 'orange', 'red'],
+        legend: [
+            { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
+            { 'No loss': 'black' }, { 'Water or no data': 'grey' }
+        ]
+    },
 }
-  /*,
-  'Loss': {
-    name: 'loss',
-    visParams: {min: 0, max: 1, palette: ['black', 'red']},
-    legend:
-        [{'Loss': 'red'}, {'No loss': 'black'}, {'Water or no data': 'grey'}],
-    defaultVisibility: false
-  },
-  'Percent Tree Cover': {
-    name: 'treecover2000',
-    visParams: {min: 0, max: 100, palette: ['black', 'green']},
-    legend: [
-      {'75-100%': '#00ff00'}, {'50-75%': '#00aa00'}, {'25-50%': '#005500'},
-      {'0-25%': '#000000'}, {'Water or no data': '#404040'}
-    ],
-    defaultVisibility: false
-  }*/
+/*,
+'Loss': {
+  name: 'loss',
+  visParams: {min: 0, max: 1, palette: ['black', 'red']},
+  legend:
+      [{'Loss': 'red'}, {'No loss': 'black'}, {'Water or no data': 'grey'}],
+  defaultVisibility: false
+},
+'Percent Tree Cover': {
+  name: 'treecover2000',
+  visParams: {min: 0, max: 100, palette: ['black', 'green']},
+  legend: [
+    {'75-100%': '#00ff00'}, {'50-75%': '#00aa00'}, {'25-50%': '#005500'},
+    {'0-25%': '#000000'}, {'Water or no data': '#404040'}
+  ],
+  defaultVisibility: false
+}*/
 
 print(layerProperties)
 
@@ -173,11 +179,11 @@ function function2(val)
 {
   var variableOfFunction1 = val;
 }
-*/ 
+*/
 //helper function for dictionary lookup
 function findWithAttr(array, attr, value) {
-    for(var i = 0; i < array.length; i += 1) {
-        if(array[i][attr] === value) {
+    for (var i = 0; i < array.length; i += 1) {
+        if (array[i][attr] === value) {
             return i;
         }
     }
@@ -209,68 +215,68 @@ var descriptionLabel = ui.Label(descriptionText, PARAGRAPH_STYLE);
 var watershedSelectLabel = ui.Label({
     value: 'Select a watershed dataset:',
     style: PARAGRAPH_STYLE
-    });
+});
 
 //set up watershed drop down menu     
-var watershedSelect = ui.Select({ 
-    items: ['HUC 12','NHDPlus'],
+var watershedSelect = ui.Select({
+    items: ['HUC 12', 'NHDPlus'],
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: redraw
-  }); 
+});
 
 
-  
+
 //function to redraw the map with the selected watershed.     
 function redraw() {
-  Map.layers().reset()
-  var layer = watershedSelect.getValue();
-  
-  if (layer =='HUC 12') {
-    WS = HUC12;
-  } else if (layer =='NHDPlus') {
-    WS = NHDPlus; 
-  } else if (layer == 'Watershed Assessment Units') {
-    WS = PSAU;
-  } else if (layer == 'WRIA')
-    WS = WRIA; 
-  mapPanel.clear()
-  mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
-  mapPanel.addLayer(WS,{},'layer name')
- // handle_map_click(WS)
-  }
+    Map.layers().reset()
+    var layer = watershedSelect.getValue();
+
+    if (layer == 'HUC 12') {
+        WS = HUC12;
+    } else if (layer == 'NHDPlus') {
+        WS = NHDPlus;
+    } else if (layer == 'Watershed Assessment Units') {
+        WS = PSAU;
+    } else if (layer == 'WRIA')
+        WS = WRIA;
+    mapPanel.clear()
+    mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
+    mapPanel.addLayer(WS, {}, 'layer name')
+    // handle_map_click(WS)
+}
 
 
 // Create a layer selector pulldown.
 // The elements of the pulldown are the keys of the layerProperties dictionary.
 var selectItems = Object.keys(layerProperties);
 print(selectItems)
-var layerDict = ee.Dictionary(layerProperties);  
+var layerDict = ee.Dictionary(layerProperties);
 // Define the pulldown menu.  Changing the pulldown menu changes the map layer
 // and legend.
 
-var layerSelect = ui.Select({ 
+var layerSelect = ui.Select({
     //items: ee.List(layerDict.get('names')),
-    items: selectItems, 
+    items: selectItems,
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: addUserLayer
-  }); 
-  
+});
+
 function addUserLayer() {
-  //Map.layers().reset()
-  var selected = layerSelect.getValue();
- 
-  var userLayer = layerProperties[selected]
-   print("Layer to be clipped:", userLayer)
-  var image = clipBasin(userLayer.layer);
-  var name = selected
-  var viz = userLayer.visParams
-  print(image)
-  print(name)
-  mapPanel.addLayer(image,viz,name) 
- // handle_map_click(WS)
-  }    
+    //Map.layers().reset()
+    var selected = layerSelect.getValue();
+
+    var userLayer = layerProperties[selected]
+    print("Layer to be clipped:", userLayer)
+    var image = clipBasin(userLayer.layer);
+    var name = selected
+    var viz = userLayer.visParams
+    print(image)
+    print(name)
+    mapPanel.addLayer(image, viz, name)
+    // handle_map_click(WS)
+}
 
 var buttonPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('horizontal', true),
@@ -287,55 +293,55 @@ var buttonPanel = ui.Panel({
 //var inspectorHelperPanel = new ui.Panel(label);
 //var inspectHelperTitle = 'Click on a watershed'
 
-     
-function  handle_map_click(location) {    
-        // get clicked subbasin info
-       // var selected_WS = watershedSelect.getValue()
-       //var selected_WS = WS;
-      // print(selected_WS)
-      //mapPanel.addLayer(WS)
-        var clicked_point      = ee.Geometry.Point(location.lon, location.lat);
-        var clicked_basin_fc   = WS.filterBounds(clicked_point);
-           clicked_basin      = ee.Feature(clicked_basin_fc.first());
-        var clicked_basin_geom = clicked_basin.geometry();
-        print('Click')
-        print(clicked_point),
+
+function handle_map_click(location) {
+    // get clicked subbasin info
+    // var selected_WS = watershedSelect.getValue()
+    //var selected_WS = WS;
+    // print(selected_WS)
+    //mapPanel.addLayer(WS)
+    var clicked_point = ee.Geometry.Point(location.lon, location.lat);
+    var clicked_basin_fc = WS.filterBounds(clicked_point);
+    clicked_basin = ee.Feature(clicked_basin_fc.first());
+    var clicked_basin_geom = clicked_basin.geometry();
+    print('Click')
+    print(clicked_point),
         print('Clicked Basin', clicked_basin)
-        mapPanel.clear()
-        mapPanel.addLayer(clicked_basin)
-        mapPanel.centerObject(clicked_basin)
-        
-        //add layer dropdown 
-        mainPanel.add(layerSelect)
-        addUserLayer(clicked_basin)
-        //mapPanel.addLayer(precip.clip(clicked_basin),{},'Precipitation',false)
-        //mapPanel.addLayer(landcover.clip(clicked_basin,{},'Land Cover',false))
-        //var hruBandsclipped = hruBands.clip(clicked_basin)
-        //var hruChart = ui.Chart.image.byRegion(hruBandsclipped)
-        //mainPanel.add(hruChart)
-        //var precipChart = ui.Chart.image.regions(precip)
-        //mainPanel.add(precipChart)
-        
+    mapPanel.clear()
+    mapPanel.addLayer(clicked_basin)
+    mapPanel.centerObject(clicked_basin)
+
+    //add layer dropdown 
+    mainPanel.add(layerSelect)
+    addUserLayer(clicked_basin)
+    //mapPanel.addLayer(precip.clip(clicked_basin),{},'Precipitation',false)
+    //mapPanel.addLayer(landcover.clip(clicked_basin,{},'Land Cover',false))
+    //var hruBandsclipped = hruBands.clip(clicked_basin)
+    //var hruChart = ui.Chart.image.byRegion(hruBandsclipped)
+    //mainPanel.add(hruChart)
+    //var precipChart = ui.Chart.image.regions(precip)
+    //mainPanel.add(precipChart)
+
 }
 
 function handle_inspect_click() {
-      print('inspector Activated')
-      var selected_WS = watershedSelect.getValue();
-      print(selected_WS)
-      mapPanel.onClick(handle_map_click)
-} 
+    print('inspector Activated')
+    var selected_WS = watershedSelect.getValue();
+    print(selected_WS)
+    mapPanel.onClick(handle_map_click)
+}
 
-var inspect_button = ui.Button({ 
+var inspect_button = ui.Button({
     label: 'Activate inspector',
-    onClick: handle_inspect_click 
-}) 
-var image 
+    onClick: handle_inspect_click
+})
+var image
 //function to add user layer to the map
 
 
 function clipBasin(imageToClip) {
-  var clippedImage = imageToClip.clip(clicked_basin)
-  return clippedImage
+    var clippedImage = imageToClip.clip(clicked_basin)
+    return clippedImage
 }
 
 var deactiv_button = ui.Button({
@@ -349,7 +355,7 @@ function makeSidePanel() {
     mainPanel.add(titleLabel);
     mainPanel.add(descriptionLabel);
     mainPanel.add(watershedSelectLabel);
-    mainPanel.add(watershedSelect); 
+    mainPanel.add(watershedSelect);
     mainPanel.add(buttonPanel);
     buttonPanel.add(inspect_button)
     buttonPanel.add(deactiv_button)
@@ -363,7 +369,7 @@ function makeMapPanel() {
     map.style().set('cursor', 'crosshair');
     // Don't show the layer list for this app.
     map.setControlVisibility({ layerList: true });
-    
+
     return map;
 }
 
