@@ -19,7 +19,7 @@ var soils = { 'layer': datasets.soils, 'name': 'Soils', 'viz': palettes.misc.jet
 var slope = { 'layer': datasets.slope, 'name': 'Slope', 'viz': palettes.misc.jet[7] };
 var landcover = { 'layer': datasets.landcover, 'name': 'Land Cover', 'viz': palettes.misc.jet[7] };
 var hruBands = { 'layer': datasets.hruBands, 'name': 'HRUs', 'viz': palettes.misc.jet[7] };
-
+var climP = datasets.climp
 //try dictions of layers 
 var layerDict = ee.Dictionary({
     'Num': [1, 2, 3, 4, 5],
@@ -31,10 +31,9 @@ var layerDict = ee.Dictionary({
 var layers = layerDict.get('layers')
 var names = layerDict.get('names')
 
-
 var layerProperties = {
     'Precipitation': {
-        layer: datasets.precip,
+        layer: datasets.climp,
         palette: palettes.misc.jet[7],
         legend: [
             { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
