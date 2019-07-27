@@ -14,7 +14,8 @@ var studyArea = datasets.PugetSound
 var WRIA = datasets.WRIA
 var PSAU = datasets.PS_AU
 //Load images
-var precip = { 'layer': datasets.precip, 'name': 'Precipitation', 'viz': { min: 30, max: 120, palette: palettes.misc.jet[7] } };
+/*
+var precip = { 'layer': datasets.prismP, 'name': 'Precipitation', 'viz': { min: 30, max: 120, palette: palettes.misc.jet[7] } };
 var soils = { 'layer': datasets.soils, 'name': 'Soils', 'viz': palettes.misc.jet[7] };
 var slope = { 'layer': datasets.slope, 'name': 'Slope', 'viz': palettes.misc.jet[7] };
 var landcover = { 'layer': datasets.landcover, 'name': 'Land Cover', 'viz': palettes.misc.jet[7] };
@@ -30,10 +31,10 @@ var layerDict = ee.Dictionary({
 
 var layers = layerDict.get('layers')
 var names = layerDict.get('names')
-
+*/
 var layerProperties = {
     'Precipitation': {
-        layer: datasets.climp,
+        layer: datasets.prismP,
         palette: palettes.misc.jet[7],
         legend: [
             { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
@@ -273,9 +274,14 @@ function addUserLayer() {
     var pal = userLayer.palette
     print(image)
     print(name)
-    var minMax = image.reduceRegion(ee.Reducer.minMax()).values()
-   
-    mapPanel.addLayer(image, { min: minMax.get(0), max: minMax.get(1), palette:userLayer.palette}, name)
+    
+    //get the min and max for display
+    var minmax = image.reduceRegion({reducer: ee.Reducer.minMax(),
+    scale: 1000}).values()
+    //var min = 
+    //var max = 
+    //print('min', min, 'max', max)
+    mapPanel.addLayer(image, { min: minmax.get(0), max: minmax.get(1), palette:userLayer.palette}, name)
     // handle_map_click(WS)
 }
 
