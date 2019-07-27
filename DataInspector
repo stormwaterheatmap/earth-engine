@@ -219,7 +219,7 @@ var watershedSelectLabel = ui.Label({
 
 //set up watershed drop down menu     
 var watershedSelect = ui.Select({
-    items: ['HUC 12', 'NHDPlus'],
+    items: ['HUC 12', 'NHDPlus','WRIA'],
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: redraw
