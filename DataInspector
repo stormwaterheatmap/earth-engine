@@ -278,10 +278,10 @@ function addUserLayer() {
     //get the min and max for display
     var minmax = image.reduceRegion({reducer: ee.Reducer.minMax(),
     scale: 1000}).values()
-    //var min = 
-    //var max = 
-    //print('min', min, 'max', max)
-    mapPanel.addLayer(image, { min: minmax.get(0), max: minmax.get(1), palette:userLayer.palette}, name)
+    var vizMin = minmax.get(0) 
+    var vizMax = minmax.get(1)
+    print('min', vizMin, 'max', vizMax)
+    mapPanel.addLayer(image, { min: vizMin, max: vizMax, palette:userLayer.palette}, name)
     // handle_map_click(WS)
 }
 
