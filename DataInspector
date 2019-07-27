@@ -59,7 +59,22 @@ var layerProperties = {
     legend: [
       {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
       {'No loss': 'black'}, {'Water or no data': 'grey'}
-    ]}
+    ]},
+    
+  'HRUs': {
+    layer: datasets.HRUBands,
+    palette: ['yellow', 'orange', 'red'],
+    legend: [
+      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
+      {'No loss': 'black'}, {'Water or no data': 'grey'}
+    ]},
+     'Population': {
+    layer: datasets.population,
+    palette: ['yellow', 'orange', 'red'],
+    legend: [
+      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
+      {'No loss': 'black'}, {'Water or no data': 'grey'}
+    ]},
 }
   /*,
   'Loss': {
