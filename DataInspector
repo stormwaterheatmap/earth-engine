@@ -34,13 +34,33 @@ var names = layerDict.get('names')
 var layerProperties = {
   'Precipitation': {
     layer: datasets.precip,
-    visParams: {min: 0, max: 120, palette: ['yellow', 'orange', 'red']},
+    palette: ['yellow', 'orange', 'red'],
     legend: [
       {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
       {'No loss': 'black'}, {'Water or no data': 'grey'}
-    ],
-    defaultVisibility: true
-  }}
+    ]},
+    'Soils': {
+    layer: datasets.soils,
+    palette: ['yellow', 'orange', 'red'],
+    legend: [
+      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
+      {'No loss': 'black'}, {'Water or no data': 'grey'}
+    ]},
+     'Slopes': {
+    layer: datasets.slopes,
+    palette: ['yellow', 'orange', 'red'],
+    legend: [
+      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
+      {'No loss': 'black'}, {'Water or no data': 'grey'}
+    ]},
+     'Land Cover': {
+    layer: datasets.landcover,
+    palette: ['yellow', 'orange', 'red'],
+    legend: [
+      {'2016': 'red'}, {'...': 'orange'}, {'2000': 'yellow'},
+      {'No loss': 'black'}, {'Water or no data': 'grey'}
+    ]}
+}
   /*,
   'Loss': {
     name: 'loss',
