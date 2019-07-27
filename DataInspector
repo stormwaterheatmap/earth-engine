@@ -273,7 +273,9 @@ function addUserLayer() {
     var pal = userLayer.palette
     print(image)
     print(name)
-    mapPanel.addLayer(image, {palette:userLayer.palette}, name)
+    var minMax = image.reduceRegion(ee.Reducer.minMax()).values()
+   
+    mapPanel.addLayer(image, { min: minMax.get(0), max: minMax.get(1), palette:userLayer.palette}, name)
     // handle_map_click(WS)
 }
 
