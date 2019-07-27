@@ -35,7 +35,7 @@ var names = layerDict.get('names')
 var layerProperties = {
     'Precipitation': {
         layer: datasets.precip,
-        palette: ['yellow', 'orange', 'red'],
+        palette: palettes.misc.jet[7],
         legend: [
             { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
             { 'No loss': 'black' }, { 'Water or no data': 'grey' }
@@ -271,10 +271,10 @@ function addUserLayer() {
     print("Layer to be clipped:", userLayer)
     var image = clipBasin(userLayer.layer);
     var name = selected
-    var viz = userLayer.visParams
+    var pal = userLayer.palette
     print(image)
     print(name)
-    mapPanel.addLayer(image, viz, name)
+    mapPanel.addLayer(image, {palette:userLayer.palette}, name)
     // handle_map_click(WS)
 }
 
