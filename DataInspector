@@ -287,21 +287,25 @@ function addUserLayer() {
     //determine the min and max for display
     var minmax = image.reduceRegion({reducer: ee.Reducer.minMax(),
     scale: 1000}).values()
-     
-    
     //Request min and max from server
-      
     minmax.evaluate(function(result) {
       //When the server returns the value, show it
       print(result)
     var vizMin = result[0] 
     var vizMax = result[1]
-    print('min', vizMin, 'max', vizMax)
+    //print('min', vizMin, 'max', vizMax)
     mapPanel.addLayer(image, 
     { min: vizMin, max: vizMax, palette:userLayer.palette}, 
       name)
     })
     //remove Loading label
+    //TODO
+    //Add histogram of data 
+    //var localChart = charts.histogramImage(image,userLayer,100,userLayer.name)
+    print('tring to add chart')
+    print('image:', image)
+    print('selected:', selected)
+    sidePanel.add(charts.histogramImage(image,clicked_basin,100,'name'))
     // handle_map_click(WS)
 }
 
