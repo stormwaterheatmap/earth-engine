@@ -263,13 +263,13 @@ var layerSelect = ui.Select({
     onChange: addUserLayer
 });
 
-var vizMin
-var vizMax 
+//var vizMin
+//var vizMax 
 
 function addUserLayer() {
     //Map.layers().reset()
     var selected = layerSelect.getValue();
-
+    
     var userLayer = layerProperties[selected]
     print("Layer to be clipped:", userLayer)
     var image = clipBasin(userLayer.layer);
@@ -277,14 +277,31 @@ function addUserLayer() {
     var pal = userLayer.palette
     print(image)
     print(name)
-    
-    //get the min and max for display
+    //show the loading label
+    mapPanel.add(ui.Label({
+      value: 'Loading...',
+      style: {color:'gray'}
+          })
+          )
+    //  
+    //determine the min and max for display
     var minmax = image.reduceRegion({reducer: ee.Reducer.minMax(),
     scale: 1000}).values()
-     vizMin = minmax.get(0) 
-     vizMax = minmax.get(1)
+     
+    
+    //Request min and max from server
+      
+    minmax.evaluate(function(result) {
+      //When the server returns the value, show it
+      print(result)
+    var vizMin = result.get(0) 
+    var vizMax = result.get(1)
     print('min', vizMin, 'max', vizMax)
-    mapPanel.addLayer(image, { min: vizMin, max: vizMax, palette:userLayer.palette}, name)
+    mapPanel.addLayer(image, 
+    { min: vizMin, max: vizMax, palette:userLayer.palette}, 
+      name)
+    })
+    
     // handle_map_click(WS)
 }
 
