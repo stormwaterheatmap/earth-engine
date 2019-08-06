@@ -40,6 +40,7 @@ var layerProperties = {
         LegendName: ['Mean Annual Preciptation, mm/year'],
         palette: palettes.misc.jet[7],
         discrete: false,
+        vizType: 'histogram'
     },
     'Soils': {
         layer: datasets.soils,
@@ -49,6 +50,7 @@ var layerProperties = {
           minMax: [0,4],
           values: [0, 1, 2, 3, 4], 
           labels: ['A/B', 'C', 'D', 'water', 'Water'],
+          vizType: 'pieChart'
             },
     
         
