@@ -13,6 +13,8 @@ var NHDPlus = datasets.NHDPlus
 var studyArea = datasets.PugetSound
 var WRIA = datasets.WRIA
 var PSAU = datasets.PS_AU
+
+print(palettes.misc.jet[7])
 //Load images
 /*
 var precip = { 'layer': datasets.prismP, 'name': 'Precipitation', 'viz': { min: 30, max: 120, palette: palettes.misc.jet[7] } };
