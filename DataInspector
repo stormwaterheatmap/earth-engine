@@ -37,22 +37,21 @@ var names = layerDict.get('names')
 var layerProperties = {
     'Precipitation': {
         layer: datasets.prismP,
+        LegendName: ['Mean Annual Preciptation, mm/year'],
         palette: palettes.misc.jet[7],
-        legend: [
-            { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
-            { 'No loss': 'black' }, { 'Water or no data': 'grey' }
-        ]
+        discrete: false,
     },
     'Soils': {
         layer: datasets.soils,
-        palette: ['yellow', 'orange', 'red'],
-        values: [0, 1, 2],
-        names: ['A/B', 'C', 'D/Saturated'], 
-        legend: [
-            { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
-            { 'No loss': 'black' }, { 'Water or no data': 'grey' }
-        ]
-    },
+        layerName: ['Hydrologic Soils Group'], 
+          palette: ['#69995D', '#564138', '#F06543', '#7FFF7F', '#05668D'],
+          discrete: true, 
+          minMax: [0,4],
+          values: [0, 1, 2, 3, 4], 
+          labels: ['A/B', 'C', 'D', 'water', 'Water'],
+            },
+    
+        
     'Slopes': {
         layer: datasets.slopes,
         palette: ['yellow', 'orange', 'red'],
