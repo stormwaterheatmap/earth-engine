@@ -44,6 +44,8 @@ var layerProperties = {
     'Soils': {
         layer: datasets.soils,
         palette: ['yellow', 'orange', 'red'],
+        values: [0, 1, 2],
+        names: ['A/B', 'C', 'D/Saturated'], 
         legend: [
             { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
             { 'No loss': 'black' }, { 'Water or no data': 'grey' }
