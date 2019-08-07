@@ -307,7 +307,37 @@ function addUserLayer() {
     { min: vizMin, max: vizMax, palette:userLayer.palette}, 
       name)
     //add the legend  
-      mapPanel.add(legends.barLegend(vizMin, 2, vizMax,userLayer.palette))
+     mapPanel.add(  
+  ui.Panel(
+  [
+    /*ui.Label({
+      value: 'Surface Runoff',
+       style: {
+       fontWeight: 'bold',
+      fontSize: '16px',
+      margin: '0 0 4px 0',
+      padding: '0'
+      }
+      }),
+      */
+    ui.Label('mm'),
+    /*
+    ui.Label({
+      value: 'Till Soil, Pasture, Moderate Slope',
+      style: {
+        fontSize: '10px'
+     // style: 'italic'
+      }
+      }),
+      */ 
+    legends.barLegend(vizMin, 2, vizMax,userLayer.palette),
+    ui.Label('2080 vs 1980')
+    ],
+    ui.Panel.Layout.flow('vertical'),
+    {position: 'bottom-left'})); 
+     
+     
+  
       
     })
     //remove Loading label
