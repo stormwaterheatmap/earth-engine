@@ -6,6 +6,7 @@ var imageCollection = ee.ImageCollection("CIESIN/GPWv4/population-count");
 var datasets = require('users/stormwaterheatmap/Modules:datasets');
 var charts = require('users/stormwaterheatmap/Modules:chart');
 var palettes = require('users/gena/packages:palettes');
+var legends = require('users/stormwaterheatmap/Modules:legends');
 
 //Load vectors 
 var HUC12 = datasets.HUC12
@@ -296,21 +297,25 @@ function addUserLayer() {
     minmax.evaluate(function(result) {
       //When the server returns the value, show it
       print(result)
-    var vizMin = result[0] 
-    var vizMax = result[1]
-    //print('min', vizMin, 'max', vizMax)
+    //var viz = result.sort()  
+    var vizMax = result[0] 
+    var vizMin =  result[1] 
+    print('vizMax:' , vizMax)
+     print('vizMin:' , vizMin)
+    //add the clipped image
     mapPanel.addLayer(image, 
     { min: vizMin, max: vizMax, palette:userLayer.palette}, 
       name)
+    //add the legend  
+      mapPanel.add(legends.barLegend(vizMin, 2, vizMax,userLayer.palette))
+      
     })
     //remove Loading label
     //TODO
-    //Add histogram of data 
-    //var localChart = charts.histogramImage(image,userLayer,100,userLayer.name)
-    print('tring to add chart')
-    print('image:', image)
-    print('selected:', selected)
-    sidePanel.add(charts.histogramImage(image,clicked_basin,100,'name'))
+    //add legend 
+    
+    //add chart
+      sidePanel.add(charts.histogramImage(image,clicked_basin,100,'name'))
     // handle_map_click(WS)
 }
 
