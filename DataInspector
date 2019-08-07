@@ -298,8 +298,8 @@ function addUserLayer() {
       //When the server returns the value, show it
       print(result)
     //var viz = result.sort()  
-    var vizMax = result[0] 
-    var vizMin =  result[1] 
+    var vizMax = result[0].toFixed() 
+    var vizMin =  result[1].toFixed()  
     print('vizMax:' , vizMax)
      print('vizMin:' , vizMin)
     //add the clipped image
@@ -330,7 +330,7 @@ function addUserLayer() {
       }
       }),
       */ 
-    legends.barLegend(vizMin, 2, vizMax,userLayer.palette),
+    legends.barLegend(vizMin, ((vizMin+vizMax)/2), vizMax,userLayer.palette),
     ui.Label('2080 vs 1980')
     ],
     ui.Panel.Layout.flow('vertical'),
