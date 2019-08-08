@@ -255,26 +255,11 @@ function redraw() {
 
 // Create a layer selector pulldown.
 // The elements of the pulldown are the keys of the layerProperties dictionary.
-var widgets = require('users/fitoprincipe/geetools:widgets')
-
-//var image = ee.Image('COPERNICUS/S2_SR/20170328T083601_20170328T084228_T35RNK')
-  
-
-
-// UPPER LIMIT
-var select = new widgets.asyncSelect({
-  items: Object.keys(layerProperties),
-  //items: ["a b c", "b c d"],
-  //value: "5412"
-  onChange: function(el){print('onChange works, selected item is:', el)}
-})
 
 
 
 
-
-
-var selectItems = Object.keys(layerProperties);
+var selectItems = Object.keys(layerProperties);//TODO Change to list of functions
 print(selectItems)
 var layerDict = ee.Dictionary(layerProperties);
 // Define the pulldown menu.  Changing the pulldown menu changes the map layer
@@ -402,7 +387,7 @@ function handle_map_click(location) {
     mapPanel.centerObject(clicked_basin)
 
     //add layer dropdown 
-    mainPanel.add(select)
+    mainPanel.add(layerSelect)
     addUserLayer(clicked_basin)
     //mapPanel.addLayer(precip.clip(clicked_basin),{},'Precipitation',false)
     //mapPanel.addLayer(landcover.clip(clicked_basin,{},'Land Cover',false))
