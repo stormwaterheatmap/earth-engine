@@ -161,6 +161,7 @@ function findWithAttr(array, attr, value) {
 //function to redraw the map with the selected watershed.     
 function redraw() {
     Map.layers().reset()
+    
     var layer = watershedSelect.getValue();
 
     if (layer == 'HUC 12') {
@@ -175,6 +176,8 @@ function redraw() {
         WS = null; 
     mapPanel.clear()
     mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
+    mapPanel.setOptions('Dark',{'Dark': mapStyle.Dark})
+    //Map.setOptions('Dark', {'Dark': mapStyle.Dark});
     mapPanel.addLayer(WS, {}, 'layer name')
     // handle_map_click(WS)
 }
@@ -207,6 +210,7 @@ var layerSelect = ui.Select({
     
 function addUserLayer() {
     //Map.layers().reset()
+    mapPanel.setOptions('Dark',{'Dark': mapStyle.Dark})
     var selected = layerSelect.getValue();
     var userLayer = layerProperties[selected]
     print("Layer to be clipped:", userLayer)
@@ -369,10 +373,10 @@ function makeSidePanel() {
 function makeMapPanel() {
     var map = ui.Map();
     // Add an informational label
-    map.style().set('cursor', 'crosshair');
+    
     // Don't show the layer list for this app.
-    map.setControlVisibility({ layerList: true });
-    map.setOption(null,{'Dark': mapStyles.Dark})  
+    map.setControlVisibility({ layerList: false });
+    map.setOptions('Dark',{'Dark': mapStyle.Dark})  
     return map;
 }
 
@@ -425,4 +429,4 @@ ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
 var mapCenterLon = -122.423145
 var mapCenterLat = 47.612410
 redraw()
-mapPanel
+
