@@ -176,7 +176,7 @@ function redraw() {
         WS = null; 
     mapPanel.clear()
     mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
-    mapPanel.setOptions('Dark',{'Dark': mapStyle.Dark})
+    mapPanel.setOptions('Dark',{'Dark': mapStyle.GRAYMAP})
     //Map.setOptions('Dark', {'Dark': mapStyle.Dark});
     mapPanel.addLayer(WS, {}, 'layer name')
     // handle_map_click(WS)
@@ -210,15 +210,15 @@ var layerSelect = ui.Select({
     
 function addUserLayer() {
     //Map.layers().reset()
-    mapPanel.setOptions('Dark',{'Dark': mapStyle.Dark})
+    mapPanel.setOptions('Grey',{'Grey': mapStyle.GRAYMAP})
     var selected = layerSelect.getValue();
     var userLayer = layerProperties[selected]
     print("Layer to be clipped:", userLayer)
     var image = clipBasin(userLayer.layer);
     var name = selected
     var pal = userLayer.palette
-    print(image)
-    print(name)
+    //print(image)
+    //print(name)
     //show the loading label
     mapPanel.add(ui.Label({
       value: 'Loading...',
@@ -376,7 +376,7 @@ function makeMapPanel() {
     
     // Don't show the layer list for this app.
     map.setControlVisibility({ layerList: false });
-    map.setOptions('Dark',{'Dark': mapStyle.Dark})  
+    map.setOptions('Grey',{'Grey': mapStyle.GRAYMAP})  
     return map;
 }
 
