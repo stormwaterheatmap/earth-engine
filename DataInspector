@@ -197,24 +197,14 @@ function findWithAttr(array, attr, value) {
 }
 
 //helper functions 
-var layerSelect = ui.Select({
-    //items: ee.List(layerDict.get('names')),
-    items: selectItems,
-    placeholder: 'Select a value',
-    //value: 'HUC 12'
-    onChange: getFunctions(layerSelect)
-});
 
-
+/*
 function getFunctions(dropdown) { //todo edit these. 
   var selection = dropdown.getValue()
-  if (selection == itemNames[0]) {
-    print('function1')
-    //function1
-  }
-  else {print('none')
+  if 
+  
 }
-  }
+*/ 
 
 //global variables 
 var clicked_basin
@@ -290,17 +280,21 @@ var layerSelect = ui.Select({
     items: selectItems,
     placeholder: 'Select a value',
     //value: 'HUC 12'
-    onChange: getFunctions(layerSelect)
+    onChange:addUserLayer
 });
 
 //var vizMin
 //var vizMax 
 
 
-
+    
+    
 function addUserLayer() {
     //Map.layers().reset()
     var selected = layerSelect.getValue();
+    if (selected == ee.List(itemNames).get(0)){
+      print('item 0 is', selected)
+    }
     
     var userLayer = layerProperties[selected]
     print("Layer to be clipped:", userLayer)
