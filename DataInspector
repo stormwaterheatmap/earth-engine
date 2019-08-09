@@ -1,40 +1,31 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var imageCollection = ee.ImageCollection("CIESIN/GPWv4/population-count");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-// Load modules
+/* 
+Load modules
+---------------------------------------------------------------------------------------------------- 
+*/ 
 //var utils = require('users/giswqs/public:Modules/utils');
 var datasets = require('users/stormwaterheatmap/Modules:datasets');
 var charts = require('users/stormwaterheatmap/Modules:chart');
 var palettes = require('users/gena/packages:palettes');
 var legends = require('users/stormwaterheatmap/Modules:legends');
 
-//Load vectors 
+/* 
+Load vectors
+---------------------------------------------------------------------------------------------------- 
+*/ 
 var HUC12 = datasets.HUC12
 var NHDPlus = datasets.NHDPlus
 var studyArea = datasets.PugetSound
 var WRIA = datasets.WRIA
 var PSAU = datasets.PS_AU
 
-print(palettes.misc.jet[7])
-//Load images
-/*
-var precip = { 'layer': datasets.prismP, 'name': 'Precipitation', 'viz': { min: 30, max: 120, palette: palettes.misc.jet[7] } };
-var soils = { 'layer': datasets.soils, 'name': 'Soils', 'viz': palettes.misc.jet[7] };
-var slope = { 'layer': datasets.slope, 'name': 'Slope', 'viz': palettes.misc.jet[7] };
-var landcover = { 'layer': datasets.landcover, 'name': 'Land Cover', 'viz': palettes.misc.jet[7] };
-var hruBands = { 'layer': datasets.hruBands, 'name': 'HRUs', 'viz': palettes.misc.jet[7] };
-var climP = datasets.climp
-//try dictions of layers 
-var layerDict = ee.Dictionary({
-    'Num': [1, 2, 3, 4, 5],
-    'layers': [datasets.precip, datasets.soils, datasets.slope, datasets.landcover, datasets.hruBands],
-    'names': ['Precipitation', 'Soils', 'Slope', 'Land Cover', 'HRUs'],
-    'viz': [{ min: 30, max: 120, palette: palettes.misc.jet[7] }, {}, {}, {}, {}, {}]
-})
 
-var layers = layerDict.get('layers')
-var names = layerDict.get('names')
-*/
+/*
+Load images into a dictionary
+---------------------------------------------------------------------------------------------------- 
+*/ 
 var layerProperties = {
     'Precipitation': {
         layer: datasets.NASA_precip,
@@ -88,40 +79,11 @@ var layerProperties = {
         ]
     },
 }
-/*,
-'Loss': {
-  name: 'loss',
-  visParams: {min: 0, max: 1, palette: ['black', 'red']},
-  legend:
-      [{'Loss': 'red'}, {'No loss': 'black'}, {'Water or no data': 'grey'}],
-  defaultVisibility: false
-},
-'Percent Tree Cover': {
-  name: 'treecover2000',
-  visParams: {min: 0, max: 100, palette: ['black', 'green']},
-  legend: [
-    {'75-100%': '#00ff00'}, {'50-75%': '#00aa00'}, {'25-50%': '#005500'},
-    {'0-25%': '#000000'}, {'Water or no data': '#404040'}
-  ],
-  defaultVisibility: false
-}*/
 
-print(layerProperties)
-
-
-
-var mapCenterLon = -122.423145
-var mapCenterLat = 47.612410
-
-
-
-
-//Dictionary of layers, names, and palettes 
-
-//var 
-
-// Style defaults 
-// ---------------------------------------------------------------------------------------------------- //
+/*
+Style defaults 
+---------------------------------------------------------------------------------------------------- 
+*/
 var colors = { 'cyan': '#24C1E0', 'transparent': '#11ffee00', 'gray': '#F8F9FA', 'white': '#ffffff' };
 
 var TITLE_STYLE = {
@@ -165,27 +127,16 @@ var BUTTON_STYLE = {
 //Create a dictionary of layers and descriptions 
 // Use curly brackets {} to make a dictionary of key:value pairs.
 
-
-
-
-// ---------------------------------------------------------------------------------------------------- //
-// UI
-// ---------------------------------------------------------------------------------------------------- //
-///UI Helper functions 
-//redraw function redraws map based on watershed selected. 
 /*
-Pass vairaibles this way 
-function function1()
-{
-  var variable1=12;
-  function2(variable1);
-}
+Global Variables 
+*/ 
 
-function function2(val)
-{
-  var variableOfFunction1 = val;
-}
-*/
+var clicked_basin
+var WS
+/* 
+Functions 
+---------------------------------------------------------------------------------------------------- 
+*/  
 //helper function for dictionary lookup
 function findWithAttr(array, attr, value) {
     for (var i = 0; i < array.length; i += 1) {
@@ -196,49 +147,8 @@ function findWithAttr(array, attr, value) {
     return -1;
 }
 
-//helper functions 
 
-/*
-function getFunctions(dropdown) { //todo edit these. 
-  var selection = dropdown.getValue()
-  if 
-  
-}
-*/ 
 
-//global variables 
-var clicked_basin
-var WS
-
-//UI Variables
-var mainPanel = ui.Panel({
-    layout: ui.Panel.Layout.flow('vertical', true),
-    style: {
-        stretch: 'horizontal',
-        height: '100%',
-        width: '550px',
-        backgroundColor: colors.white,
-        border: BORDER_STYLE,
-    }
-});
-
-// Add the app title to the side panel
-var titleLabel = ui.Label('Watershed Inspector', TITLE_STYLE);
-var descriptionText =
-    'This app allows you to interactively explore heatmap data by watershed.'
-var descriptionLabel = ui.Label(descriptionText, PARAGRAPH_STYLE);
-var watershedSelectLabel = ui.Label({
-    value: 'Select a watershed dataset:',
-    style: PARAGRAPH_STYLE
-});
-
-//set up watershed drop down menu     
-var watershedSelect = ui.Select({
-    items: ['HUC 12', 'NHDPlus','WRIA'],
-    placeholder: 'Select a value',
-    //value: 'HUC 12'
-    onChange: redraw
-});
 
 
 
@@ -292,10 +202,6 @@ var layerSelect = ui.Select({
 function addUserLayer() {
     //Map.layers().reset()
     var selected = layerSelect.getValue();
-    if (selected == ee.List(itemNames).get(0)){
-      print('item 0 is', selected)
-    }
-    
     var userLayer = layerProperties[selected]
     print("Layer to be clipped:", userLayer)
     var image = clipBasin(userLayer.layer);
@@ -464,17 +370,52 @@ function makeMapPanel() {
     return map;
 }
 
-// Clear the default UI since we're adding our own side and map panels.
+/* 
+Set up User Interface
+----------------------------------------------------------------------------------------------------
+*/ 
+//Lay out main panel 
+var mainPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('vertical', true),
+    style: {
+        stretch: 'horizontal',
+        height: '100%',
+        width: '550px',
+        backgroundColor: colors.white,
+        border: BORDER_STYLE,
+    }
+});
+
+// Add the app title and information 
+var titleLabel = ui.Label('Watershed Inspector', TITLE_STYLE);
+var descriptionText =
+    'This app allows you to interactively explore heatmap data by watershed.'
+var descriptionLabel = ui.Label(descriptionText, PARAGRAPH_STYLE);
+var watershedSelectLabel = ui.Label({
+    value: 'Select a watershed dataset:',
+    style: PARAGRAPH_STYLE
+});
+
+//set up watershed drop down menu     
+var watershedSelect = ui.Select({
+    items: ['HUC 12', 'NHDPlus','WRIA'],
+    placeholder: 'Select a value',
+    //value: 'HUC 12'
+    onChange: redraw
+});
+
+
+// Clear the default UI 
 ui.root.clear();
 
-// Create the app's two panels and add them to the ui.root
+// Create the app's two panels and add them to the ui.root as a split panel
 var sidePanel = makeSidePanel();
 var mapPanel = makeMapPanel();
-
-// Use a SplitPanel so it's possible to resize the two panels.
 ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
 
-//mapPanel.centerObject(studyArea,12); 
-//mapPanel.add(studyArea)
-redraw()
 
+
+
+var mapCenterLon = -122.423145
+var mapCenterLat = 47.612410
+redraw()
