@@ -199,16 +199,27 @@ var layerSelect = ui.Select({
     items: selectItems,
     placeholder: 'Select a value',
     //value: 'HUC 12'
-    onChange:addUserLayer
+    onChange:addLayersAndReport
 });
 
 //var vizMin
 //var vizMax 
 
-
+//After inspection/selection call functions for layers and reports
+function addLayersAndReport() {
+  addUserLayer()
+  addReports()
+}
+//Main Function for reports
+function addReports() {
+  var selected = layerSelect.getValue();
+  //display information about report 
+  var reportTitle = ui.Label(selected)
+  mainPanel.add(reportTitle)
+}
     
-    
-function addUserLayer() {
+//Main Function for displaying layers     
+function addUserLayer() { 
     //Map.layers().reset()
     mapPanel.setOptions('Grey',{'Grey': mapStyle.GRAYMAP})
     var selected = layerSelect.getValue();
