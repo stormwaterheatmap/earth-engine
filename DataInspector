@@ -1,5 +1,5 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var imageCollection = ee.ImageCollection("CIESIN/GPWv4/population-count");
+var imageCollection = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Count");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* 
 Load modules
@@ -10,6 +10,7 @@ var datasets = require('users/stormwaterheatmap/Modules:datasets');
 var charts = require('users/stormwaterheatmap/Modules:chart');
 var palettes = require('users/gena/packages:palettes');
 var legends = require('users/stormwaterheatmap/Modules:legends');
+var mapStyle = require('users/stormwaterheatmap/Modules:mapStyles')
 
 /* 
 Load vectors
@@ -126,6 +127,11 @@ var BUTTON_STYLE = {
 };
 //Create a dictionary of layers and descriptions 
 // Use curly brackets {} to make a dictionary of key:value pairs.
+/* 
+Map Styles 
+---------------------------------------------------------------------------------------------------- 
+*/ 
+
 
 /*
 Global Variables 
@@ -366,7 +372,7 @@ function makeMapPanel() {
     map.style().set('cursor', 'crosshair');
     // Don't show the layer list for this app.
     map.setControlVisibility({ layerList: true });
-
+    map.setOption(null,{'Dark': mapStyles.Dark})  
     return map;
 }
 
@@ -419,3 +425,4 @@ ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
 var mapCenterLon = -122.423145
 var mapCenterLat = 47.612410
 redraw()
+mapPanel
