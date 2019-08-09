@@ -37,7 +37,7 @@ var names = layerDict.get('names')
 */
 var layerProperties = {
     'Precipitation': {
-        layer: datasets.prismP,
+        layer: datasets.NASA_precip,
         LegendName: ['Mean Annual Preciptation, mm/year'],
         palette: palettes.misc.jet[7],
         discrete: false,
@@ -196,6 +196,25 @@ function findWithAttr(array, attr, value) {
     return -1;
 }
 
+//helper functions 
+var layerSelect = ui.Select({
+    //items: ee.List(layerDict.get('names')),
+    items: selectItems,
+    placeholder: 'Select a value',
+    //value: 'HUC 12'
+    onChange: getFunctions(layerSelect)
+});
+
+
+function getFunctions(dropdown) { //todo edit these. 
+  var selection = dropdown.getValue()
+  if (selection == itemNames[0]) {
+    print('function1')
+    //function1
+  }
+  else {print('none')
+}
+  }
 
 //global variables 
 var clicked_basin
@@ -246,6 +265,8 @@ function redraw() {
         WS = PSAU;
     } else if (layer == 'WRIA')
         WS = WRIA;
+      else
+        WS = null; 
     mapPanel.clear()
     mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
     mapPanel.addLayer(WS, {}, 'layer name')
@@ -256,10 +277,9 @@ function redraw() {
 // Create a layer selector pulldown.
 // The elements of the pulldown are the keys of the layerProperties dictionary.
 
+var itemNames = ['Precipitation', 'Land Cover/Land Use', 'Population', 'Hydrology', 'Stormwater Pollutants']
 
-
-
-var selectItems = Object.keys(layerProperties);//TODO Change to list of functions
+var selectItems = itemNames;//TODO Change to list of functions
 print(selectItems)
 var layerDict = ee.Dictionary(layerProperties);
 // Define the pulldown menu.  Changing the pulldown menu changes the map layer
@@ -270,11 +290,13 @@ var layerSelect = ui.Select({
     items: selectItems,
     placeholder: 'Select a value',
     //value: 'HUC 12'
-    onChange: addUserLayer
+    onChange: getFunctions(layerSelect)
 });
 
 //var vizMin
 //var vizMax 
+
+
 
 function addUserLayer() {
     //Map.layers().reset()
@@ -460,5 +482,5 @@ ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
 
 //mapPanel.centerObject(studyArea,12); 
 //mapPanel.add(studyArea)
-
+redraw()
 
