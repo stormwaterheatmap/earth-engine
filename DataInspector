@@ -216,6 +216,9 @@ function addReports() {
   //display information about report 
   var reportTitle = ui.Label(selected)
   mainPanel.add(reportTitle)
+       //add chart
+  sidePanel.add(charts.histogramImage(layerProperties.Precipitation.layer,
+  clicked_basin,100,layerProperties.Precipitation.LegendName))
 }
     
 //Main Function for displaying layers     
@@ -290,9 +293,7 @@ function addUserLayer() {
     //remove Loading label
     //TODO
     //add legend 
-    
-    //add chart
-      sidePanel.add(charts.histogramImage(image,clicked_basin,100,'name'))
+   
     // handle_map_click(WS)
 }
 
@@ -326,6 +327,7 @@ function handle_map_click(location) {
     print(clicked_point),
         print('Clicked Basin', clicked_basin)
     mapPanel.clear()
+    mapPanel.style().set({cursor: 'hand'});
     mapPanel.addLayer(clicked_basin)
     mapPanel.centerObject(clicked_basin)
 
@@ -344,6 +346,7 @@ function handle_map_click(location) {
 
 function handle_inspect_click() {
     print('inspector Activated')
+    mapPanel.style().set({cursor: 'crosshair'});
     var selected_WS = watershedSelect.getValue();
     print(selected_WS)
     mapPanel.onClick(handle_map_click)
