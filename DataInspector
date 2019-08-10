@@ -29,7 +29,7 @@ Load images into a dictionary
 */ 
 var layerProperties = {
     'Precipitation': {
-        layer: datasets.NASA_precip,
+        layer: datasets.prismP,
         LegendName: ['Mean Annual Preciptation, mm/year'],
         palette: palettes.misc.jet[7],
         discrete: false,
@@ -216,7 +216,24 @@ function addReports() {
   //display information about report 
   var reportTitle = ui.Label(selected)
   mainPanel.add(reportTitle)
-       //add chart
+       //add charts
+  if (selected == 'Precipitation'){
+  //display mean annual precipitation 
+  print(selected)
+  var image = layerProperties.Precipitation.layer
+  var meanP = ee.Number(image.reduceRegion(
+    ee.Reducer.mean()), clicked_basin)
+  sidePanel.add(
+    ui.Label(['Basin mean annual precipitation: ',meanP])
+    )
+  
+  sidePanel.add(charts.histogramImage(layerProperties.Precipitation.layer,
+  clicked_basin,100,layerProperties.Precipitation.LegendName))
+  
+    } else if (layer == 'NHDPlus') {
+        WS = NHDPlus;
+    }
+  
   sidePanel.add(charts.histogramImage(layerProperties.Precipitation.layer,
   clicked_basin,100,layerProperties.Precipitation.LegendName))
 }
