@@ -256,32 +256,14 @@ function addUserLayer() {
     mapPanel.addLayer(image, 
     { min: vizMin, max: vizMax, palette:userLayer.palette}, 
       name)
-    //add the legend  
+    //add the map panel and legend  
      mapPanel.add(  
   ui.Panel(
   [
-    /*ui.Label({
-      value: 'Surface Runoff',
-       style: {
-       fontWeight: 'bold',
-      fontSize: '16px',
-      margin: '0 0 4px 0',
-      padding: '0'
-      }
-      }),
-      */
-    ui.Label('mm'),
-    /*
-    ui.Label({
-      value: 'Till Soil, Pasture, Moderate Slope',
-      style: {
-        fontSize: '10px'
-     // style: 'italic'
-      }
-      }),
-      */ 
-    legends.barLegend(vizMin, ((vizMin+vizMax)/2), vizMax,userLayer.palette),
-    ui.Label('2080 vs 1980')
+    ui.Label(userLayer.LegendName),
+    ui.Label('opacity'), 
+    ui.Slider(), //empty slider for now
+    legends.barLegend(vizMin, null, vizMax,userLayer.palette),
     ],
     ui.Panel.Layout.flow('vertical'),
     {position: 'bottom-left'})); 
@@ -366,8 +348,9 @@ function clipBasin(imageToClip) {
 }
 
 var deactiv_button = ui.Button({
-    label: 'Deactivate inspector',
-    style: BUTTON_STYLE
+    label: 'Reset Map',
+    style: BUTTON_STYLE, 
+    onClick: mapReset,//also clear side panel 
 });
 
 //UI functions
@@ -429,8 +412,17 @@ var watershedSelect = ui.Select({
 });
 
 
-// Clear the default UI 
-ui.root.clear();
+
+function mapReset(){
+  ui.root.clear()
+  Map.layers().reset()
+  //redraw()
+}
+
+ // Clear the default UI 
+  ui.root.clear();
+
+
 
 // Create the app's two panels and add them to the ui.root as a split panel
 var sidePanel = makeSidePanel();
