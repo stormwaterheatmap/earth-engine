@@ -414,9 +414,10 @@ var watershedSelect = ui.Select({
 
 
 function mapReset(){
-  
   Map.layers().reset()
   mapPanel.clear()
+  mainPanel.clear()
+  
   mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
   mapPanel.setOptions('Dark',{'Dark': mapStyle.GRAYMAP})
     //Map.setOptions('Dark', {'Dark': mapStyle.Dark});
