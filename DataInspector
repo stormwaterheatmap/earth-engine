@@ -276,7 +276,15 @@ function addUserLayer() {
     
     ui.Label('opacity'), 
     ui.Slider(), //empty slider for now
-  
+    ui.Button({label: 'Download image',
+      onClick: function() {
+        var path = image1.getDownloadURL({
+    'scale': 30,
+    'crs': 'EPSG:4326',
+    'region': '[[-123.1139467, 48.083], [-123.090600, 48.083], [-123.090600, 48.070], [-123.1139467, 48.070]]'
+})
+print(path)
+    }})
     ],
     ui.Panel.Layout.flow('vertical'),
     {position: 'top-left'})
