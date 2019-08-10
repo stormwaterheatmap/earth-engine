@@ -260,6 +260,7 @@ function addUserLayer() {
      mapPanel.add(  
   ui.Panel(
   [
+    ui.Select(['Layer 1', 'Layer 2', 'Layer 3']), 
     ui.Label(userLayer.LegendName),
     ui.Label('opacity'), 
     ui.Slider(), //empty slider for now
@@ -268,7 +269,19 @@ function addUserLayer() {
     ui.Panel.Layout.flow('vertical'),
     {position: 'bottom-left'})); 
      
-     
+  mapPanel.add(  
+  ui.Panel(
+  [
+    ui.Select(['Layer 1', 'Layer 2', 'Layer 3']), 
+    
+    ui.Label('opacity'), 
+    ui.Slider(), //empty slider for now
+  
+    ],
+    ui.Panel.Layout.flow('vertical'),
+    {position: 'top-left'})
+    
+    );    
   
       
     })
