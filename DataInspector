@@ -12,6 +12,9 @@ var charts = require('users/stormwaterheatmap/Modules:chart');
 var palettes = require('users/gena/packages:palettes');
 var legends = require('users/stormwaterheatmap/Modules:legends');
 var mapStyle = require('users/stormwaterheatmap/Modules:mapStyles')
+var layerProperties = require('users/stormwaterheatmap/Modules:layerProperties')
+var layerProperties = layerProperties.layerProperties
+var pieChart = require('users/stormwaterheatmap/Modules:pieChartSnippetwithExport')
 
 /* 
 Load vectors
