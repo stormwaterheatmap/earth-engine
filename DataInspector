@@ -198,7 +198,7 @@ var layerProperties = {
 'Northeastern Interior Dry Oak Forest-Hardwood Modifier',
 'Northeastern Interior Dry-Mesic Oak Forest',
 'Northern Atlantic Coastal Plain Dry Hardwood Forest',
-'Northern Crowley's Ridge Sand Forest',
+'Northern Crowleys Ridge Sand Forest',
 'Ouachita Montane Oak Forest',
 'Ozark-Ouachita Dry Oak Woodland',
 'Ozark-Ouachita Dry-Mesic Oak Forest',
@@ -246,7 +246,7 @@ var layerProperties = {
 'Ozark-Ouachita Mesic Hardwood Forest',
 'South-Central Interior Mesophytic Forest',
 'Southern and Central Appalachian Cove Forest',
-'Southern Crowley's Ridge Mesic Loess Slope Forest',
+'Southern Crowleys Ridge Mesic Loess Slope Forest',
 'Southern Piedmont Mesic Forest',
 'Appalachian Shale Barrens',
 'Atlantic Coastal Plain Northern Maritime Forest',
@@ -694,7 +694,7 @@ var layerProperties = {
 'Quarries, Mines, Gravel Pits and Oil Wells',
 'Developed, Open Space',
 'Developed, Low Intensity',
-'Developed, Medium Intensity']
+'Developed, Medium Intensity'],
         legend: [
             { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
             { 'No loss': 'black' }, { 'Water or no data': 'grey' }
@@ -995,7 +995,8 @@ function addReports() {
         sidePanel.add(makePieChart
         (clicked_basin.geometry(),layerProperties.landcover))
         //add report of GAP data 
-        
+        sidePanel.add(makePieChart
+        (clicked_basin.geometry(),layerProperties.GAP))
     
         
     }
