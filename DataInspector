@@ -212,7 +212,7 @@ function addReports() {
         //(clicked_basin.geometry(),layerProperties.landUse))
         //add report of land cover 
          //image = layerProperties.landcover.layer
-        sidePanel.add(pieChart.makePieChart
+        mainPanel.add(pieChart.makePieChart
         (clicked_basin.geometry(),layerProperties.landcover))
         //add report of GAP data 
         mainPanel.add(pieChart.makePieChart
