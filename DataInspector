@@ -72,6 +72,29 @@ var BUTTON_STYLE = {
     //fontWeight: '50',
     //stretch: 'horizontal'
 };
+
+var reportsStyle = {
+  'main': {
+    position: 'bottom-left',
+     margin: '0 0 0 0',  
+    backgroundColor: '#EEEEEE', 
+    border: '1px BDBDBD, 0, 0, 0',
+    height: '35%',
+      width: '300 px', 
+      padding: '4px, 4px, 4px, 4px'
+  },
+   'reportTitle': {
+    fontSize: '24px',
+   backgroundColor: '#11ffee00'
+  }, 
+  'cardPanel': {
+    border: '1px solid #BDBDBD',
+    backgroundColor: 'white', 
+  }
+  
+}
+
+print(reportsStyle)
 //Create a dictionary of layers and descriptions 
 // Use curly brackets {} to make a dictionary of key:value pairs.
 /* 
@@ -176,10 +199,22 @@ function addLayersAndReport() {
 }
 //Main Function for reports
 function addReports() {
+  //make the main reports panel 
+  var reportsPanel = ui.Panel({
+    widgets: null, 
+    layout:  ui.Panel.Layout('vertical',true), 
+    style: reportsStyle.main
+    })
+    
+    main.Panel.add(reportsPanel)
+
   var selected = layerSelect.getValue();
+  
   //display information about report 
-  var reportTitle = ui.Label(selected)
-  mainPanel.add(reportTitle)
+  var reportTitle = ui.Label({
+    value: selected, 
+    style: reportsStyle.cardTitle} )
+  reportsPanel.add(reportTitle)
        //add charts
        
 //Begin Precipitation Reports  
@@ -458,6 +493,7 @@ function mapReset(){
 // Create the app's two panels and add them to the ui.root as a split panel
 var sidePanel = makeSidePanel();
 var mapPanel = makeMapPanel();
+//var reportsPanel = makeReportsPanel(); 
 ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
 
 
