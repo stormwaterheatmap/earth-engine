@@ -208,17 +208,15 @@ function addReports() {
         //add report of land use
         print('Print Landuse!')
         print(layerProperties)
-        sidePanel.add(pieChart.makePieChart
-        (clicked_basin.geometry(),layerProperties.landUse))
+        //sidePanel.add(pieChart.makePieChart
+        //(clicked_basin.geometry(),layerProperties.landUse))
         //add report of land cover 
          //image = layerProperties.landcover.layer
         sidePanel.add(pieChart.makePieChart
         (clicked_basin.geometry(),layerProperties.landcover))
         //add report of GAP data 
-        sidePanel.add(pieChart.makePieChart
+        mainPanel.add(pieChart.makePieChart
         (clicked_basin.geometry(),layerProperties.GAP))
-    
-        
     }
   
   //sidePanel.add(charts.histogramImage(layerProperties.Precipitation.layer,
