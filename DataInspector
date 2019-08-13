@@ -32,92 +32,72 @@ var PSAU = datasets.PS_AU
 Style defaults 
 ---------------------------------------------------------------------------------------------------- 
 */
-var colors = { 'cyan': '#24C1E0', 'transparent': '#11ffee00', 'gray': '#F8F9FA', 'white': '#ffffff' };
-
-var TITLE_STYLE = {
-    fontWeight: '300',
-    fontSize: '32px',
-    padding: '10px',
-    //color: '#616161',
-    backgroundColor: colors.white,
+var colors = {
+    'primary': '#4caf50',
+    'pLight': '#80e27e', 
+    'pDark': '#087f23', 
+    'secondary': '#bdbdbd',
+    'sLight': '#eeeeee',
+    'sDark': '#8c8c8c'
 };
-
-var PARAGRAPH_STYLE = {
-    fontSize: '14px',
-    //fontWeight: '100',
-    //color: '#9E9E9E',
-    padding: '8px',
-    backgroundColor: colors.white,
-};
-
-var LABEL_STYLE = {
-    fontWeight: '100',
-    textAlign: 'center',
-    fontSize: '11px',
-    backgroundColor: colors.white,
-};
-
-var BORDER_STYLE = '4px solid rgba(97, 97, 97, 0.05)'
-
-var BUTTON_STYLE = {
-    //color: 'white',
-    //backgroundColor: "green", /* Green */
-    border: 'none',
-    //color: 'white',
-    //padding: '15px',
-    //text-align: center;
-    //text-decoration: none;
-    //display: inline-block;
-    // fontSize: '16px',
-    //fontWeight: '50',
-    //stretch: 'horizontal'
-};
-
+print(colors)
+var panelBorderStyle = '1px BDBDBD, 0, 0, 0'
+var cardBorderStyle = '1px solid #BDBDBD'
 var reportsStyle = {
-  'main': {
-    position: 'bottom-left',
-     margin: '0 0 0 0',  
-    backgroundColor: '#EEEEEE', 
-    border: '1px BDBDBD, 0, 0, 0',
-    height: '35%',
-      width: '300 px', 
-      padding: '4px, 4px, 4px, 4px'
+  'Report': {
+    //position: 'bottom-left',
+    backgroundColor: colors.sLight, 
+ //   border: '1px solid #BDBDBD',
+   // height: '50%',
+      //width: '98%', 
   },
-   'reportTitle': {
-    fontSize: '24px',
-   backgroundColor: '#11ffee00'
+   'cardTitle': {
+    color: '#212121', 
+    fontSize: '12px',
+    textAlign: 'left',
+    fontWeight: 'bold', 
+    fontFamily: ['Arial', "serif"],
+    //stretch: 'vertical',
+    backgroundColor: '#11ffee00',
+  
   }, 
   'cardPanel': {
-    border: '1px solid #BDBDBD',
+   // border: '1px solid #BDBDBD',
     backgroundColor: 'white', 
+  //  width: '100%',
+     textAlign: 'center', 
+     margin: '24px',
+     //padding: '24px',
+    // position: 'top-center', 
+     stretch: 'horizontal'
+  }, 
+  'reportTitle' : { 
+    fontSize: '18px',
+    textAlign: 'left',
+    fontFamily: ['Arial','Segoe UI', "serif"],
+    stretch: 'horizontal',
+    padding: '6px',
+    margin: '0px',
+   backgroundColor: colors.pLight,
   }
   
 }
-
 print(reportsStyle)
-//Create a dictionary of layers and descriptions 
-// Use curly brackets {} to make a dictionary of key:value pairs.
-/* 
-Map Styles 
----------------------------------------------------------------------------------------------------- 
-*/ 
-
-
 /*
-Global Variables 
+Global Variables------------------------------------------------------------------------------------- 
 */ 
-
 var clicked_basin
 var WS
+
 /* 
 Functions 
 ---------------------------------------------------------------------------------------------------- 
 */  
 //creates a table of mean value in a region //todo: fix format
+//Chart/calculations functions (to do - move these to a module)
 function makeTable(image) { 
   var table = ui.Chart.image.byRegion({
   image: image, 
-  //regions: geometry, 
   reducer: ee.Reducer.mean()
 })
   table.setChartType('Table');
@@ -125,26 +105,6 @@ function makeTable(image) {
   table.style().set({stretch: 'both'});
   return(table)
 }
-  
-
-//helper function for dictionary lookup
-function findWithAttr(array, attr, value) {
-    for (var i = 0; i < array.length; i += 1) {
-        if (array[i][attr] === value) {
-            return i;
-        }
-    }
-    return -1;
-}
-//ToDo clean up the piechart function 
-
-
-
-
-
-
-
-
 //function to redraw the map with the selected watershed.     
 function redraw() {
     Map.layers().reset()
@@ -168,19 +128,57 @@ function redraw() {
     mapPanel.addLayer(WS, {}, 'layer name')
     // handle_map_click(WS)
 }
+/* 
+UI Functions 
+---------------------------------------------------------------------------------------------------- 
+*/
+function makeSidePanel() {
+    // Create the base side panel, into which other widgets will be added
+    mainPanel.add(blankPanel)
+    mainPanel.add(titleLabel)
+    mainPanel.add(
+      instructionsPanel.add(step1),
+      instructionsPanel.add(watershedSelect),
+      instructionsPanel.add(step2))
+    mainPanel.add(buttonPanel)
+        return mainPanel;
 
+}
+/* 
+UI Variables
+--------------------------------------------------------------------------------------------------- 
+*/ 
+//Panels 
+var instructionsPanel = ui.Panel()
+var buttonPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('vertical', true),
+    style: {
+                               //backgroundColor: colors.white,
+            }
+});
 
-// Create a layer selector pulldown.
-// The elements of the pulldown are the keys of the layerProperties dictionary.
+//Buttons 
+var deactiv_button = ui.Button({
+    label: 'Reset Map',
+    //onClick: mapReset,//also clear side panel 
+});
 
-var itemNames = ['Precipitation', 'Land Cover/Land Use', 'Population', 'Hydrology', 'Stormwater Pollutants']
+//Labels 
+var step1 = ui.Label('1) Select a watershed dataset to use')
+var step2 = ui.Label('2) Select an image')
 
-var selectItems = itemNames;//TODO Change to list of functions
+//Selectors 
+var watershedSelect = ui.Select({
+    items: ['HUC 12', 'NHDPlus','WRIA'],
+    placeholder: 'Select a value',
+    //value: 'HUC 12'
+   // onChange: redraw
+});
+var selectItems = ['Precipitation', 'Land Cover/Land Use', 'Population', 'Hydrology', 'Stormwater Pollutants']
 print(selectItems)
 var layerDict = ee.Dictionary(layerProperties);
 // Define the pulldown menu.  Changing the pulldown menu changes the map layer
 // and legend.
-
 var layerSelect = ui.Select({
     //items: ee.List(layerDict.get('names')),
     items: selectItems,
@@ -188,13 +186,9 @@ var layerSelect = ui.Select({
     //value: 'HUC 12'
     onChange:addLayersAndReport
 });
-
-//var vizMin
-//var vizMax 
-
 //After inspection/selection call functions for layers and reports
 function addLayersAndReport() {
-  addUserLayer()
+  //addUserLayer()
   addReports()
 }
 //Main Function for reports
@@ -202,11 +196,11 @@ function addReports() {
   //make the main reports panel 
   var reportsPanel = ui.Panel({
     widgets: null, 
-    layout:  ui.Panel.Layout('vertical',true), 
+    //layout:  ui.Panel.Layout('vertical',true), 
     style: reportsStyle.main
     })
     
-    main.Panel.add(reportsPanel)
+    mainPanel.add(reportsPanel)
 
   var selected = layerSelect.getValue();
   
@@ -341,12 +335,12 @@ print(path)
 }
 
 var buttonPanel = ui.Panel({
-    layout: ui.Panel.Layout.flow('horizontal', true),
+    //layout: ui.Panel.Layout.flow('horizontal', true),
     style: {
         //stretch: 'both',
         //height: '100px',
         //width: '400px',
-        backgroundColor: colors.white,
+       // backgroundColor: colors.white,
         //border: BORDER_STYLE,
     }
 });
@@ -410,7 +404,6 @@ function clipBasin(imageToClip) {
 
 var deactiv_button = ui.Button({
     label: 'Reset Map',
-    style: BUTTON_STYLE, 
     onClick: mapReset,//also clear side panel 
 });
 
@@ -449,19 +442,19 @@ var mainPanel = ui.Panel({
         stretch: 'horizontal',
         height: '100%',
         width: '550px',
-        backgroundColor: colors.white,
-        border: BORDER_STYLE,
+       // backgroundColor: colors.white,
+       // border: BORDER_STYLE,
     }
 });
 
 // Add the app title and information 
-var titleLabel = ui.Label('Watershed Inspector', TITLE_STYLE);
+var titleLabel = ui.Label('Watershed Inspector');
 var descriptionText =
     'This app allows you to interactively explore heatmap data by watershed.'
-var descriptionLabel = ui.Label(descriptionText, PARAGRAPH_STYLE);
+var descriptionLabel = ui.Label(descriptionText);
 var watershedSelectLabel = ui.Label({
     value: 'Select a watershed dataset:',
-    style: PARAGRAPH_STYLE
+   // style: PARAGRAPH_STYLE
 });
 
 //set up watershed drop down menu     
