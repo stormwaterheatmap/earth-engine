@@ -241,16 +241,36 @@ function clipBasin(imageToClip) {
 /*
 Cards Function------------------------------------------------------------------------------------
 */ 
+//for debugging
+function debugCards() {
+   reportsPanel.clear() // Clear the panel  
+    // add mean precip card
+    var thisLayer = layerProperties.Precipitation
+    //var title = thisLayer.LegendName
+   // var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
+    var card1 = cards.bigNumberPanel(
+      thisLayer.LegendName, //Title 
+      imgMean(thisLayer.layer,clicked_basin,200), //Number
+      'units',//Units 
+      'info' //info
+      )
+    reportsPanel.add(card1)
+  
+    //(img, geometry, scale) {
+  //add precip histogram card 
+
+}
+///Precip Cards 
 function precipCards() {
   reportsPanel.clear() // Clear the panel  
     // add mean precip card
     //var bigNumberPanel = function (title, number, units, info)
     var thisLayer = layerProperties.Precipitation
-    var title = thisLayer.LegendName
-    var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
+    //var title = thisLayer.LegendName
+   // var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
     var card1 = cards.bigNumberPanel(
       thisLayer.LegendName, //Title 
-      imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale()), //Number
+      imgMean(thisLayer.layer,clicked_basin,200), //Number
       'units',//Units 
       'info' //info
       )
@@ -328,6 +348,9 @@ function addReports() {
          //add charts
          
   //Begin Precipitation cards  
+     if (selected == 'debug'){
+    debugCards() 
+      } 
     if (selected == 'Precipitation'){
     precipCards() 
       } 
