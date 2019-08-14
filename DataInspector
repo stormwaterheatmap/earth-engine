@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var imageCollection = ee.ImageCollection("OREGONSTATE/PRISM/Norm81m");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* 
 Load modules
 ---------------------------------------------------------------------------------------------------- 
@@ -130,6 +133,7 @@ Global Variables----------------------------------------------------------------
 */ 
 var clicked_basin
 var WS
+var layer
 
 /* 
 Functions 
@@ -232,6 +236,8 @@ function redraw() {
     // handle_map_click(WS)
 }
 function clipBasin(imageToClip) {
+    print('line 236', imageToClip)
+    print('line 237', clicked_basin)
     var clippedImage = imageToClip.clip(clicked_basin);
     return clippedImage;
 }
@@ -242,7 +248,7 @@ function addUserLayer(userLayer) {
       'Grey',{'Grey': mapStyle.GRAYMAP}
       );
 
-    print("Layer to be displayed:", layer);
+    print("Layer to be displayed:", userLayer);
     var image = clipBasin(userLayer.layer);
     var name = userLayer.LegendName;
     var pal = userLayer.palette;
@@ -251,9 +257,7 @@ function addUserLayer(userLayer) {
       {
         reducer: ee.Reducer.minMax(),
         scale: 1000
-        
       }).values();
-  
     minmax.evaluate(function(result) {
       //When the server returns the value, show it
       print(result)
@@ -270,7 +274,7 @@ function addUserLayer(userLayer) {
       palette:userLayer.palette
       
     }, 
-      name); 
+      'name'); 
     })
   
 }
@@ -279,11 +283,12 @@ function addUserLayer(userLayer) {
 Cards Function------------------------------------------------------------------------------------
 */ 
 //for debugging
-function debugCards() {
+function precipCards() {
    reportsPanel.clear() // Clear the panel 
-    clicked_basin = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
+    //clicked_basin = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
    print('debugging mode')
-   mapPanel.add(clicked_basin)
+   print(clicked_basin)
+   //mapPanel.add(clicked_basin)
     // add mean precip card
     var thisLayer = layerProperties.Precipitation
     //var title = thisLayer.LegendName
@@ -298,10 +303,12 @@ function debugCards() {
 //histogram of precip 
 var cardTitle = ui.Label({value: thisLayer.LegendName, style: reportsStyle.cardTitle}) 
 var pChart = charts.histogramImage(thisLayer.layer,clicked_basin,200,thisLayer.LegendName)
- 
+ print(thisLayer)
+ print(thisLayer.layer)
 var addButton = ui.Button({
   label: 'Show this on Map',
-onClick: addUserLayer(thisLayer)
+ onClick: addUserLayer(
+ thisLayer)
 }); 
 
 var pCard = ui.Panel({style:reportsStyle.cardPanel}).add(cardTitle).add(pChart).add(addButton)
@@ -309,7 +316,7 @@ reportsPanel.add(pCard)
 // function(image, WS, scale, title)
 }
 ///Precip Cards 
-function precipCards() {
+function debugCards() {
   reportsPanel.clear() // Clear the panel  
     // add mean precip card
     //var bigNumberPanel = function (title, number, units, info)
@@ -386,6 +393,8 @@ function makeMapPanel() {
 }
   //make the main reports panel 
 function addReports() {
+    reportsPanel.clear()
+    mapPanel.clear()
     var selected = reportsSelect.getValue();
     var reportTitle = ui.Label({
       value: selected, 
