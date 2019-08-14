@@ -247,6 +247,9 @@ function precipCards() {
     var thisLayer = layerProperties.precipitation
     var title = thisLayer.LegendName
     var number = imgMean(thisLayer.layer,mapPanel.getScale())
+    var card1 = bigNumberPanel(tile,number,'none','none')
+    reportsPanel.add(card1)
+    
     //(img, geometry, scale) {
   //add precip histogram card 
   
