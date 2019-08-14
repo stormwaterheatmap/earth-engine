@@ -232,35 +232,49 @@ function redraw() {
     // handle_map_click(WS)
 }
 function clipBasin(imageToClip) {
-    var clippedImage = imageToClip.clip(clicked_basin)
-    return clippedImage
+    var clippedImage = imageToClip.clip(clicked_basin);
+    return clippedImage;
 }
 //layerProperties.Precipitation
 function addUserLayer(userLayer) { 
-    //Map.layers().reset()
-    mapPanel.setOptions('Grey',{'Grey': mapStyle.GRAYMAP})
-    //var selected = layerSelect.getValue();
-    //var userLayer = layerProperties[layer]
-    print("Layer to be displayed:", layer)
+    
+    mapPanel.setOptions(
+      'Grey',{'Grey': mapStyle.GRAYMAP}
+      );
+
+    print("Layer to be displayed:", layer);
     var image = clipBasin(userLayer.layer);
-    var name = userLayer.LegendName
-    var pal = userLayer.palette
+    var name = userLayer.LegendName;
+    var pal = userLayer.palette;
     //determine the min and max for display
-    var minmax = image.reduceRegion({reducer: ee.Reducer.minMax(),
-    scale: 1000}).values()
-    //Request min and max from server
+    var minmax = image.reduceRegion(
+      {
+        reducer: ee.Reducer.minMax(),
+        scale: 1000
+        
+      }).values();
+  
     minmax.evaluate(function(result) {
       //When the server returns the value, show it
       print(result)
-    //var viz = result.sort()  
+   
     var vizMax = result[0].toFixed() 
     var vizMin =  result[1].toFixed()  
     print('vizMax:' , vizMax)
      print('vizMin:' , vizMin)
     //add the clipped image
     mapPanel.addLayer(image, 
-    { min: vizMin, max: vizMax, palette:userLayer.palette}, 
-      name)
+    { 
+      min: vizMin, 
+      max: vizMax, 
+      palette:userLayer.palette
+      
+    }, 
+      name); 
+    })
+  
+}
+
 /*
 Cards Function------------------------------------------------------------------------------------
 */ 
@@ -285,8 +299,10 @@ function debugCards() {
 var cardTitle = ui.Label({value: thisLayer.LegendName, style: reportsStyle.cardTitle}) 
 var pChart = charts.histogramImage(thisLayer.layer,clicked_basin,200,thisLayer.LegendName)
  
-var addButton = ui.Button({label: 'Show this on Map',
-onClick: addUserLayer(thisLayer)})
+var addButton = ui.Button({
+  label: 'Show this on Map',
+onClick: addUserLayer(thisLayer)
+}); 
 
 var pCard = ui.Panel({style:reportsStyle.cardPanel}).add(cardTitle).add(pChart).add(addButton)
 reportsPanel.add(pCard)
@@ -305,7 +321,7 @@ function precipCards() {
       imgMean(thisLayer.layer,clicked_basin,200).getInfo(), //Number
       'units',//Units 
       'info' //info
-      )
+      );
    // reportsPanel.add(card1)
   
     //(img, geometry, scale) {
@@ -315,13 +331,13 @@ function precipCards() {
 }
 
 function landcoverCards() {
-  var reportTitle = ui.Label('landcoverCards')
-  reportsPanel.add(reportTitle)
+  var reportTitle = ui.Label('landcoverCards');
+  reportsPanel.add(reportTitle);
 }
 
 function populationCards() {
-  var reportTitle = ui.Label('this is a title')
-  reportsPanel.add(reportTitle)
+  var reportTitle = ui.Label('this is a title');
+  reportsPanel.add(reportTitle);
 }
 
 function hydrologyCards() {
@@ -330,8 +346,8 @@ function hydrologyCards() {
 }
 
 function stormwaterPollutantsCards() {
-  var reportTitle = ui.Label('this is a title')
-  reportsPanel.add(reportTitle)
+  var reportTitle = ui.Label('this is a title');
+  reportsPanel.add(reportTitle);
 }
 
 /* 
@@ -365,7 +381,7 @@ function makeMapPanel() {
     
     // Don't show the layer list for this app.
     map.setControlVisibility({ layerList: false });
-    map.setOptions('Grey',{'Grey': mapStyle.GRAYMAP})  
+    map.setOptions('Grey',{'Grey': mapStyle.GRAYMAP}) ; 
     return map;
 }
   //make the main reports panel 
@@ -373,30 +389,30 @@ function addReports() {
     var selected = reportsSelect.getValue();
     var reportTitle = ui.Label({
       value: selected, 
-      style: reportsStyle.cardTitle} )
-      reportsPanel.add(reportTitle)
+      style: reportsStyle.cardTitle} );
+      reportsPanel.add(reportTitle);
          //add charts
          
   //Begin Precipitation cards  
      if (selected == 'Debug'){
-    debugCards() 
+    debugCards() ;
       } 
     if (selected == 'Precipitation'){
-    precipCards() 
+    precipCards() ;
       } 
       //End Precipitation Reports  
             //Begin Land Cover/Land Use Reports
       else if (selected == 'Land Cover/Land Use') {
-          landcoverCards()
+          landcoverCards();
       }
       else if (selected == 'Population') {
-          populationCards()
+          populationCards();
       }
       else if (selected == 'Hydrology') {
-          hydrologyCards()
+          hydrologyCards();
       }
           else if (selected == 'Stormwater Pollutants') {
-          stormwaterPollutantsCards()
+          stormwaterPollutantsCards();
       }
     
     //sidePanel.add(charts.histogramImage(layerProperties.Precipitation.layer,
@@ -446,7 +462,7 @@ var buttonPanel = ui.Panel({
            backgroundColor: colors.transparent,
             }
 });
-var resultCard = ui.Panel({style: reportsStyle.cardPanel})
+var resultCard = ui.Panel({style: reportsStyle.cardPanel}); 
 //Buttons 
 var deactiv_button = ui.Button({
     label: 'Reset Map',
@@ -457,7 +473,7 @@ var deactiv_button = ui.Button({
 var inspect_button = ui.Button({
     label: 'Activate inspector',
     onClick: handle_inspect_click
-})
+}); 
 //function to add user layer to the map
 
 
@@ -513,9 +529,9 @@ function mapReset(){
 var sidePanel = makeSidePanel();
  var mapPanel = makeMapPanel();
 //var reportsPanel = makeReportsPanel(); 
-mapPanel.setOptions('Dark',{'Dark': mapStyle.GRAYMAP})
+mapPanel.setOptions('Dark',{'Dark': mapStyle.GRAYMAP});
 ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
-var mapCenterLon = -122.423145
-var mapCenterLat = 47.612410
-redraw()
+var mapCenterLon = -122.423145;
+var mapCenterLat = 47.612410;
+redraw();
 
