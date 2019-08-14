@@ -250,7 +250,7 @@ function addUserLayer(userLayer) {
 
     print("Layer to be displayed:", userLayer);
     var image = clipBasin(userLayer.layer);
-    var name = userLayer.LegendName;
+    var name = userLayer.Description;
     var pal = userLayer.palette;
     //determine the min and max for display
     var minmax = image.reduceRegion(
@@ -274,9 +274,17 @@ function addUserLayer(userLayer) {
       palette:userLayer.palette
       
     }, 
-      'name'); 
+      userLayer.Description); 
     })
-  
+    //add legend 
+    var Plegend = legends.barLegend(vizMin, null, vizMax, userLayer.palette)
+    var legendPanel = ui.Panel().Layout.absolute('bottom-left')
+    
+    legendPanel.add(ui.Label(userLayer.Description))
+      .add(Plegend)
+      .add(ui.Label(userLayer.units))
+    
+    mapPanel.add(legendPanel)
 }
 
 /*
