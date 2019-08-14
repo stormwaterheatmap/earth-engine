@@ -275,16 +275,15 @@ function addUserLayer(userLayer) {
       
     }, 
       userLayer.Description); 
-    })
-    //add legend 
+      //add legend 
     var Plegend = legends.barLegend(vizMin, null, vizMax, userLayer.palette)
-    var legendPanel = ui.Panel().Layout.absolute('bottom-left')
-    
+    var legendPanel = ui.Panel()
     legendPanel.add(ui.Label(userLayer.Description))
       .add(Plegend)
-      .add(ui.Label(userLayer.units))
-    
+      .add(ui.Label(userLayer.Units))
     mapPanel.add(legendPanel)
+    })
+    
 }
 
 /*
