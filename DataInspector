@@ -11,7 +11,7 @@ var mapStyle = require('users/stormwaterheatmap/Modules:mapStyles')
 var layerProperties = require('users/stormwaterheatmap/Modules:layerProperties')
 var layerProperties = layerProperties.layerProperties
 var pieChart = require('users/stormwaterheatmap/Modules:pieChartSnippetwithExport')
-
+var cards = require('users/stormwaterheatmap/Modules:Cards')
 /* 
 Load vectors
 ---------------------------------------------------------------------------------------------------- 
@@ -168,7 +168,7 @@ function imgMean(img, geometry, scale) {
     reducer: ee.Reducer.mean(),
     scale: scale,
     maxPixels: 1e9
-  });
+  }).getInfo();
   return imgM;
 }
 
@@ -241,15 +241,20 @@ function clipBasin(imageToClip) {
 Cards Function------------------------------------------------------------------------------------
 */ 
 function precipCards() {
-  reportsPanel.clear() // Clear the pane. 
+  reportsPanel.clear() // Clear the panel  
     // add mean precip card
     //var bigNumberPanel = function (title, number, units, info)
-    var thisLayer = layerProperties.precipitation
+    var thisLayer = layerProperties.Precipitation
     var title = thisLayer.LegendName
-    var number = imgMean(thisLayer.layer,mapPanel.getScale())
-    var card1 = bigNumberPanel(tile,number,'none','none')
+    var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
+    var card1 = cards.bigNumberPanel(
+      thisLayer.LegendName, //Title 
+      imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale()), //Number
+      'units',//Units 
+      'info' //info
+      )
     reportsPanel.add(card1)
-    
+  
     //(img, geometry, scale) {
   //add precip histogram card 
   
