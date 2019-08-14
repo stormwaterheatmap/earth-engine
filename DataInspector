@@ -161,15 +161,16 @@ function imgAreaHa(img, geometry, scale) {
   });
   return imgArea;
 }
-//calculate the mean value of an image 
+//calculate the mean value of an image and return the number
 function imgMean(img, geometry, scale) {
   var imgM = img.reduceRegion({
     geometry: geometry,
     reducer: ee.Reducer.mean(),
     scale: scale,
     maxPixels: 1e9
-  }).getInfo();
-  return imgM;
+  })
+  var numString = ee.Number.parse(imgM.get(0)).format('%,.2f').getInfo();
+  return numString;
 }
 
 //function to redraw the map with the selected watershed.
