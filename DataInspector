@@ -244,8 +244,10 @@ function precipCards() {
   reportsPanel.clear() // Clear the pane. 
     // add mean precip card
     //var bigNumberPanel = function (title, number, units, info)
-    var title = layerProperties.precipitation.LegendName
-    var number = 
+    var thisLayer = layerProperties.precipitation
+    var title = thisLayer.LegendName
+    var number = imgMean(thisLayer.layer,mapPanel.getScale())
+    //(img, geometry, scale) {
   //add precip histogram card 
   
   var reportTitle = ui.Label('this is a title')
