@@ -21,9 +21,6 @@ var NHDPlus = datasets.NHDPlus
 var studyArea = datasets.PugetSound
 var WRIA = datasets.WRIA
 var PSAU = datasets.PS_AU
-
-
-
 /*
 Style defaults 
 ---------------------------------------------------------------------------------------------------- 
@@ -126,7 +123,7 @@ var reportsStyle = {
   }
   
 }
-print(reportsStyle)
+print('Reports Style', reportsStyle)
 
 /*
 Global Variables------------------------------------------------------------------------------------- 
@@ -169,7 +166,7 @@ function imgMean(img, geometry, scale) {
     scale: scale,
     maxPixels: 1e9
   })
-  var numString = ee.Number.parse(imgM.select(0)).format('%,.2f').getInfo();
+  var numString = ee.Number.parse(imgM).format('%,.2f')//.getInfo();
   return numString;
 }
 
@@ -238,6 +235,32 @@ function clipBasin(imageToClip) {
     var clippedImage = imageToClip.clip(clicked_basin)
     return clippedImage
 }
+//layerProperties.Precipitation
+function addUserLayer(userLayer) { 
+    //Map.layers().reset()
+    mapPanel.setOptions('Grey',{'Grey': mapStyle.GRAYMAP})
+    //var selected = layerSelect.getValue();
+    //var userLayer = layerProperties[layer]
+    print("Layer to be displayed:", layer)
+    var image = clipBasin(userLayer.layer);
+    var name = userLayer.LegendName
+    var pal = userLayer.palette
+    //determine the min and max for display
+    var minmax = image.reduceRegion({reducer: ee.Reducer.minMax(),
+    scale: 1000}).values()
+    //Request min and max from server
+    minmax.evaluate(function(result) {
+      //When the server returns the value, show it
+      print(result)
+    //var viz = result.sort()  
+    var vizMax = result[0].toFixed() 
+    var vizMin =  result[1].toFixed()  
+    print('vizMax:' , vizMax)
+     print('vizMin:' , vizMin)
+    //add the clipped image
+    mapPanel.addLayer(image, 
+    { min: vizMin, max: vizMax, palette:userLayer.palette}, 
+      name)
 /*
 Cards Function------------------------------------------------------------------------------------
 */ 
@@ -246,6 +269,7 @@ function debugCards() {
    reportsPanel.clear() // Clear the panel 
     clicked_basin = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
    print('debugging mode')
+   mapPanel.add(clicked_basin)
     // add mean precip card
     var thisLayer = layerProperties.Precipitation
     //var title = thisLayer.LegendName
@@ -256,11 +280,17 @@ function debugCards() {
       'units',//Units 
       'info' //info
       )
-    reportsPanel.add(card1)
-  
-    //(img, geometry, scale) {
-  //add precip histogram card 
+  //  reportsPanel.add(card1)})
+//histogram of precip 
+var cardTitle = ui.Label({value: thisLayer.LegendName, style: reportsStyle.cardTitle}) 
+var pChart = charts.histogramImage(thisLayer.layer,clicked_basin,200,thisLayer.LegendName)
+ 
+var addButton = ui.Button({label: 'Show this on Map',
+onClick: addUserLayer(thisLayer)})
 
+var pCard = ui.Panel({style:reportsStyle.cardPanel}).add(cardTitle).add(pChart).add(addButton)
+reportsPanel.add(pCard)
+// function(image, WS, scale, title)
 }
 ///Precip Cards 
 function precipCards() {
@@ -272,18 +302,16 @@ function precipCards() {
    // var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
     var card1 = cards.bigNumberPanel(
       thisLayer.LegendName, //Title 
-      imgMean(thisLayer.layer,clicked_basin,200), //Number
+      imgMean(thisLayer.layer,clicked_basin,200).getInfo(), //Number
       'units',//Units 
       'info' //info
       )
-    reportsPanel.add(card1)
+   // reportsPanel.add(card1)
   
     //(img, geometry, scale) {
   //add precip histogram card 
   
-  var reportTitle = ui.Label('this is a title')
-  
-  reportsPanel.add(reportTitle)
+
 }
 
 function landcoverCards() {
@@ -418,7 +446,7 @@ var buttonPanel = ui.Panel({
            backgroundColor: colors.transparent,
             }
 });
-
+var resultCard = ui.Panel({style: reportsStyle.cardPanel})
 //Buttons 
 var deactiv_button = ui.Button({
     label: 'Reset Map',
