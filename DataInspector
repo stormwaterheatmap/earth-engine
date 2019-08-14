@@ -169,7 +169,7 @@ function imgMean(img, geometry, scale) {
     scale: scale,
     maxPixels: 1e9
   })
-  var numString = ee.Number.parse(imgM.get(0)).format('%,.2f').getInfo();
+  var numString = ee.Number.parse(imgM.select(0)).format('%,.2f').getInfo();
   return numString;
 }
 
