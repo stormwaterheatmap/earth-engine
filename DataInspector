@@ -243,7 +243,9 @@ Cards Function------------------------------------------------------------------
 */ 
 //for debugging
 function debugCards() {
-   reportsPanel.clear() // Clear the panel  
+   reportsPanel.clear() // Clear the panel 
+    clicked_basin = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
+   print('debugging mode')
     // add mean precip card
     var thisLayer = layerProperties.Precipitation
     //var title = thisLayer.LegendName
@@ -348,7 +350,7 @@ function addReports() {
          //add charts
          
   //Begin Precipitation cards  
-     if (selected == 'debug'){
+     if (selected == 'Debug'){
     debugCards() 
       } 
     if (selected == 'Precipitation'){
