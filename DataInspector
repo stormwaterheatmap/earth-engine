@@ -1,7 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var imageCollection = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Count"),
-    image = ee.Image("USGS/GAP/CONUS/2011");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* 
 Load modules
 ---------------------------------------------------------------------------------------------------- 
@@ -154,6 +150,28 @@ function makeTable(image) {
   table.style().set({stretch: 'both'});
   return(table)
 }
+//calculate the area of an image in Ha
+function imgAreaHa(img, geometry, scale) {
+  var pixelArea = img.gt(0).multiply(ee.Image.pixelArea()).divide(10000);  
+  var imgArea = pixelArea.reduceRegion({
+    geometry: geometry,
+    reducer: ee.Reducer.sum(),
+    scale: scale,
+    maxPixels: 1e9
+  });
+  return imgArea;
+}
+//calculate the mean value of an image 
+function imgMean(img, geometry, scale) {
+  var imgM = img.reduceRegion({
+    geometry: geometry,
+    reducer: ee.Reducer.mean(),
+    scale: scale,
+    maxPixels: 1e9
+  });
+  return imgM;
+}
+
 //function to redraw the map with the selected watershed.
 function handle_map_click(location) {
     // get clicked subbasin info
@@ -172,7 +190,7 @@ function handle_map_click(location) {
     mapPanel.style().set({cursor: 'hand'});
     mapPanel.addLayer(clicked_basin)
     mapPanel.centerObject(clicked_basin)
-
+    return clicked_basin
     //add layer dropdown 
     //mainPanel.add(reportsSelect)
     //addUserLayer(clicked_basin)
@@ -223,8 +241,36 @@ function clipBasin(imageToClip) {
 Cards Function------------------------------------------------------------------------------------
 */ 
 function precipCards() {
-  var Preciptitle = ui.Label('this is a title')
-  reportsPanel.add(Preciptitle)
+  reportsPanel.clear() // Clear the pane. 
+    // add mean precip card
+    //var bigNumberPanel = function (title, number, units, info)
+    var title = layerProperties.precipitation.LegendName
+    var number = 
+  //add precip histogram card 
+  
+  var reportTitle = ui.Label('this is a title')
+  
+  reportsPanel.add(reportTitle)
+}
+
+function landcoverCards() {
+  var reportTitle = ui.Label('landcoverCards')
+  reportsPanel.add(reportTitle)
+}
+
+function populationCards() {
+  var reportTitle = ui.Label('this is a title')
+  reportsPanel.add(reportTitle)
+}
+
+function hydrologyCards() {
+  var reportTitle = ui.Label('this is a title')
+  reportsPanel.add(reportTitle)
+}
+
+function stormwaterPollutantsCards() {
+  var reportTitle = ui.Label('this is a title')
+  reportsPanel.add(reportTitle)
 }
 
 /* 
@@ -277,7 +323,16 @@ function addReports() {
       //End Precipitation Reports  
             //Begin Land Cover/Land Use Reports
       else if (selected == 'Land Cover/Land Use') {
-          landcoverCards
+          landcoverCards()
+      }
+      else if (selected == 'Population') {
+          populationCards()
+      }
+      else if (selected == 'Hydrology') {
+          hydrologyCards()
+      }
+          else if (selected == 'Stormwater Pollutants') {
+          stormwaterPollutantsCards()
       }
     
     //sidePanel.add(charts.histogramImage(layerProperties.Precipitation.layer,
