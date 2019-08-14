@@ -324,7 +324,7 @@ function addReports() {
     var reportTitle = ui.Label({
       value: selected, 
       style: reportsStyle.cardTitle} )
-    //reportsPanel.add(reportTitle)
+      reportsPanel.add(reportTitle)
          //add charts
          
   //Begin Precipitation cards  
@@ -419,7 +419,7 @@ var watershedSelect = ui.Select({
     //value: 'HUC 12'
    onChange: redraw
 });
-var selectItems = ['Precipitation', 'Land Cover/Land Use', 'Population', 'Hydrology', 'Stormwater Pollutants']
+var selectItems = ['Debug','Precipitation', 'Land Cover/Land Use', 'Population', 'Hydrology', 'Stormwater Pollutants']
 print(selectItems)
 var layerDict = ee.Dictionary(layerProperties);
 // Define the pulldown menu.  Changing the pulldown menu changes the map layer
