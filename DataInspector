@@ -306,7 +306,7 @@ var pChart = charts.histogramImage(thisLayer.layer,clicked_basin,200,thisLayer.L
  print(thisLayer)
  print(thisLayer.layer)
 var addButton = ui.Button({
-  label: 'Show this on Map',
+  label: 'Show this layer on Map',
  onClick: addUserLayer(
  thisLayer)
 }); 
