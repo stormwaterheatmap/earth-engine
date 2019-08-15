@@ -97,10 +97,10 @@ var reportsStyle = {
   },
    'cardTitle': {
     color: '#212121', 
-    fontSize: '12px',
+    fontSize: '20px',
     textAlign: 'left',
-    fontWeight: 'bold', 
-    fontFamily: ['Arial', "serif"],
+    fontWeight: 'medium', 
+    fontFamily: fonts,
     //stretch: 'vertical',
     backgroundColor: '#11ffee00',
   
@@ -111,7 +111,7 @@ var reportsStyle = {
   //  width: '100%',
      textAlign: 'center', 
      margin: '24px',
-     //padding: '24px',
+     padding: '24px',
     // position: 'top-center', 
      stretch: 'horizontal'
   }, 
@@ -302,11 +302,11 @@ function precipCards() {
    // var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
     var card1 = cards.bigNumberPanel(
       thisLayer.LegendName, //Title 
-      imgMean(thisLayer.layer,clicked_basin,200), //Number
+      88, //imgMean(thisLayer.layer,clicked_basin,200), //Number
       'units',//Units 
       'info' //info
-      )
-  //  reportsPanel.add(card1)})
+      ).style().set({style:reportsStyle.cardPanel})
+    reportsPanel.add(card1)
 //histogram of precip 
 var cardTitle = ui.Label({value: thisLayer.LegendName, style: reportsStyle.cardTitle}) 
 var pChart = charts.histogramImage(thisLayer.layer,clicked_basin,200,thisLayer.LegendName)
