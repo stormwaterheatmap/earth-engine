@@ -56,11 +56,11 @@ var panelStyle = {
      fontWeight: '500',
     fontSize: 'x-large',
     fontFamily: fonts,
-    color: colors.lightBlack, 
+    color: 'white',//colors.lightBlack, 
     padding: '8px',// 24px, 8px, 8px',
     margin: '0px',
     width: '100%',
-    backgroundColor: colors.primary,
+    backgroundColor: colors.pDark
     }
   },
   'instructions': {
@@ -78,7 +78,7 @@ var panelStyle = {
     padding: '8px',// 24px, 8px, 8px',
     margin: '0px',
     //width: '100%',
-    backgroundColor: colors.sLight
+    //backgroundColor: colors.sLight
     }
     
   }
@@ -101,7 +101,7 @@ var reportsStyle = {
     textAlign: 'left',
     fontWeight: 'medium', 
     fontFamily: fonts,
-    padding: '24px', 
+    padding: '24px',
     //stretch: 'vertical',
     backgroundColor: '#11ffee00',
   
