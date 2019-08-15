@@ -30,8 +30,8 @@ Style defaults
 */
 var colors = {
     'primary': '#4caf50',
-    'pLight': '#80e27e', 
-    'pDark': '#087f23', 
+    'pLight': '#e7f4e6',//#80e27e', 
+    'pDark': '#4caf50', 
     'secondary': '#bdbdbd',
     'sLight': '#eeeeee',
     'sDark': '#8c8c8c', 
@@ -48,7 +48,7 @@ var panelStyle = {
     padding: '8px',// 24px, 8px, 8px',
     margin: '0px',
     //width: '100%',
-    backgroundColor: colors.pDark
+    backgroundColor: colors.pLight
     }
   },
   'title': {
