@@ -78,7 +78,7 @@ var panelStyle = {
     padding: '8px',// 24px, 8px, 8px',
     margin: '0px',
     //width: '100%',
-    //backgroundColor: colors.sLight
+    backgroundColor: colors.sLight
     }
     
   }
@@ -101,6 +101,7 @@ var reportsStyle = {
     textAlign: 'left',
     fontWeight: 'medium', 
     fontFamily: fonts,
+    padding: '24px', 
     //stretch: 'vertical',
     backgroundColor: '#11ffee00',
   
@@ -111,7 +112,7 @@ var reportsStyle = {
   //  width: '100%',
      textAlign: 'center', 
      margin: '24px',
-     padding: '24px',
+     padding: '0px',
     // position: 'top-center', 
      stretch: 'horizontal'
   }, 
@@ -305,7 +306,7 @@ function precipCards() {
       88, //imgMean(thisLayer.layer,clicked_basin,200), //Number
       'units',//Units 
       'info' //info
-      ).style().set(reportsStyle.cardPanel)
+      )//.style().set(reportsStyle.cardPanel)
     reportsPanel.add(card1)
 //histogram of precip 
 var cardTitle = ui.Label({value: thisLayer.LegendName, style: reportsStyle.cardTitle}) 
