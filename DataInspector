@@ -305,7 +305,7 @@ function precipCards() {
       88, //imgMean(thisLayer.layer,clicked_basin,200), //Number
       'units',//Units 
       'info' //info
-      ).style().set({style:reportsStyle.cardPanel})
+      ).style().set(reportsStyle.cardPanel)
     reportsPanel.add(card1)
 //histogram of precip 
 var cardTitle = ui.Label({value: thisLayer.LegendName, style: reportsStyle.cardTitle}) 
