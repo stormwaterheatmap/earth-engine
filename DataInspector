@@ -48,18 +48,19 @@ var panelStyle = {
     padding: '8px',// 24px, 8px, 8px',
     margin: '0px',
     //width: '100%',
-    backgroundColor: colors.sLight
+    backgroundColor: colors.pDark
     }
   },
   'title': {
     'label': {
      fontWeight: '500',
-    fontSize: 'x-large',
+    fontSize: '28px',
     fontFamily: fonts,
-    color: 'white',//colors.lightBlack, 
-    padding: '8px',// 24px, 8px, 8px',
+    color: 'white', //colors.lightBlack, 
+    padding: '0 0 0 20px',
     margin: '0px',
     width: '100%',
+    height: '48px',
     backgroundColor: colors.pDark
     }
   },
@@ -78,7 +79,7 @@ var panelStyle = {
     padding: '8px',// 24px, 8px, 8px',
     margin: '0px',
     //width: '100%',
-    //backgroundColor: colors.sLight
+    backgroundColor: 'white'//colors.pLight
     }
     
   }
