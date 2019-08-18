@@ -11,6 +11,6 @@ var  userSnic = ee.Algorithms.Image.Segmentation.SNIC(
     compactness: compactness});
     return userSnic
 }
-var ss = uSnic(ndvi, 5, 2)
+var ss = uSnic(ndvi, 50, 2)
 
-Map.addLayer(ss)
+Map.addLayer(ss.select('ndvi_mean'))//elect('clusters'))
