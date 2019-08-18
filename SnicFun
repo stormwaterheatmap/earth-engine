@@ -1,0 +1,16 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("NASA/ASTER_GED/AG100_003");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var ndvi = image.select('ndvi')
+Map.addLayer(ndvi)
+
+function uSnic(image, size, compactness) {
+var  userSnic = ee.Algorithms.Image.Segmentation.SNIC(
+    {image: image,
+    size: size,
+    compactness: compactness});
+    return userSnic
+}
+var ss = uSnic(ndvi, 5, 2)
+
+Map.addLayer(ss)
