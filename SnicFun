@@ -1,9 +1,9 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var image = ee.Image("NASA/ASTER_GED/AG100_003");
+var image = ee.Image("NASA/ASTER_GED/AG100_003"),
+    image2 = ee.Image("USGS/NED");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var ndvi = image.select('ndvi')
 Map.addLayer(ndvi)
-
 function uSnic(image, size, compactness) {
 var  userSnic = ee.Algorithms.Image.Segmentation.SNIC(
     {image: image,
@@ -11,6 +11,9 @@ var  userSnic = ee.Algorithms.Image.Segmentation.SNIC(
     compactness: compactness});
     return userSnic
 }
-var ss = uSnic(ndvi, 50, 2)
-
+var ss = uSnic(ndvi, 50, 0)
+var el = uSnic(image2, 35, 5)
 Map.addLayer(ss.select('ndvi_mean'))//elect('clusters'))
+Map.addLayer(el)
+var sq = uSnic(ee.Image(1),50,1)
+Map.addLayer(sq)
