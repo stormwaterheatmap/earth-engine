@@ -139,7 +139,7 @@ function clipBasin(imageToClip) {
 function addUserLayer(userLayer) { 
     
     mapPanel.setOptions(
-      'Grey',{'Grey': mapStyle.GRAYMAP}
+      'Grey',{'Grey': Style.Dark}
       );
 
     print("Layer to be displayed:", userLayer);
@@ -290,7 +290,7 @@ function makeMapPanel() {
     
     // Don't show the layer list for this app.
     map.setControlVisibility({ layerList: false });
-    map.setOptions('Grey',{'Grey': mapStyle.GRAYMAP}) ; 
+    map.setOptions('Grey',{'Grey': Style.Dark}) ; 
     return map;
 }
   //make the main reports panel 
@@ -386,12 +386,10 @@ var inspect_button = ui.Button({
     onClick: handle_inspect_click
 }); 
 //function to add user layer to the map
-
-
 //Labels 
-var step1 = ui.Label('1) Select a watershed dataset to use',panelStyle.instructions.label)
-var step2 = ui.Label('2) Select a watershed on the map to analyze',panelStyle.instructions.label)
-var step3= ui.Label('3) Select a category to view results',panelStyle.instructions.label)
+var step1 = ui.Label('1) Select a watershed dataset to use',Style.fonts.Body1) //panelStyle.instructions.label)
+var step2 = ui.Label('2) Select a watershed on the map to analyze',Style.fonts.Body1)
+var step3= ui.Label('3) Select a category to view results',Style.fonts.Body1)
 //Selectors 
 var watershedSelect = ui.Select({
     items: ['HUC 12', 'NHDPlus','WRIA'],
@@ -426,7 +424,7 @@ function mapReset(){
   mainPanel.clear()
   
   mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
-  mapPanel.setOptions('Dark',{'Dark': mapStyle.GRAYMAP})
+  mapPanel.setOptions('Dark',{'Dark': Style.Dark})//mapStyle.GRAYMAP})
     //Map.setOptions('Dark', {'Dark': mapStyle.Dark});
   //redraw()
 }
