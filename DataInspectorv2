@@ -38,10 +38,34 @@ Functions
 //Chart/calculations functions (to do - move these to a module)
 function bigNumber(image, geometry, scale, band)  { 
   var val = image.reduceRegion(
-  ee.Reducer.mean(),geometry.geometry())
+  ee.Reducer.mean(),geometry)
   var num = val.get(band)
   return num 
 }
+
+function bigNumberPanel(panel, num, digits) {
+  //panel.add
+  print('bigNumPanel function')//, 
+  print(num, digits)
+  //(ui.Label(num.toFixed(digits))))
+}
+
+var histogramFun = function (image, geometry, scale, band){
+  var histogram =  image.reduceRegion(ee.Reducer.histogram(),
+    geometry,scale)
+    print(histogram)
+  histogram = ee.Dictionary(histogram.get(band));
+    var counts = ee.Array(histogram.get('histogram'));
+    var means = ee.Array(histogram.get('bucketMeans'));
+    var size = means.length().get([0]);
+    var total = counts.reduce(ee.Reducer.sum(), [0]).get([0]);
+    var sum = means.multiply(counts).reduce(ee.Reducer.sum(), [0]).get([0]);
+    var mean = sum.divide(total);
+    
+return{'histogram': histogram, 
+'means': means,'counts': counts, 'mean': mean}
+}
+
 
 function makeTable(image) { 
   var table = ui.Chart.image.byRegion({
@@ -188,25 +212,27 @@ function addUserLayer(userLayer) {
 /*
 Cards Function------------------------------------------------------------------------------------
 */ 
-//for debugging
+
 function precipCards() {
    reportsPanel.clear() // Clear the panel 
     //clicked_basin = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
    print('debugging mode')
    print(clicked_basin)
+   
    //mapPanel.add(clicked_basin)
     // add mean precip card
     var thisLayer = layerProperties.Precipitation
     print(thisLayer)
+    print(histogramFun(thisLayer.layer,clicked_basin.geometry()
+    ,500,'b1'))
   //Mean P card 
-  bigNumber(thisLayer.layer, clicked_basin, 500, 0).evaluate(function(result){
- var a = ui.Label({
-   value:  result.toFixed(0).toString()
-   //.concat('%'),
+ 
+print( bigNumber(thisLayer.layer, clicked_basin.geometry(), 500, 0)
+.evaluate(function(result){
+  //print(result)
+// bigNumberPanel(reportsPanel, result, 2)
  })
-// mapPanel.add(a)
-print(a)
-})
+ ); 
    
 /*   
 var cardTitle = ui.Label({value: thisLayer.LegendName})//, style: reportsStyle.cardTitle}) 
@@ -300,13 +326,15 @@ function addReports() {
     var selected = reportsSelect.getValue();
     var reportTitle = ui.Label({
       value: selected, 
-      style: Style.fonts.H3} );
+      style: Style.fonts.H4} );
       reportsPanel.add(reportTitle);
          //add charts
          
   //Begin Precipitation cards  
      if (selected == 'Debug'){
     debugCards() ;
+     
+     
       } 
     if (selected == 'Precipitation'){
     precipCards() ;
@@ -387,9 +415,9 @@ var inspect_button = ui.Button({
 }); 
 //function to add user layer to the map
 //Labels 
-var step1 = ui.Label('1) Select a watershed dataset to use',Style.fonts.Body1) //panelStyle.instructions.label)
-var step2 = ui.Label('2) Select a watershed on the map to analyze',Style.fonts.Body1)
-var step3= ui.Label('3) Select a category to view results',Style.fonts.Body1)
+var step1 = ui.Label('1) Select a watershed dataset to use',Style.fonts.Body2) //panelStyle.instructions.label)
+var step2 = ui.Label('2) Select a watershed on the map to analyze',Style.fonts.Body2)
+var step3= ui.Label('3) Select a category to view results',Style.fonts.Body2)
 //Selectors 
 var watershedSelect = ui.Select({
     items: ['HUC 12', 'NHDPlus','WRIA'],
