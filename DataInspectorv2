@@ -36,6 +36,13 @@ Functions
 */  
 //creates a table of mean value in a region //todo: fix format
 //Chart/calculations functions (to do - move these to a module)
+function bigNumber(image, geometry, scale, band)  { 
+  var val = image.reduceRegion(
+  ee.Reducer.mean(),geometry.geometry())
+  var num = val.get(band)
+  return num 
+}
+
 function makeTable(image) { 
   var table = ui.Chart.image.byRegion({
   image: image, 
@@ -137,11 +144,9 @@ function clipBasin(imageToClip) {
 }
 //layerProperties.Precipitation
 function addUserLayer(userLayer) { 
-    
     mapPanel.setOptions(
       'Grey',{'Grey': Style.Dark}
       );
-
     print("Layer to be displayed:", userLayer);
     var image = clipBasin(userLayer.layer);
     var name = userLayer.Description;
@@ -192,16 +197,18 @@ function precipCards() {
    //mapPanel.add(clicked_basin)
     // add mean precip card
     var thisLayer = layerProperties.Precipitation
-    //var title = thisLayer.LegendName
-   // var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
-    var card1 = cards.bigNumberPanel(
-      thisLayer.LegendName, //Title 
-      88, //imgMean(thisLayer.layer,clicked_basin,200), //Number
-      'units',//Units 
-      'info' //info
-      )//.style().set(reportsStyle.cardPanel)
-    reportsPanel.add(card1)
-//histogram of precip 
+    print(thisLayer)
+  //Mean P card 
+  bigNumber(thisLayer.layer, clicked_basin, 500, 0).evaluate(function(result){
+ var a = ui.Label({
+   value:  result.toFixed(0).toString()
+   //.concat('%'),
+ })
+// mapPanel.add(a)
+print(a)
+})
+   
+/*   
 var cardTitle = ui.Label({value: thisLayer.LegendName})//, style: reportsStyle.cardTitle}) 
 var pChart = charts.histogramImage(thisLayer.layer,clicked_basin,200,thisLayer.LegendName)
  print(thisLayer)
@@ -215,6 +222,7 @@ var addButton = ui.Button({
 var pCard = ui.Panel()//{style:reportsStyle.cardPanel})
 .add(cardTitle).add(pChart).add(addButton)
 reportsPanel.add(pCard)
+*/
 // function(image, WS, scale, title)
 }
 ///Precip Cards 
@@ -225,16 +233,8 @@ function debugCards() {
     var thisLayer = layerProperties.Precipitation
     //var title = thisLayer.LegendName
    // var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
-    var card1 = cards.bigNumberPanel(
-      thisLayer.LegendName, //Title 
-      imgMean(thisLayer.layer,clicked_basin,200).getInfo(), //Number
-      'units',//Units 
-      'info' //info
-      );
-   // reportsPanel.add(card1)
-  
-    //(img, geometry, scale) {
-  //add precip histogram card 
+    bigNumber(thisLayer.layer,clicked_basin)
+ 
   
 
 }
