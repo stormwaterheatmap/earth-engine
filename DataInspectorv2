@@ -222,7 +222,7 @@ function precipCards() {
    //mapPanel.add(clicked_basin)
     // add mean precip card
     var thisLayer = layerProperties.Precipitation
-    print(thisLayer)
+    print(thisLayer)//ned to evaluate this toDo 
     print(histogramFun(thisLayer.layer,clicked_basin.geometry()
     ,500,'b1'))
   //Mean P card 
