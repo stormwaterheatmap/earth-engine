@@ -1,0 +1,447 @@
+/* 
+Load modules
+---------------------------------------------------------------------------------------------------- 
+*/ 
+//var utils = require('users/giswqs/public:Modules/utils');
+var datasets = require('users/stormwaterheatmap/Modules:datasets');
+var charts = require('users/stormwaterheatmap/Modules:chart');
+var palettes = require('users/gena/packages:palettes');
+var legends = require('users/stormwaterheatmap/Modules:legends');
+var mapStyle = require('users/stormwaterheatmap/Modules:mapStyles')
+var layerProperties = require('users/stormwaterheatmap/Modules:layerProperties')
+var layerProperties = layerProperties.layerProperties
+var pieChart = require('users/stormwaterheatmap/Modules:pieChartSnippetwithExport')
+var cards = require('users/stormwaterheatmap/Modules:Cards')
+var Style = require('users/stormwaterheatmap/Modules:Style')
+/* 
+Load vectors
+---------------------------------------------------------------------------------------------------- 
+*/ 
+var HUC12 = datasets.HUC12
+var NHDPlus = datasets.NHDPlus
+var studyArea = datasets.PugetSound
+var WRIA = datasets.WRIA
+var PSAU = datasets.PS_AU
+
+/*
+Global Variables------------------------------------------------------------------------------------- 
+*/ 
+var clicked_basin
+var WS
+var layer
+
+/* 
+Functions 
+---------------------------------------------------------------------------------------------------- 
+*/  
+//creates a table of mean value in a region //todo: fix format
+//Chart/calculations functions (to do - move these to a module)
+function makeTable(image) { 
+  var table = ui.Chart.image.byRegion({
+  image: image, 
+  reducer: ee.Reducer.mean()
+})
+  table.setChartType('Table');
+  //table.setOptions({allowHtml: true, pageSize: 5});
+  table.style().set({stretch: 'both'});
+  return(table)
+}
+//calculate the area of an image in Ha
+function imgAreaHa(img, geometry, scale) {
+  var pixelArea = img.gt(0).multiply(ee.Image.pixelArea()).divide(10000);  
+  var imgArea = pixelArea.reduceRegion({
+    geometry: geometry,
+    reducer: ee.Reducer.sum(),
+    scale: scale,
+    maxPixels: 1e9
+  });
+  return imgArea;
+}
+//calculate the mean value of an image and return the number
+function imgMean(img, geometry, scale) {
+  var imgM = img.reduceRegion({
+    geometry: geometry,
+    reducer: ee.Reducer.mean(),
+    scale: scale,
+    maxPixels: 1e9
+  })
+  var numString = ee.Number.parse(imgM).format('%,.2f')//.getInfo();
+  return numString;
+}
+
+//function to redraw the map with the selected watershed.
+function handle_map_click(location) {
+    // get clicked subbasin info
+    // var selected_WS = watershedSelect.getValue()
+    //var selected_WS = WS;
+    // print(selected_WS)
+    //mapPanel.addLayer(WS)
+    var clicked_point = ee.Geometry.Point(location.lon, location.lat);
+    var clicked_basin_fc = WS.filterBounds(clicked_point);
+    clicked_basin = ee.Feature(clicked_basin_fc.first());
+    var clicked_basin_geom = clicked_basin.geometry();
+    print('Click')
+    print(clicked_point),
+        print('Clicked Basin', clicked_basin)
+    mapPanel.clear()
+    mapPanel.style().set({cursor: 'hand'});
+    mapPanel.addLayer(clicked_basin)
+    mapPanel.centerObject(clicked_basin)
+    return clicked_basin
+    //add layer dropdown 
+    //mainPanel.add(reportsSelect)
+    //addUserLayer(clicked_basin)
+    //mapPanel.addLayer(precip.clip(clicked_basin),{},'Precipitation',false)
+    //mapPanel.addLayer(landcover.clip(clicked_basin,{},'Land Cover',false))
+    //var hruBandsclipped = hruBands.clip(clicked_basin)
+    //var hruChart = ui.Chart.image.byRegion(hruBandsclipped)
+    //mainPanel.add(hruChart)
+    //var precipChart = ui.Chart.image.regions(precip)
+    //mainPanel.add(precipChart)
+}
+
+function handle_inspect_click() {
+    print('inspector Activated')
+    mapPanel.style().set({cursor: 'crosshair'});
+    var selected_WS = watershedSelect.getValue();
+    print(selected_WS)
+    mapPanel.onClick(handle_map_click)
+}     
+function redraw() {
+    Map.layers().reset()
+    
+    var layer = watershedSelect.getValue();
+
+    if (layer == 'HUC 12') {
+        WS = HUC12;
+    } else if (layer == 'NHDPlus') {
+        WS = NHDPlus;
+    } else if (layer == 'Watershed Assessment Units') {
+        WS = PSAU;
+    } else if (layer == 'WRIA')
+        WS = WRIA;
+      else
+        WS = null; 
+    mapPanel.clear()
+    mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
+    mapPanel.setOptions('Dark',{'Dark': mapStyle.GRAYMAP})
+    //Map.setOptions('Dark', {'Dark': mapStyle.Dark});
+    mapPanel.addLayer(WS, {}, 'layer name')
+    // handle_map_click(WS)
+}
+function clipBasin(imageToClip) {
+    print('line 236', imageToClip)
+    print('line 237', clicked_basin)
+    var clippedImage = imageToClip.clip(clicked_basin);
+    return clippedImage;
+}
+//layerProperties.Precipitation
+function addUserLayer(userLayer) { 
+    
+    mapPanel.setOptions(
+      'Grey',{'Grey': mapStyle.GRAYMAP}
+      );
+
+    print("Layer to be displayed:", userLayer);
+    var image = clipBasin(userLayer.layer);
+    var name = userLayer.Description;
+    var pal = userLayer.palette;
+    //determine the min and max for display
+    var minmax = image.reduceRegion(
+      {
+        reducer: ee.Reducer.minMax(),
+        scale: 1000
+      }).values();
+    minmax.evaluate(function(result) {
+      //When the server returns the value, show it
+      print(result)
+   
+    var vizMax = result[0].toFixed() 
+    var vizMin =  result[1].toFixed()  
+    print('vizMax:' , vizMax)
+     print('vizMin:' , vizMin)
+    //add the clipped image
+    mapPanel.addLayer(image, 
+    { 
+      min: vizMin, 
+      max: vizMax, 
+      palette:userLayer.palette
+      
+    }, 
+      userLayer.Description); 
+      //add legend 
+    var Plegend = legends.barLegend(vizMin, null, vizMax, userLayer.palette)
+    var legendPanel = ui.Panel()
+    legendPanel.add(ui.Label(userLayer.Description))
+      .add(Plegend)
+      .add(ui.Label(userLayer.Units))
+    mapPanel.add(legendPanel)
+    })
+    
+}
+
+/*
+Cards Function------------------------------------------------------------------------------------
+*/ 
+//for debugging
+function precipCards() {
+   reportsPanel.clear() // Clear the panel 
+    //clicked_basin = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
+   print('debugging mode')
+   print(clicked_basin)
+   //mapPanel.add(clicked_basin)
+    // add mean precip card
+    var thisLayer = layerProperties.Precipitation
+    //var title = thisLayer.LegendName
+   // var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
+    var card1 = cards.bigNumberPanel(
+      thisLayer.LegendName, //Title 
+      88, //imgMean(thisLayer.layer,clicked_basin,200), //Number
+      'units',//Units 
+      'info' //info
+      )//.style().set(reportsStyle.cardPanel)
+    reportsPanel.add(card1)
+//histogram of precip 
+var cardTitle = ui.Label({value: thisLayer.LegendName, style: reportsStyle.cardTitle}) 
+var pChart = charts.histogramImage(thisLayer.layer,clicked_basin,200,thisLayer.LegendName)
+ print(thisLayer)
+ print(thisLayer.layer)
+var addButton = ui.Button({
+  label: 'Show this layer on Map',
+ onClick: addUserLayer(
+ thisLayer)
+}); 
+
+var pCard = ui.Panel({style:reportsStyle.cardPanel}).add(cardTitle).add(pChart).add(addButton)
+reportsPanel.add(pCard)
+// function(image, WS, scale, title)
+}
+///Precip Cards 
+function debugCards() {
+  reportsPanel.clear() // Clear the panel  
+    // add mean precip card
+    //var bigNumberPanel = function (title, number, units, info)
+    var thisLayer = layerProperties.Precipitation
+    //var title = thisLayer.LegendName
+   // var number = imgMean(thisLayer.layer,clicked_basin,mapPanel.getScale())
+    var card1 = cards.bigNumberPanel(
+      thisLayer.LegendName, //Title 
+      imgMean(thisLayer.layer,clicked_basin,200).getInfo(), //Number
+      'units',//Units 
+      'info' //info
+      );
+   // reportsPanel.add(card1)
+  
+    //(img, geometry, scale) {
+  //add precip histogram card 
+  
+
+}
+
+function landcoverCards() {
+  var reportTitle = ui.Label('landcoverCards');
+  reportsPanel.add(reportTitle);
+}
+
+function populationCards() {
+  var reportTitle = ui.Label('this is a title');
+  reportsPanel.add(reportTitle);
+}
+
+function hydrologyCards() {
+  var reportTitle = ui.Label('this is a title')
+  reportsPanel.add(reportTitle)
+}
+
+function stormwaterPollutantsCards() {
+  var reportTitle = ui.Label('this is a title');
+  reportsPanel.add(reportTitle);
+}
+
+/* 
+UI Functions 
+---------------------------------------------------------------------------------------------------- 
+*/
+function makeSidePanel() {
+    // Create the base side panel, into which other widgets will be added
+    mainPanel.add(blankPanel)
+    mainPanel.add(titleLabel)
+    mainPanel.add(
+      instructionsPanel.add(step1),
+      instructionsPanel.add(watershedSelect),
+      instructionsPanel.add(step2),
+      instructionsPanel.add(
+        buttonPanel.add(
+          inspect_button),
+          buttonPanel.add(deactiv_button
+          )),
+      instructionsPanel.add(step3),
+      instructionsPanel.add(reportsSelect)
+      )
+      mainPanel.add(reportsPanel)
+        return mainPanel
+}
+
+/** Returns a ui.Map with some UI configuration in place */
+function makeMapPanel() {
+    var map = ui.Map();
+    // Add an informational label
+    
+    // Don't show the layer list for this app.
+    map.setControlVisibility({ layerList: false });
+    map.setOptions('Grey',{'Grey': mapStyle.GRAYMAP}) ; 
+    return map;
+}
+  //make the main reports panel 
+function addReports() {
+    reportsPanel.clear()
+    mapPanel.clear()
+    var selected = reportsSelect.getValue();
+    var reportTitle = ui.Label({
+      value: selected, 
+      style: reportsStyle.cardTitle} );
+      reportsPanel.add(reportTitle);
+         //add charts
+         
+  //Begin Precipitation cards  
+     if (selected == 'Debug'){
+    debugCards() ;
+      } 
+    if (selected == 'Precipitation'){
+    precipCards() ;
+      } 
+      //End Precipitation Reports  
+            //Begin Land Cover/Land Use Reports
+      else if (selected == 'Land Cover/Land Use') {
+          landcoverCards();
+      }
+      else if (selected == 'Population') {
+          populationCards();
+      }
+      else if (selected == 'Hydrology') {
+          hydrologyCards();
+      }
+          else if (selected == 'Stormwater Pollutants') {
+          stormwaterPollutantsCards();
+      }
+    
+    //sidePanel.add(charts.histogramImage(layerProperties.Precipitation.layer,
+    //clicked_basin,100,layerProperties.Precipitation.LegendName))
+  }
+/* 
+UI Variables
+--------------------------------------------------------------------------------------------------- 
+*/ 
+//Panels 
+//Lay out main panel 
+var mainPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('vertical', true),
+    style: {
+        stretch: 'horizontal',
+        height: '100%',
+        width: '550px'
+    }
+});
+// App title and information 
+var titleLabel = ui.Label({
+  value: 'Watershed Inspector',
+  style: Style.fonts.H1});
+var descriptionText =
+    'This app allows you to interactively explore heatmap data by watershed.'
+var descriptionLabel = ui.Label(descriptionText);
+var watershedSelectLabel = ui.Label({
+    value: 'Select a watershed dataset:',
+});
+var reportsPanel = ui.Panel({
+      widgets: null, 
+      //layout:  ui.Panel.Layout('vertical',true), 
+      style: panelStyle.reports.panel
+      })
+
+
+var blankPanel = ui.Panel({
+    style:
+  {backgroundColor : Style.colors.pDark,
+  width: '100%',
+    height: '4px'
+  }})
+var instructionsPanel = ui.Panel({style:panelStyle.instructions.panel })
+var buttonPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('horizontal', true),
+    style: {
+           backgroundColor: Style.colors.transparent,
+            }
+});
+var resultCard = ui.Panel({style: reportsStyle.cardPanel}); 
+//Buttons 
+var deactiv_button = ui.Button({
+    label: 'Reset Map',
+    //onClick: mapReset,//also clear side panel 
+});
+
+
+var inspect_button = ui.Button({
+    label: 'Activate inspector',
+    onClick: handle_inspect_click
+}); 
+//function to add user layer to the map
+
+
+//Labels 
+var step1 = ui.Label('1) Select a watershed dataset to use',panelStyle.instructions.label)
+var step2 = ui.Label('2) Select a watershed on the map to analyze',panelStyle.instructions.label)
+var step3= ui.Label('3) Select a category to view results',panelStyle.instructions.label)
+//Selectors 
+var watershedSelect = ui.Select({
+    items: ['HUC 12', 'NHDPlus','WRIA'],
+    placeholder: 'Select a value',
+    //value: 'HUC 12'
+   onChange: redraw
+});
+var selectItems = ['Debug','Precipitation', 'Land Cover/Land Use', 'Population', 'Hydrology', 'Stormwater Pollutants']
+print(selectItems)
+var layerDict = ee.Dictionary(layerProperties);
+// Define the pulldown menu.  Changing the pulldown menu changes the map layer
+// and legend.
+var reportsSelect = ui.Select({
+    //items: ee.List(layerDict.get('names')),
+    items: selectItems,
+    placeholder: 'Select a value',
+    //value: 'HUC 12'
+    onChange:addReports
+});
+
+/* 
+Set up User Interface
+----------------------------------------------------------------------------------------------------
+*/ 
+
+
+
+
+function mapReset(){
+  Map.layers().reset()
+  mapPanel.clear()
+  mainPanel.clear()
+  
+  mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
+  mapPanel.setOptions('Dark',{'Dark': mapStyle.GRAYMAP})
+    //Map.setOptions('Dark', {'Dark': mapStyle.Dark});
+  //redraw()
+}
+
+ // Clear the default UI 
+  ui.root.clear();
+
+
+
+// Create the app's two panels and add them to the ui.root as a split panel
+var sidePanel = makeSidePanel();
+ var mapPanel = makeMapPanel();
+//var reportsPanel = makeReportsPanel(); 
+mapPanel.setOptions('Dark',{'Dark': mapStyle.GRAYMAP});
+ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
+var mapCenterLon = -122.423145;
+var mapCenterLat = 47.612410;
+redraw();
+
