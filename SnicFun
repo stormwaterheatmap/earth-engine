@@ -10,11 +10,12 @@ var ndvi = image.select('ndvi')
 Map.addLayer(ndvi)
 function uSnic(image, size, compactness) {
 var  userSnic = ee.Algorithms.Image.Segmentation.SNIC(
-    {image: image4,
+    {image: image,
     size: size,
-    compactness: compactness});
+    compactness: compactness, 
+      neighborhoodSize: 48
+    });
 return userSnic
-  
 }
 
 
@@ -32,7 +33,7 @@ onClick: function() {
   print('click!')
   map.clear()
   print( sizeSlide.getValue())
-  var layer = uSnic(image4, sizeSlide.getValue(), compactnessSlide.getValue())
+  var layer = uSnic(image4.clip(table), sizeSlide.getValue(), compactnessSlide.getValue())
   var clusters = layer.select(1)
   map.addLayer(clusters,imageVisParam,'clusters')
 }
@@ -46,9 +47,7 @@ var controlPan = ui.Panel({style:
 controlPan.add(sizeSlide).add(compactnessSlide).add(snicButton)
 //Map.add(controlPan)
 //grid size 
-var snicSeeds = ee.Algorithms.Image.Segmentation.seedGrid({
-  size: 100, 
-  gridType: 'hex'})
+
   
 
 // Set up the overall structure of the app, with a control panel to the left
@@ -57,5 +56,6 @@ ui.root.clear();
 var panel = controlPan;
 var map = ui.Map();
 ui.root.add(panel).add(map);
-
+map.addLayer(table)
+map.centerObject(table,12)
 
