@@ -6,8 +6,16 @@ var image = ee.Image("NASA/ASTER_GED/AG100_003"),
     imageVisParam = {"opacity":1,"bands":["sum_mean"],"min":104.44167480468751,"max":939.9750732421875,"palette":["f3e79b","fac484","f8a07e","eb7f86","ce6693","a059a0","5c53a5"]},
     table = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+var utils = require('users/gena/packages:utils')
+
+var scale = 100
+var crs = 'EPSG:3857'
+
+// generate seeds using a hexagonal grid (crs and scale are optional)
+var size = 35 // in scale points
+var grid = utils.generateHexagonalSeeds(size, crs, scale)//.focal_max(2)
 var ndvi = image.select('ndvi')
-Map.addLayer(ndvi)
+
 function uSnic(image, size, compactness) {
 var  userSnic = ee.Algorithms.Image.Segmentation.SNIC(
     {image: image,
@@ -33,9 +41,10 @@ onClick: function() {
   print('click!')
   map.clear()
   print( sizeSlide.getValue())
-  var layer = uSnic(image4.clip(table), sizeSlide.getValue(), compactnessSlide.getValue())
+  print( compactnessSlide.getValue())
+  var layer = uSnic(image2, sizeSlide.getValue(), compactnessSlide.getValue())
   var clusters = layer.select(1)
-  map.addLayer(clusters,imageVisParam,'clusters')
+  map.addLayer(clusters,{},'clusters')
 }
 })
 
@@ -56,6 +65,5 @@ ui.root.clear();
 var panel = controlPan;
 var map = ui.Map();
 ui.root.add(panel).add(map);
-map.addLayer(table)
-map.centerObject(table,12)
+
 
