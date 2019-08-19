@@ -6,110 +6,19 @@ var image = ee.Image("NASA/ASTER_GED/AG100_003"),
     imageVisParam = {"opacity":1,"bands":["sum_mean"],"min":104.44167480468751,"max":939.9750732421875,"palette":["f3e79b","fac484","f8a07e","eb7f86","ce6693","a059a0","5c53a5"]},
     table = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var geometry = table.geometry()
+var ndvi = image.select('ndvi')
+Map.addLayer(ndvi)
 function uSnic(image, size, compactness) {
-//Start with Tiger Roads - use cummulative cost map fuzz the edges 
-var roads = ee.FeatureCollection("TIGER/2016/Roads"); 
-var imageCollection = ee.ImageCollection("USDA/NAIP/DOQQ"); 
-var sources = ee.Image().toByte().paint(roads, 20);
-
-var cost = ee.Image(1).clip(geometry); 
-//inverse the cost function 
-var cumulativeCost = cost.fastDistanceTransform()
-
-//import NAIP this takes all images collected in the last four years
-var bands = ["R", "G", "B", "N"]; 
-var img = imageCollection
-    .filterDate('2017-01-01', '2019-01-01')
-    .filterBounds(geometry);
-
-//Map NDVI over the image collection 
-var withNDVI = img.map(
-    function (image)
-    {
-        var ndvi = image.normalizedDifference(['N', 'R'])
-            .rename('NDVI');
-        return image.addBands(ndvi);
-    }
-);
-
-
-//take the maximum NDVI value 
-var maxNDVI = withNDVI.select('NDVI')
-    .max();
-
-var img = img.mean(); //mean of two years in each band
-img = ee.Image(img)
-    .divide(255)
-    .select(bands); //normalizes NAIP
-
-// Apply a softening.
-var kernel = ee.Kernel.gaussian(3)
-img = img.convolve(kernel)
-
-
-// Compute spectralGradients.
-var gradient3 = ee.Image.cat(
-    img.spectralGradient('sam'),
-    img.spectralGradient('sid'),
-    img.spectralGradient('sed'))
-
-var gradient = img.spectralErosion()
-    .spectralGradient('emd')
-
-//--------begin segmentation 
-// define seeds 
-var roadsImg = ee.Image().toByte().paint(roads, 1);
-
-var roadxy = ee.Image.pixelLonLat().multiply(roadsImg);
-var zerogrid = ee.Image.cat(ee.Image(-125),ee.Image(45)); 
-var roadxy = roadxy.subtract(zerogrid).multiply(1e6); 
-
-var lon = roadxy.select('longitude').divide(50).floor()
-var lon = lon.multiply(50)
-var lon = roadxy.select('longitude').floor().subtract(lon); 
-var horzpts = lon.eq(1);
-var horzpts = horzpts.updateMask(horzpts)
-
-var lat = roadxy.select('latitude').divide(50).floor()
-var lat = lat.multiply(50)
-var lat = roadxy.select('latitude').floor().subtract(lat); 
-var verpts = lat.eq(1);
-var verpts = verpts.updateMask(verpts)
-
-
-//var lon = lon.substract
 
 
 
-var seeds = ee.Algorithms.Image.Segmentation.seedGrid(32, 'hex');
-var seeds = seeds.blend(horzpts).blend(verpts); 
-map.addLayer(seeds)
-
-//var seeds = ee.Algorithms.Image.Segmentation.seedGrid(5, 'square');
-//var ndvi = img.normalizedDifference(["N", "R"])
-var ndvi = maxNDVI;
-var ndviGradient = ndvi.gradient()
-    .pow(2)
-    .reduce('sum')
-    .sqrt()
-
-map.addLayer(ndviGradient,{},'grad')
-var img = ee.Image.cat(img, ndviGradient).clip(geometry); //.addBands(gradient3)
 
 var  userSnic = ee.Algorithms.Image.Segmentation.SNIC(
-    {image: img,
+    {image: image4,
     size: size,
     compactness: compactness});
-var toCluster = ee.Image.cat(userSnic, image)   
-var clustered = toCluster.
-reduceConnectedComponents({ //(reducer, labelBand, maxSize)
-  reducer: ee.Reducer.sum(), 
-  labelBand: 'clusters'
-})
+
    
-   
-return clustered    
 }
 
 /*function uSnicAdd(image, size, compactness) {
@@ -120,8 +29,12 @@ return clustered
 
 }*/
 
-
-
+var ss = uSnic(ndvi, 50, 0)
+var el = uSnic(image3, 35, 5)
+//Map.addLayer(ss.select('ndvi_mean'))//elect('clusters'))
+//Map.addLayer(el)
+var sq = uSnic(ee.Image(1),20,99)
+Map.addLayer(el)
 
 //make panel; size, compactness 
 var sizeSlide = ui.Slider(0,96,5,1)
@@ -137,8 +50,7 @@ onClick: function() {
   print( sizeSlide.getValue())
   var layer = uSnic(image4, sizeSlide.getValue(), compactnessSlide.getValue())
   var clusters = layer.select(1)
-   map.addLayer(layer,{},'snicced')//,imageVisParam,'clusters')
-  map.addLayer(clusters,{},'clusters')//,imageVisParam,'clusters')
+  map.addLayer(clusters,imageVisParam,'clusters')
 }
 })
 
