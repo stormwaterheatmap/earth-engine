@@ -9,32 +9,16 @@ var image = ee.Image("NASA/ASTER_GED/AG100_003"),
 var ndvi = image.select('ndvi')
 Map.addLayer(ndvi)
 function uSnic(image, size, compactness) {
-
-
-
-
 var  userSnic = ee.Algorithms.Image.Segmentation.SNIC(
     {image: image4,
     size: size,
     compactness: compactness});
-
-   
+return userSnic
+  
 }
 
-/*function uSnicAdd(image, size, compactness) {
- // Map.clear(); 
-  
-  var layer = uSnic(image, size, compactness)
-  var clusters = layer.select(1)
 
-}*/
 
-var ss = uSnic(ndvi, 50, 0)
-var el = uSnic(image3, 35, 5)
-//Map.addLayer(ss.select('ndvi_mean'))//elect('clusters'))
-//Map.addLayer(el)
-var sq = uSnic(ee.Image(1),20,99)
-Map.addLayer(el)
 
 //make panel; size, compactness 
 var sizeSlide = ui.Slider(0,96,5,1)
@@ -66,7 +50,6 @@ var snicSeeds = ee.Algorithms.Image.Segmentation.seedGrid({
   size: 100, 
   gridType: 'hex'})
   
-
 
 // Set up the overall structure of the app, with a control panel to the left
 // of a full-screen map.
