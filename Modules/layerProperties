@@ -1,4 +1,4 @@
-var datasets = require('users/stormwaterheatmap/apps/Modules:datasets');
+var datasets = require('users/stormwaterheatmap/apps:Modules/datasets');
 var palettes = require('users/gena/packages:palettes');
 /*
 Load images into a dictionary
