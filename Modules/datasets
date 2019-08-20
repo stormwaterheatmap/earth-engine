@@ -1,0 +1,165 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var NED = ee.Image("USGS/NED"),
+    precip = ee.Image("users/stormwaterheatmap/meanAnnual_precip"),
+    image = ee.Image("users/stormwaterheatmap/soils"),
+    image2 = ee.Image("users/stormwaterheatmap/q1980sbyHRU"),
+    image3 = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1"),
+    table = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
+    table2 = ee.FeatureCollection("TIGER/2018/Counties"),
+    table3 = ee.FeatureCollection("users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"),
+    table4 = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
+    NEXDCP = ee.ImageCollection("NASA/NEX-DCP30"),
+    image4 = ee.Image("users/stormwaterheatmap/nasaPAll"),
+    image5 = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip"),
+    GLCF_trees = ee.ImageCollection("GLCF/GLS_TCC");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// ---------------------------
+// Author: Christian Nilsen, Geosyntec Consultants 
+// Email: cnilsen@geosyntec.com
+// Date Created: 2019-07-19
+// ---------------------------
+//This program is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, version 3.0 
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//For a copy of the GNU General Public License 
+//  see <https://www.gnu.org/licenses/>.
+// ---------------------------
+
+/*
+Image Collections 
+*/
+//Population
+var populationDataset = ee.ImageCollection('CIESIN/GPWv4/population-count');
+var population = populationDataset.select('population-count');
+exports.population = population
+
+/*
+Images 
+*/
+//Precipitation
+//var NASA_precip =  ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip")
+exports.NASA_precip = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip")
+
+//exports.climp = climP.select('pr').first();
+var prismP = ee.Image('users/cnilsen/precip/PRISM800meter') 
+//var prismP = prism.select('ppt').mean()
+exports.prismP = prismP
+//
+var  lu = ee.Image("users/cnilsen/lu_5m_pyramid"); //remap these categories to the following: 
+/*
+['SF Residential',
+'MF Residential',
+'LD Residential',
+'Retail',
+'Resmisc',
+'Industrial',
+'TransRelated',
+'Road',
+'Commercial',
+'Public/Recreation',
+'Agriculture',
+'Timber-ResourceExtraction',
+'Undeveloped',
+'Water',
+'Open Space'
+*/ 
+var generalizedLU = lu.remap(
+  [11, 12,  15,  18, 19,                            //Residential
+  21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 39, //Industrial
+  41, 42, 43, 44, 45, 46, 47, 48, 49,                             //Transportation 
+  13, 14, 16, 17, 51, 52, 53, 54, 55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 66, 67, 68, 69,             //Commercial
+  81, 82, 83,                                                     //Agricultural 
+  84, 85, 87, 88, 89,                 //Timber and Resource Extraction
+  93,                                 //water
+  71, 72, 74, 75, 76, 91, 92, 94, 95],                       //open space 
+  
+  [1, 1, 1, 1, 1,  
+  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, //Industrial
+  3, 3, 3, 3, 3, 3, 3, 3, 3,                             //Transportation 
+  4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,              //Commercial
+  5, 5, 5,                                                     //Agricultural 
+  6, 6, 6, 6, 6,                 //Timber and Resource Extraction
+  7,                                 //water
+  8, 8, 8, 8, 8, 8, 8, 8, 8]  //open space
+);  
+
+
+//
+exports.landuse = generalizedLU; 
+
+var landcover = ee.Image('users/stormwaterheatmap/landcover'); 
+exports.landcover = landcover; 
+
+var soils = ee.Image("users/stormwaterheatmap/soils");
+exports.soils = ee.Image("users/stormwaterheatmap/soils");
+//Generate slopes from USGS DEM 
+var thresholds = ee.Image([5.0, 15, 100]);
+var slopeZone = ee.Terrain.slope(NED).gt(thresholds).reduce('sum'); 
+exports.slope = slopeZone; 
+
+exports.mean_annual_runoff_byHRU = ee.Image("users/stormwaterheatmap/q1980sbyHRU");
+
+var imp = landcover.eq(4).or(landcover.eq(5)).mask(landcover.neq(8))
+exports.imperv = imp; 
+
+//exports.hrus = 
+
+exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select('built');
+exports.population2020 = population.filter(ee.Filter.eq('system:index', '2020')).first();
+exports.precip = precip.select('b1').resample().divide(25.4);//exports precip as mm 
+//HRUs by band
+var hruBands = 
+  (soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru000'))
+.addBands(soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(1))).rename('hru001'))
+.addBands(soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(2))).rename('hru002'))
+.addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(0))).rename('hru010'))
+.addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(1))).rename('hru011'))
+.addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(2))).rename('hru012'))
+.addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(0))).rename('hru020'))
+.addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(1))).rename('hru021'))
+.addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(2))).rename('hru022'))
+.addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru100'))
+.addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(1))).rename('hru101'))
+.addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(2))).rename('hru102'))
+.addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(0))).rename('hru110'))
+.addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(1))).rename('hru111'))
+.addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(2))).rename('hru112'))
+.addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(0))).rename('hru120'))
+.addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(1))).rename('hru121'))
+.addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(2))).rename('hru122'))
+.addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru200'))
+.addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(1))).rename('hru201'))
+.addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(2))).rename('hru202'))
+.addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(0))).rename('hru210'))
+.addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(1))).rename('hru211'))
+.addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(2))).rename('hru212'))
+.addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(0))).rename('hru220'))
+.addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(1))).rename('hru221'))
+.addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(2))).rename('hru222'))
+.addBands(landcover.eq(4).or(landcover.eq(5).and(slopeZone.eq(0))).rename('hru250'))
+.addBands(landcover.eq(5).and(slopeZone.eq(1)).rename('hru251'))
+.addBands(landcover.eq(5).and(slopeZone.eq(2)).rename('hru252'))
+
+exports.hruBands = hruBands; 
+
+
+//Vectors 
+//Ecology Watershed Assessment Units 
+exports.PS_AU = ee.FeatureCollection('users/cnilsen/PS_AU')
+//exports.PS_AU = PS_AU
+
+var PugetSound = (ee.FeatureCollection("USGS/WBD/2017/HUC04")).filter(ee.Filter.eq('huc4', '1711'));
+//Map.addLayer(PugetSound)
+var counties = ee.FeatureCollection("TIGER/2018/Counties").filterBounds(PugetSound);
+//Map.addLayer(counties)
+exports.WRIA = ee.FeatureCollection("users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA")
+.filterBounds(PugetSound);
+//Map.addLayer(WRIA)
+exports.HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(PugetSound); 
+exports.NHDPlus = ee.FeatureCollection('users/cnilsen/PugetSoundNHDPlusWatersheds'); 
+//Map.addLayer(precip.select('b1').resample().divide(25.4))
