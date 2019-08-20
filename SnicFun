@@ -43,8 +43,10 @@ onClick: function() {
   print( sizeSlide.getValue())
   print( compactnessSlide.getValue())
   var layer = uSnic(image2, sizeSlide.getValue(), compactnessSlide.getValue())
-  var clusters = layer.select(1)
-  map.addLayer(clusters,{},'clusters')
+  var clusters = layer.select(0)
+  map.addLayer(clusters.randomVisualizer(),{},'clusters')
+  var meanVals = layer.select(1)
+  map.addLayer(meanVals, {},'mean vals')
 }
 })
 
