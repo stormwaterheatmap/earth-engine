@@ -6,8 +6,10 @@ var image = ee.Image("NASA/ASTER_GED/AG100_003"),
     imageVisParam = {"opacity":1,"bands":["sum_mean"],"min":104.44167480468751,"max":939.9750732421875,"palette":["f3e79b","fac484","f8a07e","eb7f86","ce6693","a059a0","5c53a5"]},
     table = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var utils = require('users/gena/packages:utils')
 
+var regression = require('users/cnilsen/TNC:regressions/Zinc')
+var utils = require('users/gena/packages:utils')
+Map.addLayer(regression.Zinc,{},'Zinc')
 var scale = 100
 var crs = 'EPSG:3857'
 
@@ -55,12 +57,13 @@ var controlPan = ui.Panel({style:
 {width: '400px'}
 }); 
 
-controlPan.add(sizeSlide).add(compactnessSlide).add(snicButton)
+controlPan.add(ui.Label('Size'))
+.add(sizeSlide)
+.add(ui.Label('compactness'))
+.add(compactnessSlide)
+.add(snicButton)
 //Map.add(controlPan)
 //grid size 
-
-  
-
 // Set up the overall structure of the app, with a control panel to the left
 // of a full-screen map.
 ui.root.clear();
