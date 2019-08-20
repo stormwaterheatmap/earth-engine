@@ -4,9 +4,11 @@ Load modules
 */ 
 //var utils = require('users/giswqs/public:Modules/utils');
 //var datasets = require('users/stormwaterheatmap/Modules:datasets');
+//var datasets = require('users/stormwaterheatmap/apps:Modules/datasets')
 var datasets = require('users/stormwaterheatmap/apps:Modules/datasets')
+//var datasets2 = require('users/stormwaterheatmap/apps:Modules/datasets')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart');
-var palettes = require('users/gena/packages:palettes');
+//var palettes = require('users/gena/packages:palettes');
 var legends = require('users/stormwaterheatmap/apps:Modules/legends');
 var mapStyle = require('users/stormwaterheatmap/apps:Modules/mapStyles')
 var layerProperties = require('users/stormwaterheatmap/apps:Modules/layerProperties')
