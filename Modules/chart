@@ -14,7 +14,7 @@ var image = ee.Image("users/stormwaterheatmap/meanAnnual_precip"),
           [-121.91279659117117, 47.511822033134536],
           [-121.91279659117117, 48.124118775306165]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-exports.histogramFeature = function (region, propName, buckwidth, title) {
+/*exports.histogramFeature = function (region, propName, buckwidth, title) {
     var chart = ui.Chart.feature
         .histogram({
             features: region,
@@ -40,7 +40,7 @@ exports.histogramImage = function (image, WS, scale, title) {
             title: title
         });
     return chart;
-};
+};*/
 
 var makePieChart = function (geometry, properties, holeSize) {
     var AOI = geometry;
@@ -156,4 +156,23 @@ var makePieChart = function (geometry, properties, holeSize) {
 
 }
 
-exports.pieChart = makePieChart; 
+//exports.pieChart = makePieChart; 
+
+
+
+//chart test
+
+var legends = require('users/stormwaterheatmap/apps:Modules/legends');
+var palettes = require('users/gena/packages:palettes');
+var charts = require('users/stormwaterheatmap/apps:Modules/chart');
+var datasets = require('users/stormwaterheatmap/apps:Modules/datasets');
+var layerProperties = require('users/stormwaterheatmap/apps:Modules/layerProperties');
+
+var soils = layerProperties.Soils
+print(soils)
+Map.addLayer(soils.layer)
+
+var chart = makePieChart(geometry, soils , 0.4)
+print(chart)
+
+
