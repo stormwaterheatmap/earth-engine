@@ -108,7 +108,7 @@ var imp = landcover.eq(4).or(landcover.eq(5)).mask(landcover.neq(8)).multiply(ee
 exports.imperv = imp; 
 
 //exports.hrus = 
-
+var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select('built');
 exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select('built');
 exports.population2020 = population.filter(ee.Filter.eq('system:index', '2020')).first();
 exports.precip = precip.select('b1').resample().divide(25.4);//exports precip as mm 
@@ -163,3 +163,4 @@ exports.WRIA = ee.FeatureCollection("users/stormwaterheatmap/WAECY__Water_Resour
 exports.HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(PugetSound); 
 exports.NHDPlus = ee.FeatureCollection('users/cnilsen/PugetSoundNHDPlusWatersheds'); 
 //Map.addLayer(precip.select('b1').resample().divide(25.4))
+Map.addLayer(age_of_development)
