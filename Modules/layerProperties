@@ -112,11 +112,30 @@ var layerProperties = {
     },
     'landUse': {
         layer: datasets.landUse,
-        palette: ['yellow', 'orange', 'red'],
-        legend: [
-            { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
-            { 'No loss': 'black' }, { 'Water or no data': 'grey' }
-        ]
+        layerName: ['Landuse'], 
+palette: [
+  '#D45A51', 
+  '#CD770C', 
+  '#949989',
+  '#2E7BAF',
+  '#C3931E', 
+  '#4BA891', 
+  '#466b9f', 
+  '#256C61' 
+  ], 
+          discrete: true, 
+          minMax: [1,8],
+          values: [1, 2, 3, 4, 5, 6, 7, 8], 
+          labels: ['Residential', 
+'Industrial',
+'Transportation ',
+'Commercial',
+'Agricultural', 
+'Timber and Resource Extraction',
+'Water',
+'open space'], 
+            vizType: 'pieChart'
+
     },
     'GAP': {
         layer: ee.Image("USGS/GAP/CONUS/2011"),
