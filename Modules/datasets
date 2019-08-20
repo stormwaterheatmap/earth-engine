@@ -104,7 +104,7 @@ exports.slope = slopeZone;
 
 exports.mean_annual_runoff_byHRU = ee.Image("users/stormwaterheatmap/q1980sbyHRU");
 
-var imp = landcover.eq(4).or(landcover.eq(5)).mask(landcover.neq(8))
+var imp = landcover.eq(4).or(landcover.eq(5)).mask(landcover.neq(8)).multiply(ee.Image(100))
 exports.imperv = imp; 
 
 //exports.hrus = 
