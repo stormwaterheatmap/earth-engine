@@ -44,7 +44,7 @@ onClick: function() {
   map.clear()
   print( sizeSlide.getValue())
   print( compactnessSlide.getValue())
-  var layer = uSnic(image2, sizeSlide.getValue(), compactnessSlide.getValue())
+  var layer = uSnic(regression.Zinc, sizeSlide.getValue(), compactnessSlide.getValue())
   var clusters = layer.select(0)
   map.addLayer(clusters.randomVisualizer(),{},'clusters')
   var meanVals = layer.select(1)
@@ -71,6 +71,5 @@ ui.root.clear();
 var panel = controlPan;
 var map = ui.Map();
 ui.root.add(panel).add(map);
-
-map.addLayer(regressions.Zinc,{},'zinc')
+map.addLayer(regression.Zinc,{},'zinc'); 
 
