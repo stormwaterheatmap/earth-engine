@@ -8,7 +8,7 @@ var layerProperties = {
       'Imperviousness': {
         layer: datasets.imperv,
         layerName: ['Imperviousness'], 
-          palette: ['#000000', '#564138'],
+          palette: ['#115e10','#cbd4c2'],
           discrete: true, 
           minMax: [0,1],
           values: [0, 1], 
