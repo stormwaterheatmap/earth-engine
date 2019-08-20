@@ -1873,7 +1873,7 @@ var layerProperties = {
     'DevAge': {
         layer: datasets.age_of_development,
         layerName: ['Age of Development'], 
-          palette: ['#69995D', '#000000', '#448564', '#70daa4', '#83ffbf','ffffff' ],
+          palette: ['#466b9f', '#000000', '#448564', '#70daa4', '#83ffbf','ffffff' ],
           discrete: true, 
           minMax: [1,6],
           values: [1, 2, 3,
@@ -1884,6 +1884,7 @@ var layerProperties = {
             },
   
 }
+
 
 exports.layerProperties = layerProperties 
 //print(layerProperties.Soils)
