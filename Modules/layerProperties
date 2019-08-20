@@ -4,6 +4,18 @@ var palettes = require('users/gena/packages:palettes');
 Load images into a dictionary
 ---------------------------------------------------------------------------------------------------- 
 */ 
+/* Use this as example: 
+    'Soils': {
+        layer: datasets.soils,
+        layerName: ['Hydrologic Soils Group'], 
+          palette: ['#69995D', '#564138', '#F06543', '#7FFF7F', '#05668D'],
+          discrete: true, 
+          minMax: [0,4],
+          values: [0, 1, 2, 3, 4], 
+          labels: ['A/B', 'C', 'D', 'water', 'Water'],
+          vizType: 'pieChart'
+            },
+*/ 
 var layerProperties = {
       'Imperviousness': {
         layer: datasets.imperv,
@@ -79,6 +91,9 @@ var layerProperties = {
           'impervious', 'na', 'na', 'water','na'],
           vizType: 'pieChart'
             },
+            
+            
+            
     'HRUs': {
         layer: datasets.HRUBands,
         palette: ['yellow', 'orange', 'red'],
@@ -104,10 +119,6 @@ var layerProperties = {
         ]
     },
     'GAP': {
-        
-         
-          
-        
         layer: ee.Image("USGS/GAP/CONUS/2011"),
         layerName: ['GAP LANDFIRE National Terrestrial Ecosystems data'],
         palette: 
@@ -1859,10 +1870,21 @@ var layerProperties = {
             { 'No loss': 'black' }, { 'Water or no data': 'grey' }
         ]
     },
+    'DevAge': {
+        layer: datasets.age_of_development,
+        layerName: ['Age of Development'], 
+          palette: ['#69995D', '#000000', '#448564', '#70daa4', '#83ffbf','ffffff' ],
+          discrete: true, 
+          minMax: [1,6],
+          values: [1, 2, 3,
+                    4, 5, 6], 
+          labels: ['Water surface', 'Not Developed', 'Developed after 2000', 
+          'Developed 1990-2000', 'Developed 1975-1990', 'Water'],
+          vizType: 'pieChart'
+            },
+  
 }
-//var thisLayer = layerProperties.GAP
-//Map.addLayer(thisLayer.layer,{min: 1, max: 584,palette: thisLayer.palette})
-//print(layerProperties)
+
 exports.layerProperties = layerProperties 
 //print(layerProperties.Soils)
 //Map.addLayer(layerProperties.Precipitation.layer
