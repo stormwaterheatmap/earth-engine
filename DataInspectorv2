@@ -3,16 +3,17 @@ Load modules
 ---------------------------------------------------------------------------------------------------- 
 */ 
 //var utils = require('users/giswqs/public:Modules/utils');
-var datasets = require('users/stormwaterheatmap/Modules:datasets');
-var charts = require('users/stormwaterheatmap/Modules:chart');
+//var datasets = require('users/stormwaterheatmap/Modules:datasets');
+var datasets = require('users/stormwaterheatmap/apps:Modules/datasets')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart');
 var palettes = require('users/gena/packages:palettes');
-var legends = require('users/stormwaterheatmap/Modules:legends');
-var mapStyle = require('users/stormwaterheatmap/Modules:mapStyles')
-var layerProperties = require('users/stormwaterheatmap/Modules:layerProperties')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends');
+var mapStyle = require('users/stormwaterheatmap/apps:Modules/mapStyles')
+var layerProperties = require('users/stormwaterheatmap/apps:Modules/layerProperties')
 var layerProperties = layerProperties.layerProperties
-var pieChart = require('users/stormwaterheatmap/Modules:pieChartSnippetwithExport')
-var cards = require('users/stormwaterheatmap/Modules:Cards')
-var Style = require('users/stormwaterheatmap/Modules:Style')
+var pieChart = require('users/stormwaterheatmap/apps:Modules/pieChartSnippetwithExport')
+var cards = require('users/stormwaterheatmap/apps:Modules/Cards')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 /* 
 Load vectors
 ---------------------------------------------------------------------------------------------------- 
