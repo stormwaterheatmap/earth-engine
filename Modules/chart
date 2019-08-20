@@ -161,13 +161,14 @@ var makePieChart = function (geometry, properties, holeSize) {
 
 
 //chart test
-
+print('hello')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends');
 var palettes = require('users/gena/packages:palettes');
-var charts = require('users/stormwaterheatmap/apps:Modules/chart');
+//var charts = require('users/stormwaterheatmap/apps:Modules/chart');
 var datasets = require('users/stormwaterheatmap/apps:Modules/datasets');
 var layerProperties = require('users/stormwaterheatmap/apps:Modules/layerProperties');
-
+var layerProperties = layerProperties.layerProperties
+print(layerProperties)
 var soils = layerProperties.Soils
 print(soils)
 Map.addLayer(soils.layer)
