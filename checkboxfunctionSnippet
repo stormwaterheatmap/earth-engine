@@ -1,0 +1,32 @@
+var props = require('users/stormwaterheatmap/apps:Modules/layerProperties')
+var layerProperties = props.layerProperties
+print(layerProperties)
+
+var testPanel = ui.Panel({
+  style: {
+    width: '33%', height: '80%', position: 'bottom-right'
+  }
+})
+Map.add(testPanel)
+
+//check boxes ui.Checkbox(label, value, onChange, disabled, style)
+var checkbox = function (name) {
+  var cb = ui.Checkbox({
+    label: name, 
+    value: 0, 
+    style: {
+      margin: 0,
+      padding: '1px'
+    }
+  })
+      return cb
+}
+
+var thislayer = layerProperties.DevAge
+var cb1 = checkbox(thislayer.layerName)
+var thislayer = layerProperties.Soils
+var cb2 = checkbox(thislayer.layerName)
+
+testPanel.add(cb1).add(cb2)
+
+
