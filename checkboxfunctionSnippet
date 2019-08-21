@@ -48,7 +48,8 @@ var headingLabel2 = ui.Label({
 
 var thislayer = layerProperties.DevAge
 var cb1 = checkbox(thislayer.layerName)
-  cb1.onChange.set(function(){
+  cb1.onChange(function(){
+    print(cb1.getValue())
     Map.addLayer(thislayer.layer)
   })
 var thislayer = layerProperties.Soils
