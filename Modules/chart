@@ -144,7 +144,7 @@ exports.pieChart = makePieChart;
 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
-var bigNumPanel = function (value, units, title, tag, color) {
+exports.bigNumPanel = function (value, units, title, tag, color) {
     var panel = ui.Panel({
         style: {
             width: '33%',
