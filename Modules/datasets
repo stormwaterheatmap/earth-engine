@@ -194,10 +194,10 @@ Map.addLayer(generalizedLU,{palette: LUpal})*/
 //Timber and Resource Extraction
 //water
 //open space
-
+/*
 var palettes = require('users/gena/packages:palettes');
 var pop = population
   .filter(ee.Filter.date('2019-01-01', '2021-12-31')).first()
 Map.addLayer(pop,{palette: //palettes.kovesi.linear_kryw_5_100_c64[7]}
 palettes.kovesi.linear_gow_65_90_c35[7]}
-,'pop')
+,'pop')*/
