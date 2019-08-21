@@ -103,8 +103,8 @@ var layerProperties = {
         ]
     },
     'Population': {
-        layer: datasets.population,
-        palette: ['yellow', 'orange', 'red'],
+        layer: datasets.population2020,
+        palette: palettes.kovesi.linear_gow_65_90_c35[7],
         legend: [
             { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
             { 'No loss': 'black' }, { 'Water or no data': 'grey' }
