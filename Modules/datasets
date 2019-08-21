@@ -11,7 +11,8 @@ var NED = ee.Image("USGS/NED"),
     NEXDCP = ee.ImageCollection("NASA/NEX-DCP30"),
     image4 = ee.Image("users/stormwaterheatmap/nasaPAll"),
     image5 = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip"),
-    GLCF_trees = ee.ImageCollection("GLCF/GLS_TCC");
+    GLCF_trees = ee.ImageCollection("GLCF/GLS_TCC"),
+    imageCollection = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Density");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 // ---------------------------
 // Author: Christian Nilsen, Geosyntec Consultants 
@@ -34,8 +35,8 @@ var NED = ee.Image("USGS/NED"),
 Image Collections 
 */
 //Population
-var populationDataset = ee.ImageCollection('CIESIN/GPWv4/population-count');
-var population = populationDataset.select('population-count');
+var populationDataset = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Density");
+var population = populationDataset.select('population_density'); //people per 1000 m2
 exports.population = population
 
 /*
@@ -78,7 +79,7 @@ var generalizedLU = lu.remap(
   93,                                 //water
   71, 72, 74, 75, 76, 91, 92, 94, 95],                       //open space 
   
-  [1, 1, 1, 1, 1,  
+  [1, 1, 1, 1, 1,         //Residential
   2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, //Industrial
   3, 3, 3, 3, 3, 3, 3, 3, 3,                             //Transportation 
   4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,              //Commercial
@@ -110,7 +111,9 @@ exports.imperv = imp;
 //exports.hrus = 
 var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select('built');
 exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select('built');
-exports.population2020 = population.filter(ee.Filter.eq('system:index', '2020')).first();
+
+var population2020 = population.filter(ee.Filter.eq('system:index', '2020')).first();
+exports.population2020 = population2020; 
 exports.precip = precip.select('b1').resample().divide(25.4);//exports precip as mm 
 //HRUs by band
 var hruBands = 
@@ -163,4 +166,38 @@ exports.WRIA = ee.FeatureCollection("users/stormwaterheatmap/WAECY__Water_Resour
 exports.HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(PugetSound); 
 exports.NHDPlus = ee.FeatureCollection('users/cnilsen/PugetSoundNHDPlusWatersheds'); 
 //Map.addLayer(precip.select('b1').resample().divide(25.4))
-Map.addLayer(age_of_development)
+/*var LUpal = [
+  '#D45A51', 
+  '#CD770C', 
+  '#949989',
+  '#2E7BAF',
+  '#C3931E', 
+  '#4BA891', 
+  '#466b9f', 
+  '#256C61' 
+  ]
+  
+Map.addLayer(generalizedLU,{palette: LUpal})*/
+
+ //Residential
+ //Industrial
+   //Transportation 
+ //Agricultural 
+ //Timber and Resource Extraction
+//water
+ //open space 
+
+ //Industrial
+//Transportation 
+  //Commercial
+ //Agricultural 
+//Timber and Resource Extraction
+//water
+//open space
+
+var palettes = require('users/gena/packages:palettes');
+var pop = population
+  .filter(ee.Filter.date('2019-01-01', '2021-12-31')).first()
+Map.addLayer(pop,{palette: //palettes.kovesi.linear_kryw_5_100_c64[7]}
+palettes.kovesi.linear_gow_65_90_c35[7]}
+,'pop')
