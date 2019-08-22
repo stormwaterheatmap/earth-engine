@@ -1955,7 +1955,7 @@ var layerProperties = {
 
 
 exports.layerProperties = layerProperties
-print(layerProperties)
+/*print(layerProperties)
 
 
 var selectItems = Object.keys(layerProperties)
@@ -1963,7 +1963,7 @@ var size = Object.keys(layerProperties).length;
 
 print('select items:', selectItems)//.length())
 
-print(size)
+print(size)*/
 
 
 
