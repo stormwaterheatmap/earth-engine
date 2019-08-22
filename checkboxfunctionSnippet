@@ -17,23 +17,82 @@ var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var layerProperties = props.layerProperties
 print(layerProperties)
 print(style.fonts)
+
 //make a list of layers 
-
+var layerList = Object.keys(layerProperties)
+var size = Object.keys(layerProperties).length
 print(layerList)
-//print(layerList.keys())
+print(size)
 
-
+//function to add layer to Map 
 var addBaseLayer = function(keyName){
+  var layerItem = layerProperties[keyName]
   Map.addLayer({
-    eeObject: keyName.layer, 
-    visParams: {palette: keyName.palette,
-                min: keyName.minMax[0], 
-                max: keyName.minMax[1], 
+    eeObject: layerItem.layer, 
+    visParams: {palette: layerItem.palette,
+                min: layerItem.minMax[0], 
+                max: layerItem.minMax[1], 
     },
-    name: keyName.Description,
+    name: keyName,
     shown: false})
 }; 
-addBaseLayer(layerProperties.DevAge)
+//function to make checkboxes 
+var checkbox = function (index) {
+  var layer = selectItems[index]
+  addBaseLayer(layer);
+  var layerItem = layerProperties[layer]
+  var cb = ui.Checkbox({
+    label: layer, 
+    value: 0, 
+    style:{
+     margin: '0px',
+      padding: '4px',
+      fontSize: '10px'
+    }
+  })
+  cb.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+    Map.layers().get(index).setShown(checked);
+  print(checked)
+  }); 
+  return cb
+}; 
+
+//function to build checkbox panel 
+var checkPanel = function(){
+ var widList = [
+    ui.Label('Legend'), 
+    ui.Label('Precipitation'), 
+    checkbox(1),
+    checkbox(0)
+        ]
+  var panel = ui.Panel(widList)
+  Map.add(panel)
+}
+
+var selectItems = Object.keys(layerProperties)
+print(selectItems)
+addBaseLayer(selectItems[0]);
+checkPanel()
+
+
+/*var t3 = selectItems[0]
+print(t3)
+print()
+
+//var addlayer = function(keyvalue)
+//get the legend from a layer 
+
+var brute = layerProperties.Loss.visParams.palette
+print(brute)
+var layer1 = layerProperties[t3]
+print(layer1)
+var palGet = layer1.visParams.palette
+print(palGet)*/
+
+
+
+/*addBaseLayer(layerProperties.DevAge)
 addBaseLayer(layerProperties.GAP)
 //addBaseLayer(layerProperties.HRUs)
 addBaseLayer(layerProperties.Imperviousness)
@@ -101,7 +160,7 @@ add(headingLabel2)
 hline(testPanel)
 testPanel.add(cb4).add(cb5).add(cb6).add(cb7).add(cb8).add(cb9)
 Map.add(testPanel)
-
+*/
 
 
 
