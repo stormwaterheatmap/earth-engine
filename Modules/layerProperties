@@ -32,6 +32,7 @@ var layerProperties = {
         LegendName: ['Mean Annual Preciptation, mm/year'],
         Description: 'Mean Annual Preciptation',
         Units: 'mm/year',
+        minMax: [0, 255],
         palette: palettes.misc.jet[7],
         discrete: false,
         vizType: 'histogram'
@@ -51,6 +52,8 @@ var layerProperties = {
     'Slopes': {
         layer: datasets.slopes,
         palette: ['yellow', 'orange', 'red'],
+        minMax: [0, 255],
+        layerName: ['slopes'],
         legend: [{
                 '2016': 'red'
             }, {
@@ -67,6 +70,7 @@ var layerProperties = {
     },
     'landcover': {
         layer: datasets.landcover,
+        layerName: ['Land Cover'],
         palette: ['#1c5f2c', //forest 
             '#b9c5dc', //na
             '#b5c58f', //'lawn', 
@@ -105,6 +109,8 @@ var layerProperties = {
 
     'HRUs': {
         layer: datasets.HRUBands,
+          layerName: ['HRUs'],
+          minMax: [0,255], 
         palette: ['yellow', 'orange', 'red'],
         legend: [{
                 '2016': 'red'
@@ -123,6 +129,8 @@ var layerProperties = {
     'Population': {
         layer: datasets.population2020,
         palette: palettes.kovesi.linear_gow_65_90_c35[7],
+         minMax: [0,256], 
+          layerName: ['Population'],
         legend: [{
                 '2016': 'red'
             }, {
@@ -168,6 +176,7 @@ var layerProperties = {
     'GAP': {
         layer: ee.Image("USGS/GAP/CONUS/2011"),
         layerName: ['GAP LANDFIRE National Terrestrial Ecosystems data'],
+        minMax: [0,255], 
         palette: [
                 "#000000",
                 "#000000",
