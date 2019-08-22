@@ -17,6 +17,12 @@ var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var layerProperties = props.layerProperties
 print(layerProperties)
 print(style.fonts)
+//make a list of layers 
+
+print(layerList)
+//print(layerList.keys())
+
+
 var addBaseLayer = function(keyName){
   Map.addLayer({
     eeObject: keyName.layer, 
