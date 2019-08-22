@@ -175,7 +175,7 @@ var layerProperties = {
     },
     'GAP': {
         layer: ee.Image("USGS/GAP/CONUS/2011"),
-        layerName: ['GAP LANDFIRE National Terrestrial Ecosystems data'],
+        layerName: ["GAP LANDFIRE National Terrestrial Ecosystems data"],
         minMax: [0,255], 
         palette: [
                 "#000000",
