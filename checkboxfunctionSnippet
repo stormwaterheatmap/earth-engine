@@ -26,8 +26,8 @@ var addBaseLayer = function(keyName){
   Map.addLayer({
     eeObject: keyName.layer, 
     visParams: {palette: keyName.palette,
-                min: keyName.minMax[0] || 0, 
-                max: keyName.minMax[1] || 255, 
+                min: keyName.minMax[0], 
+                max: keyName.minMax[1], 
     },
     name: keyName.layerName.toString(), 
     shown: false})
@@ -36,14 +36,14 @@ var addBaseLayer = function(keyName){
 
 addBaseLayer(layerProperties.DevAge)
 addBaseLayer(layerProperties.GAP)
-addBaseLayer(layerProperties.HRUs)
+//addBaseLayer(layerProperties.HRUs)
 addBaseLayer(layerProperties.Imperviousness)
 addBaseLayer(layerProperties.Population)
 addBaseLayer(layerProperties.Precipitation)
-addBaseLayer(layerProperties.Slopes)
+//addBaseLayer(layerProperties.Slopes)
 addBaseLayer(layerProperties.Soils)
 addBaseLayer(layerProperties.landUse)
-addBaseLayer(layerProperties.landcover)
+//addBaseLayer(layerProperties.landcover)
 
 
 
