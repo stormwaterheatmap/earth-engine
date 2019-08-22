@@ -1958,17 +1958,19 @@ exports.layerProperties = layerProperties
 /*print(layerProperties)
 
 
-var 
+
 var size = Object.keys(layerProperties).length;
 
 print('select items:', selectItems)//.length())
 
-print(size)*/
+print(size)
 var selectItems = Object.keys(layerProperties)
 var item = (selectItems[3]); //selects a key 
 var layerselected = layerProperties['GAP'];
 print(layerselected)
 print(layerProperties[item])
+*/
 
+var selectItems = Object.keys(layerProperties)
 
-
+print(selectItems.length)
