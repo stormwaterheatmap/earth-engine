@@ -12,12 +12,26 @@ function hline(pan) {
    ));
 }
 
+//add all layers to map 
+
 
 var props = require('users/stormwaterheatmap/apps:Modules/layerProperties')
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
 var layerProperties = props.layerProperties
 print(layerProperties)
+print(layerProperties.Soils)
+
+var addBaseLayer = function(keyName){
+  Map.addLayer({
+    eeObject: keyName.layer, 
+    visParams: {palette: keyName.palette},
+    name: keyName.layerName.toString(), 
+    shown: false})
+}; 
+addBaseLayer(layerProperties.DevAge)
+addBaseLayer(layerProperties.GAP)
+
 
 var testPanel = ui.Panel({
   style: {
@@ -56,22 +70,76 @@ var headingLabel2 = ui.Label({
   padding: 0}
 })
 
-Map.addLayer(ee.Image('CGIAR/SRTM90_V4'));
 
 
-var thislayer = layerProperties.DevAge
-var cb1 = checkbox(thislayer.layerName)
+
+
+
+var cb0 = checkbox(layerProperties.DevAge.layerName)
+  cb0.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
+var cb1 = checkbox(layerProperties.GAP.layerName)
   cb1.onChange(function(checked) {
   // Shows or hides the first map layer based on the checkbox's value.
   Map.layers().get(0).setShown(checked);
 });
-var thislayer = layerProperties.Soils
-var cb2 = checkbox(thislayer.layerName)
+var cb2 = checkbox(layerProperties.HRUs.layerName)
+  cb2.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
+var cb3 = checkbox(layerProperties.Imperviousness.layerName)
+  cb3.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
+var cb4 = checkbox(layerProperties.Population.layerName)
+  cb4.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
+var cb5 = checkbox(layerProperties.Precipitation.layerName)
+  cb5.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
+var cb6 = checkbox(layerProperties.Slopes.layerName)
+  cb6.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
+var cb7 = checkbox(layerProperties.Slopes.layerName)
+  cb7.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
+var cb8 = checkbox(layerProperties.Soils.layerName)
+  cb8.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
+var cb9 = checkbox(layerProperties.landUse.layerName)
+  cb9.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+}); 
+var cb10 = checkbox(layerProperties.landcover.layerName)
+  cb10.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+}); 
+
+
 
 testPanel.add(headingLabel)
 hline(testPanel)
-testPanel.add(cb1).add(cb2)
+testPanel.add(cb0).add(cb1).add(cb2)
 testPanel.add(headingLabel2)
+
+
+
 
 
 
