@@ -20,7 +20,7 @@ var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
 var layerProperties = props.layerProperties
 print(layerProperties)
-print(layerProperties.Soils)
+print(style.fonts)
 
 var addBaseLayer = function(keyName){
   Map.addLayer({
@@ -29,24 +29,19 @@ var addBaseLayer = function(keyName){
                 min: keyName.minMax[0], 
                 max: keyName.minMax[1], 
     },
-    name: keyName.layerName, 
+    name: keyName.Description,
     shown: false})
 }; 
-
-
 addBaseLayer(layerProperties.DevAge)
-/*addBaseLayer(layerProperties.GAP)
+addBaseLayer(layerProperties.GAP)
 //addBaseLayer(layerProperties.HRUs)
 addBaseLayer(layerProperties.Imperviousness)
 //addBaseLayer(layerProperties.Population)
 addBaseLayer(layerProperties.Precipitation)
 //addBaseLayer(layerProperties.Slopes)
-addBaseLayer(layerProperties.Soils)
-addBaseLayer(layerProperties.landUse)
-//addBaseLayer(layerProperties.landcover)*/
-
-
-
+//addBaseLayer(layerProperties.Soils)
+//addBaseLayer(layerProperties.landUse)
+addBaseLayer(layerProperties.landcover)
 var testPanel = ui.Panel({
   style: {
     //width: '33%', height: '80%', 
@@ -55,18 +50,17 @@ var testPanel = ui.Panel({
     margin: 0,
   }
 })
-
-
 //check boxes ui.Checkbox(label, value, onChange, disabled, style)
 var checkbox = function (name, index) {
   var cb = ui.Checkbox({
     label: name, 
     value: 0, 
-    style: {
-     margin: 0,
-      padding: 0, 
+    style:{
+     margin: '4px',
+      padding: '4px' 
     }
   })
+  cb.style().set(style.fonts.Body3)
   cb.onChange(function(checked) {
   // Shows or hides the first map layer based on the checkbox's value.
   Map.layers().get(index).setShown(checked);
@@ -79,7 +73,7 @@ var headingLabel = ui.Label({
   margin: 0, 
   padding: 0
 }}); 
-headingLabel.style().set(style.fonts.H2)
+headingLabel.style().set(style.fonts.H4)
 
 var headingLabel2 = ui.Label({
   value: 'Land use and Land cover',
