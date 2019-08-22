@@ -27,7 +27,7 @@ var fonts = {
         ],
         fontSize: '28px',
         fontWeight: 700,
-        color: colors.tncblue
+       // color: colors.tncblue
     },
 
     H2: {
@@ -37,7 +37,7 @@ var fonts = {
         ],
         fontSize: '22px',
         fontWeight: 300,
-        color: colors.tncblue
+       // color: colors.tncblue
 
     },
     H3: {
