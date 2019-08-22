@@ -25,10 +25,15 @@ print(layerProperties.Soils)
 var addBaseLayer = function(keyName){
   Map.addLayer({
     eeObject: keyName.layer, 
-    visParams: {palette: keyName.palette},
+    visParams: {palette: keyName.palette,
+                min: keyName.minMax[0] || 0, 
+                max: keyName.minMax[1] || 255, 
+    },
     name: keyName.layerName.toString(), 
     shown: false})
 }; 
+
+
 addBaseLayer(layerProperties.DevAge)
 addBaseLayer(layerProperties.GAP)
 
@@ -44,7 +49,7 @@ var testPanel = ui.Panel({
 Map.add(testPanel)
 
 //check boxes ui.Checkbox(label, value, onChange, disabled, style)
-var checkbox = function (name) {
+var checkbox = function (name, index) {
   var cb = ui.Checkbox({
     label: name, 
     value: 0, 
@@ -53,6 +58,10 @@ var checkbox = function (name) {
       padding: 0, 
     }
   })
+  cb.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(index).setShown(checked);
+});
       return cb
 }
 
@@ -75,70 +84,24 @@ var headingLabel2 = ui.Label({
 
 
 
-var cb0 = checkbox(layerProperties.DevAge.layerName)
-  cb0.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-});
-var cb1 = checkbox(layerProperties.GAP.layerName)
-  cb1.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-});
-var cb2 = checkbox(layerProperties.HRUs.layerName)
-  cb2.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-});
-var cb3 = checkbox(layerProperties.Imperviousness.layerName)
-  cb3.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-});
-var cb4 = checkbox(layerProperties.Population.layerName)
-  cb4.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-});
-var cb5 = checkbox(layerProperties.Precipitation.layerName)
-  cb5.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-});
-var cb6 = checkbox(layerProperties.Slopes.layerName)
-  cb6.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-});
-var cb7 = checkbox(layerProperties.Slopes.layerName)
-  cb7.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-});
-var cb8 = checkbox(layerProperties.Soils.layerName)
-  cb8.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-});
-var cb9 = checkbox(layerProperties.landUse.layerName)
-  cb9.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-}); 
-var cb10 = checkbox(layerProperties.landcover.layerName)
-  cb10.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(0).setShown(checked);
-}); 
+var cb0 = checkbox(layerProperties.DevAge.layerName, 0)
+var cb1 = checkbox(layerProperties.GAP.layerName, 1)
+var cb2 = checkbox(layerProperties.HRUs.layerName, 2)
+var cb3 = checkbox(layerProperties.Imperviousness.layerName, 3)
+var cb4 = checkbox(layerProperties.Population.layerName, 4)
+var cb5 = checkbox(layerProperties.Precipitation.layerName, 5)
+var cb6 = checkbox(layerProperties.Slopes.layerName, 6)
+var cb7 = checkbox(layerProperties.Soils.layerName, 7)
+var cb8 = checkbox(layerProperties.landUse.layerName, 8)
+var cb9 = checkbox(layerProperties.landcover.layerName, 9 )
+
 
 
 
 testPanel.add(headingLabel)
 hline(testPanel)
-testPanel.add(cb0).add(cb1).add(cb2)
-testPanel.add(headingLabel2)
-
-
+testPanel.add(cb0).add(cb1).add(cb2).add(cb3).add(cb4).add(cb5).add(cb6).add(cb7).add(cb8).add(cb9)
+Map.add(testPanel)
 
 
 
