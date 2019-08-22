@@ -11,17 +11,12 @@ function hline(pan) {
    }}
    ));
 }
-
 //add all layers to map 
-
-
 var props = require('users/stormwaterheatmap/apps:Modules/layerProperties')
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
-
 var layerProperties = props.layerProperties
 print(layerProperties)
 print(style.fonts)
-
 var addBaseLayer = function(keyName){
   Map.addLayer({
     eeObject: keyName.layer, 
@@ -44,10 +39,11 @@ addBaseLayer(layerProperties.Precipitation)
 addBaseLayer(layerProperties.landcover)
 var testPanel = ui.Panel({
   style: {
-    //width: '33%', height: '80%', 
+    width: '280px', //height: '80%', 
     position: 'bottom-right', 
-    padding: 0,
+    padding: '4px',
     margin: 0,
+    fontSize: '10px'
   }
 })
 //check boxes ui.Checkbox(label, value, onChange, disabled, style)
@@ -56,8 +52,9 @@ var checkbox = function (name, index) {
     label: name, 
     value: 0, 
     style:{
-     margin: '4px',
-      padding: '4px' 
+     margin: '0px',
+      padding: '4px',
+      fontSize: '10px'
     }
   })
   cb.style().set(style.fonts.Body3)
@@ -67,26 +64,20 @@ var checkbox = function (name, index) {
 });
       return cb
 }
-
 var headingLabel = ui.Label({
   value: 'Precipitation and Hydrology', style: {
   margin: 0, 
   padding: 0
 }}); 
 headingLabel.style().set(style.fonts.H4)
-
 var headingLabel2 = ui.Label({
   value: 'Land use and Land cover',
   style: {
   margin: 0, 
-  padding: 0}
+  padding: 0,
+    fontSize: '10px'
+  }
 })
-
-
-
-
-
-
 var cb0 = checkbox(layerProperties.DevAge.layerName, 0)
 var cb1 = checkbox(layerProperties.GAP.layerName, 1)
 var cb2 = checkbox(layerProperties.HRUs.layerName, 2)
@@ -97,13 +88,12 @@ var cb6 = checkbox(layerProperties.Slopes.layerName, 6)
 var cb7 = checkbox(layerProperties.Soils.layerName, 7)
 var cb8 = checkbox(layerProperties.landUse.layerName, 8)
 var cb9 = checkbox(layerProperties.landcover.layerName, 9 )
-
-
-
-
 testPanel.add(headingLabel)
 hline(testPanel)
-testPanel.add(cb0).add(cb1).add(cb2).add(cb3).add(cb4).add(cb5).add(cb6).add(cb7).add(cb8).add(cb9)
+testPanel.add(cb0).add(cb1).add(cb2).add(cb3).
+add(headingLabel2)
+hline(testPanel)
+testPanel.add(cb4).add(cb5).add(cb6).add(cb7).add(cb8).add(cb9)
 Map.add(testPanel)
 
 
