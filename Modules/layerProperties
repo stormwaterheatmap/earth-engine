@@ -1950,13 +1950,19 @@ var layerProperties = {
         vizType: 'pieChart'
     },
 
-}
+};
 
 
 exports.layerProperties = layerProperties
+/*
 //print(layerProperties.Soils)
-//Map.addLayer(layerProperties.Precipitation.layer
-//,{min:500, max:2000, palette:palettes.
-//niccoli.linearlhot[7]//misc.jet//tol_rainbow//cubehelix
+Map.addLayer(layerProperties.Precipitation.layer
+,{min:500, max:2000, palette:palettes.niccoli.
+linearlhot[7]},
+layerProperties.Precipitation.Description
+)
+//misc.jet//tol_rainbow//cubehelix
 //})
-
+var name = layerProperties.Precipitation//LegendName
+print(name)
+*/
