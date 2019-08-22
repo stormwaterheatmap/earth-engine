@@ -36,6 +36,15 @@ var addBaseLayer = function(keyName){
 
 addBaseLayer(layerProperties.DevAge)
 addBaseLayer(layerProperties.GAP)
+addBaseLayer(layerProperties.HRUs)
+addBaseLayer(layerProperties.Imperviousness)
+addBaseLayer(layerProperties.Population)
+addBaseLayer(layerProperties.Precipitation)
+addBaseLayer(layerProperties.Slopes)
+addBaseLayer(layerProperties.Soils)
+addBaseLayer(layerProperties.landUse)
+addBaseLayer(layerProperties.landcover)
+
 
 
 var testPanel = ui.Panel({
@@ -46,7 +55,7 @@ var testPanel = ui.Panel({
     margin: 0,
   }
 })
-Map.add(testPanel)
+
 
 //check boxes ui.Checkbox(label, value, onChange, disabled, style)
 var checkbox = function (name, index) {
