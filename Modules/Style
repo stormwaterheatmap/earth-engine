@@ -73,6 +73,14 @@ var fonts = {
         fontSize: '15px',
         fontWeight: 400
     },
+        Body3: {
+        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            'Dejavu Sans', 'Helvetica Neue',
+            'Arial', 'sans-serif'
+        ],
+        fontSize: '13px',
+        fontWeight: 400
+    },
     Caption1: {
         fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
@@ -82,6 +90,14 @@ var fonts = {
         fontWeight: 400
     },
     Caption2: {
+        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            'Dejavu Sans', 'Helvetica Neue',
+            'Arial', 'sans-serif'
+        ],
+        fontSize: '11px',
+        fontWeight: 400
+    },
+     Caption3: {
         fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
