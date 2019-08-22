@@ -1959,5 +1959,4 @@ exports.layerProperties = layerProperties
 //,{min:500, max:2000, palette:palettes.
 //niccoli.linearlhot[7]//misc.jet//tol_rainbow//cubehelix
 //})
-print(layerProperties)
-print(layerProperties.Precipitation.LegendName[0])
+
