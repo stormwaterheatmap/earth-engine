@@ -1,0 +1,30 @@
+var style = require('users/stormwaterheatmap/apps:Modules/Style')
+
+print(style.fonts)
+
+var ze = style.fonts.H1
+var pan = ui.Panel({style: {position: 'bottom-left'}}); 
+var H1 = (ui.Label('H1'))//
+var H2 =  ui.Label('H2')
+var H3 = ui.Label('H3')
+var H4 = ui.Label('H4')
+var Body1 = (ui.Label('Body1'))//
+var Body2 =  ui.Label('Body2')
+var Body3 = ui.Label('Body2')
+var Caption1 = ui.Label('Caption1')
+var Caption2 = ui.Label('Caption2')
+var Caption3 = (ui.Label('Caption3'))//
+
+H1.style().set(style.fonts.H1)
+H2.style().set(style.fonts.H2)
+H3.style().set(style.fonts.H3)
+H4.style().set(style.fonts.H4)
+Body1.style().set(style.fonts.Body1)
+Body2.style().set(style.fonts.Body2)
+Body3.style().set(style.fonts.Body3)
+Caption1.style().set(style.fonts.Caption1)
+Caption2.style().set(style.fonts.Caption2)
+Caption3.style().set(style.fonts.Caption3)
+
+pan.add(H1).add(H2).add(H3).add(H4).add(Body1).add(Body2).add(Body3).add(Caption1).add(Caption2).add(Caption3)
+Map.add(pan)
