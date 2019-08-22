@@ -2,7 +2,7 @@ function hline(pan) {
  pan.add( ui.Label( 
    {value:'null',
    style:{
-  width:'100%',
+  //width:'100%',
   height: '0px',
    padding: '0px ',
    margin: '0px 0px 0px 0px',
@@ -12,15 +12,19 @@ function hline(pan) {
    ));
 }
 
+
 var props = require('users/stormwaterheatmap/apps:Modules/layerProperties')
+var style = require('users/stormwaterheatmap/apps:Modules/Style')
+
 var layerProperties = props.layerProperties
 print(layerProperties)
 
 var testPanel = ui.Panel({
   style: {
     //width: '33%', height: '80%', 
-    
-    position: 'bottom-right'
+    position: 'bottom-right', 
+    padding: 0,
+    margin: 0,
   }
 })
 Map.add(testPanel)
@@ -31,27 +35,36 @@ var checkbox = function (name) {
     label: name, 
     value: 0, 
     style: {
-      //margin: 0,
-      //margin: '1px 1 px 1px 100px'
+     margin: 0,
+      padding: 0, 
     }
   })
       return cb
 }
 
 var headingLabel = ui.Label({
-  value: 'Precipitation and Hydrology'
-}); 
+  value: 'Precipitation and Hydrology', style: {
+  margin: 0, 
+  padding: 0
+}}); 
+headingLabel.style().set(style.fonts.H2)
 
 var headingLabel2 = ui.Label({
-  value: 'Land use and Land cover'
+  value: 'Land use and Land cover',
+  style: {
+  margin: 0, 
+  padding: 0}
 })
+
+Map.addLayer(ee.Image('CGIAR/SRTM90_V4'));
+
 
 var thislayer = layerProperties.DevAge
 var cb1 = checkbox(thislayer.layerName)
-  cb1.onChange(function(){
-    print(cb1.getValue())
-    Map.addLayer(thislayer.layer)
-  })
+  cb1.onChange(function(checked) {
+  // Shows or hides the first map layer based on the checkbox's value.
+  Map.layers().get(0).setShown(checked);
+});
 var thislayer = layerProperties.Soils
 var cb2 = checkbox(thislayer.layerName)
 
