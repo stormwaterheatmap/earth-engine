@@ -65,7 +65,8 @@ var checkPanel = function(){
     ui.Label('Precipitation'), 
     checkbox(1),
     checkbox(0), 
-    checkbox(4)
+    checkbox(4), 
+    checkbox(9)
         ]
   var panel = ui.Panel(widList)
   Map.add(panel)
