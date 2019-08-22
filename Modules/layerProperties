@@ -1,5 +1,6 @@
 var datasets = require('users/stormwaterheatmap/apps:Modules/datasets');
 var palettes = require('users/gena/packages:palettes');
+//see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects for using
 /*
 Load images into a dictionary
 ---------------------------------------------------------------------------------------------------- 
@@ -1664,7 +1665,7 @@ var layerProperties = {
             'Western Great Plains Foothill and Piedmont Grassland',
             'Western Great Plains Tallgrass Prairie',
             'Western Great Plains Sand Prairie',
-            'Western Great Plains Sandhill Steppe',
+            'Western Gre//at Plains Sandhill Steppe',
             'Western Great Plains Mesquite Woodland and Shrubland',
             'Western Great Plains Shortgrass Prairie',
             'Arkansas Valley Prairie and Woodland',
@@ -1954,15 +1955,19 @@ var layerProperties = {
 
 
 exports.layerProperties = layerProperties
-/*
-//print(layerProperties.Soils)
-Map.addLayer(layerProperties.Precipitation.layer
-,{min:500, max:2000, palette:palettes.niccoli.
-linearlhot[7]},
-layerProperties.Precipitation.Description
-)
-//misc.jet//tol_rainbow//cubehelix
-//})
-var name = layerProperties.Precipitation//LegendName
-print(name)
-*/
+print(layerProperties)
+
+
+var selectItems = Object.keys(layerProperties)
+
+
+var values2 = Object.getOwnPropertyNames(layerProperties)
+print('select items:', selectItems)//.length())
+var valList = ee.List(values2)
+print(valList)
+print(valList.length())
+print(valList.serialize())
+print(valList.get(1))
+print(valList.serialize().get(1))
+
+
