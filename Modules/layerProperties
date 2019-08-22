@@ -1959,15 +1959,12 @@ print(layerProperties)
 
 
 var selectItems = Object.keys(layerProperties)
+var size = Object.keys(layerProperties).length;
 
-
-var values2 = Object.getOwnPropertyNames(layerProperties)
 print('select items:', selectItems)//.length())
-var valList = ee.List(values2)
-print(valList)
-print(valList.length())
-print(valList.serialize())
-print(valList.get(1))
-print(valList.serialize().get(1))
+
+print(size)
+
+
 
 
