@@ -239,6 +239,8 @@ exports.layerobjs = {
             palette: ['#00007f','#002aff','#00d4ff','#7fff7f','#ffd400',
             '#ff2a00',
             '#7f0000'], 
+            min: 400,
+            max: 4000
           }}, 
           discrete: false,
           values: null,
