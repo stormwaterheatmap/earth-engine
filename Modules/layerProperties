@@ -1974,3 +1974,7 @@ print(layerProperties[item])
 var selectItems = Object.keys(layerProperties)
 
 print(selectItems.length)
+
+var p = layerProperties.Precipitation
+print(p)
+//Map.addLayer(p.)
