@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = /* color: #d63000 */ee.Geometry.MultiPoint();
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 function hline(pan) {
  pan.add( ui.Label( 
    {value:'null',
@@ -14,7 +17,7 @@ function hline(pan) {
 //add all layers to map 
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
-var layerProperties = data.layerobjs
+var layerProperties = data.rasters
 print(layerProperties)
 //print(style.fonts)
 //make a list of layers 
@@ -79,7 +82,44 @@ addButton.onClick(function() {
   return cb
 }; 
 
+//add a legend function as a method to precip 
 
+function ColorBar(palette) {
+  return ui.Thumbnail({
+    image: ee.Image.pixelLonLat().select(0),
+    params: {
+      bbox: [0, 0, 1, 0.1],
+      dimensions: '200x20',
+      format: 'png',
+      min: 0,
+      max: 1,
+      palette: palette,
+    },
+    style: {stretch: 'horizontal', margin: '0px 8px'},
+  });
+}
+
+var Thermal = ['042333', '2c3395', '744992', 'b15f82', 'eb7958', 'fbb43d', 'e8fa5b']
+
+var barLegend = function (obj) {
+  var labelPanel = ui.Panel(
+    //var low = this.
+      [
+        ui.Label(low, {margin: '4px 8px',textAlign: 'left',stretch: 'horizontal'}),
+        ui.Label(mid, {margin: '4px 8px', textAlign: 'center',stretch: 'horizontal'}),
+        ui.Label(high, {margin: '4px 8px',textAlign: 'right',stretch: 'horizontal'})
+      ],
+      ui.Panel.Layout.flow('horizontal')
+      //{width: '230px', position: 'top-center'}
+      );
+  return ui.Panel([ColorBar(palette), labelPanel])
+}
+
+layerProperties.legend = function() {
+  print(this.Precipitation.vizType)
+}
+layerProperties.legend()
+print(layerProperties)
 
 /*
 //function to build checkbox panel 
