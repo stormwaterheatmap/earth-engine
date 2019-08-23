@@ -264,6 +264,9 @@ var layers = {
           labels: ['Pervious', 'Impervious'], 
           vizType: 'bigNumber'
         }, 
+        
+    }
+    /*
            'Slopes': {
         layer: datasets.slopes,
         palette: ['yellow', 'orange', 'red'],
@@ -313,7 +316,7 @@ var layers = {
         5 water             8 - water  
         6 impervious other  5 - impervious
         7 impervious roofs  4 - roofs  
-        */
+      
         labels: ['forest', 'na', 'lawn', 'na', 'impervious - roofs',
             'impervious', 'na', 'na', 'water', 'na'
         ],
@@ -394,3 +397,4 @@ var layers = {
 
 
 
+*/
