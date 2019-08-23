@@ -12,30 +12,30 @@ function hline(pan) {
    ));
 }
 //add all layers to map 
-var props = require('users/stormwaterheatmap/apps:Modules/layerProperties')
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
-var layerProperties = props.layerProperties
+var layerProperties = data.layerobjs
 print(layerProperties)
-print(style.fonts)
-
+//print(style.fonts)
 //make a list of layers 
 var layerList = Object.keys(layerProperties)
 var size = Object.keys(layerProperties).length
 print(layerList)
 print(size)
+Map.layers().add(layerProperties.Precipitation.layer)
 
-//function to add layer to Map 
-var addBaseLayer = function(keyName){
-  var layerItem = layerProperties[keyName]
-  Map.addLayer({
-    eeObject: layerItem.layer, 
-    visParams: {palette: layerItem.palette,
-                min: layerItem.minMax[0], 
-                max: layerItem.minMax[1], 
-    },
-    name: keyName,
-    shown: false})
-}; 
+// //function to add layer to Map 
+// var addBaseLayer = function(keyName){
+//   var layerItem = layerProperties[keyName]
+//   Map.addLayer({
+//     eeObject: layerItem.layer, 
+//     visParams: {palette: layerItem.palette,
+//                 min: layerItem.minMax[0], 
+//                 max: layerItem.minMax[1], 
+//     },
+//     name: keyName,
+//     shown: false})
+// }; 
 //function to make checkboxes 
 var checkbox = function (layerObject) {
   var layer = selectItems[index]
@@ -79,6 +79,9 @@ addButton.onClick(function() {
   return cb
 }; 
 
+
+
+/*
 //function to build checkbox panel 
 var checkPanel = function(){
  var widList = [
