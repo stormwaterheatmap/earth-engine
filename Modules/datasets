@@ -35,8 +35,10 @@ var NED = ee.Image("USGS/NED"),
 Image Collections 
 */
 //Population
-var populationDataset = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Density");
-var population = populationDataset.select('population_density'); //people per 1000 m2
+var populationDataset = ee.ImageCollection(
+    "CIESIN/GPWv411/GPW_Population_Density");
+var population = populationDataset.select(
+'population_density'); //people per 1000 m2
 exports.population = population
 
 /*
@@ -47,11 +49,12 @@ Images
 exports.NASA_precip = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip")
 
 //exports.climp = climP.select('pr').first();
-var prismP = ee.Image('users/cnilsen/precip/PRISM800meter') 
+var prismP = ee.Image('users/cnilsen/precip/PRISM800meter')
 //var prismP = prism.select('ppt').mean()
 exports.prismP = prismP
 //
-var  lu = ee.Image("users/cnilsen/lu_5m_pyramid"); //remap these categories to the following: 
+var lu = ee.Image(
+"users/cnilsen/lu_5m_pyramid"); //remap these categories to the following: 
 /*
 ['SF Residential',
 'MF Residential',
@@ -68,103 +71,142 @@ var  lu = ee.Image("users/cnilsen/lu_5m_pyramid"); //remap these categories to t
 'Undeveloped',
 'Water',
 'Open Space'
-*/ 
+*/
 var generalizedLU = lu.remap(
-  [11, 12,  15,  18, 19,                            //Residential
-  21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 39, //Industrial
-  41, 42, 43, 44, 45, 46, 47, 48, 49,                             //Transportation 
-  13, 14, 16, 17, 51, 52, 53, 54, 55, 56, 57, 58, 59, 61, 62, 63, 64, 65, 66, 67, 68, 69,             //Commercial
-  81, 82, 83,                                                     //Agricultural 
-  84, 85, 87, 88, 89,                 //Timber and Resource Extraction
-  93,                                 //water
-  71, 72, 74, 75, 76, 91, 92, 94, 95],                       //open space 
-  
-  [1, 1, 1, 1, 1,         //Residential
-  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, //Industrial
-  3, 3, 3, 3, 3, 3, 3, 3, 3,                             //Transportation 
-  4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,              //Commercial
-  5, 5, 5,                                                     //Agricultural 
-  6, 6, 6, 6, 6,                 //Timber and Resource Extraction
-  7,                                 //water
-  8, 8, 8, 8, 8, 8, 8, 8, 8]  //open space
-);  
+    [11, 12, 15, 18, 19, //Residential
+        21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+        39, //Industrial
+        41, 42, 43, 44, 45, 46, 47, 48, 49, //Transportation 
+        13, 14, 16, 17, 51, 52, 53, 54, 55, 56, 57, 58, 59, 61, 62, 63, 64,
+        65, 66, 67, 68, 69, //Commercial
+        81, 82, 83, //Agricultural 
+        84, 85, 87, 88, 89, //Timber and Resource Extraction
+        93, //water
+        71, 72, 74, 75, 76, 91, 92, 94, 95
+    ], //open space 
+
+    [1, 1, 1, 1, 1, //Residential
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, //Industrial
+        3, 3, 3, 3, 3, 3, 3, 3, 3, //Transportation 
+        4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4,
+        4, //Commercial
+        5, 5, 5, //Agricultural 
+        6, 6, 6, 6, 6, //Timber and Resource Extraction
+        7, //water
+        8, 8, 8, 8, 8, 8, 8, 8, 8
+    ] //open space
+);
 
 
 //
-exports.landuse = generalizedLU; 
+exports.landuse = generalizedLU;
 
-var landcover = ee.Image('users/stormwaterheatmap/landcover'); 
-exports.landcover = landcover; 
+var landcover = ee.Image('users/stormwaterheatmap/landcover');
+exports.landcover = landcover;
 
 var soils = ee.Image("users/stormwaterheatmap/soils");
 exports.soils = ee.Image("users/stormwaterheatmap/soils");
 //Generate slopes from USGS DEM 
 var thresholds = ee.Image([5.0, 15, 100]);
-var slopeZone = ee.Terrain.slope(NED).gt(thresholds).reduce('sum'); 
-exports.slope = slopeZone; 
+var slopeZone = ee.Terrain.slope(NED).gt(thresholds).reduce('sum');
+exports.slope = slopeZone;
 
-exports.mean_annual_runoff_byHRU = ee.Image("users/stormwaterheatmap/q1980sbyHRU");
+exports.mean_annual_runoff_byHRU = ee.Image(
+    "users/stormwaterheatmap/q1980sbyHRU");
 
-var imp = landcover.eq(4).or(landcover.eq(5)).mask(landcover.neq(8)).multiply(ee.Image(100))
-exports.imperv = imp; 
+var imp = landcover.eq(4).or(landcover.eq(5)).mask(landcover.neq(8)).multiply(ee
+    .Image(100))
+exports.imperv = imp;
 
 //exports.hrus = 
-var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select('built');
-exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select('built');
+var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select(
+    'built');
+exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1')
+    .select('built');
 
-var population2020 = population.filter(ee.Filter.eq('system:index', '2020')).first();
-exports.population2020 = population2020; 
-exports.precip = precip.select('b1').resample().divide(25.4);//exports precip as mm 
+var population2020 = population.filter(ee.Filter.eq('system:index', '2020'))
+    .first();
+exports.population2020 = population2020;
+//exports.precip = precip.select('b1').resample().divide(
+//25.4); //exports precip as mm 
 //HRUs by band
-var hruBands = 
-  (soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru000'))
-.addBands(soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(1))).rename('hru001'))
-.addBands(soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(2))).rename('hru002'))
-.addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(0))).rename('hru010'))
-.addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(1))).rename('hru011'))
-.addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(2))).rename('hru012'))
-.addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(0))).rename('hru020'))
-.addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(1))).rename('hru021'))
-.addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(2))).rename('hru022'))
-.addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru100'))
-.addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(1))).rename('hru101'))
-.addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(2))).rename('hru102'))
-.addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(0))).rename('hru110'))
-.addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(1))).rename('hru111'))
-.addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(2))).rename('hru112'))
-.addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(0))).rename('hru120'))
-.addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(1))).rename('hru121'))
-.addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(2))).rename('hru122'))
-.addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru200'))
-.addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(1))).rename('hru201'))
-.addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(2))).rename('hru202'))
-.addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(0))).rename('hru210'))
-.addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(1))).rename('hru211'))
-.addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(2))).rename('hru212'))
-.addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(0))).rename('hru220'))
-.addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(1))).rename('hru221'))
-.addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(2))).rename('hru222'))
-.addBands(landcover.eq(4).or(landcover.eq(5).and(slopeZone.eq(0))).rename('hru250'))
-.addBands(landcover.eq(5).and(slopeZone.eq(1)).rename('hru251'))
-.addBands(landcover.eq(5).and(slopeZone.eq(2)).rename('hru252'))
-
-exports.hruBands = hruBands; 
-
-
+var hruBands =
+    (soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru000'))
+    .addBands(soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(1))).rename(
+        'hru001'))
+    .addBands(soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(2))).rename(
+        'hru002'))
+    .addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(0))).rename(
+        'hru010'))
+    .addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(1))).rename(
+        'hru011'))
+    .addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(2))).rename(
+        'hru012'))
+    .addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(0))).rename(
+        'hru020'))
+    .addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(1))).rename(
+        'hru021'))
+    .addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(2))).rename(
+        'hru022'))
+    .addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(0))).rename(
+        'hru100'))
+    .addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(1))).rename(
+        'hru101'))
+    .addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(2))).rename(
+        'hru102'))
+    .addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(0))).rename(
+        'hru110'))
+    .addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(1))).rename(
+        'hru111'))
+    .addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(2))).rename(
+        'hru112'))
+    .addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(0))).rename(
+        'hru120'))
+    .addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(1))).rename(
+        'hru121'))
+    .addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(2))).rename(
+        'hru122'))
+    .addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(0))).rename(
+        'hru200'))
+    .addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(1))).rename(
+        'hru201'))
+    .addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(2))).rename(
+        'hru202'))
+    .addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(0))).rename(
+        'hru210'))
+    .addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(1))).rename(
+        'hru211'))
+    .addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(2))).rename(
+        'hru212'))
+    .addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(0))).rename(
+        'hru220'))
+    .addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(1))).rename(
+        'hru221'))
+    .addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(2))).rename(
+        'hru222'))
+    .addBands(landcover.eq(4).or(landcover.eq(5).and(slopeZone.eq(0))).rename(
+        'hru250'))
+    .addBands(landcover.eq(5).and(slopeZone.eq(1)).rename('hru251'))
+    .addBands(landcover.eq(5).and(slopeZone.eq(2)).rename('hru252'))
+exports.hruBands = hruBands;
 //Vectors 
 //Ecology Watershed Assessment Units 
 exports.PS_AU = ee.FeatureCollection('users/cnilsen/PS_AU')
 //exports.PS_AU = PS_AU
-
-var PugetSound = (ee.FeatureCollection("USGS/WBD/2017/HUC04")).filter(ee.Filter.eq('huc4', '1711'));
+var PugetSound = (ee.FeatureCollection("USGS/WBD/2017/HUC04")).filter(ee.Filter
+    .eq('huc4', '1711'));
 //Map.addLayer(PugetSound)
-var counties = ee.FeatureCollection("TIGER/2018/Counties").filterBounds(PugetSound);
+var counties = ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
+    PugetSound);
 //Map.addLayer(counties)
-exports.WRIA = ee.FeatureCollection("users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA")
-.filterBounds(PugetSound);
+exports.WRIA = ee.FeatureCollection(
+        "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA")
+    .filterBounds(PugetSound);
 //Map.addLayer(WRIA)
-exports.HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(PugetSound); 
-exports.NHDPlus = ee.FeatureCollection('users/cnilsen/PugetSoundNHDPlusWatersheds'); 
+exports.HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
+    PugetSound);
+exports.NHDPlus = ee.FeatureCollection(
+    'users/cnilsen/PugetSoundNHDPlusWatersheds');
 //Map.addLayer(precip.select('b1').resample().divide(25.4))
 /*var LUpal = [
   '#D45A51', 
@@ -179,18 +221,18 @@ exports.NHDPlus = ee.FeatureCollection('users/cnilsen/PugetSoundNHDPlusWatershed
   
 Map.addLayer(generalizedLU,{palette: LUpal})*/
 
- //Residential
- //Industrial
-   //Transportation 
- //Agricultural 
- //Timber and Resource Extraction
-//water
- //open space 
-
- //Industrial
+//Residential
+//Industrial
 //Transportation 
-  //Commercial
- //Agricultural 
+//Agricultural 
+//Timber and Resource Extraction
+//water
+//open space 
+
+//Industrial
+//Transportation 
+//Commercial
+//Agricultural 
 //Timber and Resource Extraction
 //water
 //open space
@@ -215,79 +257,85 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
             },
 ---------------------------
 */ //updated 8/22/2019
-exports.layerobjs = {
+exports.rasters = {
     'Imperviousness': {
         layer: {
-          eeObject: imp, 
-          name:  'Imperviousness', 
-          visParams: {
-            palette: ['#115e10', '#cbd4c2'], 
-            min: 0,
-            max: 1
-          }}, 
-          discrete: true,
-          values: [0, 1],
-          units: null, 
-          labels: ['Pervious', 'Impervious'], 
-          vizType: 'bigNumber'
-    }, 
+            eeObject: imp,
+            name: 'Imperviousness',
+            visParams: {
+                palette: ['#115e10', '#cbd4c2'],
+                min: 0,
+                max: 1
+            }
+        },
+        discrete: true,
+        values: [0, 1],
+        units: null,
+        labels: ['Pervious', 'Impervious'],
+        vizType: 'bigNumber'
+    },
     'Precipitation': {
         layer: {
-          eeObject: prismP, 
-          name:  'Mean Annual Preciptation', 
-          visParams: {
-            palette: ['#00007f','#002aff','#00d4ff','#7fff7f','#ffd400',
-            '#ff2a00',
-            '#7f0000'], 
-            min: 400,
-            max: 4000
-          }}, 
-          discrete: false,
-          values: null,
-          units: 'mm/year', 
-          labels: null, 
-          vizType: 'histogram'
-    }, 
+            eeObject: prismP,
+            name: 'Mean Annual Preciptation',
+            visParams: {
+                palette: ['#00007f', '#002aff', '#00d4ff', '#7fff7f',
+                    '#ffd400',
+                    '#ff2a00',
+                    '#7f0000'
+                ],
+                min: 400,
+                max: 4000
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'mm/year',
+        labels: null,
+        vizType: 'histogram'
+    },
     'Soils': {
         layer: {
-          eeObject: ee.Image("users/stormwaterheatmap/soils"), 
-          name:  'Hydrologic Soils Groups', 
-          visParams: {
-            palette: ['#69995D', '#564138', '#F06543', '#7FFF7F', '#05668D'], 
-            min: 0,
-            max: 4
-          }},  
-          discrete: true,
-          values: [0, 1],
-          units: 'mm/year', 
-          labels: ['Pervious', 'Impervious'], 
-          vizType: 'bigNumber'
-        }, 
-    }
-    /*
-           'Slopes': {
-        layer: datasets.slopes,
-        palette: ['yellow', 'orange', 'red'],
-        minMax: [0, 255],
-        layerName: ['slopes'],
-        legend: [{
-                '2016': 'red'
-            }, {
-                '...': 'orange'
-            }, {
-                '2000': 'yellow'
-            },
-            {
-                'No loss': 'black'
-            }, {
-                'Water or no data': 'grey'
+            eeObject: ee.Image("users/stormwaterheatmap/soils"),
+            name: 'Hydrologic Soils Groups',
+            visParams: {
+                palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
+                    '#05668D'
+                ],
+                min: 0,
+                max: 4
             }
-        ]
+        },
+        discrete: true,
+        values: [0, 1],
+        units: 'mm/year',
+        labels: ['Pervious', 'Impervious'],
+        vizType: 'bigNumber'
     },
-    'landcover': {
-        layer: datasets.landcover,
-        layerName: ['Land Cover'],
-        palette: ['#1c5f2c', //forest 
+    'Slope': {
+        layer: {
+            eeObject: slopeZone,
+            name: 'Slope Categories',
+            visParams: {
+                palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
+                    '#05668D'
+                ],
+                min: 0,
+                max: 2
+            }
+        },
+        discrete: true,
+        values: [0, 1, 2],
+        units: null,
+        labels: ['Flat', 'Moderate', 'Steep'],
+        vizType: 'pieChart'
+    },
+    'landCover': {
+        layer: {
+            eeObject: landcover,
+            name: 'Land Cover',
+            visParams: {
+                palette: ['#1c5f2c', //forest 
             '#b9c5dc', //na
             '#b5c58f', //'lawn', 
             '#b9c5dc', //'na', 
@@ -298,101 +346,111 @@ exports.layerobjs = {
             '#466b9f', //'water',
             '#b9c5dc' //'na'
         ],
-        //palettes.colorbrewer.Set3[10],
-
-        minMax: [0, 9],
+                min: 0,
+                max: 9
+            }
+        },
+        discrete: true,
         values: [0, 1, 2, 3, 4,
             5, 6, 7, 8, 9
         ],
-
-        /*tnc               reclass as 
-        0 no data           9 - na
-        1 grass             2 - lawn
-        2 shrub             2 - lawn
-        3 tree              0 - forest
-        4 dirt/barren       2 - lawn 
-        5 water             8 - water  
-        6 impervious other  5 - impervious
-        7 impervious roofs  4 - roofs  
-      
+        units: null,
         labels: ['forest', 'na', 'lawn', 'na', 'impervious - roofs',
             'impervious', 'na', 'na', 'water', 'na'
         ],
         vizType: 'pieChart'
-    },
-
-
-
+    }, 
     'HRUs': {
-        layer: datasets.HRUBands,
-          layerName: ['HRUs'],
-          minMax: [0,255], 
-        palette: ['yellow', 'orange', 'red'],
-        legend: [{
-                '2016': 'red'
-            }, {
-                '...': 'orange'
-            }, {
-                '2000': 'yellow'
-            },
-            {
-                'No loss': 'black'
-            }, {
-                'Water or no data': 'grey'
+        layer: {
+            eeObject: hruBands,
+            name: 'Hydrologic Response Units',
+            visParams: {
+                palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
+                    '#05668D'
+                ],
+                min: 0,
+                max: 255
             }
-        ]
+        },
+        discrete: true,
+        values: [0, 1],
+        units: null,
+        labels: null,//['Pervious', 'Impervious'],
+        vizType: 'pieChart'
     },
     'Population': {
-        layer: datasets.population2020,
-        palette: palettes.kovesi.linear_gow_65_90_c35[7],
-         minMax: [0,256], 
-          layerName: ['Population'],
-        legend: [{
-                '2016': 'red'
-            }, {
-                '...': 'orange'
-            }, {
-                '2000': 'yellow'
-            },
-            {
-                'No loss': 'black'
-            }, {
-                'Water or no data': 'grey'
+        layer: {
+            eeObject: population2020,
+            name: 'Population',
+            visParams: {
+                palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
+                    '#05668D'
+                ],
+                min: 0,
+                max: 255
             }
-        ]
+        },
+        discrete: false,
+        values: null,
+        units: null,
+        labels: null,//['Pervious', 'Impervious'],
+        vizType: 'pieChart'
     },
     'landUse': {
-        layer: datasets.landUse,
-        layerName: ['Landuse'],
-        palette: [
-            '#D45A51',
-            '#CD770C',
-            '#949989',
-            '#2E7BAF',
-            '#C3931E',
-            '#4BA891',
-            '#466b9f',
-            '#256C61'
-        ],
+        layer: {
+            eeObject: generalizedLU,
+            name: 'Land Use',
+            visParams: {
+                palette: [
+                    '#D45A51',
+                    '#CD770C',
+                    '#949989',
+                    '#2E7BAF',
+                    '#C3931E',
+                    '#4BA891',
+                    '#466b9f',
+                    '#256C61'
+                ],
+                min: 0,
+                max: 8
+            }
+        },
         discrete: true,
-        minMax: [1, 8],
         values: [1, 2, 3, 4, 5, 6, 7, 8],
+        units: null,
         labels: ['Residential',
-            'Industrial',
-            'Transportation ',
-            'Commercial',
-            'Agricultural',
-            'Timber and Resource Extraction',
-            'Water',
-            'open space'
-        ],
+        'Industrial',
+        'Transportation ',
+        'Commercial',
+        'Agricultural',
+        'Timber and Resource Extraction',
+        'Water',
+        'open space'
+    ],
         vizType: 'pieChart'
-
     },
+
 }
-
-
-
-
-
+exports.vectors = {
+        counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
+            PugetSound),
+        HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
+            PugetSound),
+        HUC10: ee.FeatureCollection("USGS/WBD/2017/HUC10").filterBounds(
+            PugetSound),
+        HUC08: ee.FeatureCollection("USGS/WBD/2017/HUC08").filterBounds(
+            PugetSound),
+        HUC06: ee.FeatureCollection("USGS/WBD/2017/HUC06").filterBounds(
+            PugetSound),
+        NHDPlus: ee.FeatureCollection(
+            'users/cnilsen/PugetSoundNHDPlusWatersheds'),
+        PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
+        WRIA: ee.FeatureCollection(
+                "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
+            )
+            .filterBounds(PugetSound),
+        //add LJ 
+        //add NPDES Bounds 
+}
+/*
 */
