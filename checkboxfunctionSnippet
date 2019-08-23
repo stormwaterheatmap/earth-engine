@@ -37,7 +37,7 @@ var addBaseLayer = function(keyName){
     shown: false})
 }; 
 //function to make checkboxes 
-var checkbox = function (index) {
+var checkbox = function (layerObject) {
   var layer = selectItems[index]
   addBaseLayer(layer);
   var layerItem = layerProperties[layer]
@@ -52,7 +52,28 @@ var checkbox = function (index) {
   })
   cb.onChange(function(checked) {
   // Shows or hides the first map layer based on the checkbox's value.
+   //if checked 
+  if(checked) {
+   Map.layers().add(layerObject)//add(image)
+} else {
+   Map.layers().remove(layerObject);
+}
+   
+   
     Map.layers().get(index).setShown(checked);
+//
+addButton.onClick(function() {
+  var toAdd = ui.Map.Layer({eeObject: image, 
+  name:'from button',
+  visParams: {palette: ['blue', 'green', 'white']}
+  })
+  Map.layers().set(0,toAdd)//add(image)
+  print(Map.layers())
+  print(image.getMap())
+ 
+})    
+    
+    
   print(checked)
   }); 
   return cb
