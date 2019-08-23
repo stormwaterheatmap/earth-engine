@@ -215,7 +215,7 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
             },
 ---------------------------
 */ //updated 8/22/2019
-var layers = {
+var hmlayers = {
     'Imperviousness': {
         layer: {
           eeObject: imp, 
@@ -265,7 +265,7 @@ var layers = {
           vizType: 'bigNumber'
         }, 
         
-    }
+    }}
     /*
            'Slopes': {
         layer: datasets.slopes,
