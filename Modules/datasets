@@ -215,7 +215,7 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
             },
 ---------------------------
 */ //updated 8/22/2019
-var hmlayers = {
+exports.layerobjs = {
     'Imperviousness': {
         layer: {
           eeObject: imp, 
