@@ -432,6 +432,7 @@ exports.rasters = {
 
 }
 exports.vectors = {
+        MS4: ee.FeatureCollection("users/stormwaterheatmap/MS4_bounds"), 
         counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
             PugetSound),
         HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
