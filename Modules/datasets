@@ -201,3 +201,196 @@ var pop = population
 Map.addLayer(pop,{palette: //palettes.kovesi.linear_kryw_5_100_c64[7]}
 palettes.kovesi.linear_gow_65_90_c35[7]}
 ,'pop')*/
+//new layerlist with ee Objects listed 
+/* Use this as example: 
+    'Soils': {
+        layer: datasets.soils,
+        layerName: ['Hydrologic Soils Group'], 
+          palette: ['#69995D', '#564138', '#F06543', '#7FFF7F', '#05668D'],
+          discrete: true, 
+          minMax: [0,4],
+          values: [0, 1, 2, 3, 4], 
+          labels: ['A/B', 'C', 'D', 'water', 'Water'],
+          vizType: 'pieChart'
+            },
+---------------------------
+*/ //updated 8/22/2019
+var layers = {
+    'Imperviousness': {
+        layer: {
+          eeObject: imp, 
+          name:  'Imperviousness', 
+          visParams: {
+            palette: ['#115e10', '#cbd4c2'], 
+            min: 0,
+            max: 1
+          }, 
+          discrete: true,
+          values: [0, 1],
+          units: null, 
+          labels: ['Pervious', 'Impervious'], 
+          vizType: 'bigNumber'
+          
+        }, 
+    }, 
+    'Precipitation': {
+        layer: {
+          eeObject: prismP, 
+          name:  'Mean Annual Preciptation', 
+          visParams: {
+            palette: ['#00007f','#002aff','#00d4ff','#7fff7f','#ffd400',
+            '#ff2a00',
+            '#7f0000'], 
+          }, 
+          discrete: false,
+          values: null,
+          units: 'mm/year', 
+          labels: null, 
+          vizType: 'histogram'
+        }, 
+    }, 
+    'Soils': {
+        layer: {
+          eeObject: ee.Image("users/stormwaterheatmap/soils"), 
+          name:  'Hydrologic Soils Groups', 
+          visParams: {
+            palette: ['#69995D', '#564138', '#F06543', '#7FFF7F', '#05668D'], 
+            min: 0,
+            max: 4
+          }, 
+          discrete: true,
+          values: [0, 1],
+          units: 'mm/year', 
+          labels: ['Pervious', 'Impervious'], 
+          vizType: 'bigNumber'
+        }, 
+           'Slopes': {
+        layer: datasets.slopes,
+        palette: ['yellow', 'orange', 'red'],
+        minMax: [0, 255],
+        layerName: ['slopes'],
+        legend: [{
+                '2016': 'red'
+            }, {
+                '...': 'orange'
+            }, {
+                '2000': 'yellow'
+            },
+            {
+                'No loss': 'black'
+            }, {
+                'Water or no data': 'grey'
+            }
+        ]
+    },
+    'landcover': {
+        layer: datasets.landcover,
+        layerName: ['Land Cover'],
+        palette: ['#1c5f2c', //forest 
+            '#b9c5dc', //na
+            '#b5c58f', //'lawn', 
+            '#b9c5dc', //'na', 
+            '#ab0000', //'roofs', 
+            '#d99282', //'impervious', 
+            '#b9c5dc', //'na', 
+            '#b9c5dc', //'na', 
+            '#466b9f', //'water',
+            '#b9c5dc' //'na'
+        ],
+        //palettes.colorbrewer.Set3[10],
+
+        minMax: [0, 9],
+        values: [0, 1, 2, 3, 4,
+            5, 6, 7, 8, 9
+        ],
+
+        /*tnc               reclass as 
+        0 no data           9 - na
+        1 grass             2 - lawn
+        2 shrub             2 - lawn
+        3 tree              0 - forest
+        4 dirt/barren       2 - lawn 
+        5 water             8 - water  
+        6 impervious other  5 - impervious
+        7 impervious roofs  4 - roofs  
+        */
+        labels: ['forest', 'na', 'lawn', 'na', 'impervious - roofs',
+            'impervious', 'na', 'na', 'water', 'na'
+        ],
+        vizType: 'pieChart'
+    },
+
+
+
+    'HRUs': {
+        layer: datasets.HRUBands,
+          layerName: ['HRUs'],
+          minMax: [0,255], 
+        palette: ['yellow', 'orange', 'red'],
+        legend: [{
+                '2016': 'red'
+            }, {
+                '...': 'orange'
+            }, {
+                '2000': 'yellow'
+            },
+            {
+                'No loss': 'black'
+            }, {
+                'Water or no data': 'grey'
+            }
+        ]
+    },
+    'Population': {
+        layer: datasets.population2020,
+        palette: palettes.kovesi.linear_gow_65_90_c35[7],
+         minMax: [0,256], 
+          layerName: ['Population'],
+        legend: [{
+                '2016': 'red'
+            }, {
+                '...': 'orange'
+            }, {
+                '2000': 'yellow'
+            },
+            {
+                'No loss': 'black'
+            }, {
+                'Water or no data': 'grey'
+            }
+        ]
+    },
+    'landUse': {
+        layer: datasets.landUse,
+        layerName: ['Landuse'],
+        palette: [
+            '#D45A51',
+            '#CD770C',
+            '#949989',
+            '#2E7BAF',
+            '#C3931E',
+            '#4BA891',
+            '#466b9f',
+            '#256C61'
+        ],
+        discrete: true,
+        minMax: [1, 8],
+        values: [1, 2, 3, 4, 5, 6, 7, 8],
+        labels: ['Residential',
+            'Industrial',
+            'Transportation ',
+            'Commercial',
+            'Agricultural',
+            'Timber and Resource Extraction',
+            'Water',
+            'open space'
+        ],
+        vizType: 'pieChart'
+
+    },
+}
+
+
+
+
+
