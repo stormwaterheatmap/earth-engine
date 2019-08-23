@@ -224,14 +224,12 @@ exports.layerobjs = {
             palette: ['#115e10', '#cbd4c2'], 
             min: 0,
             max: 1
-          }, 
+          }}, 
           discrete: true,
           values: [0, 1],
           units: null, 
           labels: ['Pervious', 'Impervious'], 
           vizType: 'bigNumber'
-          
-        }, 
     }, 
     'Precipitation': {
         layer: {
@@ -241,13 +239,12 @@ exports.layerobjs = {
             palette: ['#00007f','#002aff','#00d4ff','#7fff7f','#ffd400',
             '#ff2a00',
             '#7f0000'], 
-          }, 
+          }}, 
           discrete: false,
           values: null,
           units: 'mm/year', 
           labels: null, 
           vizType: 'histogram'
-        }, 
     }, 
     'Soils': {
         layer: {
@@ -257,15 +254,14 @@ exports.layerobjs = {
             palette: ['#69995D', '#564138', '#F06543', '#7FFF7F', '#05668D'], 
             min: 0,
             max: 4
-          }, 
+          }},  
           discrete: true,
           values: [0, 1],
           units: 'mm/year', 
           labels: ['Pervious', 'Impervious'], 
           vizType: 'bigNumber'
         }, 
-        
-    }}
+    }
     /*
            'Slopes': {
         layer: datasets.slopes,
