@@ -25,7 +25,7 @@ var layerList = Object.keys(layerProperties)
 var size = Object.keys(layerProperties).length
 print(layerList)
 print(size)
-Map.layers().add(layerProperties.Precipitation.layer)
+Map.layers().add(layerProperties.Soils.layer)
 
 // //function to add layer to Map 
 // var addBaseLayer = function(keyName){
@@ -120,10 +120,10 @@ var palette= obj.layer.visParams.palette
   return ui.Panel([ColorBar(palette), labelPanel])
 }
 
-layerProperties.Precipitation.legend = barLegend //function() {
+//ayerProperties.Slope.legend = barLegend //function() {
 //  barLegend
 //}
-Map.add(barLegend(layerProperties.Precipitation))
+Map.add(barLegend(layerProperties.Slope))
 print(layerProperties)
 
 /*
