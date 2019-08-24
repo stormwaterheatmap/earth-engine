@@ -64,7 +64,7 @@ var checkbox = function (layerObject) {
   print(checked)
   print(Map.layers())
   Map.layers().set(1, {visParams:false})
-   Map.layers().remove(1);
+  Map.layers().remove(1);
 }
    
    
