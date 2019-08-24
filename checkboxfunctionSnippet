@@ -107,23 +107,27 @@ print(obj.layer)
 var palette= obj.layer.visParams.palette
     var low = obj.layer.visParams.min
     var high = obj.layer.visParams.max
-    var mid = null
+    var mid = ( low+high)/2
     var labelPanel = ui.Panel(
       [
         ui.Label(low, {margin: '4px 8px',textAlign: 'left',stretch: 'horizontal'}),
         ui.Label(mid, {margin: '4px 8px', textAlign: 'center',stretch: 'horizontal'}),
         ui.Label(high, {margin: '4px 8px',textAlign: 'right',stretch: 'horizontal'})
-      ],
-      ui.Panel.Layout.flow('horizontal')
-      //{width: '230px', position: 'top-center'}
+      ], 
+      ui.Panel.Layout.flow('horizontal'),
+      
+  //    labelPanel.add(ui.Label(obj.units))
+      {width: '230px', position: 'top-center'}
       );
+      
+  var    unitlabel =(ui.Label(obj.units))
   return ui.Panel([ColorBar(palette), labelPanel])
 }
 
 //ayerProperties.Slope.legend = barLegend //function() {
 //  barLegend
 //}
-Map.add(barLegend(layerProperties.Slope))
+Map.add(barLegend(layerProperties.Precipitation))
 print(layerProperties)
 
 /*
