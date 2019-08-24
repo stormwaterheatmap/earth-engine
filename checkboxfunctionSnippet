@@ -41,11 +41,12 @@ Map.layers().add(layerProperties.Soils.layer)
 // }; 
 //function to make checkboxes 
 var checkbox = function (layerObject) {
-  var layer = this.eeobject
-  addBaseLayer(layer);
-  var layerItem = layerProperties[layer]
+ print(layerObject)
+  var layer = layerObject.layer
+ // addBaseLayer(layer);
+ //var layerItem = layerObject.layer
   var cb = ui.Checkbox({
-    label: layer, 
+    label: 'label', 
     value: 0, 
     style:{
      margin: '0px',
@@ -57,27 +58,31 @@ var checkbox = function (layerObject) {
   // Shows or hides the first map layer based on the checkbox's value.
    //if checked 
   if(checked) {
-   Map.layers().add(layerObject)//add(image)
+    print(Map.layers())
+   Map.layers().add(layer)//add(image)
 } else {
-   Map.layers().remove(layerObject);
+  print(checked)
+  print(Map.layers())
+  Map.layers().set(1, {visParams:false})
+   Map.layers().remove(layer.eeObject);
 }
    
    
-    Map.layers().get(index).setShown(checked);
+    //Map.layers().get(index).setShown(checked);
 //
-addButton.onClick(function() {
-  var toAdd = ui.Map.Layer({eeObject: image, 
-  name:'from button',
-  visParams: {palette: ['blue', 'green', 'white']}
-  })
-  Map.layers().set(0,toAdd)//add(image)
-  print(Map.layers())
-  print(image.getMap())
+//addButton.onClick(function() {
+//  var toAdd = ui.Map.Layer({eeObject: image, 
+//  name:'from button',
+//  visParams: {palette: ['blue', 'green', 'white']}
+//  })
+//  Map.layers().set(0,toAdd)//add(image)
+ // print(Map.layers())
+ // print(image.getMap())
  
-})    
+//})    
     
     
-  print(checked)
+  //print(checked)
   }); 
   return cb
 }; 
@@ -129,6 +134,7 @@ var palette= obj.layer.visParams.palette
 //}
 Map.add(barLegend(layerProperties.Precipitation))
 print(layerProperties)
+Map.add(checkbox(layerProperties.Precipitation))
 
 /*
 //function to build checkbox panel 
