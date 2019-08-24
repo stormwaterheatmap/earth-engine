@@ -59,12 +59,12 @@ var checkbox = function (layerObject) {
    //if checked 
   if(checked) {
     print(Map.layers())
-   Map.layers().add(layer)//add(image)
+   Map.layers().insert(1,layer)//add(image)
 } else {
   print(checked)
   print(Map.layers())
   Map.layers().set(1, {visParams:false})
-   Map.layers().remove(layer.eeObject);
+   Map.layers().remove(1);
 }
    
    
