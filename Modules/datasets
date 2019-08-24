@@ -196,6 +196,7 @@ exports.PS_AU = ee.FeatureCollection('users/cnilsen/PS_AU')
 var PugetSound = (ee.FeatureCollection("USGS/WBD/2017/HUC04")).filter(ee.Filter
     .eq('huc4', '1711'));
 //Map.addLayer(PugetSound)
+exports.PugetSound = PugetSound; 
 var counties = ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
     PugetSound);
 //Map.addLayer(counties)
