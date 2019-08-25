@@ -19,6 +19,11 @@ var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var layerProperties = data.rasters
 print(layerProperties)
+
+for (var key in layerProperties) {
+  print (layerProperties[key].vizType)
+}
+
 //print(style.fonts)
 //make a list of layers 
 var layerList = Object.keys(layerProperties)
