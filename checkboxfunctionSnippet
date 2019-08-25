@@ -29,13 +29,21 @@ function hline(pan) {
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var layerProperties = data.rasters
+for (var key in layerProperties) {
+  (layerProperties[key].shown = false); //({shown: false}));
+  
+}
+
 print(layerProperties)
 //clip all the layers
 for (var key in layerProperties) {
-  print (layerProperties[key].vizType)
+  print (layerProperties[key])
+  
   var layerVal =   layerProperties[key].layer//eeObject = 
 print(layerVal)
   layerVal.eeObject = layerVal.eeObject.clip(geometry)
+  //layerVal.eeObject.shown = false 
+ // checkbox(layerProperties[key])
  // layerVal.visParams.max
 /*  var minMax  =   layerVal.eeObject.reduceRegion(
     {reducer: 
@@ -47,15 +55,13 @@ bestEffort: true});
      layerVal.visParams.max = ee.Number(minMax.get(1));
 */ 
   Map.layers().add(layerProperties[key].layer)
+ // Map.layers().forEach().set({shown: false})
+  print(Map.layers())
 }
 
 //print(style.fonts)
 //make a list of layers 
-var layerList = Object.keys(layerProperties)
-var size = Object.keys(layerProperties).length
-print(layerList)
-print(size)
-Map.layers().add(layerProperties.Soils.layer)
+
 
 // //function to add layer to Map 
 // var addBaseLayer = function(keyName){
@@ -89,7 +95,7 @@ var checkbox = function (layerObject) {
    //if checked 
   if(checked) {
     print(Map.layers())
-   Map.layers().insert(1,layer)//add(image)
+   //Map.layers().insert(1,layer)//add(image)
 } else {
   print(checked)
   print(Map.layers())
