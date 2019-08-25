@@ -30,13 +30,16 @@ var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var layerProperties = data.rasters
 print(layerProperties)
-
+//clip all the layers
 for (var key in layerProperties) {
   print (layerProperties[key].vizType)
-  layerProperties[key].layer.eeObject = 
-  layerProperties[key].layer.eeObject.clip(geometry)
- 
- 
+  var layerVal =   layerProperties[key].layer//eeObject = 
+  layerVal = layerVal.eeObject.clip(geometry)
+ // layerVal.visParams.max
+   minMax  = layerVal.eeObject.reduce(
+     ee.Reducer.percentile([1,99]))
+     layerVal.visParams.min = minMax[0]
+     layerVal.visParams.max = minMax[1]
   Map.layers().add(layerProperties[key].layer)
 }
 
