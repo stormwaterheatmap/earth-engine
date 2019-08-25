@@ -37,10 +37,15 @@ for (var key in layerProperties) {
 print(layerVal)
   layerVal.eeObject = layerVal.eeObject.clip(geometry)
  // layerVal.visParams.max
-  var minMax  =   layerVal.eeObject.reduce(ee.Reducer.percentile([1,99]))
-   print (minMax)
-     layerVal.visParams.min = minMax[0]
-     layerVal.visParams.max = minMax[1]
+/*  var minMax  =   layerVal.eeObject.reduceRegion(
+    {reducer: 
+  ee.Reducer.percentile([1,99]),
+bestEffort: true});
+
+  // print (minMax)
+     layerVal.visParams.min = ee.Number(minMax.get(0));
+     layerVal.visParams.max = ee.Number(minMax.get(1));
+*/ 
   Map.layers().add(layerProperties[key].layer)
 }
 
