@@ -38,10 +38,21 @@ print(layerProperties)
 //clip all the layers
 for (var key in layerProperties) {
   print (layerProperties[key])
-  
   var layerVal =   layerProperties[key].layer//eeObject = 
-print(layerVal)
+  print(layerVal)
   layerVal.eeObject = layerVal.eeObject.clip(geometry)
+  //layerProperties[key].layer.setShown(false)//({shown: false}); //shown = false
+  Map.addLayer(layerProperties[key].layer.eeObject, 
+  layerProperties[key].layer.visParams, 
+  layerProperties[key].layer.name,0)
+  //Map.layers().add(layerProperties[key].layer)
+  //.setShown(false)
+ // Map.layers().forEach().set({shown: false})
+  print(Map.layers())
+}  
+
+
+
   //layerVal.eeObject.shown = false 
  // checkbox(layerProperties[key])
  // layerVal.visParams.max
@@ -54,10 +65,7 @@ bestEffort: true});
      layerVal.visParams.min = ee.Number(minMax.get(0));
      layerVal.visParams.max = ee.Number(minMax.get(1));
 */ 
-  Map.layers().add(layerProperties[key].layer)
- // Map.layers().forEach().set({shown: false})
-  print(Map.layers())
-}
+
 
 //print(style.fonts)
 //make a list of layers 
