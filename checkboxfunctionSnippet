@@ -35,6 +35,8 @@ for (var key in layerProperties) {
   print (layerProperties[key].vizType)
   layerProperties[key].layer.eeObject = 
   layerProperties[key].layer.eeObject.clip(geometry)
+ 
+ 
   Map.layers().add(layerProperties[key].layer)
 }
 
