@@ -1,5 +1,16 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #d63000 */ee.Geometry.MultiPoint();
+var geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-122.32195503528891, 47.615011187997275],
+          [-122.32195503528891, 47.52699119414934],
+          [-122.20659858997641, 47.52699119414934],
+          [-122.20659858997641, 47.615011187997275]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 function hline(pan) {
  pan.add( ui.Label( 
@@ -22,6 +33,9 @@ print(layerProperties)
 
 for (var key in layerProperties) {
   print (layerProperties[key].vizType)
+  layerProperties[key].layer.eeObject = 
+  layerProperties[key].layer.eeObject.clip(geometry)
+  Map.layers().add(layerProperties[key].layer)
 }
 
 //print(style.fonts)
