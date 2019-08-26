@@ -84,13 +84,13 @@ bestEffort: true});
 //     shown: false})
 // }; 
 //function to make checkboxes 
-var checkbox = function (layerObject) {
+var checkbox = function (layerObject, index) {
  print(layerObject)
   var layer = layerObject.layer
  // addBaseLayer(layer);
  //var layerItem = layerObject.layer
   var cb = ui.Checkbox({
-    label: 'label', 
+    label: layer.name, 
     value: 0, 
     style:{
      margin: '0px',
@@ -101,7 +101,8 @@ var checkbox = function (layerObject) {
   cb.onChange(function(checked) {
   // Shows or hides the first map layer based on the checkbox's value.
    //if checked 
-  if(checked) {
+   Map.layers().get(index).setShown(checked)
+  /*if(checked) {
     print(Map.layers())
    //Map.layers().insert(1,layer)//add(image)
 } else {
@@ -111,7 +112,7 @@ var checkbox = function (layerObject) {
   Map.layers().remove(1);
 }
    
-   
+*/    
     //Map.layers().get(index).setShown(checked);
 //
 //addButton.onClick(function() {
@@ -177,8 +178,9 @@ var palette= obj.layer.visParams.palette
 //  barLegend
 //}
 Map.add(barLegend(layerProperties.Precipitation))
-print(layerProperties)
-Map.add(checkbox(layerProperties.Precipitation))
+print(Object.keys(layerProperties))
+Map.add(checkbox(layerProperties.Precipitation, 1))
+Map.add(checkbox(layerProperties.Imperviousness, 0))
 
 /*
 //function to build checkbox panel 
