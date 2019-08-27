@@ -28,27 +28,11 @@ exports.histogramImage = function (image, WS, scale, title) {
 
 var makePieChart = function (geometry, properties, holeSize) {
     var AOI = geometry;
-    var image = properties.layer
-    var withArea = ee.Image.pixelArea().addBands(image.eeObject);
+    var image = properties.layer.eeObject
+    var withArea = ee.Image.pixelArea().addBands(image);
     var clipImage = withArea.clip(AOI)
 
-    //Dictionary (will be imported)
-    /*
-    var properties =  {
-            layer: image,
-            layerName: ['Hydrologic properties Group'], 
-              palette: ['#69995D', '#564138', '#F06543', '#7FFF7F', '#05668D'],
-              minMax: [0,4],
-              discrete: true, 
-              values: [0, 1, 2, 3, 4], 
-              labels: ['A/B', 'C', 'D', 'water', 'Water'],
-            legend: [
-                { '2016': 'red' }, { '...': 'orange' }, { '2000': 'yellow' },
-                { 'No loss': 'black' }, { 'Water or no data': 'grey' }
-            ]
-        }
-    print(properties)
-    */
+    
 
 
 
