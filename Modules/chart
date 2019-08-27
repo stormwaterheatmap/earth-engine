@@ -124,6 +124,98 @@ var makePieChart = function (geometry, properties, holeSize) {
 
 }
 
+var makePieChart = function (geometry, properties, holeSize) {
+    var AOI = geometry;
+    var image = properties.layer.eeObject
+    var withArea = ee.Image.pixelArea().addBands(image);
+    var clipImage = withArea.clip(AOI)
+
+    //////////////////////////////////////////////////////////////
+    // Calculations
+    //////////////////////////////////////////////////////////////
+var values = properties.values
+var labels = properties.labels
+    var lookup_names = ee.Dictionary.fromLists(
+        ee.List(values).map(ee.String),
+        labels
+    );
+
+    print('lookup names', lookup_names)
+var palette =  properties.layer.visParams.palette
+    var lookup_palette = ee.Dictionary.fromLists(
+        ee.List(values).map(ee.String),
+        palette
+    );
+
+
+    print(ee.List(lookup_palette))
+
+    //////////////////////////////////////////////////////////////
+    // Helper functions
+    //////////////////////////////////////////////////////////////
+
+    function createFeature(transition_class_stats) {
+        transition_class_stats = ee.Dictionary(transition_class_stats);
+        var class_number = transition_class_stats.get('class value');
+        var result = {
+            transition_class_number: class_number,
+            transition_class_name: lookup_names.get(class_number),
+            transition_class_palette: lookup_palette.get(class_number),
+            area_m2: transition_class_stats.get('sum')
+        };
+        return ee.Feature(null,
+        result); // Creates a feature without a geometry.
+    }
+
+    // Create a JSON dictionary that defines piechart colors based on the
+    // transition class palette.
+    // https://developers.google.com/chart/interactive/docs/gallery/piechart
+    function createPieChartSliceDictionary(fc) {
+        return ee.List(fc.aggregate_array("transition_class_palette"))
+            .map(function (p) {
+                return {
+                    'color': p
+                };
+            }).getInfo();
+    }
+
+    //var classValue = image.get('system:title')
+    //print(classValue)
+
+    var reduction_results = clipImage.reduceRegion({
+        reducer: ee.Reducer.sum().group({
+            groupField: 1,
+            groupName: 'class value',
+        }),
+        geometry: AOI,
+        scale: 1,
+        bestEffort: true,
+    });
+    print('reduction_results', reduction_results);
+    var roi_stats = ee.List(reduction_results.get('groups'));
+    print('roi stats', roi_stats)
+
+    var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
+    print('transition_fc', transition_fc);
+
+    // Add a summary chart.
+    var transition_summary_chart = ui.Chart.feature.byFeature({
+            features: transition_fc,
+            xProperty: 'transition_class_name',
+            yProperties: ['area_m2', 'transition_class_number']
+        })
+        .setChartType('PieChart')
+        .setOptions({
+            title: 'Summary of '.concat(properties.layerName),
+            pieHole: holeSize,
+            slices: createPieChartSliceDictionary(transition_fc),
+            sliceVisibilityThreshold: 0.02
+        });
+
+    return (transition_summary_chart);
+
+}; 
+
 exports.pieChart = makePieChart; 
 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
