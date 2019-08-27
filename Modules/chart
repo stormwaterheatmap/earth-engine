@@ -228,7 +228,7 @@ exports.bigNumPanel = function (value, units, title, tag, color) {
             margin: 0
         }
     }) //.style().set({width: '33%'})
-    ui.root.add(panel)
+    //ui.root.add(panel)
     var infoLabel = ui.Label({
         value: 'ⓘ',
         targetUrl: 'https://github.com/stormwaterheatmap'
