@@ -293,7 +293,7 @@ exports.rasters = {
         values: null,
         units: 'mm/year',
         labels: null,
-        vizType: 'histogram'
+        vizType: 'bigNumber'
     },
     'Soils': {
         layer: {
