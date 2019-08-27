@@ -260,7 +260,7 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
 */ //updated 8/22/2019
 exports.rasters = {
     'Imperviousness': {
-        layer: {
+        layer: ui.Map.Layer({
             eeObject: imp,
             name: 'Imperviousness',
             visParams: {
@@ -268,15 +268,16 @@ exports.rasters = {
                 min: 0,
                 max: 1
             }
-        },
+        }),
         discrete: true,
         values: [0, 1],
         units: null,
         labels: ['Pervious', 'Impervious'],
         vizType: 'bigNumber'
+        
     },
     'Precipitation': {
-        layer: {
+        layer: ui.Map.Layer({
             eeObject: prismP,
             name: 'Mean Annual Preciptation',
             visParams: {
@@ -288,7 +289,7 @@ exports.rasters = {
                 min: 400,
                 max: 4000
             }
-        },
+        }),
         discrete: false,
         values: null,
         units: 'mm/year',
@@ -296,7 +297,7 @@ exports.rasters = {
         vizType: 'histogram'
     },
     'Soils': {
-        layer: {
+        layer: ui.Map.Layer({
             eeObject: ee.Image("users/stormwaterheatmap/soils"),
             name: 'Hydrologic Soils Groups',
             visParams: {
@@ -306,7 +307,7 @@ exports.rasters = {
                 min: 0,
                 max: 4
             }
-        },
+        }),
         discrete: true,
         values: [0, 1],
         units: 'mm/year',
@@ -314,7 +315,7 @@ exports.rasters = {
         vizType: 'bigNumber'
     },
     'Slope': {
-        layer: {
+        layer: ui.Map.Layer({
             eeObject: slopeZone,
             name: 'Slope Categories',
             visParams: {
@@ -324,7 +325,7 @@ exports.rasters = {
                 min: 0,
                 max: 2
             }
-        },
+        }),
         discrete: true,
         values: [0, 1, 2],
         units: null,
@@ -332,7 +333,7 @@ exports.rasters = {
         vizType: 'pieChart'
     },
     'landCover': {
-        layer: {
+        layer: ui.Map.Layer({
             eeObject: landcover,
             name: 'Land Cover',
             visParams: {
@@ -350,7 +351,7 @@ exports.rasters = {
                 min: 0,
                 max: 9
             }
-        },
+        }),
         discrete: true,
         values: [0, 1, 2, 3, 4,
             5, 6, 7, 8, 9
@@ -362,7 +363,7 @@ exports.rasters = {
         vizType: 'pieChart'
     }, 
     'HRUs': {
-        layer: {
+        layer: ui.Map.Layer({
             eeObject: hruBands,
             name: 'Hydrologic Response Units',
             visParams: {
@@ -372,7 +373,7 @@ exports.rasters = {
                 min: 0,
                 max: 255
             }
-        },
+        }),
         discrete: true,
         values: [0, 1],
         units: null,
@@ -380,7 +381,7 @@ exports.rasters = {
         vizType: 'pieChart'
     },
     'Population': {
-        layer: {
+        layer: ui.Map.Layer({
             eeObject: population2020,
             name: 'Population',
             visParams: {
@@ -390,7 +391,7 @@ exports.rasters = {
                 min: 0,
                 max: 255
             }
-        },
+        }),
         discrete: false,
         values: null,
         units: null,
@@ -398,7 +399,7 @@ exports.rasters = {
         vizType: 'pieChart'
     },
     'landUse': {
-        layer: {
+        layer: ui.Map.Layer({
             eeObject: generalizedLU,
             name: 'Land Use',
             visParams: {
@@ -415,7 +416,7 @@ exports.rasters = {
                 min: 0,
                 max: 8
             }
-        },
+        }),
         discrete: true,
         values: [1, 2, 3, 4, 5, 6, 7, 8],
         units: null,
