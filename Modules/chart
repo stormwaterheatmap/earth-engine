@@ -29,7 +29,7 @@ exports.histogramImage = function (image, WS, scale, title) {
 var makePieChart = function (geometry, properties, holeSize) {
     var AOI = geometry;
     var image = properties.layer
-    var withArea = ee.Image.pixelArea().addBands(image);
+    var withArea = ee.Image.pixelArea().addBands(image.eeObject);
     var clipImage = withArea.clip(AOI)
 
     //Dictionary (will be imported)
