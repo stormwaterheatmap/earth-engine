@@ -29,9 +29,9 @@ exports.barLegend = function (low, mid, high, palette) {
   return ui.Panel([ColorBar(palette), labelPanel])
 }
 
-exports.discreteLegend = function (layerObject) {
+var discreteLegend = function (layerObject) {
     //var BAND_NAME = bandName //Land_Cover_Type_1';  
-   
+  
     //var image = ee.Image('MODIS/051/MCD12Q1/2001_01_01')
     //          .select(BAND_NAME);
   
@@ -45,7 +45,7 @@ exports.discreteLegend = function (layerObject) {
 
     // Create and add the legend title.
     var legendTitle = ui.Label({
-        value: layerObject.layerName, //'MODIS Land Cover',
+        value: layerObject.layer.name.toString(), //'MODIS Land Cover',
         style: {
             fontWeight: 'bold',
             fontSize: '18px',
@@ -88,11 +88,15 @@ exports.discreteLegend = function (layerObject) {
 
     // Get the list of palette colors and class names from the image.
 
-        var palette = layerObject.palette;
+        var palette = layerObject.layer.visParams.palette;
+      
         var names = layerObject.labels;
+
         loading.style().set('shown', false);
 
         for (var i = 0; i < names.length; i++) {
+         
+         
             legend.add(makeRow(palette[i], names[i]));
         }
     
@@ -101,4 +105,4 @@ exports.discreteLegend = function (layerObject) {
 
 }
 
-    
+ exports.discreteLegend 
