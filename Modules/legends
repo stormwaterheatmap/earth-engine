@@ -87,7 +87,8 @@ exports.discreteLegend = function (layerlayerObject) {
     };
 
     // Get the list of palette colors and class names from the image.
-    image.toDictionary().select([BAND_NAME + ".*"]).evaluate(function (result) {
+    image.toDictionary()//.select([BAND_NAME + ".*"])
+    .evaluate(function (result) {
         var palette = layerObject.palette;
         var names = layerObject.labels;
         loading.style().set('shown', false);
