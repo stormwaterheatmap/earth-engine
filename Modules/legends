@@ -31,7 +31,7 @@ exports.barLegend = function (low, mid, high, palette) {
 
 exports.discreteLegend = function (layerObject) {
     //var BAND_NAME = bandName //Land_Cover_Type_1';  
-var image = null
+   
     //var image = ee.Image('MODIS/051/MCD12Q1/2001_01_01')
     //          .select(BAND_NAME);
   
