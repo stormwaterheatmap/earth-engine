@@ -87,8 +87,7 @@ var image = null
     };
 
     // Get the list of palette colors and class names from the image.
-    image.toDictionary()//.select([BAND_NAME + ".*"])
-    .evaluate(function (result) {
+
         var palette = layerObject.palette;
         var names = layerObject.labels;
         loading.style().set('shown', false);
@@ -96,7 +95,7 @@ var image = null
         for (var i = 0; i < names.length; i++) {
             legend.add(makeRow(palette[i], names[i]));
         }
-    });
+    
 
     return legend
 
