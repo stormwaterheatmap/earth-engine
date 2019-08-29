@@ -127,8 +127,8 @@ exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1')
 var population2020 = population.filter(ee.Filter.eq('system:index', '2020'))
     .first();
 exports.population2020 = population2020;
-//exports.precip = precip.select('b1').resample().divide(
-//25.4); //exports precip as mm 
+exports.precip = precip.select('b1').resample().divide(
+25.4); //exports precip as mm 
 //HRUs by band
 var hruBands =
     (soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru000'))
@@ -188,15 +188,18 @@ var hruBands =
         'hru250'))
     .addBands(landcover.eq(5).and(slopeZone.eq(1)).rename('hru251'))
     .addBands(landcover.eq(5).and(slopeZone.eq(2)).rename('hru252'))
+
 exports.hruBands = hruBands;
+
+
 //Vectors 
 //Ecology Watershed Assessment Units 
 exports.PS_AU = ee.FeatureCollection('users/cnilsen/PS_AU')
 //exports.PS_AU = PS_AU
+
 var PugetSound = (ee.FeatureCollection("USGS/WBD/2017/HUC04")).filter(ee.Filter
     .eq('huc4', '1711'));
 //Map.addLayer(PugetSound)
-exports.PugetSound = PugetSound; 
 var counties = ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
     PugetSound);
 //Map.addLayer(counties)
@@ -293,7 +296,7 @@ exports.rasters = {
         values: null,
         units: 'mm/year',
         labels: null,
-        vizType: 'bigNumber'
+        vizType: 'histogram'
     },
     'Soils': {
         layer: {
@@ -433,7 +436,6 @@ exports.rasters = {
 
 }
 exports.vectors = {
-        MS4: ee.FeatureCollection("users/stormwaterheatmap/MS4_bounds"), 
         counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
             PugetSound),
         HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
@@ -455,4 +457,7 @@ exports.vectors = {
         //add NPDES Bounds 
 }
 /*
+  
+    
+    
 */
