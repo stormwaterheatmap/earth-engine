@@ -461,7 +461,4 @@ exports.vectors = {
         //add NPDES Bounds 
 }
 exports.rasters = rasters
-print(rasters.Population)
-Map.addLayer(population)
 
-Map.addLayer(population2020)
