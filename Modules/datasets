@@ -124,8 +124,12 @@ var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select(
 exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1')
     .select('built');
 
-var population2020 = population.filter(ee.Filter.eq('system:index', '2020'))
+var population2020 = population.filterDate('2020-01-01')  
     .first();
+    
+
+    
+    
 exports.population2020 = population2020;
 exports.precip = precip.select('b1').resample().divide(
 25.4); //exports precip as mm 
@@ -261,7 +265,7 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
             },
 ---------------------------
 */ //updated 8/22/2019
-exports.rasters = {
+var rasters = {
     'Imperviousness': {
         layer: {
             eeObject: imp,
@@ -456,8 +460,8 @@ exports.vectors = {
         //add LJ 
         //add NPDES Bounds 
 }
-/*
-  
-    
-    
-*/
+exports.rasters = rasters
+print(rasters.Population)
+Map.addLayer(population)
+
+Map.addLayer(population2020)
