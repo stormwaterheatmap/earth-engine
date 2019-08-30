@@ -104,7 +104,7 @@ exports.landuse = generalizedLU;
 
 
 var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
-Map.addLayer(tncLC,imageVisParam2,'tncLC')
+
 
 var imp = tncLC.eq(6).or(tncLC.eq(7)).multiply(ee
     .Image(100))
