@@ -325,9 +325,8 @@ var rasters = {
             eeObject: slopeZone,
             name: 'Slope Categories',
             visParams: {
-                palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
-                    '#05668D'
-                ],
+                palette: ['#009B9E','#F1F1F1','#C75DAB'] , 
+                
                 min: 0,
                 max: 2
             }
