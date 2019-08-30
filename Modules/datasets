@@ -33,7 +33,7 @@ var NED = ee.Image("USGS/NED"),
 
 /*
 Image Collections 
-*/a
+*/
 //Population
 
 
@@ -127,86 +127,27 @@ var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select(
 /*
 var population2020 = population.filterDate('2020-01-01')
     .first();
-
+/*
 
 
 
 exports.population2020 = population2020;*/
 exports.precip = precip.select('b1').resample().divide(
     25.4); //exports precip as mm 
-//HRUs by band
-var hruBands =
-    (soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru000'))
-    .addBands(soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(1))).rename(
-        'hru001'))
-    .addBands(soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(2))).rename(
-        'hru002'))
-    .addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(0))).rename(
-        'hru010'))
-    .addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(1))).rename(
-        'hru011'))
-    .addBands(soils.eq(0).and(landcover.eq(1).and(slopeZone.eq(2))).rename(
-        'hru012'))
-    .addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(0))).rename(
-        'hru020'))
-    .addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(1))).rename(
-        'hru021'))
-    .addBands(soils.eq(0).and(landcover.eq(2).and(slopeZone.eq(2))).rename(
-        'hru022'))
-    .addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(0))).rename(
-        'hru100'))
-    .addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(1))).rename(
-        'hru101'))
-    .addBands(soils.eq(1).and(landcover.eq(0).and(slopeZone.eq(2))).rename(
-        'hru102'))
-    .addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(0))).rename(
-        'hru110'))
-    .addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(1))).rename(
-        'hru111'))
-    .addBands(soils.eq(1).and(landcover.eq(1).and(slopeZone.eq(2))).rename(
-        'hru112'))
-    .addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(0))).rename(
-        'hru120'))
-    .addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(1))).rename(
-        'hru121'))
-    .addBands(soils.eq(1).and(landcover.eq(2).and(slopeZone.eq(2))).rename(
-        'hru122'))
-    .addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(0))).rename(
-        'hru200'))
-    .addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(1))).rename(
-        'hru201'))
-    .addBands(soils.eq(2).and(landcover.eq(0).and(slopeZone.eq(2))).rename(
-        'hru202'))
-    .addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(0))).rename(
-        'hru210'))
-    .addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(1))).rename(
-        'hru211'))
-    .addBands(soils.eq(2).and(landcover.eq(1).and(slopeZone.eq(2))).rename(
-        'hru212'))
-    .addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(0))).rename(
-        'hru220'))
-    .addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(1))).rename(
-        'hru221'))
-    .addBands(soils.eq(2).and(landcover.eq(2).and(slopeZone.eq(2))).rename(
-        'hru222'))
-    .addBands(landcover.eq(4).or(landcover.eq(5).and(slopeZone.eq(0))).rename(
-        'hru250'))
-    .addBands(landcover.eq(5).and(slopeZone.eq(1)).rename('hru251'))
-    .addBands(landcover.eq(5).and(slopeZone.eq(2)).rename('hru252'))
 
-exports.hruBands = hruBands;
 
 
 //Vectors 
 //Ecology Watershed Assessment Units 
 exports.PS_AU = ee.FeatureCollection('users/cnilsen/PS_AU')
-//exports.PS_AU = PS_AU
+//exports.PS_AU = PS_AU*/
 
 var PugetSound = (ee.FeatureCollection("USGS/WBD/2017/HUC04")).filter(ee.Filter
     .eq('huc4', '1711'));
 //Map.addLayer(PugetSound)
 var counties = ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
     PugetSound);
+/*
 //Map.addLayer(counties)
 exports.WRIA = ee.FeatureCollection(
         "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA")
@@ -266,6 +207,7 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
             },
 ---------------------------
 */ //updated 8/22/2019
+
 var rasters = {
         'Imperviousness': {
             layer: {
@@ -376,7 +318,7 @@ var rasters = {
             labels: ['Water surface', 'Not developed', '2000 to 2014', '1990 to 2000', '1975 to 1990', 'Prior to 1975 '],
             vizType: 'histogram'
         },
-        'HRUs': {
+ /*       'HRUs': {
             layer: {
                 eeObject: hruBands,
                 name: 'Hydrologic Response Units',
@@ -393,7 +335,7 @@ var rasters = {
             units: null,
             labels: null, //['Pervious', 'Impervious'],
             vizType: 'pieChart'
-        },
+        },*/
         'Population': {
             layer: {
                 eeObject: population,
@@ -463,7 +405,7 @@ var rasters = {
         }, 
     }
 
-        exports.vectors = {
+exports.vectors = {
             /*  counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
                   PugetSound),
               HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
@@ -484,4 +426,6 @@ var rasters = {
             //add LJ 
             //add NPDES Bounds 
         }
-        exports.rasters = rasters
+exports.rasters = rasters
+        
+print(rasters)
