@@ -102,8 +102,8 @@ var generalizedLU = lu.remap(
 //
 exports.landuse = generalizedLU;
 
-var landcover = ee.Image('users/stormwaterheatmap/landcover');
-exports.landcover = landcover;
+var landcover = ("users/jrobertson2000/psLandCover_1m_finPS_roofs");
+/*exports.landcover = landcover;*/
 
 var soils = ee.Image("users/stormwaterheatmap/soils");
 exports.soils = ee.Image("users/stormwaterheatmap/soils");
@@ -117,7 +117,7 @@ exports.slope = slopeZone;
 var mean_annual_runoff = ee.Image(
     "users/cnilsen/Runoff1980s5m");
 
-var imp = tncLC.eq(6).or(tncLC.eq(7)).multiply(ee
+var imp = landcover.eq(6).or(landcover.eq(7)).multiply(ee
     .Image(100))
 
 //exports.hrus = 
