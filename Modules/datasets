@@ -418,7 +418,7 @@ var rasters = {
                     '#466b9f',
                     '#256C61'
                 ],
-                min: 0,
+                min: 1,
                 max: 8
             }
         },
