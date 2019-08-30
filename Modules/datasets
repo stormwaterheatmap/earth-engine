@@ -123,7 +123,7 @@ var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select(
     'built');
 exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1')
     .select('built');
-
+Map.addLayer(age_of_development)
 var population2020 = population.filterDate('2020-01-01')  
     .first();
     
