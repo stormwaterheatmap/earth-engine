@@ -33,7 +33,7 @@ var NED = ee.Image("USGS/NED"),
 
 /*
 Image Collections 
-*/
+*/a
 //Population
 
 
@@ -124,14 +124,14 @@ exports.imperv = imp;
 //exports.hrus = 
 var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select(
     'built');
-
+/*
 var population2020 = population.filterDate('2020-01-01')
     .first();
 
 
 
 
-exports.population2020 = population2020;
+exports.population2020 = population2020;*/
 exports.precip = precip.select('b1').resample().divide(
     25.4); //exports precip as mm 
 //HRUs by band
