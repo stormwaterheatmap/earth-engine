@@ -102,8 +102,12 @@ var generalizedLU = lu.remap(
 //
 exports.landuse = generalizedLU;
 
-var landcover = ("users/jrobertson2000/psLandCover_1m_finPS_roofs");
-/*exports.landcover = landcover;*/
+
+var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
+Map.addLayer(tncLC,imageVisParam2,'tncLC')
+
+var imp = tncLC.eq(6).or(tncLC.eq(7)).multiply(ee
+    .Image(100))
 
 var soils = ee.Image("users/stormwaterheatmap/soils");
 exports.soils = ee.Image("users/stormwaterheatmap/soils");
@@ -117,9 +121,9 @@ exports.slope = slopeZone;
 var mean_annual_runoff = ee.Image(
     "users/cnilsen/Runoff1980s5m");
 
-var imp = landcover.eq(6).or(landcover.eq(7)).multiply(ee
+/*var imp = landcover.eq(6).or(landcover.eq(7)).multiply(ee
     .Image(100))
-
+*/
 //exports.hrus = 
 var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select(
     'built');
@@ -281,7 +285,7 @@ var rasters = {
         },
         'landCover': {
             layer: {
-                eeObject: landcover,
+                eeObject: tncLC,
                 name: 'Land Cover',
                 visParams: {
                     palette: ["ffffff", "3ead63", "c9fbff", "26532b", "a39171", "476b9d", "adacb5", "d8d5db"], 
