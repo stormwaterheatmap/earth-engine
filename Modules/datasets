@@ -343,7 +343,7 @@ var rasters = {
                 eeObject: landcover,
                 name: 'Land Cover',
                 visParams: {
-                    palette: ["ffffff", "3ead63", "c9fbff", "26532b", "a39171", "476b9d", "adacb5", "d8d5db"]
+                    palette: ["ffffff", "3ead63", "c9fbff", "26532b", "a39171", "476b9d", "adacb5", "d8d5db"], 
                     min: 0,
                     max: 7
                 }
@@ -460,7 +460,9 @@ var rasters = {
             vizType: 'histogram'
             //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
 
-        }
+        }, 
+    }
+
         exports.vectors = {
             /*  counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
                   PugetSound),
@@ -478,7 +480,7 @@ var rasters = {
             WRIA: ee.FeatureCollection(
                     "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
                 )
-                .filterBounds(PugetSound),
+                .filterBounds(PugetSound)
             //add LJ 
             //add NPDES Bounds 
         }
