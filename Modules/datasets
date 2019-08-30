@@ -35,11 +35,12 @@ var NED = ee.Image("USGS/NED"),
 Image Collections 
 */
 //Population
-var populationDataset = ee.ImageCollection(
-    "CIESIN/GPWv411/GPW_Population_Density");
-var population = populationDataset.select(
-'population_density'); //people per 1000 m2
-exports.population = population
+
+
+var populationDataset = ee.ImageCollection('JRC/GHSL/P2016/POP_GPW_GLOBE_V1')
+    .filter(ee.Filter.date('2015-01-01', '2015-12-31'));
+var population = populationDataset.select('population_count').first();
+
 
 /*
 Images 
@@ -54,7 +55,7 @@ var prismP = ee.Image('users/cnilsen/precip/PRISM800meter')
 exports.prismP = prismP
 //
 var lu = ee.Image(
-"users/cnilsen/lu_5m_pyramid"); //remap these categories to the following: 
+    "users/cnilsen/lu_5m_pyramid"); //remap these categories to the following: 
 /*
 ['SF Residential',
 'MF Residential',
@@ -111,8 +112,10 @@ var thresholds = ee.Image([5.0, 15, 100]);
 var slopeZone = ee.Terrain.slope(NED).gt(thresholds).reduce('sum');
 exports.slope = slopeZone;
 
-exports.mean_annual_runoff_byHRU = ee.Image(
-    "users/stormwaterheatmap/q1980sbyHRU");
+
+
+var mean_annual_runoff = ee.Image(
+    "users/cnilsen/Runoff1980s5m");
 
 var imp = landcover.eq(4).or(landcover.eq(5)).mask(landcover.neq(8)).multiply(ee
     .Image(100))
@@ -121,18 +124,16 @@ exports.imperv = imp;
 //exports.hrus = 
 var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select(
     'built');
-exports.age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1')
-    .select('built');
-Map.addLayer(age_of_development)
-var population2020 = population.filterDate('2020-01-01')  
-    .first();
-    
 
-    
-    
+var population2020 = population.filterDate('2020-01-01')
+    .first();
+
+
+
+
 exports.population2020 = population2020;
 exports.precip = precip.select('b1').resample().divide(
-25.4); //exports precip as mm 
+    25.4); //exports precip as mm 
 //HRUs by band
 var hruBands =
     (soils.eq(0).and(landcover.eq(0).and(slopeZone.eq(0))).rename('hru000'))
@@ -266,198 +267,219 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
 ---------------------------
 */ //updated 8/22/2019
 var rasters = {
-    'Imperviousness': {
-        layer: {
-            eeObject: imp,
-            name: 'Imperviousness',
-            visParams: {
-                palette: ['#115e10', '#cbd4c2'],
-                min: 0,
-                max: 1
-            }
+        'Imperviousness': {
+            layer: {
+                eeObject: imp,
+                name: 'Imperviousness',
+                visParams: {
+                    palette: ['#115e10', '#cbd4c2'],
+                    min: 0,
+                    max: 1
+                }
+            },
+            discrete: true,
+            values: [0, 1],
+            units: null,
+            labels: ['Pervious', 'Impervious'],
+            vizType: 'bigNumber'
         },
-        discrete: true,
-        values: [0, 1],
-        units: null,
-        labels: ['Pervious', 'Impervious'],
-        vizType: 'bigNumber'
-    },
-    'Precipitation': {
-        layer: {
-            eeObject: prismP,
-            name: 'Mean Annual Preciptation',
-            visParams: {
-                palette: ['#00007f', '#002aff', '#00d4ff', '#7fff7f',
-                    '#ffd400',
-                    '#ff2a00',
-                    '#7f0000'
-                ],
-                min: 400,
-                max: 4000
-            }
+        'Precipitation': {
+            layer: {
+                eeObject: prismP,
+                name: 'Mean Annual Preciptation',
+                visParams: {
+                    palette: ['#00007f', '#002aff', '#00d4ff', '#7fff7f',
+                        '#ffd400',
+                        '#ff2a00',
+                        '#7f0000'
+                    ],
+                    min: 400,
+                    max: 4000
+                }
+            },
+            discrete: false,
+            values: null,
+            units: 'mm/year',
+            labels: null,
+            vizType: 'bigNumber'
         },
-        discrete: false,
-        values: null,
-        units: 'mm/year',
-        labels: null,
-        vizType: 'bigNumber'
-    },
-    'Soils': {
-        layer: {
-            eeObject: ee.Image("users/stormwaterheatmap/soils"),
-            name: 'Hydrologic Soils Groups',
-            visParams: {
-                palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
-                    '#05668D'
-                ],
-                min: 0,
-                max: 4
-            }
+        'Soils': {
+            layer: {
+                eeObject: ee.Image("users/stormwaterheatmap/soils"),
+                name: 'Hydrologic Soils Groups',
+                visParams: {
+                    palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
+                        '#05668D'
+                    ],
+                    min: 0,
+                    max: 4
+                }
+            },
+            discrete: true,
+            values: [0, 1, 2, 3, 4],
+            units: null,
+            labels: ['A/B', 'C', 'D', 'water', 'Water'],
+            vizType: 'pieChart'
         },
-        discrete: true,
-        values: [0, 1, 2, 3, 4], 
-        units: null, 
-        labels: ['A/B', 'C', 'D', 'water', 'Water'],
-        vizType: 'pieChart'
-    },
-    'Slope': {
-        layer: {
-            eeObject: slopeZone,
-            name: 'Slope Categories',
-            visParams: {
-                palette: ['#009B9E','#F1F1F1','#C75DAB'] , 
-                
-                min: 0,
-                max: 2
-            }
-        },
-        discrete: true,
-        values: [0, 1, 2],
-        units: null,
-        labels: ['Flat', 'Moderate', 'Steep'],
-        vizType: 'pieChart'
-    },
-    'landCover': {
-        layer: {
-            eeObject: landcover,
-            name: 'Land Cover',
-            visParams: {
-                palette: ['#1c5f2c', //forest 
-            '#b9c5dc', //na
-            '#b5c58f', //'lawn', 
-            '#b9c5dc', //'na', 
-            '#ab0000', //'roofs', 
-            '#d99282', //'impervious', 
-            '#b9c5dc', //'na', 
-            '#b9c5dc', //'na', 
-            '#466b9f', //'water',
-            '#b9c5dc' //'na'
-        ],
-                min: 0,
-                max: 9
-            }
-        },
-        discrete: true,
-        values: [0, 1, 2, 3, 4,
-            5, 6, 7, 8, 9
-        ],
-        units: null,
-        labels: ['forest', 'na', 'lawn', 'na', 'impervious - roofs',
-            'impervious', 'na', 'na', 'water', 'na'
-        ],
-        vizType: 'pieChart'
-    }, 
-    'HRUs': {
-        layer: {
-            eeObject: hruBands,
-            name: 'Hydrologic Response Units',
-            visParams: {
-                palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
-                    '#05668D'
-                ],
-                min: 0,
-                max: 255
-            }
-        },
-        discrete: true,
-        values: [0, 1],
-        units: null,
-        labels: null,//['Pervious', 'Impervious'],
-        vizType: 'pieChart'
-    },
-    'Population': {
-        layer: {
-            eeObject: population2020,
-            name: 'Population',
-            visParams: {
-                palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
-                    '#05668D'
-                ],
-                min: 0,
-                max: 255
-            }
-        },
-        discrete: false,
-        values: null,
-        units: null,
-        labels: null,//['Pervious', 'Impervious'],
-        vizType: 'pieChart'
-    },
-    'landUse': {
-        layer: {
-            eeObject: generalizedLU,
-            name: 'Land Use',
-            visParams: {
-                palette: [
-                    '#D45A51',
-                    '#CD770C',
-                    '#949989',
-                    '#2E7BAF',
-                    '#C3931E',
-                    '#4BA891',
-                    '#466b9f',
-                    '#256C61'
-                ],
-                min: 1,
-                max: 8
-            }
-        },
-        discrete: true,
-        values: [1, 2, 3, 4, 5, 6, 7, 8],
-        units: null,
-        labels: ['Residential',
-        'Industrial',
-        'Transportation ',
-        'Commercial',
-        'Agricultural',
-        'Timber and Resource Extraction',
-        'Water',
-        'open space'
-    ],
-        vizType: 'pieChart'
-    },
+        'Slope': {
+            layer: {
+                eeObject: slopeZone,
+                name: 'Slope Categories',
+                visParams: {
+                    palette: ['#009B9E', '#F1F1F1', '#C75DAB'],
 
-}
-exports.vectors = {
-      /*  counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
-            PugetSound),
-        HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
-            PugetSound),
-        HUC10: ee.FeatureCollection("USGS/WBD/2017/HUC10").filterBounds(
-            PugetSound),
-        HUC08: ee.FeatureCollection("USGS/WBD/2017/HUC08").filterBounds(
-            PugetSound),
-        HUC06: ee.FeatureCollection("USGS/WBD/2017/HUC06").filterBounds(
-            PugetSound),
-        NHDPlus: ee.FeatureCollection(
-            'users/cnilsen/PugetSoundNHDPlusWatersheds'),
-        PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),*/
-        WRIA: ee.FeatureCollection(
-                "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
-            )
-            .filterBounds(PugetSound),
-        //add LJ 
-        //add NPDES Bounds 
-}
-exports.rasters = rasters
+                    min: 0,
+                    max: 2
+                }
+            },
+            discrete: true,
+            values: [0, 1, 2],
+            units: null,
+            labels: ['Flat', 'Moderate', 'Steep'],
+            vizType: 'pieChart'
+        },
+        'landCover': {
+            layer: {
+                eeObject: landcover,
+                name: 'Land Cover',
+                visParams: {
+                    palette: ["ffffff", "3ead63", "c9fbff", "26532b", "a39171", "476b9d", "adacb5", "d8d5db"]
+                    min: 0,
+                    max: 7
+                }
+            },
+            discrete: true,
+            values: [0, 1, 2, 3, 4,
+                5, 6, 7
+            ],
+            units: null,
+            labels: ['No data', 'Grass', 'Saturated/Ice', 'Tree', 'Bare soil', 'Water', 'Impervious', 'Impervious - Roofs'],
+            vizType: 'pieChart'
+        },
+        'DevAge': {
+            layer: {
+                eeObject: age_of_development, //var visParams = {
+                min: 1.0,
+                max: 6.0,
 
+                name: 'Mean Annual Preciptation',
+                visParams: {
+                    palette: ['0c1d60', '000000', '448564', '70daa4', '83ffbf', 'ffffff'],
+
+                    min: 1,
+                    max: 6
+                }
+            },
+            discrete: true,
+            values: [1, 2, 3, 4, 5, 6],
+            units: null,
+            labels: ['Water surface', 'Not developed', '2000 to 2014', '1990 to 2000', '1975 to 1990', 'Prior to 1975 '],
+            vizType: 'histogram'
+        },
+        'HRUs': {
+            layer: {
+                eeObject: hruBands,
+                name: 'Hydrologic Response Units',
+                visParams: {
+                    palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
+                        '#05668D'
+                    ],
+                    min: 0,
+                    max: 255
+                }
+            },
+            discrete: true,
+            values: [0, 1],
+            units: null,
+            labels: null, //['Pervious', 'Impervious'],
+            vizType: 'pieChart'
+        },
+        'Population': {
+            layer: {
+                eeObject: population,
+                name: 'Population Count',
+                visParams: {
+                    palette: ['#2f0f3e', '#66185c', '#9f2462', '#ce4356', '#eb7858', '#f7b37c', '#feedb0'],
+                    min: 20,
+                    max: 200
+                }
+            },
+            discrete: false,
+            values: null,
+            units: 'Total Population',
+            labels: null, //['Pervious', 'Impervious'],
+            vizType: 'bigNumber'
+        },
+        'landUse': {
+            layer: {
+                eeObject: generalizedLU,
+                name: 'Land Use',
+                visParams: {
+                    palette: [
+                        '#D45A51',
+                        '#CD770C',
+                        '#949989',
+                        '#2E7BAF',
+                        '#C3931E',
+                        '#4BA891',
+                        '#466b9f',
+                        '#256C61'
+                    ],
+                    min: 1,
+                    max: 8
+                }
+            },
+            discrete: true,
+            values: [1, 2, 3, 4, 5, 6, 7, 8],
+            units: null,
+            labels: ['Residential',
+                'Industrial',
+                'Transportation ',
+                'Commercial',
+                'Agricultural',
+                'Timber and Resource Extraction',
+                'Water',
+                'open space'
+            ],
+            vizType: 'pieChart'
+        },
+        'Runoff': {
+            layer: {
+                eeObject: mean_annual_runoff,
+                name: 'Mean Annual Runoff',
+                visParams: {
+                    palette: ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
+                    min: 100,
+                    max: 1000
+                }
+            },
+            discrete: false,
+            values: null,
+            units: 'mm/year',
+            labels: null, //['Pervious', 'Impervious'],
+            vizType: 'histogram'
+            //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
+
+        }
+        exports.vectors = {
+            /*  counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
+                  PugetSound),
+              HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
+                  PugetSound),
+              HUC10: ee.FeatureCollection("USGS/WBD/2017/HUC10").filterBounds(
+                  PugetSound),
+              HUC08: ee.FeatureCollection("USGS/WBD/2017/HUC08").filterBounds(
+                  PugetSound),
+              HUC06: ee.FeatureCollection("USGS/WBD/2017/HUC06").filterBounds(
+                  PugetSound),
+              NHDPlus: ee.FeatureCollection(
+                  'users/cnilsen/PugetSoundNHDPlusWatersheds'),*/
+            PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
+            WRIA: ee.FeatureCollection(
+                    "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
+                )
+                .filterBounds(PugetSound),
+            //add LJ 
+            //add NPDES Bounds 
+        }
+        exports.rasters = rasters
