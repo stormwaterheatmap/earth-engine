@@ -117,7 +117,7 @@ exports.slope = slopeZone;
 var mean_annual_runoff = ee.Image(
     "users/cnilsen/Runoff1980s5m");
 
-var imp = landcover.eq(4).or(landcover.eq(5)).mask(landcover.neq(8)).multiply(ee
+var imp = landcover.eq(6).or(landcover.eq(7)).mask(landcover.neq(5)).multiply(ee
     .Image(100))
 exports.imperv = imp;
 
