@@ -21,7 +21,7 @@ exports.colors = colors
 //fonts from https://design.firefox.com/photon/visuals/typography.html
 var fonts = {
     H1: {
-        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
@@ -31,7 +31,7 @@ var fonts = {
     },
 
     H2: {
-        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
@@ -41,7 +41,7 @@ var fonts = {
 
     },
     H3: {
-        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
@@ -49,7 +49,7 @@ var fonts = {
         fontWeight: 500
     },
     H4: {
-        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
@@ -58,7 +58,7 @@ var fonts = {
         // wrap: true
     },
     Body1: {
-        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
@@ -66,7 +66,7 @@ var fonts = {
         fontWeight: 400
     },
     Body2: {
-        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
@@ -74,7 +74,7 @@ var fonts = {
         fontWeight: 400
     },
         Body3: {
-        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
