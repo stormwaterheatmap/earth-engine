@@ -41,7 +41,7 @@ var populationDataset = ee.ImageCollection('JRC/GHSL/P2016/POP_GPW_GLOBE_V1')
     .filter(ee.Filter.date('2015-01-01', '2015-12-31'));
 var population = populationDataset.select('population_count').first();
 
-
+var lithology = ee.Image('CSP/ERGo/1_0/US/lithology').select('b1');
 /*
 Images 
 */
@@ -307,7 +307,7 @@ var rasters = {
                 min: 1.0,
                 max: 6.0,
 
-                name: 'Mean Annual Preciptation',
+                name: 'Age of Development',
                 visParams: {
                     palette: ['0c1d60', '000000', '448564', '70daa4', '83ffbf', 'ffffff'],
 
@@ -321,6 +321,47 @@ var rasters = {
             labels: ['Water surface', 'Not developed', '2000 to 2014', '1990 to 2000', '1975 to 1990', 'Prior to 1975 '],
             vizType: 'histogram'
         },
+//
+'Lithology': {
+    layer: {
+        eeObject: lithology, //var visParams = {
+        name: 'Lithology',
+        visParams:{
+            
+            palette: [
+              '356EFF', 'ACB6DA', 'D6B879', '313131', 'EDA800', '616161', 'D6D6D6',
+              'D0DDAE', 'B8D279', 'D5D378', '141414', '6DB155', '9B6D55', 'FEEEC9',
+              'D6B879', '00B7EC', 'FFDA90', 'F8B28C'
+            ],
+            min: 0,
+            max: 20,
+          }
+    },
+    discrete: true,
+    values: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    units: null,
+    labels: 
+ ['Water', 
+	'Carbonate',
+'Non-carbonate',
+'Alkaline intrusive', 
+'Silicic residual', 
+'Extrusive volcanic', 
+'Colluvial sediment', 
+'Glacial till clay', 
+'Glacial till loam', 
+'Glacial till coarse', 
+'Glacial lake sediment fine', 
+'Glacial outwash coarse', 
+'Hydric', 
+'Eolian sediment coarse', 
+'Eolian sediment fine', 
+'Saline lake sediment', 
+'Alluvium and coastal sediment fine', 
+'Coastal sediment coarse'],
+    vizType: 'pieChart'
+},
+
  /*       'HRUs': {
             layer: {
                 eeObject: hruBands,
