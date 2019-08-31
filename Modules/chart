@@ -1,3 +1,37 @@
+exports.histByClass = function (layerObject, scale, geom) {
+    var area = ee.Image.pixelArea().divide(10000) //area in hectares 
+    var image = ee.Image.cat(area, layerObject.layer.eeObject)
+    // Define chart customization options.
+    var options = {
+        legend: {
+            position: 'right'
+        },
+        lineWidth: 1,
+        vAxis: {
+            title: 'Hectares'
+        },
+        title: layerObject.layer.name.concat(' in Watershed'),
+        colors: layerObject.layer.visParams.palette
+        //theme: 'maximized',// {position: 'right'}
+        // legend: 'none'
+    };
+
+    var histChart = ( ui.Chart.image.byClass({
+            image: image, //reducer: ee.Reducer.count(), 
+            classBand: 1,
+            region: geom,
+            scale: scale,
+            classLabels: layerObject.labels,
+            xLabels: ' '
+        })
+        .setOptions(options)
+        )
+
+    return histChart
+
+}
+
+
 exports.histogramFeature = function (region, propName, buckwidth, title) {
     var chart = ui.Chart.feature
         .histogram({
