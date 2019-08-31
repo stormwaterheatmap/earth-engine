@@ -44,7 +44,6 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
         });
     return chart;
 };
-
 exports.histogramImage = function (image, WS, scale, title) {
     var chart = ui.Chart.image
         .histogram({
@@ -122,13 +121,13 @@ var makePieChart = function (geometry, properties, holeSize) {
             xProperty: 'transition_class_name',
             yProperties: ['area_m2', 'transition_class_number']
         })
-        .setChartType('PieChart')
-        .setOptions({
+        .setChartType('DataTable')
+    /*    .setOptions({
             title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
             slices: createPieChartSliceDictionary(transition_fc),
             sliceVisibilityThreshold: 0.02
-        });
+        });*/
 
     return (transition_summary_chart);
 
