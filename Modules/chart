@@ -121,7 +121,7 @@ var makePieChart = function (geometry, properties, holeSize) {
             xProperty: 'transition_class_name',
             yProperties: ['area_m2', 'transition_class_number']
         })
-     //   .setChartType('Table')
+       .setChartType('PieChart')//le')
         .setOptions({
             title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
