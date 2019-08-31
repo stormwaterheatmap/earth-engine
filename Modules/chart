@@ -119,7 +119,7 @@ var makePieChart = function (geometry, properties, holeSize) {
                 return {
                     'color': p
                 };
-            }).getInfo();
+            })//.getInfo();
     }
 
     //var classValue = image.get('system:title')
@@ -211,7 +211,7 @@ var palette =  properties.layer.visParams.palette
                 return {
                     'color': p
                 };
-            }).getInfo();
+            })//.getInfo();
     }
 
     //var classValue = image.get('system:title')
