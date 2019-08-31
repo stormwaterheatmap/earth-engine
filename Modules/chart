@@ -11,8 +11,8 @@ exports.histByClass = function (layerObject, scale, geom) {
             title: 'Hectares'
         },
         title: layerObject.layer.name.concat(' in Watershed'),
-        colors: layerObject.layer.visParams.palette
-        //theme: 'maximized',// {position: 'right'}
+        colors: layerObject.layer.visParams.palette,
+        theme: 'maximized',// {position: 'right'}
         // legend: 'none'
     };
 
