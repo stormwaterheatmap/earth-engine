@@ -42,11 +42,10 @@ exports.discreteLegend = function (layerObject) {
     // Create the panel for the legend items.
     var legend = ui.Panel({
         style: {
-            position: 'bottom-right',
+            position: 'top-left',
             padding: '8px 15px'
         }
     });
-
     // Create and add the legend title.
     var legendTitle = ui.Label({
         value: layerObject.layer.name.toString(), //'MODIS Land Cover',
@@ -58,12 +57,10 @@ exports.discreteLegend = function (layerObject) {
         }
     });
     legend.add(legendTitle);
-
     var loading = ui.Label('Loading legend...', {
         margin: '2px 0 4px 0'
     });
     legend.add(loading);
-
     // Creates and styles 1 row of the legend.
     var makeRow = function (color, name) {
         // Create the label that is actually the colored box.
@@ -89,7 +86,6 @@ exports.discreteLegend = function (layerObject) {
             layout: ui.Panel.Layout.Flow('horizontal')
         });
     };
-
     // Get the list of palette colors and class names from the image.
 
         var palette = layerObject.layer.visParams.palette;
