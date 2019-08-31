@@ -23,7 +23,7 @@ exports.histByClass = function (layerObject, scale, geom) {
             region: geom,
             scale: scale,
             classLabels: layerObject.labels,
-            xLabels: ' '
+           // xLabels: ' '
         })
         .setOptions(options)
         )
