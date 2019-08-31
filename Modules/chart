@@ -31,8 +31,6 @@ exports.histByClass = function (layerObject, scale, geom) {
     return histChart
 
 }
-
-
 exports.histogramFeature = function (region, propName, buckwidth, title) {
     var chart = ui.Chart.feature
         .histogram({
@@ -66,37 +64,22 @@ var makePieChart = function (geometry, properties, holeSize) {
     var image = properties.layer.eeObject
     var withArea = ee.Image.pixelArea().addBands(image);
     var clipImage = withArea.clip(AOI)
-
-    
-
-
-
-    //////////////////////////////////////////////////////////////
+ //////////////////////////////////////////////////////////////
     // Calculations
     //////////////////////////////////////////////////////////////
-
-
-
-
     var lookup_names = ee.Dictionary.fromLists(
         ee.List(properties.values).map(ee.String),
         properties.labels
     );
-
     print('lookup names', lookup_names)
 
     var lookup_palette = ee.Dictionary.fromLists(
         ee.List(properties.values).map(ee.String),
         properties.palette
     );
-
-
     print(ee.List(lookup_palette))
-
+    //////////////////////////////////////////////////////////////   // Helper functions
     //////////////////////////////////////////////////////////////
-    // Helper functions
-    //////////////////////////////////////////////////////////////
-
     function createFeature(transition_class_stats) {
         transition_class_stats = ee.Dictionary(transition_class_stats);
         var class_number = transition_class_stats.get('class value');
@@ -109,9 +92,7 @@ var makePieChart = function (geometry, properties, holeSize) {
         return ee.Feature(null,
         result); // Creates a feature without a geometry.
     }
-
-    // Create a JSON dictionary that defines piechart colors based on the
-    // transition class palette.
+    // Create a JSON dictionary that defines piechart colors based on thetransition class palette.
     // https://developers.google.com/chart/interactive/docs/gallery/piechart
     function createPieChartSliceDictionary(fc) {
         return ee.List(fc.aggregate_array("transition_class_palette"))
@@ -121,10 +102,8 @@ var makePieChart = function (geometry, properties, holeSize) {
                 };
             })//.getInfo();
     }
-
     //var classValue = image.get('system:title')
     //print(classValue)
-
     var reduction_results = clipImage.reduceRegion({
         reducer: ee.Reducer.sum().group({
             groupField: 1,
@@ -137,10 +116,8 @@ var makePieChart = function (geometry, properties, holeSize) {
     print('reduction_results', reduction_results);
     var roi_stats = ee.List(reduction_results.get('groups'));
     print('roi stats', roi_stats)
-
     var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
     print('transition_fc', transition_fc);
-
     // Add a summary chart.
     var transition_summary_chart = ui.Chart.feature.byFeature({
             features: transition_fc,
@@ -149,7 +126,7 @@ var makePieChart = function (geometry, properties, holeSize) {
         })
         .setChartType('PieChart')
         .setOptions({
-            title: 'Summary of '.concat(properties.layerName),
+            title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
             slices: createPieChartSliceDictionary(transition_fc),
             sliceVisibilityThreshold: 0.02
