@@ -124,7 +124,8 @@ var makePieChart = function (geometry, properties, holeSize) {
         .setOptions({
             title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
-            chartArea: '100%',
+            height: '200 px',
+            width: '200 px',
             pieSliceTextStyle: {color: 'black', padding: '8px'},
             slices: createPieChartSliceDictionary(transition_fc),
             sliceVisibilityThreshold: 0.02
