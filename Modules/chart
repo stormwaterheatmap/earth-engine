@@ -17,7 +17,8 @@ exports.histByClass = function (layerObject, scale, geom) {
     };
 
     var histChart = ( ui.Chart.image.byClass({
-            image: image, //reducer: ee.Reducer.count(), 
+            image: image, //
+            reducer: ee.Reducer.count(), 
             classBand: 1,
             region: geom,
             scale: scale,
