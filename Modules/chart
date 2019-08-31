@@ -74,7 +74,7 @@ var makePieChart = function (geometry, properties, holeSize) {
     print('lookup names', lookup_names)
     var lookup_palette = ee.Dictionary.fromLists(
         ee.List(properties.values).map(ee.String),
-        properties.layer.eeObject.visParams.palette
+        properties.layer.visParams.palette
     );
     print(ee.List(lookup_palette))
     //////////////////////////////////////////////////////////////   // Helper functions    //////////////////////////////////////////////////////////////
