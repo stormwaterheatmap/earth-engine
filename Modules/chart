@@ -96,7 +96,7 @@ var makePieChart = function (geometry, properties, holeSize) {
                 return {
                     'color': p
                 };
-            }).getInfo();
+            })//.getInfo();
     }
     //var classValue = image.get('system:title')
     //print(classValue)
@@ -128,7 +128,7 @@ var makePieChart = function (geometry, properties, holeSize) {
             width: '200',
             pieSliceTextStyle: {color: 'black', padding: '8px'},
             
-            slices: createPieChartSliceDictionary(transition_fc),
+            slices: (transition_fc).evaluate(createPieChartSliceDictionary),
             sliceVisibilityThreshold: 0.02
         });
 
