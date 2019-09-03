@@ -285,7 +285,7 @@ var bigNum = function (layerObj, region, scale) {
     outerCard.add(card).add(info)
     }*/
     //makePanels()
-    var reduced = ee.Number((layTest.eeObject).reduceRegion(ee.Reducer.mean(), region, 10).get('label'))
+    var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion(ee.Reducer.mean(), region, 10).get('label'))
     print(reduced)
     //reduced = reduced.toFixed()
 
@@ -306,7 +306,7 @@ var style = require('users/stormwaterheatmap/apps:Modules/Style')
 print(style)
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
-var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var layerProperties = data.rasters
 var vectors = data.vectors
