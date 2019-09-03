@@ -146,7 +146,9 @@ var makePieChart = function (geometry, properties, holeSize) {
     createPieChartSliceDictionary(transition_fc).evaluate(function(result) {
     // When the server returns the value, show it.
     transition_summary_chart.setOptions({
-      slices: result
+      slices: result,
+      title: properties.layer.name, 
+      titleTextStyle: style.fonts.LegendTitle
     })})
     return (transition_summary_chart);
 
