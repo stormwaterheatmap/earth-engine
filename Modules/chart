@@ -15,21 +15,21 @@ exports.histByClass = function (layerObject, scale, geom) {
         },
         title: layerObject.layer.name.concat(' in Watershed'),
         colors: layerObject.layer.visParams.palette,
-        theme: 'maximized',// {position: 'right'}
+        theme: 'maximized', // {position: 'right'}
         // legend: 'none'
     };
 
-    var histChart = ( ui.Chart.image.byClass({
+    var histChart = (ui.Chart.image.byClass({
             image: image, //
-            reducer: ee.Reducer.sum(), 
+            reducer: ee.Reducer.sum(),
             classBand: 1,
             region: geom,
             scale: scale,
             classLabels: layerObject.labels,
-           // xLabels: ' '
+            // xLabels: ' '
         })
         .setOptions(options)
-        )
+    )
 
     return histChart
 
@@ -65,7 +65,7 @@ var makePieChart = function (geometry, properties, holeSize) {
     var image = properties.layer.eeObject
     var withArea = ee.Image.pixelArea().addBands(image);
     var clipImage = withArea.clip(AOI)
- //////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////
     // Calculations
     //////////////////////////////////////////////////////////////
     var lookup_names = ee.Dictionary.fromLists(
@@ -89,7 +89,7 @@ var makePieChart = function (geometry, properties, holeSize) {
             area_m2: transition_class_stats.get('sum')
         };
         return ee.Feature(null,
-        result); // Creates a feature without a geometry.
+            result); // Creates a feature without a geometry.
     }
     // Create a JSON dictionary that defines piechart colors based on thetransition class palette.
     // https://developers.google.com/chart/interactive/docs/gallery/piechart
@@ -99,7 +99,7 @@ var makePieChart = function (geometry, properties, holeSize) {
                 return {
                     'color': p
                 };
-            })//.getInfo();
+            }) //.getInfo();
     }
     //var classValue = image.get('system:title')
     //print(classValue)
@@ -123,150 +123,173 @@ var makePieChart = function (geometry, properties, holeSize) {
             xProperty: 'transition_class_name',
             yProperties: ['area_m2', 'transition_class_number']
         })
-       .setChartType('PieChart')//le')
+        .setChartType('PieChart') //le')
         .setOptions({
-           // title: 'Summary of '.concat(properties.layer.eeObject.name),
+            // title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
             height: '200',
             width: '200',
-            pieSliceTextStyle: {color: 'black', padding: '8px'},
+            pieSliceTextStyle: {
+                color: 'black',
+                padding: '8px'
+            },
             slices: createPieChartSliceDictionary(transition_fc),
             sliceVisibilityThreshold: 0.02
-        }); 
+        });
 
     return (transition_summary_chart);
 
 }
 
-exports.pieChart = makePieChart; 
+exports.pieChart = makePieChart;
 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
-exports.bigNum = function(image, region, scale) {
-var panel = ui.Panel({style: {width: '33%', padding: '10px', margin: 0}})//.style().set({width: '33%'})
-var units
-var loading = 'loading...'
-var infoLabel = ui.Label({value: 'ⓘ', targetUrl: 'https://github.com/stormwaterheatmap'})
-infoLabel.style().set({
-    margin: '2px', 
-  padding: '2px', 
-  color: 'white',
-  backgroundColor: style.colors.transparent,
-})
-var titlePanel = ui.Panel({layout: ui.Panel.Layout.flow('horizontal')})
-titlePanel.style().set({
-  margin: 0, 
-  padding: 0,
-  backgroundColor: color, 
-  stretch: 'horizontal'
-})
-var card = ui.Panel({style: {
-  backgroundColor: style.colors.transparent,
-  margin: 0,
-  //border: "0.5px solid black",
-  width: '100%', 
-  //height: '100px', 
-  padding: 0,
-}})//.setLayout(ui.Panel.Layout.absolute())//('horizontal')); 
-var bigNum = ui.Label({value: loading, style: {
-  margin: 0,
-  padding: '0px 12px 0px 0px',
-  fontSize: '48px',
-  fontWeight: '700', 
-  backgroundColor: style.colors.transparent, 
-  color: 'white',
-  //position: 'middle-right', 
-  textAlign: 'right', 
-  stretch: 'horizontal'
-}})
+var bigNum = function (layerObj, region, scale) {
+    var panel = ui.Panel({
+        style: {
+            width: '33%',
+            padding: '10px',
+            margin: 0
+        }
+    }) //.style().set({width: '33%'})
+    var units = layObj
+    var loading = 'loading...'
+    var infoLabel = ui.Label({
+        value: 'ⓘ',
+        targetUrl: 'https://github.com/stormwaterheatmap'
+    })
+    infoLabel.style().set({
+        margin: '2px',
+        padding: '2px',
+        color: 'white',
+        backgroundColor: style.colors.transparent,
+    })
+    var titlePanel = ui.Panel({
+        layout: ui.Panel.Layout.flow('horizontal')
+    })
+    titlePanel.style().set({
+        margin: 0,
+        padding: 0,
+        backgroundColor: color,
+        stretch: 'horizontal'
+    })
+    var card = ui.Panel({
+        style: {
+            backgroundColor: style.colors.transparent,
+            margin: 0,
+            //border: "0.5px solid black",
+            width: '100%',
+            //height: '100px', 
+            padding: 0,
+        }
+    }) //.setLayout(ui.Panel.Layout.absolute())//('horizontal')); 
+    var bigNum = ui.Label({
+        value: loading,
+        style: {
+            margin: 0,
+            padding: '0px 12px 0px 0px',
+            fontSize: '48px',
+            fontWeight: '700',
+            backgroundColor: style.colors.transparent,
+            color: 'white',
+            //position: 'middle-right', 
+            textAlign: 'right',
+            stretch: 'horizontal'
+        }
+    })
 
-var titleLabel = ui.Label({value: title, style: style.fonts.Body1}); 
-titleLabel.style().set(
-{
-  margin: 0,
-   padding: '4px 64px 0px 12px',
-  position: 'top-left', 
-  stretch: 'horizontal', 
-  color: 'white', 
-  backgroundColor: color
-}); 
+    var titleLabel = ui.Label({
+        value: title,
+        style: style.fonts.Body1
+    });
+    titleLabel.style().set({
+        margin: 0,
+        padding: '4px 64px 0px 12px',
+        position: 'top-left',
+        stretch: 'horizontal',
+        color: 'white',
+        backgroundColor: color
+    });
 
-units = ui.Label({value: 'in/hr', style: {
-    margin: '-8px 0px 0px 0px ',
-  padding: '0px 14px 4px 0px',
-  fontSize: '12px',
-  fontWeight: '400', 
-  backgroundColor: style.colors.transparent, 
-  color: 'white', 
-  textAlign: 'right', 
-  stretch: 'horizontal'
-}})
-//make a right-hand-side panel to hold big number and units. 
-var rightPan = ui.Panel({//layout: ui.Panel.Layout.absolute(), 
-layout: ui.Panel.Layout.flow('vertical'), 
-style: { //backgroundColor: style.colors.transparent,
-//textAlign: 'center', 
-//position: 'middle-right',
-  margin: 0,
-  padding: 0, 
- // border: '1px dotted white', 
-  backgroundColor: color
-}}); 
+    units = ui.Label({
+        value: layerObj.units,
+        style: {
+            margin: '-8px 0px 0px 0px ',
+            padding: '0px 14px 4px 0px',
+            fontSize: '12px',
+            fontWeight: '400',
+            backgroundColor: style.colors.transparent,
+            color: 'white',
+            textAlign: 'right',
+            stretch: 'horizontal'
+        }
+    })
+    //make a right-hand-side panel to hold big number and units. 
+    var rightPan = ui.Panel({ //layout: ui.Panel.Layout.absolute(), 
+        layout: ui.Panel.Layout.flow('vertical'),
+        style: { //backgroundColor: style.colors.transparent,
+            //textAlign: 'center', 
+            //position: 'middle-right',
+            margin: 0,
+            padding: 0,
+            // border: '1px dotted white', 
+            backgroundColor: color
+        }
+    });
 
 
-//one more panel to hold the information 
-var outerCard = ui.Panel({
-  layout: ui.Panel.Layout.flow('vertical', true),
-  style: {
-    //border: '1px solid grey', 
-     margin: 0,
-  padding: 0, 
-    //backgroundColor: style.colors.tncgreen
-  position: 'top-left'}
-})//.add(ui.Label('outer Card') )
-var info = ui.Label({
-  value: 'more information here', 
-  style: style.fonts.Caption1}) 
-  
-  info.style().set({
-    color: style.colors.grey,
-    //position: 'bottom-right', 
-    textAlign: 'right',
-   // fontWeight: '600',
-    stretch: 'horizontal', 
-    //backgroundColor: style.colors.transparent, 
-         margin: 0,
-  padding: '4px', 
-  }
-  ); 
+    //one more panel to hold the information 
+    var outerCard = ui.Panel({
+        layout: ui.Panel.Layout.flow('vertical', true),
+        style: {
+            //border: '1px solid grey', 
+            margin: 0,
+            padding: 0,
+            //backgroundColor: style.colors.tncgreen
+            position: 'top-left'
+        }
+    }) //.add(ui.Label('outer Card') )
+    var info = ui.Label({
+        value: 'more information here',
+        style: style.fonts.Caption1
+    })
 
-//make panels 
+    info.style().set({
+        color: style.colors.grey,
+        //position: 'bottom-right', 
+        textAlign: 'right',
+        // fontWeight: '600',
+        stretch: 'horizontal',
+        //backgroundColor: style.colors.transparent, 
+        margin: 0,
+        padding: '4px',
+    });
 
-  titlePanel.add(titleLabel)//.add(infoLabel)
-  rightPan.add(bigNum).add(units)
-  card.add(titlePanel).add(rightPan)
-  outerCard.add(card).add(info)
+    //make panels 
 
-/*rightPan.add(bigNum).add(units)
-card.add(title).add(infoLabel).add(rightPan)
-outerCard.add(card).add(info)
-}*/
-//makePanels()
-var reduced = ee.Number((layTest.eeObject).reduceRegion(ee.Reducer.mean(),region,10).get('label')
-)
-print(reduced)
-//reduced = reduced.toFixed()
+    titlePanel.add(titleLabel) //.add(infoLabel)
+    rightPan.add(bigNum).add(units)
+    card.add(titlePanel).add(rightPan)
+    outerCard.add(card).add(info)
 
-reduced.evaluate(function(result) {
-    // When the server returns the value, show it.
-    bigNum.setValue(result.toFixed(0))})//.add(units)
+    /*rightPan.add(bigNum).add(units)
+    card.add(title).add(infoLabel).add(rightPan)
+    outerCard.add(card).add(info)
+    }*/
+    //makePanels()
+    var reduced = ee.Number((layTest.eeObject).reduceRegion(ee.Reducer.mean(), region, 10).get('label'))
+    print(reduced)
+    //reduced = reduced.toFixed()
 
-return outerCard
-  
+    reduced.evaluate(function (result) {
+        // When the server returns the value, show it.
+        bigNum.setValue(result.toFixed(0))
+    }) //.add(units)
+
+    return outerCard
+
 }
 
 
-
-
-
-
+exports.bigNum = bigNum;
