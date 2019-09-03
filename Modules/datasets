@@ -226,7 +226,7 @@ var rasters = {
             values: [0, 1],
             units: null,
             labels: ['Pervious', 'Impervious'],
-            vizType: 'bigNumber'
+            vizType: 'bigNumberPercent'
         },
         'Precipitation': {
             layer: {
@@ -246,7 +246,7 @@ var rasters = {
             values: null,
             units: 'mm/year',
             labels: null,
-            vizType: 'bigNumber'
+            vizType: 'bigNumberMean'
         },
         'Soils': {
             layer: {
@@ -394,7 +394,7 @@ var rasters = {
             values: null,
             units: 'Total Population',
             labels: null, //['Pervious', 'Impervious'],
-            vizType: 'bigNumber'
+            vizType: 'bigNumberSum'
         },
         'landUse': {
             layer: {
