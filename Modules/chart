@@ -106,7 +106,7 @@ var makePieChart = function (geometry, properties, holeSize) {
                 return {
                     'color': p
                 };
-            }) //.getInfo();
+            });
     }
     //var classValue = image.get('system:title')
     //print(classValue)
@@ -140,10 +140,14 @@ var makePieChart = function (geometry, properties, holeSize) {
                 color: 'black',
                 padding: '8px'
             },
-            slices: createPieChartSliceDictionary(transition_fc),
+            //slices: createPieChartSliceDictionary(transition_fc).evaluate,
             sliceVisibilityThreshold: 0.02
         });
-
+    createPieChartSliceDictionary(transition_fc).evaluate(function(result) {
+    // When the server returns the value, show it.
+    transition_summary_chart.setOptions({
+      slices: result
+    })})
     return (transition_summary_chart);
 
 }
