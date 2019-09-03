@@ -1,3 +1,6 @@
+var style = require('users/stormwaterheatmap/apps:Modules/Style')
+var color = style.colors.primary
+
 exports.histByClass = function (layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(10000) //area in hectares 
     var image = ee.Image.cat(area, layerObject.layer.eeObject)
