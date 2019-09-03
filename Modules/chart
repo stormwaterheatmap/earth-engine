@@ -285,7 +285,13 @@ var bigNum = function (layerObj, region, scale) {
     outerCard.add(card).add(info)
     }*/
     //makePanels()
-    var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion(ee.Reducer.mean(), region, scale).get('label'))
+    var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+      reducer: ee.Reducer.mean(), 
+      region: region, 
+      scale: scale, 
+      bestEffort: true
+      
+    }).get('label'))
     print(reduced)
     //reduced = reduced.toFixed()
 
@@ -300,7 +306,7 @@ var bigNum = function (layerObj, region, scale) {
 
 
 exports.bigNum = bigNum;
-/*
+
 //Testing area 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 print(style)
@@ -319,4 +325,3 @@ var color = style.colors.primary
 var layTest = data.rasters.Imperviousness
 print(layTest)
 Map.add(bigNum(layTest,geometry,100))
-*/
