@@ -251,7 +251,7 @@ var bigNum = function (layerObj, region, scale) {
         layout: ui.Panel.Layout.flow('vertical', true),
         style: {
             //border: '1px solid grey', 
-            margin: 0,
+            //margin: 0,
             padding: 0,
             //backgroundColor: style.colors.tncgreen
             position: 'top-left'
