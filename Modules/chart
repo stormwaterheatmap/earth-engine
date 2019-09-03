@@ -1,3 +1,10 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = /* color: #d63000 */ee.Geometry.Polygon(
+        [[[-122.18688550907996, 47.588485685274044],
+          [-122.13882032353308, 47.53659182056817],
+          [-122.11684766728308, 47.629223376175645],
+          [-122.16903272587683, 47.67547769385542]]]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var color = style.colors.primary
 
@@ -293,3 +300,22 @@ var bigNum = function (layerObj, region, scale) {
 
 
 exports.bigNum = bigNum;
+
+//Testing area 
+var style = require('users/stormwaterheatmap/apps:Modules/Style')
+print(style)
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var layerProperties = data.rasters
+var vectors = data.vectors
+var layTest = data.rasters.Imperviousness
+var value = 'loading...'
+//
+var units = 'in/year'
+var title = 'Mean Annual Precipitation'
+var color = style.colors.primary
+var layTest = data.rasters.Imperviousness
+print(layTest)
+Map.add(bigNum(layTest,geometry,100))
