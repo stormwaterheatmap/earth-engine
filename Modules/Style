@@ -105,6 +105,16 @@ var fonts = {
         fontSize: '11px',
         fontWeight: 300
     },
+       LegendTitle: {
+        fontFamily: ['Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            'Dejavu Sans', 'Helvetica Neue',
+            'Arial', 'sans-serif'
+        ],
+          fontWeight: '400',
+            fontSize: '18px',
+            margin: '0 0 4px 0',
+            padding: '0'
+    }
 };
 exports.panelStyle = {
     'reports': {
