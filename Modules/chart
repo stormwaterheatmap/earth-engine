@@ -33,6 +33,7 @@ exports.histByClass = function (layerObject, scale, geom) {
             region: geom,
             scale: scale,
             classLabels: layerObject.labels,
+            titleTextStyle: style.fonts.LegendTitle
             // xLabels: ' '
         })
         .setOptions(options)
@@ -50,7 +51,8 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
             minBucketWidth: buckwidth
         })
         .setOptions({
-            title: title
+            title: title, 
+             titleTextStyle: style.fonts.LegendTitle
         });
     return chart;
 };
@@ -63,7 +65,8 @@ exports.histogramImage = function (image, WS, scale, title) {
             maxBuckets: 16
         })
         .setOptions({
-            title: title
+            title: title, 
+             titleTextStyle: style.fonts.LegendTitle
         });
     return chart;
 };
