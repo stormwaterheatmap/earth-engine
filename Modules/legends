@@ -20,7 +20,6 @@ exports.barLegend = function (low, mid, high, layerObj) {
   var titlePanel = ui.Panel(
     [ui.Label()]
     )
-  
   var labelPanel = ui.Panel(
       [
         ui.Label(low, {margin: '4px 8px',textAlign: 'left',stretch: 'horizontal'}),
