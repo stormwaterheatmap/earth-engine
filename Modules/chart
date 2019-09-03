@@ -287,7 +287,7 @@ var bigNum = function (layerObj, region, scale) {
     //makePanels()
     var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
       reducer: ee.Reducer.mean(), 
-      region: region, 
+      geometry: region, 
       scale: scale, 
       bestEffort: true
       
