@@ -33,7 +33,7 @@ exports.histByClass = function (layerObject, scale, geom) {
             region: geom,
             scale: scale,
             classLabels: layerObject.labels,
-            titleTextStyle: style.fonts.LegendTitle
+            //titleTextStyle: style.fonts.LegendTitle
             // xLabels: ' '
         })
         .setOptions(options)
@@ -52,7 +52,7 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
         })
         .setOptions({
             title: title, 
-             titleTextStyle: style.fonts.LegendTitle
+            // titleTextStyle: style.fonts.LegendTitle
         });
     return chart;
 };
@@ -66,7 +66,7 @@ exports.histogramImage = function (image, WS, scale, title) {
         })
         .setOptions({
             title: title, 
-             titleTextStyle: style.fonts.LegendTitle
+             //titleTextStyle: style.fonts.LegendTitle
         });
     return chart;
 };
@@ -151,7 +151,7 @@ var makePieChart = function (geometry, properties, holeSize) {
     transition_summary_chart.setOptions({
       slices: result,
       title: properties.layer.name, 
-      titleTextStyle: style.fonts.LegendTitle
+     // titleTextStyle: style.fonts.LegendTitle
     })})
     return (transition_summary_chart);
 
