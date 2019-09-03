@@ -291,7 +291,7 @@ var bigNum = function (layerObj, region, scale) {
       scale: scale, 
       bestEffort: true
       
-    }).get('label'))
+    }).get(layerObj.layer.eeObject.bandNames().get(0)))
     print(reduced)
     //reduced = reduced.toFixed()
 
