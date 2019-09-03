@@ -224,7 +224,7 @@ var rasters = {
             },
             discrete: true,
             values: [0, 1],
-            units: null,
+            units: "",
             labels: ['Pervious', 'Impervious'],
             vizType: 'bigNumberPercent'
         },
