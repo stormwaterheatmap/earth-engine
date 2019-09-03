@@ -253,7 +253,7 @@ var bigNum = function (layerObj, region, scale, reducerType) {
             //border: '1px solid grey', 
            // margin: '12px',
             padding: '12px',
-            //backgroundColor: style.colors.tncgreen
+            backgroundColor: style.colors.transparent,
             position: 'top-left'
         }
     }) //.add(ui.Label('outer Card') )
