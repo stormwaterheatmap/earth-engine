@@ -200,7 +200,7 @@ var bigNum = function (layerObj, region, scale) {
     })
 
     var titleLabel = ui.Label({
-        value: title,
+        value: layerObj.layer.name,
         style: style.fonts.Body1
     });
     titleLabel.style().set({
