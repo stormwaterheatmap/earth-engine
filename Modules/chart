@@ -131,14 +131,14 @@ var makePieChart = function (geometry, properties, holeSize) {
     var transition_summary_chart = ui.Chart.feature.byFeature({
             features: transition_fc,
             xProperty: 'transition_class_name',
-            yProperties: ['area_m2', 'transition_class_number']
+            yProperties: ['area_m2']// 'transition_class_number']
         })
         .setChartType('PieChart') //le')
         .setOptions({
             // title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
-            height: '200',
-            width: '200',
+            //height: '200',
+            //width: '200',
             pieSliceTextStyle: {
                 color: 'black',
                 padding: '8px'
