@@ -328,10 +328,17 @@ var rasters = {
         name: 'Lithology',
         visParams:{
             
-            palette: [
-              '356EFF', 'ACB6DA', 'D6B879', '313131', 'EDA800', '616161', 'D6D6D6',
-              'D0DDAE', 'B8D279', 'D5D378', '141414', '6DB155', '9B6D55', 'FEEEC9',
-              'D6B879', '00B7EC', 'FFDA90', 'F8B28C'
+             palette: [
+    '356EFF', 'ACB6DA', 'white', 'D6B879', '313131', 'EDA800',
+    'white', '616161', 'D6D6D6', 'D0DDAE',   'B8D279', 
+    'D5D378', 'white', '141414', '6DB155', '9B6D55', 
+    'FEEEC9', 'D6B879', '00B7EC', 'FFDA90', 'F8B28C'
+              
+	
+
+
+              
+              
             ],
             min: 0,
             max: 20,
