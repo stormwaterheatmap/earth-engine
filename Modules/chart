@@ -151,6 +151,8 @@ var makePieChart = function (geometry, properties, holeSize) {
     transition_summary_chart.setOptions({
       slices: result,
       title: properties.layer.name, 
+      pieHole: holeSize,
+      pieSliceTextStyle: {color: 'black'}
      // titleTextStyle: style.fonts.LegendTitle
     })})
     return (transition_summary_chart);
