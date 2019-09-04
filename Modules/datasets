@@ -460,7 +460,7 @@ var rasters = {
     }
 
 exports.vectors = {
-            /*  counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
+              counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
                   PugetSound),
               HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
                   PugetSound),
@@ -471,7 +471,7 @@ exports.vectors = {
               HUC06: ee.FeatureCollection("USGS/WBD/2017/HUC06").filterBounds(
                   PugetSound),
               NHDPlus: ee.FeatureCollection(
-                  'users/cnilsen/PugetSoundNHDPlusWatersheds'),*/
+                  'users/cnilsen/PugetSoundNHDPlusWatersheds'),
             PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
             WRIA: ee.FeatureCollection(
                     "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
