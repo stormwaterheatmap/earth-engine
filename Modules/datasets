@@ -460,24 +460,23 @@ var rasters = {
     }
 
 exports.vectors = {
-              counties: ee.FeatureCollection("TIGER/2018/Counties").filter(ee.Filter.intersects(
-                  PugetSound)),
-              HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filter(ee.Filter.intersects(
-                  PugetSound)),
-              HUC10: ee.FeatureCollection("USGS/WBD/2017/HUC10").filter(ee.Filter.intersects(
-                  PugetSound)),
-              HUC08: ee.FeatureCollection("USGS/WBD/2017/HUC08").filter(ee.Filter.intersects(
-                  PugetSound)),
+              counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
+                  PugetSound),
+              HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
+                  PugetSound),
+              HUC10: ee.FeatureCollection("USGS/WBD/2017/HUC10").filterBounds(
+                  PugetSound),
+              HUC08: ee.FeatureCollection("USGS/WBD/2017/HUC08").filterBounds(
+                  PugetSound),
               //HUC06: ee.FeatureCollection("USGS/WBD/2017/HUC06").filterBounds(
               //    PugetSound),
               NHDPlus: ee.FeatureCollection(
                   'users/cnilsen/PugetSoundNHDPlusWatersheds'),
-            PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU').filter(ee.Filter.intersects(
-                  PugetSound)),
+            PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
             WRIA: ee.FeatureCollection(
                     "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
-                ).filter(ee.Filter.intersects(
-                  PugetSound)),
+                )
+                .filterBounds(PugetSound)
             //add LJ 
             //add NPDES Bounds 
         }
