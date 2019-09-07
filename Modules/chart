@@ -351,7 +351,7 @@ else if (reducerType === 'percent') {
 
 
 exports.bigNum = bigNum;
-
+/*
 //Testing area 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 print(style)
@@ -370,3 +370,4 @@ var color = style.colors.primary
 var layTest = data.rasters.Imperviousness
 print(layTest)
 Map.add(bigNum(layTest,geometry,100,'percent'))
+*/
