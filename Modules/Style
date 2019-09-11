@@ -21,27 +21,27 @@ exports.colors = colors
 //fonts from https://design.firefox.com/photon/visuals/typography.html
 var fonts = {
     H1: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '28px',
         fontWeight: 700,
-       // color: colors.tncblue
+        // color: colors.tncblue
     },
 
     H2: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             //'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '22px',
         fontWeight: 500,
-       // color: colors.tncblue
+        // color: colors.tncblue
 
     },
     H3: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             //'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
@@ -49,8 +49,8 @@ var fonts = {
         fontWeight: 500
     },
     H4: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-           // 'Dejavu Sans', 'Helvetica Neue',
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            // 'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '13',
@@ -58,31 +58,31 @@ var fonts = {
         // wrap: true
     },
     Body1: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-           // 'Dejavu Sans', 'Helvetica Neue',
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            // 'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '17px',
         fontWeight: 400
     },
     Body2: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             //'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '15px',
         fontWeight: 400
     },
-        Body3: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-           // 'Dejavu Sans', 'Helvetica Neue',
+    Body3: {
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            // 'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '13px',
         fontWeight: 400
     },
     Caption1: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             //'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
@@ -90,30 +90,30 @@ var fonts = {
         fontWeight: 300
     },
     Caption2: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             //'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '13px',
         fontWeight: 300
     },
-     Caption3: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-           // 'Dejavu Sans', 'Helvetica Neue',
+    Caption3: {
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            // 'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '11px',
         fontWeight: 300
     },
-       LegendTitle: {
-        fontFamily: [//'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-           //'Dejavu Sans', 'Helvetica Neue',
+    LegendTitle: {
+        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            //'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
-          fontWeight: 'bold',
-            fontSize: '18px',
-            margin: '0 0 4px 0',
-            padding: '0'
+        fontWeight: 'bold',
+        fontSize: '18px',
+        margin: '0 0 4px 0',
+        padding: '0'
     }
 };
 exports.panelStyle = {
@@ -204,134 +204,26 @@ exports.GRAYMAP = [{ // Dial down the map saturation.
 
 exports.lightMap = [
     {
-        "featureType": "administrative.country",
-        "elementType": "labels",
+        "featureType": "administrative",
+        "elementType": "labels.text.fill",
         "stylers": [
             {
-                "visibility": "simplified"
+                "color": "#444444"
             }
         ]
     },
     {
-        "featureType": "administrative.province",
-        "elementType": "labels",
+        "featureType": "landscape",
+        "elementType": "all",
         "stylers": [
             {
-                "visibility": "simplified"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.locality",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "simplified"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.neighborhood",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "administrative.land_parcel",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape.natural",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "color": "#e0efef"
-            }
-        ]
-    },
-    {
-        "featureType": "landscape.natural.terrain",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "off"
+                "color": "#f2f2f2"
             }
         ]
     },
     {
         "featureType": "poi",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "hue": "#1900ff"
-            },
-            {
-                "color": "#c0e8e8"
-            }
-        ]
-    },
-    {
-        "featureType": "poi",
-        "elementType": "labels",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.attraction",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.business",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.government",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.medical",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "poi.park",
-        "elementType": "geometry.fill",
+        "elementType": "all",
         "stylers": [
             {
                 "visibility": "off"
@@ -343,25 +235,34 @@ exports.lightMap = [
         "elementType": "all",
         "stylers": [
             {
-                "visibility": "off"
+                "saturation": -100
+            },
+            {
+                "lightness": 45
             }
         ]
     },
     {
-        "featureType": "road",
-        "elementType": "geometry",
+        "featureType": "road.highway",
+        "elementType": "all",
         "stylers": [
-            {
-                "lightness": 100
-            },
             {
                 "visibility": "simplified"
             }
         ]
     },
     {
-        "featureType": "road",
-        "elementType": "labels",
+        "featureType": "road.highway",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#ffffff"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "labels.icon",
         "stylers": [
             {
                 "visibility": "off"
@@ -373,54 +274,6 @@ exports.lightMap = [
         "elementType": "all",
         "stylers": [
             {
-                "visibility": "on"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.line",
-        "elementType": "geometry",
-        "stylers": [
-            {
-                "visibility": "on"
-            },
-            {
-                "lightness": 700
-            }
-        ]
-    },
-    {
-        "featureType": "transit.line",
-        "elementType": "labels.text",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.station.airport",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.station.bus",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
-                "visibility": "off"
-            }
-        ]
-    },
-    {
-        "featureType": "transit.station.rail",
-        "elementType": "labels.icon",
-        "stylers": [
-            {
                 "visibility": "off"
             }
         ]
@@ -430,19 +283,10 @@ exports.lightMap = [
         "elementType": "all",
         "stylers": [
             {
-                "color": "#7dcdcd"
-            }
-        ]
-    },
-    {
-        "featureType": "water",
-        "elementType": "geometry.fill",
-        "stylers": [
-            {
-                "lightness": "0"
+                "color": "#dde6e8"
             },
             {
-                "saturation": "-41"
+                "visibility": "on"
             }
         ]
     }
