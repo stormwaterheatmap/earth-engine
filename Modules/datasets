@@ -39,6 +39,7 @@ var populationDataset = ee.ImageCollection('JRC/GHSL/P2016/POP_GPW_GLOBE_V1')
     .filter(ee.Filter.date('2015-01-01', '2015-12-31'));
 var population = populationDataset.select('population_count').first();
 var lithology = ee.Image('CSP/ERGo/1_0/US/lithology').select('b1');
+var DissolvedCopper = ee.Image('users/cnilsen/DcuCon'); 
 /*
 Images 
 */
@@ -441,6 +442,25 @@ var rasters = {
             //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
 
         }, 
+        'DissolvedCopper': {
+           layer: {
+                eeObject: DissolvedCopper,
+                name: 'Dissolved Copper',
+                visParams: {
+                    palette: 
+                    ["#352a87", "#056ede", "#089bce", "#33b7a0", 
+                    "#a3bd6a", "#f9bd3f", "#f9fb0e"],
+                    min: 0,
+                    max: 10
+                }
+            },
+            discrete: false,
+            values: null,
+            units: 'μg/sq.m',
+            labels: null, //['Pervious', 'Impervious'],
+            vizType: 'histogram'
+        } 
+        
     }
 
 exports.vectors = {
