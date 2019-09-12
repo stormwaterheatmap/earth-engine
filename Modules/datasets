@@ -457,7 +457,7 @@ var rasters = {
             },
             discrete: false,
             values: null,
-            units: 'μg/sq.m',
+            units: 'mg/sq.m',
             labels: null, //['Pervious', 'Impervious'],
             vizType: 'histogram'
         } 
