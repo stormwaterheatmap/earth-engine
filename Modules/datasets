@@ -39,7 +39,9 @@ var populationDataset = ee.ImageCollection('JRC/GHSL/P2016/POP_GPW_GLOBE_V1')
     .filter(ee.Filter.date('2015-01-01', '2015-12-31'));
 var population = populationDataset.select('population_count').first();
 var lithology = ee.Image('CSP/ERGo/1_0/US/lithology').select('b1');
-var DissolvedCopper = ee.Image('users/cnilsen/DcuCon'); 
+var mean_annual_runoff = ee.Image(
+    "users/cnilsen/Runoff1980s5m");
+var DissolvedCopper = ee.Image('users/cnilsen/DcuCon').multiply(mean_annual_runoff); 
 /*
 Images 
 */
@@ -108,8 +110,7 @@ exports.soils = ee.Image("users/stormwaterheatmap/soils");
 var thresholds = ee.Image([5.0, 15, 100]);
 var slopeZone = ee.Terrain.slope(NED).gt(thresholds).reduce('sum');
 exports.slope = slopeZone;
-var mean_annual_runoff = ee.Image(
-    "users/cnilsen/Runoff1980s5m");
+
 /*var imp = landcover.eq(6).or(landcover.eq(7)).multiply(ee
     .Image(100))
 */
