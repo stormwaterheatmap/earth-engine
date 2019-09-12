@@ -22,7 +22,7 @@ exports.colors = colors
 var fonts = {
     H1: {
         fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-            'Dejavu Sans', 'Helvetica Neue',
+            'serif', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '28px',
