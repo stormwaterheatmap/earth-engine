@@ -452,7 +452,7 @@ var rasters = {
                     ["#352a87", "#056ede", "#089bce", "#33b7a0", 
                     "#a3bd6a", "#f9bd3f", "#f9fb0e"],
                     min: 0,
-                    max: 10
+                    max: 2000
                 }
             },
             discrete: false,
