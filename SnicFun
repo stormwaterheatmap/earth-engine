@@ -4,27 +4,100 @@ var image = ee.Image("NASA/ASTER_GED/AG100_003"),
     image3 = ee.Image("users/cnilsen/TSSLoad"),
     image4 = ee.Image("users/cnilsen/Runoff1980s5m"),
     imageVisParam = {"opacity":1,"bands":["sum_mean"],"min":104.44167480468751,"max":939.9750732421875,"palette":["f3e79b","fac484","f8a07e","eb7f86","ce6693","a059a0","5c53a5"]},
-    table = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed");
+    table = ee.FeatureCollection("users/cnilsen/Sammamish/LJWatershed"),
+    imageCollection = ee.ImageCollection("USDA/NAIP/DOQQ"),
+    geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-122.31561582851873, 47.797117912682914],
+          [-122.31561582851873, 47.70848060240823],
+          [-122.19476621914373, 47.70848060240823],
+          [-122.19476621914373, 47.797117912682914]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var layerProperties = data.rasters
 var regression = require('users/cnilsen/TNC:regressions/Zinc')
 var utils = require('users/gena/packages:utils')
-
 var scale = 100
 var crs = 'EPSG:3857'
+var img = imageCollection
+    .filterDate('2017-01-01', '2019-01-01')
+    .filterBounds(geometry);
+//Map NDVI over the image collection 
+var withNDVI = img.map(
+    function (image)
+    {
+        var ndvi = image.normalizedDifference(['N', 'R'])
+            .rename('NDVI');
+        return image.addBands(ndvi);
+    }
+);
+Map.addLayer(withNDVI,
+{}, 'withNDVI', 0);
+//take the maximum NDVI value 
+var maxNDVI = withNDVI.select('NDVI')
+    .max();
+Map.addLayer(maxNDVI,
+{}, 'maxNDVI', 0);
+//add NAIP 
+Map.addLayer(img,
+{
+    gamma: 0.8
+}, "RGBN", false)
+var img = img.mean(); //mean of two years in each band
+img = ee.Image(img)
+    .divide(255)
+   // .select(bands); //normalizes NAIP
+Map.addLayer(img,
+{}, 'mean', false);
+// Apply a softening.
+var kernel = ee.Kernel.gaussian(3)
+img = img.convolve(kernel)
+Map.addLayer(img,
+{
+    gamma: 0.8
+}, "RGBN blur", false)
 
+// Compute spectralGradients.
+var gradient3 = ee.Image.cat(
+    img.spectralGradient('sam'),
+    img.spectralGradient('sid'),
+    img.spectralGradient('sed'))
+Map.addLayer(gradient3,
+{
+    min: [0.1, 0.1, 0.01],
+    max: [0.3, 0.3, 0.1]
+}, "gradient3", false)
+var gradient = img.spectralErosion()
+    .spectralGradient('emd')
+Map.addLayer(gradient,
+{
+    min: 0,
+    max: 0.3
+}, "emd", false)
+var img = img.clip(geometry); 
 // generate seeds using a hexagonal grid (crs and scale are optional)
 var size = 35 // in scale points
-var grid = utils.generateHexagonalSeeds(size, crs, scale)//.focal_max(2)
+
 var ndvi = image.select('ndvi')
 
 function uSnic(image, size, compactness) {
 var  userSnic = ee.Algorithms.Image.Segmentation.SNIC(
     {image: image,
-    size: size,
-    compactness: compactness, 
-      neighborhoodSize: 48
-    });
+    //size: size,
+    compactness: compactness,
+    seeds: ee.Algorithms.Image.Segmentation.seedGrid(sizeSlide.getValue(),'hex')
+      //neighborhoodSize: 48
+    })
+    .reproject('EPSG:4326', null, 10);
 return userSnic
 }
 
@@ -34,24 +107,30 @@ return userSnic
 //make panel; size, compactness 
 var sizeSlide = ui.Slider(0,96,5,1)
 var compactnessSlide = ui.Slider(0,16,1,1)
-
+var hexCheck = ui.Checkbox('generate hexes', 0, (
+function() {
+  var layer = uSnic(ee.Image(1).clip(geometry), sizeSlide.getValue(), compactnessSlide.getValue())
+map.addLayer(layer.select('clusters').randomVisualizer(),{},'clusters')
+  
+}))
 sizeSlide.style().set('width', '100%');
 compactnessSlide.style().set('width', '100%')
 //button to rerun the analysis 
+var copperImage = ee.Image.cat(ndvi,layerProperties.DissolvedCopper.layer.eeObject)
+copperImage = copperImage.clip(geometry)
 var snicButton = ui.Button({label: 'Begin clustering', 
 onClick: function() {
   print('click!')
   map.clear()
   print( sizeSlide.getValue())
   print( compactnessSlide.getValue())
-  var layer = uSnic(regression.Zinc, sizeSlide.getValue(), compactnessSlide.getValue())
+  var layer = uSnic(copperImage, sizeSlide.getValue(), compactnessSlide.getValue())
   var clusters = layer.select(0)
   map.addLayer(clusters.randomVisualizer(),{},'clusters')
   var meanVals = layer.select(1)
-  map.addLayer(meanVals, {},'mean vals')
+  map.addLayer(meanVals, {},'mean vals',0)
 }
 })
-
 
 //panel to hold controls 
 var controlPan = ui.Panel({style: 
@@ -63,6 +142,7 @@ controlPan.add(ui.Label('Size'))
 .add(ui.Label('compactness'))
 .add(compactnessSlide)
 .add(snicButton)
+.add(hexCheck)
 //Map.add(controlPan)
 //grid size 
 // Set up the overall structure of the app, with a control panel to the left
@@ -71,5 +151,6 @@ ui.root.clear();
 var panel = controlPan;
 var map = ui.Map();
 ui.root.add(panel).add(map);
-map.addLayer(regression.Zinc,{},'zinc'); 
+map.centerObject(geometry)
+
 
