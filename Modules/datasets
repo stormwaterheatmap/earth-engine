@@ -14,7 +14,7 @@ var NED = ee.Image("USGS/NED"),
     GLCF_trees = ee.ImageCollection("GLCF/GLS_TCC"),
     imageCollection = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Density");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-// ---------------------------
+/* ---------------------------
 // Author: Christian Nilsen, Geosyntec Consultants 
 // Email: cnilsen@geosyntec.com
 // Date Created: 2019-07-19
@@ -29,26 +29,23 @@ var NED = ee.Image("USGS/NED"),
 //GNU General Public License for more details.
 //For a copy of the GNU General Public License 
 //  see <https://www.gnu.org/licenses/>.
-// ---------------------------
+*/ //---------------------------
 
 /*
 Image Collections 
 */
 //Population
-
-
 var populationDataset = ee.ImageCollection('JRC/GHSL/P2016/POP_GPW_GLOBE_V1')
     .filter(ee.Filter.date('2015-01-01', '2015-12-31'));
 var population = populationDataset.select('population_count').first();
-
 var lithology = ee.Image('CSP/ERGo/1_0/US/lithology').select('b1');
 /*
 Images 
 */
 //Precipitation
+
 //var NASA_precip =  ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip")
 exports.NASA_precip = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip")
-
 //exports.climp = climP.select('pr').first();
 var prismP = ee.Image('users/cnilsen/precip/PRISM800meter')
 //var prismP = prism.select('ppt').mean()
@@ -85,7 +82,6 @@ var generalizedLU = lu.remap(
         93, //water
         71, 72, 74, 75, 76, 91, 92, 94, 95
     ], //open space 
-
     [1, 1, 1, 1, 1, //Residential
         2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, //Industrial
         3, 3, 3, 3, 3, 3, 3, 3, 3, //Transportation 
@@ -97,31 +93,22 @@ var generalizedLU = lu.remap(
         8, 8, 8, 8, 8, 8, 8, 8, 8
     ] //open space
 );
-
-
 //
 exports.landuse = generalizedLU;
-
-
-var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
+var tncLC = ee.Image(
+  "users/jrobertson2000/psLandCover_1m_finPS_roofs");
 var water=  tncLC.neq(5)
-
 var imp = tncLC.eq(6).or(tncLC.eq(7)).multiply(ee
     .Image(100))
 var imp = imp.updateMask(water)
-
 var soils = ee.Image("users/stormwaterheatmap/soils");
 exports.soils = ee.Image("users/stormwaterheatmap/soils");
 //Generate slopes from USGS DEM 
 var thresholds = ee.Image([5.0, 15, 100]);
 var slopeZone = ee.Terrain.slope(NED).gt(thresholds).reduce('sum');
 exports.slope = slopeZone;
-
-
-
 var mean_annual_runoff = ee.Image(
     "users/cnilsen/Runoff1980s5m");
-
 /*var imp = landcover.eq(6).or(landcover.eq(7)).multiply(ee
     .Image(100))
 */
@@ -138,14 +125,10 @@ var population2020 = population.filterDate('2020-01-01')
 exports.population2020 = population2020;*/
 exports.precip = precip.select('b1').resample().divide(
     25.4); //exports precip as mm 
-
-
-
 //Vectors 
 //Ecology Watershed Assessment Units 
 exports.PS_AU = ee.FeatureCollection('users/cnilsen/PS_AU')
 //exports.PS_AU = PS_AU*/
-
 var PugetSound = (ee.FeatureCollection("USGS/WBD/2017/HUC04")).filter(ee.Filter
     .eq('huc4', '1711'));
 //Map.addLayer(PugetSound)
