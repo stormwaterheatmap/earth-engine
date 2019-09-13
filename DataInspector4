@@ -1,0 +1,650 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-121.21562499999999, 47.78487149189525],
+          [-121.21562499999999, 47.3698410447608],
+          [-120.16093749999999, 47.3698410447608],
+          [-120.16093749999999, 47.78487149189525]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+/*Load modules 
+---------------------------------------------------------------------------------------------------- 
+*/
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var layerProperties = data.rasters
+var vectors = data.vectors
+var layTest = data.rasters.Imperviousness.layer
+var holeSize = 0.5//85;
+
+/*Style defaults  
+---------------------------------------------------------------------------------------------------- 
+*/
+var colors = Style.colors
+var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
+
+print(layerProperties)
+/*Global Variables------------------------------------------------------------------------------------- 
+ */
+var clicked_basin
+var clicked_basin_geom
+var WS
+//var scale = 100; //scale to reduce regions//var layer
+/*function makeTable(image) {
+    var table = ui.Chart.image.byRegion({
+        image: image,
+        reducer: ee.Reducer.mean()
+    })
+    table.setChartType('Table');
+    //table.setOptions({allowHtml: true, pageSize: 5});
+    table.style().set({
+        stretch: 'both'
+    });
+    return (table)
+}*/
+//calculate the area of an image in Ha
+/*
+function imgAreaHa(img, geometry, scale) {
+    var pixelArea = img.gt(0).multiply(ee.Image.pixelArea()).divide(10000);
+    var imgArea = pixelArea.reduceRegion({
+        geometry: geometry,
+        reducer: ee.Reducer.sum(),
+        scale: scale,
+        maxPixels: 1e9
+    });
+    return imgArea;
+}
+//calculate the mean value of an image and return the number
+function imgMean(img, geometry, scale, band) {
+    var imgM = img.reduceRegion({
+        geometry: geometry,
+        reducer: ee.Reducer.mean(),
+        scale: scale,
+        maxPixels: 1e9
+    })
+    var numString = ee.Number.parse(imgM.get(band)).format(
+        '%,.2f') //.getInfo();
+    return numString
+    print(numString)
+}
+*/
+//function to redraw the map with the selected watershed.
+function handle_map_click(location) {
+    // get clicked subbasin info
+    // var selected_WS = watershedSelect.getValue()
+    //var selected_WS = WS;
+    // print(selected_WS)
+    //mapPanel.addLayer(WS)
+    print('hi from handleMapClick')
+    var clicked_point = ee.Geometry.Point(location.lon, location.lat);
+    var clicked_basin_fc = WS.filterBounds(clicked_point);
+    clicked_basin = ee.Feature(clicked_basin_fc.first());
+    clicked_basin_geom = clicked_basin.geometry();
+    //var wsArea = clicked_basin.area()
+    // print(wsArea)
+    print('Clicked Basin', clicked_basin)
+    mapPanel.layers().reset()
+    mapPanel.style().set({
+        cursor: 'hand'
+    });
+    mapPanel.addLayer(clicked_basin)
+    mapPanel.centerObject(clicked_basin)
+    //clip all the datalayers 
+    //clip all the layers with the user selected watershed --moved to accept button
+
+
+    return clicked_basin
+    return clicked_basin_geom
+}
+function handle_inspect_click() {
+    print('inspector Activated')
+    mapPanel.style().set({
+        cursor: 'crosshair'
+    })
+    var WSname = watershedSelect.getValue();
+    //print(selected_WS)
+    WS = vectors[WSname];
+    //print(WS)
+    mapPanel.onClick(function (location) {
+        //print(location)
+        (handle_map_click(location))
+        print(layerProperties)
+        /*        sidePanel.add(
+                    makeCheckBoxes()
+                )*/
+    })
+
+}
+function hline(pan) {
+    pan.add(ui.Label({
+        value: 'null',
+        style: {
+            //width:'100%',
+            height: '0px',
+            padding: '0px ',
+            margin: '0px 0px 0px 0px',
+            border: '0.5px solid gray',
+            stretch: 'horizontal',
+        }
+    }));
+}
+var layerList = Object.keys(layerProperties)
+var size = Object.keys(layerProperties).length
+layerProperties.uiLayer = {}
+
+
+// //var watershedSelect = ui.Select({
+//     items: Object.keys(vectors),
+//     placeholder: 'Select a value',
+//     //value: 'HUC 12'
+//     onChange: function (selected) {
+//         mapPanel.layers().reset()
+//         print(selected)
+//         var WS = vectors[selected]
+//         mapPanel.addLayer(WS)
+//     }
+var widgets = require('users/fitoprincipe/geetools:widgets')
+var drawingfunction = function() {
+  
+var panel = new widgets.DrawingPanel({
+  title: 'My First Drawing Panel..'
+})
+
+panel.onStop(function(wid, geom) {
+  print('name of last drawing', wid.drawing_name)
+  print('all drawings', wid.drawings)
+  print('geometry', geom)
+  print('You could add the geometry\n to the map when clicking on stop\n but I show you an alternative, click on \n"Add last drawing"')
+})
+
+panel.onStart(function() {print('drawing started...')})
+
+var addButton = ui.Button('Add last drawing')
+
+addButton.onClick(function(){
+  if (panel.started) {
+    print('First click on stop')
+    return null
+  }
+  var name = panel.drawing_name
+  var drawings = panel.drawings
+  var drawing = drawings[name]
+  
+  mapPanel.addLayer(drawing, null, name)
+})
+
+panel.addTo(mapPanel)
+mapPanel.add(addButton)
+return geometry
+  
+}
+  
+
+
+
+var drawOwnCheck = ui.Checkbox({
+  label: 'I want to draw my own', 
+  onChange: function (checked) {
+      print(checked)
+      watershedSelect.setDisabled(checked)
+     if (checked) { 
+    clicked_basin_geom = drawingfunction()
+        
+      } 
+      else {print('not')}
+return(clicked_basin_geom)
+}}) //, onChage: drawMyOwn()})
+
+var checkbox = function (layerObject) {
+    //make a ui.Layer for display 
+    layerObject.uiLayer = ui.Map.Layer({
+        eeObject: layerObject.layer.eeObject.clip(clicked_basin_geom),
+        visParams: layerObject.layer.visParams,
+        name: layerObject.layer.name,
+        shown: false,
+        opacity: 1
+    })
+    // make a legend for that layer 
+    var legend
+    if (layerObject.discrete) {
+        print('true! ')
+        legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
+        // call the histogram function print('histogram')
+    } else {
+        legend = (barLegend(layerObject))
+    }  //add reports  
+   var report
+   var tableReport
+    if (layerObject.vizType === 'pieChart') {
+        report = charts.pieChart(clicked_basin_geom, layerObject, holeSize)
+        tableReport = charts.pieChart(clicked_basin_geom, layerObject, holeSize).setChartType('Table')
+        //print('report', report)
+    } else if (layerObject.vizType === 'histogram') { //two different histograms, depending on if the info is discrete or continuous
+        if (layerObject.discrete) {
+            report = charts.histByClass(layerObject, mapPanel.getScale(), clicked_basin_geom) //layerProperties.DevAge, 1000, geometry) 
+        } else {
+            report = charts.histogramImage(layerObject.layer.eeObject,
+                clicked_basin_geom, mapPanel.getScale(), layerObject.layer.name)
+        }
+
+        //exports.histogramImage = function (image, WS, scale, title)
+    } else if (layerObject.vizType === 'bigNumberMean') {
+
+         report = charts.bigNum(layerObject, clicked_basin_geom, mapPanel.getScale(), 'mean')
+
+    } else if (layerObject.vizType === 'bigNumberSum') {
+
+         report = charts.bigNum(layerObject, clicked_basin_geom, mapPanel.getScale(), 'sum')
+
+    } else if (layerObject.vizType === 'bigNumberPercent') {
+
+         report = charts.bigNum(layerObject, clicked_basin_geom, mapPanel.getScale(), 'percent')
+
+    }
+
+
+    var cb = ui.Checkbox({
+        label: layerObject.layer.name, //layerObject.layer.name,
+        value: 0,
+        style: fonts.Body2
+        /*{
+                    margin: '0px',
+                    padding: '4px',
+                    fontSize: '10px'
+                }*/
+    })
+    cb.onChange(function (checked) {
+
+        if (checked) {
+            //add layer
+            mapPanel.layers().add(layerObject.uiLayer.setShown(true))
+            print('checked')
+            //add legend 
+            legendPanel.clear()
+            
+            //tableReport = report.getDataTable().setChartType('Table')
+            reportsPanel.clear()
+            legendPanel.add(legend)
+            legendPanel.add(report)
+            legendPanel.add(tableReport)
+
+        } else {
+            mapPanel.layers().remove(layerObject.uiLayer)
+            //legendPanel.remove(legend)
+            legendPanel.clear()
+            reportsPanel.clear()
+           // reportsPanel.remove(report)
+           // reportsPanel.remove(tableReport)
+        }
+    })
+    return cb
+
+}
+//var f = map.removeObject(imgElem1.getEeObject(), Map) //this worked!
+var removeObject = function (eeobject, map) {
+    var m = map || Map
+    var layers = m.layers()
+    var layersJS = layers.getJsArray()
+    var removedIndexes = []
+    for (var i in layersJS) {
+        var layer = layersJS[i]
+        var object = layer.getEeObject()
+        if (object === eeobject) {
+            m.remove(layer)
+            removedIndexes.push(Number(i))
+        }
+    }
+    return removedIndexes
+}
+var addObject = function (layerObject) {
+    // var pobj = ui.mapPanel.Layer({eeObject: layerProperties.Precipitation.layer.eeObject}).getEeObject()//redefine inputs as ui.mapPanel.layer
+    // mapPanel.add(layerObject.uiLayer)
+    mapPanel.layers().add(layerObject.uiLayer)
+    // mapPanel.layers().add(layerObject.layer)
+}
+//layerProperties.Precipitation.uiLayer
+function ColorBar(palette) {
+    return ui.Thumbnail({
+        image: ee.Image.pixelLonLat().select(0),
+        params: {
+            bbox: [0, 0, 1, 0.1],
+            dimensions: '200x20',
+            format: 'png',
+            min: 0,
+            max: 1,
+            palette: palette,
+        },
+        style: {
+            stretch: 'horizontal',
+            margin: '0px 12px'
+        },
+    });
+}
+var barLegend = function (obj) {
+    //  var labelPanel = ui.Panel(
+    
+    var palette = obj.layer.visParams.palette
+    var low = obj.layer.visParams.min
+    var high = obj.layer.visParams.max
+    var mid = (low + high) / 2
+    var labelPanel = ui.Panel(
+        [
+            ui.Label(low, {
+                margin: '4px 8px',
+                textAlign: 'left',
+                stretch: 'horizontal'
+            }),
+            ui.Label(mid, {
+                margin: '4px 8px',
+                textAlign: 'center',
+                stretch: 'horizontal'
+            }),
+            ui.Label(high, {
+                margin: '4px 8px',
+                textAlign: 'right',
+                stretch: 'horizontal'
+            })
+        ],
+        ui.Panel.Layout.flow('horizontal'),
+
+        //    labelPanel.add(ui.Label(obj.units))
+        {
+            width: '230px',
+            position: 'top-center'
+        }
+    );
+
+    var unitlabel = (ui.Label(obj.units))
+    var barTitle = (ui.Label({
+      value: obj.layer.name, 
+      style: fonts.LegendTitle}))
+
+    var barPanel = ui.Panel({
+        widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel],
+        style: {
+            position: 'top-left', 
+            padding: '12px'
+        }
+    })
+
+    return barPanel
+}
+var checkPanel = ui.Panel({
+    style: {
+        width: '400px',
+        height: '60%'
+    }
+})
+/* 
+UI Functions 
+---------------------------------------------------------------------------------------------------- 
+*/
+function minimizePanel() {
+    mainPanel.style().set({
+        width: '20px'
+    })
+
+}
+function maxPanel() {
+    mainPanel.style().set({
+        width: '200px'
+    })
+}
+function makeSidePanel() {
+    // Create the base side panel, into which other widgets will be added
+    //outerPanel.add(mainPanel)
+    mainPanel.add(blankPanel);
+    hPanel.add(subPanel)
+    mainPanel.add(hPanel) //main panel: make horizontal flow //add reports panel to mainPanel 
+    subPanel.add(titleLabel);
+    subPanel.add(
+        instructionsPanel.add(step1),
+        instructionsPanel.add(watershedSelect),
+        instructionsPanel.add(drawOwnCheck), 
+        instructionsPanel.add(step2),
+        instructionsPanel.add(
+            buttonPanel.add(
+                inspect_button),
+            //buttonPanel.add(deactiv_button),
+            buttonPanel.add(accept)
+        ),
+        instructionsPanel.add(step3)
+        // instructionsPanel.add(reportsSelect)
+    )
+    instructionsPanel.add(checkPanel);
+
+    return mainPanel;
+}
+var clipLayers = function () {
+    for (var key in layerProperties) {
+        layerProperties[key].layer.eeObject = layerProperties[key].layer.eeObject.clip(clicked_basin_geom) //Todo ! cannot clip this - have to clip images, then convert to ui.mapPanel.layers
+        //layerVal = layerVal.clip(clicked_basin_geom); //.clip(geometry)) //eeObject = 
+
+        // layerProperties[key].layer.eeObject = layerVal 
+        print('key', key)
+        // print('layerVal', layerVal[key])//replace the cliped layers in the list
+
+        print('returnedlayerVal')
+    }
+}
+/** Returns a ui.Map with some UI configuration in place */
+function makeMapPanel() {
+    var map = ui.Map();
+    // Add an informational label
+
+    map.setControlVisibility({
+        all: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        layerList: true
+    });
+    return map;
+}
+/*function addReports() {
+
+    // mapPanel.clear()
+
+    var reportTitle = ui.Label({
+        value: 'Layers',
+
+    });
+    reportsPanel.add(reportTitle);
+
+}*/
+var makeCheckBoxes = function () {
+    // sidePanel.add(ui.Label('making boxes....'));
+    //hline(sidePanel)
+    mapPanel.add(reportsPanel)
+    mapPanel.add(legendPanel)
+    checkPanel.clear()
+    //var checkPanel = ui.Panel(); 
+    checkPanel.add(checkbox(layerProperties.Precipitation))
+    checkPanel.add(checkbox(layerProperties.Imperviousness))
+    checkPanel.add(checkbox(layerProperties.landCover))
+    checkPanel.add(checkbox(layerProperties.Slope))
+    checkPanel.add(checkbox(layerProperties.Soils))
+    checkPanel.add(checkbox(layerProperties.landUse))
+    //checkPanel.add(checkbox(layerProperties.Population))
+    checkPanel.add(checkbox(layerProperties.DevAge))
+    checkPanel.add(checkbox(layerProperties.Runoff))
+    checkPanel.add((checkbox(layerProperties.Lithology)))
+    //ui.root.add(ui.SplitPanel(reportsPanel,mapPanel));
+
+}
+//} 
+var mainPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('vertical', true),
+    style: {
+        stretch: 'horizontal',
+        //height: '80%',
+        width: '20%',
+        //position: 'top-left'
+    }
+});
+var subPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('vertical', true),
+    style: {
+        stretch: 'horizontal',
+        border: '0.5px solid #8c8c8c'
+        //height: '80%',
+        //width: '20%',
+        //position: 'top-left'
+    }
+})
+var hPanel = ui.Panel({
+    layout: ui.Panel.Layout.flow('horizontal', true),
+    style: {
+        stretch: 'horizontal',
+        //height: '80%',
+        //width: '20%',
+        //position: 'top-left'
+    }
+})
+// App title and information 
+var titleLabel = ui.Label({
+    value: 'Watershed Insights',
+    style: fonts.H1
+});
+var descriptionText = 'This app allows you to interactively explore heatmap data by watershed.';
+var descriptionLabel = ui.Label(descriptionText);
+var watershedSelectLabel = ui.Label({
+    value: 'Select a watershed dataset:',
+});
+var reportsPanel = ui.Panel({
+    style: {// position: 'top-right',
+       width: '75%',
+     //   height: '25%',
+        padding: '12 px',
+        backgroundColor: colors.transparent,
+        stretch: 'horizontal',
+        position: 'bottom-right'
+    },
+
+}).setLayout(ui.Panel.Layout.flow('horizontal'));
+
+var legendPanel = ui.Panel({
+    style: {
+         position: 'bottom-left',
+        width: '20%',
+        //height: '80%',
+        padding: '12 px',
+        backgroundColor: colors.sLight,
+        stretch: 'horizontal',
+       // position: 'top-right'
+    },
+
+}).setLayout(ui.Panel.Layout.flow('vertical'));
+
+var blankPanel = ui.Panel({
+    style: {
+        backgroundColor: colors.pDark,
+        width: '100%',
+        height: '4px'
+    }
+});
+var instructionsPanel = ui.Panel()
+
+var resultCard = ui.Panel();
+//Buttons 
+var deactiv_button = ui.Button({
+    label: 'Reset Map',
+    //onClick: mapReset,//also clear side panel 
+});
+
+var accept = ui.Button({
+    // label: 'Accept Selected Watershed',
+    label: 'Accept Selected Watershed ',
+    onClick: makeCheckBoxes //also clear side panel todo
+});
+
+var buttonPanel = ui.Panel({
+    // widgets: [inspect_button, deactiv_button, accept], 
+    layout: ui.Panel.Layout.flow('horizontal', true),
+
+});
+
+print(393)
+var inspect_button = ui.Button({
+    label: 'Activate inspector',
+    onClick: handle_inspect_click
+});
+//function to add user layer to the map
+
+print(402)
+//Labels 
+var step1 = ui.Label('1) Select a watershed dataset to use', fonts.Body1)
+var step2 = ui.Label('2) Select a watershed on the map to analyze', fonts.Body1)
+var step3 = ui.Label('3) Select a category to view results', fonts.Body1)
+//Selectors 
+
+var watershedSelect = ui.Select({
+    items: Object.keys(vectors),
+    placeholder: 'Select a value',
+    //value: 'HUC 12'
+    onChange: function (selected) {
+        mapPanel.layers().reset()
+        print(selected)
+        var WS = vectors[selected]
+        mapPanel.addLayer(WS)
+    }
+});
+// var selectItems = ['Debug', 'Precipitation', 'Land Cover/Land Use',
+//     'Population', 'Hydrology', 'Stormwater Pollutants'
+// ]
+// print(selectItems)
+//var layerDict = ee.Dictionary(layerProperties);
+// Define the pulldown menu.  Changing the pulldown menu changes the map layer
+// and legend.
+// var reportsSelect = ui.Select({
+//     //items: ee.List(layerDict.get('names')),
+//     items: selectItems,
+//     placeholder: 'Select a value',
+//     //value: 'HUC 12'
+//     onChange: addreports
+// });
+
+/* 
+Set up User Interface
+----------------------------------------------------------------------------------------------------
+*/
+
+function mapReset() {
+    mapPanel.layers().reset()
+    //mapPanel.setCenter(mapCenterLon, mapCenterLat, 8)
+    /*mapPanel.setOptions('Dark', {
+        'Dark': mapStyle.GRAYMAP
+    })*/
+    mapPanel.setControlVisibility({
+        all: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        layerList: true
+    });
+}
+//mapPanel.setOptions('Dark', {'Dark': mapStyle.Dark});
+//redraw()
+print('449')
+// Clear the default UI 
+ui.root.clear();
+
+// Create the app's two panels and add them to the ui.root as a split panel
+var sidePanel = makeSidePanel();
+var mapPanel = makeMapPanel();
+
+/*mapPanel.setOptions('Dark', {
+    'Dark': mapStyle.GRAYMAP
+});*/
+ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
+//ui.root.add(mapPanel)
+//mapPanel.add(sidePanel)
+
+var mapCenterLon = -122.423145;
+var mapCenterLat = 47.612410;
+mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
