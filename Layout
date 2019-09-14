@@ -24,7 +24,7 @@ style: {
 }})
 var col1 = ui.Panel({style: {
   width:'33%',
-  backgroundColor: 'lightgray',
+  backgroundColor: 'whitesmoke',
   margin:'1%'
 }
 }
@@ -41,3 +41,10 @@ colMask.add(ui.Label('colMask'))
 //colLeft.add(ui.Label('colLeft'))
 col1.add(ui.Label('col1'))
 colLeft.add(col1).add(col2)
+var card1 = ui.Panel({style: {
+  margin: '1.5%',
+  stretch: 'horizontal',
+  border: '1px solid silver'
+}})
+col1.add(card1)
+card1.add(ui.Label('card1'))
