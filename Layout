@@ -1,0 +1,33 @@
+var header = ui.Panel({style:
+  {width: '100%',
+  height:'80px',
+  backgroundColor:'silver'}
+})
+ui.root.clear()
+ui.root.add(header)
+ui.root.setLayout(ui.Panel.Layout.flow(
+  'vertical'))
+var colMask = ui.Panel({style: 
+{width:'100%',
+  backgroundColor:'gray'
+}}
+  )
+var colLeft = ui.Panel({style: {
+ width: '98%',
+  margin:'1%',
+  border: '1px soild gray',
+  backgroundColor:'snow'
+}})
+var col1 = ui.Panel({style: {
+  width:'33%',
+  backgroundColor: 'lightgray',
+  margin:'1%'
+}
+}
+  )
+ui.root.add(colMask)
+colMask.add(colLeft)
+colMask.add(ui.Label('colMask'))
+//colLeft.add(ui.Label('colLeft'))
+col1.add(ui.Label('col1'))
+colLeft.add(col1)
