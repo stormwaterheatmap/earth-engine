@@ -9,14 +9,18 @@ ui.root.setLayout(ui.Panel.Layout.flow(
   'vertical'))
 var colMask = ui.Panel({style: 
 {width:'100%',
-  backgroundColor:'gray'
+  backgroundColor:'gray',
+  stretch:'vertical'
 }}
   )
-var colLeft = ui.Panel({style: {
+var colLeft = ui.Panel({layout:
+ui.Panel.Layout.flow('horizontal'),
+style: {
  width: '98%',
   margin:'1%',
   border: '1px soild gray',
-  backgroundColor:'snow'
+  backgroundColor:'snow',
+  stretch:'vertical'
 }})
 var col1 = ui.Panel({style: {
   width:'33%',
@@ -25,9 +29,15 @@ var col1 = ui.Panel({style: {
 }
 }
   )
+var col2 = ui.Map({style:{width:'64%',
+stretch:'vertical',
+backgroundColor:'darkGrey',
+  margin:'1% 1% 1% 0%'
+}}).add(ui.Label(
+  'col2'))
 ui.root.add(colMask)
 colMask.add(colLeft)
 colMask.add(ui.Label('colMask'))
 //colLeft.add(ui.Label('colLeft'))
 col1.add(ui.Label('col1'))
-colLeft.add(col1)
+colLeft.add(col1).add(col2)
