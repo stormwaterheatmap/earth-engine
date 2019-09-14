@@ -382,23 +382,7 @@ function makeSidePanel() {
     hPanel.add(subPanel)
     mainPanel.add(hPanel) //main panel: make horizontal flow //add reports panel to mainPanel 
     //blankPanel.add(titleLabel);
-    mainPanel.add(
-        instructionsPanel.add(step1),
-        instructionsPanel.add(watershedSelect),
-        instructionsPanel.add(drawOwnCheck), 
-        instructionsPanel.add(step2),
-        instructionsPanel.add(
-            buttonPanel.add(
-                inspect_button),
-            //buttonPanel.add(deactiv_button),
-            buttonPanel.add(accept)
-        ),
-        instructionsPanel.add(step3)
-        // instructionsPanel.add(reportsSelect)
-    )
-    instructionsPanel.add(checkPanel);
-
-    return mainPanel;
+       return mainPanel;
 }
 var clipLayers = function () {
     for (var key in layerProperties) {
@@ -546,6 +530,23 @@ var makeTopPanel = function () {
 
         }
     })
+    topPanel.add(
+        instructionsPanel.add(step1),
+        instructionsPanel.add(watershedSelect),
+        instructionsPanel.add(drawOwnCheck), 
+        instructionsPanel.add(step2),
+        instructionsPanel.add(
+            buttonPanel.add(
+                inspect_button),
+            //buttonPanel.add(deactiv_button),
+            buttonPanel.add(accept)
+        ),
+        instructionsPanel.add(step3)
+        // instructionsPanel.add(reportsSelect)
+    )
+    
+
+ 
 
     var dd1 = ui.Select()
     var dd2 = ui.Select()
