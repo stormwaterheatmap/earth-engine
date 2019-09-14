@@ -37,14 +37,7 @@ var WS
 }*/
 //calculate the area of an image in Ha
 /*
-function imgAreaHa(img, geometry, scale) {
-    var pixelArea = img.gt(0).multiply(ee.Image.pixelArea()).divide(10000);
-    var imgArea = pixelArea.reduceRegion({
-        geometry: geometry,
-        reducer: ee.Reducer.sum(),
-        scale: scale,
-        maxPixels: 1e9
-    });
+function imgAreaHa(
     return imgArea;
 }
 //calculate the mean value of an image and return the number
@@ -385,12 +378,11 @@ function maxPanel() {
 }
 function makeSidePanel() {
     // Create the base side panel, into which other widgets will be added
-    //outerPanel.add(mainPanel)
-    //mainPanel.add(blankPanel);
+
     hPanel.add(subPanel)
     mainPanel.add(hPanel) //main panel: make horizontal flow //add reports panel to mainPanel 
     //blankPanel.add(titleLabel);
-    topPanel.add(
+    mainPanel.add(
         instructionsPanel.add(step1),
         instructionsPanel.add(watershedSelect),
         instructionsPanel.add(drawOwnCheck), 
@@ -519,14 +511,14 @@ var reportsPanel = ui.Panel({
 var legendPanel = ui.Panel({
     style: {
          position: 'bottom-left',
-        width: '20%',
-        //height: '80%',
+         width: '20%',
+         //height: '80%',
         padding: '12 px',
         backgroundColor: colors.sLight,
         stretch: 'horizontal',
        // position: 'top-right'
     },
-
+    
 }).setLayout(ui.Panel.Layout.flow('vertical'));
 
 var blankPanel = ui.Panel({
@@ -539,6 +531,36 @@ var blankPanel = ui.Panel({
 var instructionsPanel = ui.Panel()
 
 var resultCard = ui.Panel();
+var makeTopPanel = function () {
+    var topPanel = ui.Panel({
+        layout: ui.Panel.Layout.absolute(),
+        style: {
+            backgroundColor: 'whitesmoke',
+            // width: '98%', 
+            height: '60px',
+            position: 'top-center',
+            //border: '1px solid silver',
+            stretch: 'horizontal',
+            padding: '8px',
+            //margin: '0px'
+
+        }
+    })
+
+    var dd1 = ui.Select()
+    var dd2 = ui.Select()
+    var pan3 = ui.Panel({
+        layout: ui.Panel.Layout.flow(
+            'horizontal'),
+        style: {
+            border: '0.5px solid silver',
+            margin: '8px'
+        }
+    })
+    pan3.add(dd1).add(dd2)
+    topPanel.add(pan3)
+    return topPanel
+}
 //Buttons 
 var deactiv_button = ui.Button({
     label: 'Reset Map',
@@ -615,49 +637,24 @@ function mapReset() {
         layerList: true
     });
 }
-//mapPanel.setOptions('Dark', {'Dark': mapStyle.Dark});
-//redraw()
-print('449')
-// Clear the default UI 
-ui.root.clear();
 
+ui.root.clear();
+ui.root.setLayout(ui.Panel.Layout.flow(//).absolute())
+ {direction: 'vertical'}))
 // Create the app's two panels and add them to the ui.root as a split panel
 var sidePanel = makeSidePanel();
 var mapPanel = makeMapPanel();
-
-/*mapPanel.setOptions('Dark', {
-    'Dark': mapStyle.GRAYMAP
-});*/
+var topPanel = makeTopPanel(); 
+ui.root.add(topPanel)
 ui.root.add(ui.SplitPanel(sidePanel, mapPanel));
-//ui.root.add(mapPanel)
-//mapPanel.add(sidePanel)
+
 
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
-mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
+mapPanel.setCenter(mapCenterLon, mapCenterLat, 7); 
 
-var pan1 =ui.Panel(
- { layout: ui.Panel.Layout.absolute(),
- style:{backgroundColor:'whitesmoke',
-// width: '98%', 
-height:'60px',
-position:'top-center',
-//border: '1px solid silver',
-stretch: 'horizontal',
-padding: '8px',
-//margin: '0px'
-
-}})
-pan1.add(ui.Label('intro'))
-var dd1 = ui.Select()
-var dd2 = ui.Select()
-var pan3 = ui.Panel({layout:ui.Panel.Layout.flow(
-  'horizontal'),
-  style:{border: '0.5px solid silver',
-    margin:'8px'
-  }})
 //pan3.add(dd1).add(dd2)
-pan1.add(pan3) //i.Label('pan1',{
+/* pan1.add(pan3) //i.Label('pan1',{
  // backgroundColor:'snow'}))
 var pan2 = ui.Panel({style:{ 
   backgroundColor:'white',width:'36%',
@@ -683,7 +680,7 @@ margin:'4px',
 }).setControlVisibility({fullscreenControl:
   true
 })
-//ui.root.clear()
+
 var wholePan = ui.Panel({layout:
 ui.Panel.Layout.absolute(),//('horizontal')})
 style: {
@@ -692,20 +689,10 @@ style: {
   backgroundColor:'whitesmoke'
 }})
   
-//ui.root.insert(0,pan1)
-print(ui.root.getLayout())
-ui.root.setLayout(ui.Panel.Layout.flow(//).absolute())
- {direction: 'vertical'}))
- //i.root.style().set({backgroundColor:'blue'})
-//wholePan
-var splitPan = ui.SplitPanel(pan2,mapPanel)
+
+
+var splitPan = ui.SplitPanel(sidePanel,mapPanel)
 wholePan.add(splitPan); 
 ui.root.add(pan1)
-//holePan.add(pan1)
-//ui.root.add(pan2
-//pan2.add(mapPanel)
-//wholePan.add(mapPanel)
 ui.root.add(wholePan)
-//i.root.add(mapPanel)an2.add(ui.Label('pad
-print(ui.root.getLayout())
-//an2.add(ui.Map())
+*/ 
