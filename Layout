@@ -7,9 +7,15 @@ var imageCollection = ee.ImageCollection("OREGONSTATE/PRISM/Norm81m"),
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var header = ui.Panel({style:
   {width: '100%',
-  height:'80px',
-  border: '1px solid silver',
-  backgroundColor:'whitesmoke'}
+  //height:'60px',
+  border: '1px solid darkgray',
+  backgroundColor:'white'}
+})
+var footer = ui.Panel({style:
+  {width: '100%',
+  //height:'60px',
+  border: '1px solid darkgray',
+  backgroundColor:'white'}
 })
 ui.root.clear()
 ui.root.add(header)
@@ -18,9 +24,11 @@ ui.root.setLayout(ui.Panel.Layout.flow(
   'vertical'))
 var colMask = ui.Panel({style: 
 {width:'100%',
-//  backgroundColor:'whitesmoke',
+ backgroundColor:'white',
  // border: '1px solid silver',
-  stretch:'vertical'
+  stretch:'vertical', 
+  margin: '12px', 
+  padding:0
 }}
   )
 var colLeft = ui.Panel({layout:
@@ -33,32 +41,33 @@ style: {
   stretch:'vertical'
 }})
 var col1 = ui.Panel({style: {
-  width:'33%',
-  backgroundColor: 'white',
+  width:'38.2%', //the golden ratio!
+  backgroundColor: 'whitesmoke',
 //  border: '1px solid silver',
-  margin:'1%'
+  margin:'0',
+  padding: '12px'
 }
 }
   )
 var col2 = ui.Map({style:{width:'64%', //eight: '100%',
 stretch:'vertical',
 //stretch:'horizontal',
-border:'1px solid silver',
-  margin:'1% 1% 1% 0%'
+//border:'1px solid silver',
+  margin:'0'
 }}).add(ui.Label(
   'col2'))
-ui.root.add(colMask)
+colMask.add(col1)
 var spPan = ui.SplitPanel(col1,col2)
-colMask.add(spPan)
+ui.root.add(spPan)
 colMask.add(ui.Label('colMask'))
 //colLeft.add(ui.Label('colLeft'))
 col1.add(ui.Label('col1'))
 //spPan= ui.SplitPanel(col1,col2)
 //colLeft.add(col1).add(col2)
 var card1 = ui.Panel({style: {
-  margin: '1.5% 0 0 0',
+  margin: '0 16px 0 16px',
   stretch: 'horizontal',
-  //border: '1px solid silver'
+  border: '1px solid whitesmoke'
 }})
 col1.add(card1)
 var line = ui.Panel({style: {border:
@@ -74,3 +83,4 @@ var chart= ui.Chart.image.histogram(image,table
 col1.add(ui.Chart.image.histogram(image,table).
 setChartType('Table'))
 col1.add(ui.Chart.image.histogram(image,table))
+ui.root.add(footer.add(ui.Label('footer')))
