@@ -13,6 +13,7 @@ var header = ui.Panel({style:
 })
 ui.root.clear()
 ui.root.add(header)
+header.add(ui.Label('Title')).add(ui.Select())
 ui.root.setLayout(ui.Panel.Layout.flow(
   'vertical'))
 var colMask = ui.Panel({style: 
@@ -39,18 +40,21 @@ var col1 = ui.Panel({style: {
 }
 }
   )
-var col2 = ui.Map({style:{width:'64%',
+var col2 = ui.Map({style:{width:'64%', //eight: '100%',
 stretch:'vertical',
+//stretch:'horizontal',
 border:'1px solid silver',
   margin:'1% 1% 1% 0%'
 }}).add(ui.Label(
   'col2'))
 ui.root.add(colMask)
-colMask.add(colLeft)
+var spPan = ui.SplitPanel(col1,col2)
+colMask.add(spPan)
 colMask.add(ui.Label('colMask'))
 //colLeft.add(ui.Label('colLeft'))
 col1.add(ui.Label('col1'))
-colLeft.add(col1).add(col2)
+//spPan= ui.SplitPanel(col1,col2)
+//colLeft.add(col1).add(col2)
 var card1 = ui.Panel({style: {
   margin: '1.5% 0 0 0',
   stretch: 'horizontal',
@@ -67,4 +71,6 @@ col2.addLayer(image)//able)
 var chart= ui.Chart.image.histogram(image,table
   )
   card1.add(chart).add(line)
-col1.add(ui.Chart.image.histogram(image.table))
+col1.add(ui.Chart.image.histogram(image,table).
+setChartType('Table'))
+col1.add(ui.Chart.image.histogram(image,table))
