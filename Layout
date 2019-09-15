@@ -1,3 +1,10 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var imageCollection = ee.ImageCollection("OREGONSTATE/PRISM/Norm81m"),
+    imageCollection2 = ee.ImageCollection("OREGONSTATE/PRISM/Norm81m"),
+    image = ee.Image("OpenLandMap/SOL/SOL_CLAY-WFRACTION_USDA-3A1A1A_M/v02"),
+    image2 = ee.Image("users/stormwaterheatmap/GAP_US_200EVT"),
+    table = ee.FeatureCollection("users/stormwaterheatmap/MS4_bounds");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var header = ui.Panel({style:
   {width: '100%',
   height:'80px',
@@ -53,4 +60,10 @@ col1.add(card1)
 var line = ui.Panel({style: {border:
   '1px solid whitesmoke'
 }})
-card1.add(ui.Label('card1')).add(line)
+card1.add(ui.Label('Precipitation', {fontWeight:
+  'bold'
+}))//add(line)
+col2.addLayer(image)//able)
+var chart= ui.Chart.image.histogram(image,table
+  )
+  card1.add(chart).add(line)
