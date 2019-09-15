@@ -49,7 +49,7 @@ var col1 = ui.Panel({style: {
 }
 }
   )
-var col2 = ui.Map({style:{width:'64%', //eight: '100%',
+var col2 = ui.Map({style:{width:'61.8%', //eight: '100%',
 stretch:'vertical',
 //stretch:'horizontal',
 //border:'1px solid silver',
