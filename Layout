@@ -67,3 +67,4 @@ col2.addLayer(image)//able)
 var chart= ui.Chart.image.histogram(image,table
   )
   card1.add(chart).add(line)
+col1.add(ui.Chart.image.histogram(image.table))
