@@ -1,7 +1,8 @@
 var header = ui.Panel({style:
   {width: '100%',
   height:'80px',
-  backgroundColor:'silver'}
+  border: '1px solid silver',
+  backgroundColor:'whitesmoke'}
 })
 ui.root.clear()
 ui.root.add(header)
@@ -9,7 +10,8 @@ ui.root.setLayout(ui.Panel.Layout.flow(
   'vertical'))
 var colMask = ui.Panel({style: 
 {width:'100%',
-  backgroundColor:'gray',
+//  backgroundColor:'whitesmoke',
+ // border: '1px solid silver',
   stretch:'vertical'
 }}
   )
@@ -18,20 +20,21 @@ ui.Panel.Layout.flow('horizontal'),
 style: {
  width: '98%',
   margin:'1%',
-  border: '1px soild gray',
-  backgroundColor:'snow',
+  border: '1px soild silver',
+  backgroundColor:'whitesmoke',
   stretch:'vertical'
 }})
 var col1 = ui.Panel({style: {
   width:'33%',
-  backgroundColor: 'whitesmoke',
+  backgroundColor: 'white',
+//  border: '1px solid silver',
   margin:'1%'
 }
 }
   )
 var col2 = ui.Map({style:{width:'64%',
 stretch:'vertical',
-backgroundColor:'darkGrey',
+border:'1px solid silver',
   margin:'1% 1% 1% 0%'
 }}).add(ui.Label(
   'col2'))
@@ -42,9 +45,12 @@ colMask.add(ui.Label('colMask'))
 col1.add(ui.Label('col1'))
 colLeft.add(col1).add(col2)
 var card1 = ui.Panel({style: {
-  margin: '1.5%',
+  margin: '1.5% 0 0 0',
   stretch: 'horizontal',
-  border: '1px solid silver'
+  //border: '1px solid silver'
 }})
 col1.add(card1)
-card1.add(ui.Label('card1'))
+var line = ui.Panel({style: {border:
+  '1px solid whitesmoke'
+}})
+card1.add(ui.Label('card1')).add(line)
