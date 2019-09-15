@@ -545,7 +545,7 @@ var makeReports = function () {
         layout: ui.Panel.Layout.flow('horizontal')})
     )
 
-    precipReport.add(showP).add(showM)
+   // precipReport.add(showP).add(showM)
   //  precipReport.add(
   //      charts.bigNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean')
   //  )
@@ -624,13 +624,13 @@ var topoCard = resultCard('Topography');
     */
     }
 var resultCard = function (name) {
-    //var titleLabel = ui.Label({value: name, style: {fontWeight:'bold'}})
+    var titleLabel = ui.Label({value: name, style: {fontWeight:'bold', position: 'top-left'}})
     var card = ui.Panel({
-                layout: ui.Panel.Layout.flow('vertical'),
+                layout: ui.Panel.Layout.absolute(), //flow('vertical'),
                 style: {
                     border: '1px solid whitesmoke'
                 }}) 
-    // card.add(titleLabel)
+    card.add(titleLabel)
       return card
             }
 //Buttons 
