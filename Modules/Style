@@ -29,14 +29,13 @@ var fonts = {
         fontWeight: 700,
         // color: colors.tncblue
     },
-
     H2: {
         fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             //'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '22px',
-        fontWeight: 500,
+        fontWeight: 200,
         // color: colors.tncblue
 
     },
