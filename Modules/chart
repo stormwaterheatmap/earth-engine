@@ -65,7 +65,8 @@ var  histogramImage = function (layerObject, WS, scale) {
   maxBuckets: 16,
 });
 
-chart.style().set({width:'300px',height:'185px'})
+chart.style().set({//width:'300px',
+height:'185px'})
 chart.setSeriesNames(
   (layerObject.layer.name + ' ('+layerObject.units +')'),0)
 chart.setOptions({
@@ -100,7 +101,7 @@ top:36,bottom:36,left:8,right:8},
   },
 //  titlePosition: 'in',
  //theme:'maximized',
-title: ('Histogram of '+ layerObject.layer.name)// Elevation in Colorado (meters)'
+title: ('Watershed histogram')// Elevation in Colorado (meters)'
 
   
 });
