@@ -112,7 +112,7 @@ function hline(pan) {
             height: '0px',
             padding: '0px ',
             margin: '0px 0px 0px 0px',
-            border: '0.5px solid gray',
+            border: '1px solid whitesmoke',
             stretch: 'horizontal',
         }
     }));
@@ -420,7 +420,7 @@ var histogramCard = function(layerObject) {
   })
 //make a panel to hold it 
 var card = ui.Panel({style: Style.cardPanel}
-).add(chartCard).add(chartbutton).add(tablebutton)//
+).add(chartCard).add(chartbutton)//.add(tablebutton)//removed table buttons for now
 
   //return the panel 
   return card
@@ -581,10 +581,14 @@ var makeReports = function () {
     print(cardTitle)
     var precipReport  = ui.Panel({style: Style.cardPanel})//.add(cardTitle); 
     precipReport.add(ui.Label({value: 'Precipitation', style: fonts.H3}))
+     precipReport.add(
+         charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(),
+          'mean'))
+   //  hline(precipReport)//line
     precipReport.add(histogramCard(layerProperties.Precipitation)) 
-        precipReport.add(charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean'
+   // hline(precipReport) //adds a line 
   //    (layerObj, region, scale, reducerType) {
-      ))
+      
     sidePanel.add(precipReport); 
     //print(precipReport)
     //Make a card for landuse 
@@ -768,8 +772,7 @@ ui.root.add(ui.SplitPanel(
     mapPanel));
 mapPanel.add(mapInfoPanel);     
 ui.root.add(footer)
-
-//---------------- set the initial v
+//---------------- set the initial view
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
