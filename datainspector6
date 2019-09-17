@@ -389,7 +389,9 @@ var clipLayers = function () {
 var histogramCard = function(layerObject) {
   var chartCard =ui.Panel({style: Style.cardPanel
     
-  }).add(ui.Label('ChartCard')) 
+  }).add(ui.Label('ChartCard'))
+  chartCard.add((charts.histogramImage(layerObject, clicked_basin_geom, 
+        mapPanel.getScale())) )
   var chartbutton = ui.Button({
      label: 'Display results as chart',
      onClick: function() {
@@ -418,7 +420,7 @@ var histogramCard = function(layerObject) {
   })
 //make a panel to hold it 
 var card = ui.Panel({style: Style.cardPanel}
-).add(ui.Label({value: layerObject.layer.name, style: fonts.H3})).add(chartCard).add(chartbutton).add(tablebutton)//
+).add(chartCard).add(chartbutton).add(tablebutton)//
 
   //return the panel 
   return card
