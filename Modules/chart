@@ -162,7 +162,8 @@ var makePieChart = function (geometry, properties, holeSize) {
 
 }
 
-exports.pieChart = makePieChart;
+exports.pieChart = makePieChart.setOptions(
+  {chartArea:{left:8,right:8,top:8,bottom:8}});
 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
