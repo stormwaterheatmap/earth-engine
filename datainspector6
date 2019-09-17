@@ -21,73 +21,45 @@ print(layerProperties)
 var clicked_basin
 var clicked_basin_geom
 var WS
-//var scale = 100; //scale to reduce regions//var layer
-/*function makeTable(image) {
-    var table = ui.Chart.image.byRegion({
-        image: image,
-        reducer: ee.Reducer.mean()
-    })
-    table.setChartType('Table');
-    //table.setOptions({allowHtml: true, pageSize: 5});
-    table.style().set({
-        stretch: 'both'
-    });
-    return (table)
-}*/
-//calculate the area of an image in Ha
-/*
-function imgAreaHa(img, geometry, scale) {
-    var pixelArea = img.gt(0).multiply(ee.Image.pixelArea()).divide(10000);
-    var imgArea = pixelArea.reduceRegion({
-        geometry: geometry,
-        reducer: ee.Reducer.sum(),
-        scale: scale,
-        maxPixels: 1e9
-    });
-    return imgArea;
-}
-//calculate the mean value of an image and return the number
-function imgMean(img, geometry, scale, band) {
-    var imgM = img.reduceRegion({
-        geometry: geometry,
-        reducer: ee.Reducer.mean(),
-        scale: scale,
-        maxPixels: 1e9
-    })
-    var numString = ee.Number.parse(imgM.get(band)).format(
-        '%,.2f') //.getInfo();
-    return numString
-    print(numString)
-}
-*/
-//function to redraw the map with the selected watershed.
+
 function handle_map_click(location) {
-    // get clicked subbasin info
-    // var selected_WS = watershedSelect.getValue()
-    //var selected_WS = WS;
-    // print(selected_WS)
-    //mapPanel.addLayer(WS)
+
     print('hi from handleMapClick')
     var clicked_point = ee.Geometry.Point(location.lon, location.lat);
     var clicked_basin_fc = WS.filterBounds(clicked_point);
     clicked_basin = ee.Feature(clicked_basin_fc.first());
     clicked_basin_geom = clicked_basin.geometry();
-    //var wsArea = clicked_basin.area()
-    // print(wsArea)
+    
+    var getFeatureInfo = function(clicked_basin) {
+    clicked_basin.evaluate(function () {
+            var wsName = ui.Label({
+                value: ['WRIA Name:', clicked_basin.getString('WRIA_NM').getInfo()],
+                style: fonts.Caption3
+            });
+            var wsNum = ui.Label({
+                value: ['WRIA Number:', clicked_basin.getString('WRIA_NR').getInfo()]
+            })
+            var wsArea = clicked_basin.area()
+            print(wsArea)
+            var featureInfo = ui.Panel([wsName,wsNum]); 
+            print(featureInfo) 
+            })
+            
+       } 
+   print(getFeatureInfo)
+   // buttonPanel.add(getFeatureInfo(clicked_basin))   
     print('Clicked Basin', clicked_basin)
+                accept.style().set({
+                shown: true}) 
     mapPanel.layers().reset()
     mapPanel.style().set({
         cursor: 'hand'
     });
     mapPanel.addLayer(clicked_basin)
     mapPanel.centerObject(clicked_basin)
-    //clip all the datalayers 
-    //clip all the layers with the user selected watershed --moved to accept button
-
-
     return clicked_basin
     return clicked_basin_geom
-}
+    }
 
 function handle_inspect_click() {
     print('inspector Activated')
@@ -390,6 +362,44 @@ var clipLayers = function () {
         print('returnedlayerVal')
     }
 }
+//** results Cards 
+var histogramCard = function(layerObject) {
+  var chartCard =ui.Panel().add(ui.Label('ChartCard')) 
+  var chartbutton = ui.Button({
+     label: 'Display results as chart',
+     onClick: function() {
+        //reset the panel 
+        chartbutton.style().set({shown: false}) 
+        tablebutton.style().set({shown: true}) 
+       chartCard.clear()
+       chartCard.add(charts.histogramImage(layerObject.layer.eeObject, clicked_basin_geom, 
+        mapPanel.getScale()))  
+      }
+  })
+  var tablebutton = ui.Button({
+    style: {shown: false}, //hides the button initially 
+     label: 'Display results as table',
+     onClick: function() {
+           //reset the panel 
+           tablebutton.style().set({shown: false}) 
+           chartbutton.style().set({shown: true}) 
+       chartCard.clear()
+       var chart = charts.histogramImage(layerObject.layer.eeObject, clicked_basin_geom, 
+        mapPanel.getScale()).setChartType('Table')
+        chart.setOptions({allowHtml: true, pageSize: 5}).style().set({stretch: 'both'})
+      chartCard.add(chart)
+        
+      }
+  })
+  
+  
+//make a panel to hold it 
+var card = ui.Panel({style: {width: '400px'}}).add(ui.Label({value: layerObject.layer.name})).add(chartCard).add(chartbutton).add(tablebutton).add(ui.Label('Read Methodology'))
+  //return the panel 
+  return card
+}
+
+
 /** Returns a ui.Map with some UI configuration in place */
 function makeMapPanel() {
     var map = ui.Map({
@@ -534,28 +544,22 @@ var blankPanel = ui.Panel({
     }
 });
 var instructionsPanel = ui.Panel()
+var mapInfoPanel = ui.Panel({style:{shown:false}})
 var makeReports = function () {
     //Make a card for precipitation 
-    var precipReport  = resultCard('Precipitation')
-    //make a button panel 
-    var showP = ui.Button('Show Report')
-    var showM = ui.Button('Show Map Layer')
-    precipReport.add(ui.Panel({
-        widgets: [showP, showM],
-        layout: ui.Panel.Layout.flow('horizontal')})
-    )
-
-   // precipReport.add(showP).add(showM)
-  //  precipReport.add(
-  //      charts.bigNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean')
-  //  )
-   // precipReport.add(charts.histogramImage(layerProperties.Precipitation.layer.eeObject,
-   //     clicked_basin_geom, mapPanel.getScale(), layerProperties.Precipitation.layer.name)
-   // )
-    //add to panel 
+    var cardTitle = ui.Label({value: layerProperties.Precipitation.layer.name, 
+      style: fonts.H3
+    }).style().set({fontWeight: 'bold'});
+    print(cardTitle)
+    var precipReport  = ui.Panel()//.add(cardTitle); 
+    precipReport.add(charts.bigNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean'
+  //    (layerObj, region, scale, reducerType) {
+      ))
+    precipReport.add(histogramCard(layerProperties.Precipitation)) 
     sidePanel.add(precipReport); 
+    //print(precipReport)
     //Make a card for landuse 
-    var luReport = resultCard('Land Use'); 
+   // var luReport = resultCard('Land Use'); 
    // luReport.add(charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize))
    // luReport.add((charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize).setChartType('Table'))    
    // )
@@ -563,24 +567,24 @@ var makeReports = function () {
     //Make a card for imperviousness 
     //contained in landcover card
     //Make a card for landcover 
-    var lcReport = resultCard('Land Cover'); 
+  //  var lcReport = resultCard('Land Cover'); 
     //lcReport.add(charts.bigNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'mean'))
     //lcReport.add(charts.pieChart(clicked_basin_geom, layerProperties.landCover, holeSize))
     //lcReport.add((charts.pieChart(clicked_basin_geom, layerProperties.landCover, holeSize).setChartType('Table'))    
     //)
-    sidePanel.add(lcReport)
+//    sidePanel.add(lcReport)
 
         //Make a card for Age of Development  
-        var ageDevCard = resultCard('Age of Development'); 
+  //      var ageDevCard = resultCard('Age of Development'); 
       //  ageDevCard.add(
        //     charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), clicked_basin_geom) 
         //    )
         //    ageDevCard.add(charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), 
          //   clicked_basin_geom).setChartType('Table'))  
-        sidePanel.add(ageDevCard)
-        print('devage ok')
+    //    sidePanel.add(ageDevCard)
+    //    print('devage ok')
 //soils and lithology 
- var soilsCard = resultCard('Soils and Lithology'); 
+ //var soilsCard = resultCard('Soils and Lithology'); 
 // soilsCard.add(
 //             charts.pieChart(layerProperties.Soils, mapPanel.getScale(), clicked_basin_geom) 
 //             )
@@ -588,13 +592,13 @@ var makeReports = function () {
 //             clicked_basin_geom).setChartType('Table'))  
 //    //soilsCard.add(charts.pieChart(layerProperties.Lithology, mapPanel.getScale(), clicked_basin_geom) 
 //     //).setChartType('ColumnChart')
-     sidePanel.add(soilsCard)
+   //  sidePanel.add(soilsCard)
 //Topography 
-var topoCard = resultCard('Topography'); 
-    print('topcard ok')
+//var topoCard = resultCard('Topography'); 
+  //  print('topcard ok')
 //    topoCard.add(charts.pieChart(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom)) //.setChartType('ColumnChart')
  //   topoCard.add(charts.pieChart(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom).setChartType('Table'))
-    sidePanel.add(topoCard)
+    //sidePanel.add(topoCard)
     /*
     if (layerObject.vizType === 'pieChart') {
         report = charts.pieChart(clicked_basin_geom, layerObject, holeSize)
@@ -623,17 +627,7 @@ var topoCard = resultCard('Topography');
     }
     */
     }
-var resultCard = function (name) {
-    var titleLabel = ui.Label({value: name, style: {fontWeight:'bold', position: 'top-left'}})
-    var card = ui.Panel({
-                layout: ui.Panel.Layout.absolute(), //flow('vertical'),
-                style: {
-                    border: '1px solid whitesmoke'
-                }}) 
-    card.add(titleLabel)
-      return card
-            }
-//Buttons 
+
 var deactiv_button = ui.Button({
     label: 'Reset Map',
     //onClick: mapReset,//also clear side panel 
@@ -642,7 +636,8 @@ var deactiv_button = ui.Button({
 var accept = ui.Button({
     // label: 'Accept Selected Watershed',
     label: 'Accept Selected Watershed ',
-    onClick: makeReports //also clear side panel todo
+    onClick: makeReports,  //also clear side panel todo
+ //   style:{shown: false}
 });
 
 
@@ -654,12 +649,11 @@ var inspect_button = ui.Button({
 });
 //function to add user layer to the map
 var buttonPanel = ui.Panel({
-    widgets: [inspect_button, deactiv_button, accept], 
+    widgets: [inspect_button, accept], 
     layout: ui.Panel.Layout.flow('vertical'),
-    style: {position: 'top-left'}
-
+    style: {position: 'top-left', stretch: 'both'}
 });
-print(402)
+
 //Labels 
 var step1 = ui.Label('1) Select a watershed dataset to use', fonts.Body1)
 var step2 = ui.Label('2) Select a watershed on the map to analyze', fonts.Body1)
@@ -717,7 +711,6 @@ function mapReset() {
 print('449')
 // Clear the default UI 
 ui.root.clear();
-
 // Create the app's two panels and add them to the ui.root as a split panel
 var sidePanel = makeSidePanel();
 var mapPanel = makeMapPanel();
@@ -727,11 +720,9 @@ var footer = makeFooter();
 footer.add(ui.Label('footer'))
 sidePanel.add(ui.Label('sidePanel'))
 mapPanel.add(ui.Label('mapPanel'))
-
 ui.root.setLayout(ui.Panel.Layout.flow(
     'vertical'))
 ui.root.add(header)
-
 ui.root.add(ui.SplitPanel(
     ui.Panel({
         style: {
@@ -744,6 +735,7 @@ ui.root.add(ui.SplitPanel(
         }
     }).add(ui.Label('colMask')).add(sidePanel),
     mapPanel));
+mapPanel.add(mapInfoPanel);     
 ui.root.add(footer)
 
 //---------------- set the initial v
