@@ -381,8 +381,8 @@ function makeSidePanel() {
         style: {
             // width:'38.2%', //the golden ratio!
             backgroundColor: 'whitesmoke',
-            //  border: '1px solid silver',
-            //margin:'0',
+            border: '1px solid silver',
+            margin:'12px',
             padding: '12px',
             stretch: 'horizontal'
         }
@@ -671,20 +671,21 @@ var makeReports = function () {
     var cardTitle = ui.Label({
         value: 'Precipitation',
         style: fonts.H3
-    }).style().set({
+    })
+    cardTitle.style().set({
         fontWeight: 'bold'
     });
-   
+   //print(cardTitle)
     var precipReport = ui.Panel({
         style: Style.cardPanel
-    }) //.add(cardTitle); 
-    precipReport.add(cardTitle)
+    })//.add(cardTitle); 
+  precipReport.add(cardTitle)
     precipReport.add(
         charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(),
             'mean'))
-    //  hline(precipReport)//line
+      hline(precipReport)//line
     precipReport.add(histogramCard(layerProperties.Precipitation))
-    // hline(precipReport) //adds a line 
+     hline(precipReport) //adds a line 
     //    (layerObj, region, scale, reducerType) {
 
     sidePanel.add(precipReport);
@@ -770,7 +771,7 @@ var makeReports = function () {
         report = charts.bigNum(layerObject, clicked_basin_geom, Map.getScale(), 'percent')
     
     }
-    */
+*/     
 }
 
 var deactiv_button = ui.Button({
@@ -781,7 +782,8 @@ var deactiv_button = ui.Button({
 var accept = ui.Button({
     // label: 'Accept Selected Watershed',
     label: 'Accept Selected Watershed ',
-    onClick: makeReports, //also clear side panel todo
+    onClick: [makeReports, buttonPanel.style({shown:false})]//clears the button panel
+       //also clear side panel todo
     //   style:{shown: false}
 });
 
