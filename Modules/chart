@@ -125,11 +125,11 @@ var makePieChart = function (geometry, properties, holeSize) {
         scale: 1,
         bestEffort: true,
     });
-    print('reduction_results', reduction_results);
+//    print('reduction_results', reduction_results);
     var roi_stats = ee.List(reduction_results.get('groups'));
-    print('roi stats', roi_stats)
+//    print('roi stats', roi_stats)
     var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
-    print('transition_fc', transition_fc);
+//    print('transition_fc', transition_fc);
     // Add a summary chart.
     var transition_summary_chart = ui.Chart.feature.byFeature({
             features: transition_fc,
@@ -140,7 +140,7 @@ var makePieChart = function (geometry, properties, holeSize) {
         .setOptions({
             // title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
-            //height: '200',
+         chartArea:{ left:8,right:8,top:8,bottom:8}  ,//height: '200',
             //width: '200',
             pieSliceTextStyle: {
                 color: 'black',
@@ -162,8 +162,8 @@ var makePieChart = function (geometry, properties, holeSize) {
 
 }
 
-exports.pieChart = makePieChart.setOptions(
-  {chartArea:{left:8,right:8,top:8,bottom:8}});
+exports.pieChart = makePieChart//setOptions(
+ // {chartArea:{left:8,right:8,top:8,bottom:8}});
 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
