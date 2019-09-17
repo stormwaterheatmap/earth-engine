@@ -350,6 +350,7 @@ else if (reducerType === 'percent') {
 }
 
 exports.bigNum = bigNum;
+
 var littleNum = function (layerObj, region, scale, reducerType) {
 
     var units = layerObj.units
@@ -367,13 +368,15 @@ var littleNum = function (layerObj, region, scale, reducerType) {
    
     var bigNum = ui.Label({
         value: loading,
-        style: style.fonts.B3});  
+        style: style.fonts.Body3
+      
+    });  
         
         bigNum.style().set({
-           margin: 0,
+           margin: 0,//'5px',
             padding: '2px 0px 2px 4px',
             fontSize: '24px',
-          //  fontWeight: '700',
+            //fontWeight: '400',
             backgroundColor: style.colors.transparent,
             //color: colors.pDark,
             //position: 'middle-right', 
@@ -384,12 +387,12 @@ var littleNum = function (layerObj, region, scale, reducerType) {
 
     var titleLabel = ui.Label({
         value: layerObj.layer.name,
-        style: style.fonts.H3
+        style: style.fonts.H4
     });
     titleLabel.style().set({
         margin: 0,
-        fontSize: '13px',
-        fontWeight: 100, 
+       // fontSize: '13px',
+        //fontWeight: 100, 
         padding: '0px 2px 0px 4px',
       //  position: 'top-left',
        // stretch: 'horizontal',
@@ -400,22 +403,22 @@ var littleNum = function (layerObj, region, scale, reducerType) {
 
     units = ui.Label({
         value: layerObj.units,
-        style: {
-            fontSize: '12px',
-            fontWeight: '400',
-            //backgroundColor: style.colors.transparent,
-            color: colors.primary,
+        style: style.fonts.Caption3
+    }); 
+     units.style().set({
             textAlign: 'left',
+            margin: 0, 
+             padding: '0px 2px 0px 5px',
             //stretch: 'horizontal'
-        }
-    })
+}); 
 
 
-var numPan = ui.Panel({layout: ui.Panel.Layout.flow('vertical')})
+var numPan = ui.Panel({layout: ui.Panel.Layout.flow('vertical', true)})
+numPan.style().set({width: 100, height: 400}); 
 
     numPan.add(titleLabel) //.add(infoLabel)
     numPan.add(bigNum)
-  //  numPan.add(units)
+   numPan.add(units)
 
 
 
@@ -481,12 +484,12 @@ var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var layerProperties = data.rasters
 var vectors = data.vectors
-var layTest = data.rasters.Imperviousness
+var layTest = data.rasters.Precipitation
 var value = 'loading...'
 //
 var units = 'in/year'
 var title = 'Mean Annual Precipitation'
 var color = style.colors.primary
-var layTest = data.rasters.Imperviousness
+//var layTest = data.rasters.Imperviousness
 print(layTest)
-Map.add(littleNum(layTest,geometry,100,'percent'))
+Map.add(littleNum(layTest,geometry,100,'mean'))
