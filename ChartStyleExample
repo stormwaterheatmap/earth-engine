@@ -18,18 +18,22 @@ histogram.setOptions({
  legend: {position: 'none'},
  //explorer:{},
  vAxis: {
+   title: 'Area', 
+   textPosition: 'in', 
   gridlines: {color: 'whitesmoke',
     count:4
   },
   minorGridlines:{color:'white'},
  format: 'short',
- textPosition:'in',
+ //textPosition:'in',
  // baselineColor: 'black',
 //  viewWindowMode: 'maximized'
   },
 chartArea:{//height:'80%', 
 //width:'100%',
-top:36,bottom:36,left:8,right:8},
+//top:36,bottom:36,left:8,right:8
+  
+},
  hAxis: {gridlines: {color:'white',
  //  count: 4,
  },
@@ -43,6 +47,18 @@ top:36,bottom:36,left:8,right:8},
  //theme:'maximized',
 title: 'Histogram of Elevation in Colorado (meters)'
 });
-Map.add(histogram.setChartType('ColumnChart'))
+var table = histogram.setChartType('Table')
+//var cssClassNames = {headerRow: {color: 'red'},
+table.style().set({color: 'red'})
+var rowform = {style:{color:'red'}}; 
+//hoverTableRow: 'highlightClass'};
+table.setOptions(
+  {allowHtml: true,
+  alternatingRowStyle:false,
+  pagingButtons:'both'
+  }
+  )
+//table.setCell(22, 2, 15, 'Fifteen', {style: 'font-style:bold; font-size:22px;'});  
+print(table)
 Map.addLayer(elevation.clip(colorado));
 Map.setCenter(-107, 39, 6);
