@@ -1,0 +1,32 @@
+// Plot a histogram of elevation in Colorado.
+var elevation = ee.Image('CGIAR/SRTM90_V4');
+var colorado = ee.Geometry.Rectangle(-109.05, 37, -102.05, 41);
+// Generate the histogram data.  Use minBucketWidth for nice sized buckets.
+var histogram = ui.Chart.image.histogram({
+  image: elevation,
+  region: colorado,
+  scale: 200,
+  minBucketWidth: 300
+});
+
+histogram.style().set({width:'320px',height:'200px'})
+histogram.setOptions({
+//  fontSize:12,
+ colors:['lightgreen','palegreen','green'],//groupWidth:'63%'},
+  legend: {position: 'none'},
+  vAxis: {gridlines: {color: 'white'},
+ // baselineColor: 'black',
+    viewWindowMode: 'maximized'
+  },
+ chartArea:{height:'80%'},
+  hAxis: {gridlines: {color:'white'},
+    viewWindowMode: 'maximized',
+  //  baselineColor:'black'
+  },
+//  titlePosition: 'in',
+// theme:'maximized',
+//itle: 'Histogram of Elevation in Colorado (meters)'
+});
+Map.add(histogram.setChartType('BarChart'))
+Map.addLayer(elevation.clip(colorado));
+Map.setCenter(-107, 39, 6);
