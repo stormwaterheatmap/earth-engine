@@ -126,7 +126,7 @@ exports.panelStyle = {
         backgroundColor: 'white' //colors.pLight
     },
     'cardPanel': {
-        // border: '1px solid #BDBDBD',
+        border: '1px solid whitesmoke',
         backgroundColor: 'white',
         //  width: '100%',
         textAlign: 'center',
