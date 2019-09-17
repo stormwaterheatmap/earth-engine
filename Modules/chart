@@ -6,7 +6,7 @@ var geometry = /* color: #d63000 */ee.Geometry.Polygon(
           [-122.16903272587683, 47.67547769385542]]]);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
-var color = style.colors.primary
+var colors = style.colors
 
 exports.histByClass = function (layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(10000) //area in hectares 
@@ -125,11 +125,11 @@ var makePieChart = function (geometry, properties, holeSize) {
         scale: 1,
         bestEffort: true,
     });
-//    print('reduction_results', reduction_results);
+    print('reduction_results', reduction_results);
     var roi_stats = ee.List(reduction_results.get('groups'));
-//    print('roi stats', roi_stats)
+    print('roi stats', roi_stats)
     var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
-//    print('transition_fc', transition_fc);
+    print('transition_fc', transition_fc);
     // Add a summary chart.
     var transition_summary_chart = ui.Chart.feature.byFeature({
             features: transition_fc,
@@ -140,7 +140,7 @@ var makePieChart = function (geometry, properties, holeSize) {
         .setOptions({
             // title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
-         chartArea:{ left:8,right:8,top:8,bottom:8}  ,//height: '200',
+            //height: '200',
             //width: '200',
             pieSliceTextStyle: {
                 color: 'black',
@@ -161,11 +161,7 @@ var makePieChart = function (geometry, properties, holeSize) {
     return (transition_summary_chart);
 
 }
-
-exports.pieChart = makePieChart//setOptions(
- // {chartArea:{left:8,right:8,top:8,bottom:8}});
-
-var style = require('users/stormwaterheatmap/apps:Modules/Style')
+exports.pieChart = makePieChart;
 
 var bigNum = function (layerObj, region, scale, reducerType) {
     var panel = ui.Panel({
@@ -353,9 +349,129 @@ else if (reducerType === 'percent') {
 
 }
 
-
 exports.bigNum = bigNum;
-/*
+var littleNum = function (layerObj, region, scale, reducerType) {
+
+    var units = layerObj.units
+    var loading = 'loading...'
+    /*var titlePanel = ui.Panel({
+        layout: ui.Panel.Layout.flow('horizontal')
+    })
+    titlePanel.style().set({
+        margin: 0,
+        padding: 0,
+        backgroundColor: color,
+       // border: '1px solid grey'
+       // stretch: 'horizontal'
+    })*/
+   
+    var bigNum = ui.Label({
+        value: loading,
+        style: style.fonts.B3});  
+        
+        bigNum.style().set({
+           margin: 0,
+            padding: '2px 0px 2px 4px',
+            fontSize: '24px',
+          //  fontWeight: '700',
+            backgroundColor: style.colors.transparent,
+            //color: colors.pDark,
+            //position: 'middle-right', 
+            textAlign: 'left',
+           // stretch: 'horizontal'
+        }
+    )
+
+    var titleLabel = ui.Label({
+        value: layerObj.layer.name,
+        style: style.fonts.H3
+    });
+    titleLabel.style().set({
+        margin: 0,
+        fontSize: '13px',
+        fontWeight: 100, 
+        padding: '0px 2px 0px 4px',
+      //  position: 'top-left',
+       // stretch: 'horizontal',
+        textAlign:'left',
+        //color: colors.lightBlack,
+        //backgroundColor: color
+    });
+
+    units = ui.Label({
+        value: layerObj.units,
+        style: {
+            fontSize: '12px',
+            fontWeight: '400',
+            //backgroundColor: style.colors.transparent,
+            color: colors.primary,
+            textAlign: 'left',
+            //stretch: 'horizontal'
+        }
+    })
+
+
+var numPan = ui.Panel({layout: ui.Panel.Layout.flow('vertical')})
+
+    numPan.add(titleLabel) //.add(infoLabel)
+    numPan.add(bigNum)
+  //  numPan.add(units)
+
+
+
+    if (reducerType === 'mean') {
+    var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+      reducer: ee.Reducer.mean(), 
+      geometry: region, 
+      scale: scale, 
+      bestEffort: true
+      
+    }).get(layerObj.layer.eeObject.bandNames().get(0)))
+   
+   reduced.evaluate(function (result) {
+        // When the server returns the value, show it.
+        bigNum.setValue(result.toFixed(0)) 
+    })
+    }
+    else if (reducerType === 'sum') {
+    //reduced = reduced.toFixed()
+  var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+      reducer: ee.Reducer.sum(), 
+      geometry: region, 
+      scale: scale, 
+      bestEffort: true
+      
+    }).get(layerObj.layer.eeObject.bandNames().get(0)))
+    
+    reduced.evaluate(function (result) {
+        // When the server returns the value, show it.
+        bigNum.setValue(result.toFixed(0)) 
+    })
+   
+}
+else if (reducerType === 'percent') {
+    //reduced = reduced.toFixed()
+  var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+      reducer: ee.Reducer.mean(), 
+      geometry: region, 
+      scale: scale, 
+      bestEffort: true
+      
+    }).get(layerObj.layer.eeObject.bandNames().get(0)))
+   
+
+    reduced.evaluate(function (result) {
+        // When the server returns the value, show it.
+        bigNum.setValue(
+         result.toFixed(0).toString().concat(
+          "%")) 
+    }) //.add(units)
+}
+
+    return numPan
+
+}
+
 //Testing area 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 print(style)
@@ -373,5 +489,4 @@ var title = 'Mean Annual Precipitation'
 var color = style.colors.primary
 var layTest = data.rasters.Imperviousness
 print(layTest)
-Map.add(bigNum(layTest,geometry,100,'percent'))
-*/
+Map.add(littleNum(layTest,geometry,100,'percent'))
