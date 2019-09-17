@@ -64,16 +64,14 @@ var fonts = {
         fontSize: '17px',
         fontWeight: 400
     },
-    Body2: {
-        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-            //'Dejavu Sans', 'Helvetica Neue',
+    Body2: { fontFamily: [ 'Roboto', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '15px',
         fontWeight: 400
     },
     Body3: {
-        fontFamily: [ 'Roboto', 'Helvetica Neue',
+        fontFamily: [ 'Roboto', 'Helvetica Neue',   
             'Arial', 'sans-serif'
         ],
         fontSize: '13px',
