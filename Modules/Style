@@ -73,8 +73,7 @@ var fonts = {
         fontWeight: 400
     },
     Body3: {
-        fontFamily: [ 'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-            // 'Dejavu Sans', 'Helvetica Neue',
+        fontFamily: [ 'Roboto', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '13px',
