@@ -5,6 +5,7 @@ var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var fonts = Style.fonts
 var layerProperties = data.rasters
 var vectors = data.vectors
 var holeSize = 0.5 //85;
@@ -58,15 +59,25 @@ function handle_map_click(location) {
     mapPanel.addLayer(clicked_basin)
     mapPanel.centerObject(clicked_basin)
     var featureinfo =  ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
-    var infoTab = ui.Panel({style: {position: 'bottom-center', stretch:'both', width: '80%'}})
+    var infoTab = ui.Panel({style: {position: 'bottom-center', stretch:'both', width: '80%', shown:false}})
+    var closeTab = ui.Button({
+      label: 'Close Table', 
+      onClick: function() {
+      infoTab.style().set({shown: false})
+      }
+})
+   // infoTab.add(ui.Panel(ui.Label('⌧')))
     infoTab.add(ui.Label({value:'Watershed Info Table', style: fonts.H3}))
     infoTab.add(featureinfo)
+    infoTab.add(closeTab)
     print('ok....')
     //infoTab.setOptions({orientation: 'vertical'})
     //print(infoTab)
     buttonPanel.add(ui.Button(
       {label: 'Show Watershed Information Table', 
-        onClick: mapPanel.add(infoTab)
+        onClick: function() {mapPanel.add(infoTab)
+        infoTab.style().set({shown: true})
+        }
       }))
       
     return clicked_basin
@@ -405,10 +416,10 @@ var histogramCard = function(layerObject) {
         
       }
   })
-  
-  
 //make a panel to hold it 
-var card = ui.Panel({style: Style.cardPanel}).add(ui.Label({value: layerObject.layer.name, style: fonts.H3})).add(chartCard).add(chartbutton).add(tablebutton).add(ui.Label('Read Methodology'))
+var card = ui.Panel({style: Style.cardPanel}
+).add(ui.Label({value: layerObject.layer.name, style: fonts.H3})).add(chartCard).add(chartbutton).add(tablebutton)//
+
   //return the panel 
   return card
 }
@@ -423,6 +434,7 @@ function makeMapPanel() {
             margin: '0'
         }
     });
+    map.setOptions('Dark', Style.mapStyles) 
     map.setControlVisibility({
         all: false,
         zoomControl: true,
@@ -565,8 +577,8 @@ var makeReports = function () {
       style: fonts.H3
     }).style().set({fontWeight: 'bold'});
     print(cardTitle)
-    var precipReport  = ui.Panel()//.add(cardTitle); 
-
+    var precipReport  = ui.Panel({style: Style.cardPanel})//.add(cardTitle); 
+    precipReport.add(ui.Label({value: 'Precipitation', style: fonts.H3}))
     precipReport.add(histogramCard(layerProperties.Precipitation)) 
         precipReport.add(charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean'
   //    (layerObj, region, scale, reducerType) {
@@ -718,7 +730,9 @@ function mapReset() {
         all: false,
         zoomControl: true,
         mapTypeControl: true,
-        layerList: true
+        layerList: true, 
+        fullscreenControl: true
+        
     });
 }
 //mapPanel.setOptions('Dark', {'Dark': mapStyle.Dark});
