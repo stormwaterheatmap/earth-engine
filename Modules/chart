@@ -56,7 +56,7 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
         });
     return chart;
 };
-exports.histogramImage = function (image, WS, scale, title) {
+exports.histogramImage = function (image, WS, scale) {
     var chart = ui.Chart.image
         .histogram({
             image: image,
@@ -65,7 +65,8 @@ exports.histogramImage = function (image, WS, scale, title) {
             maxBuckets: 16
         })
         .setOptions({
-            title: title, 
+           theme:'maximize', 
+           // title: title, 
              //titleTextStyle: style.fonts.LegendTitle
         });
     return chart;
