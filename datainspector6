@@ -668,7 +668,6 @@ var makeReports = function () {
     var chart = charts.littleNum(layerProperties.Precipitation, 
     clicked_basin_geom, mapPanel.getScale(), 'mean')
     var chart2 = histogramCard(layerProperties.Precipitation)
-  
     var precipCard = cards('Precipitation',[chart, chart2])
     sidePanel.add(precipCard)
  //  print(precipCard)
@@ -690,8 +689,8 @@ var makeReports = function () {
 
 //make a landuse card 
 
-  var chart = pieCard(layerProperties.landUse)
- var luCard = cards('Landuse',[chart])
+
+ var luCard = cards('Landuse',[pieCard(layerProperties.landUse)])
   sidePanel.add(luCard)
       
     // hline(precipReport) //adds a line 
@@ -768,13 +767,17 @@ var makeReports = function () {
 }
 
 //cards function 
+print('cards function')
 var cards = function(title,widgetItems) {
  var cardTitle = ui.Label({
         value: title,
         style: fonts.H3
     })//.style().set({
       //  fontWeight: 'bold'
-  var wholeCard = ui.Panel({widgets: widgetItems, style: {border: '8px solid whitesmoke', padding: '12px'}})
+  var wholeCard = ui.Panel({
+    widgets: widgetItems, 
+    style: {border: '8px solid whitesmoke', padding: '12px'}
+  })
   wholeCard.insert(0, cardTitle)
   //wholeCard.add(widgetItems)
     return wholeCard
