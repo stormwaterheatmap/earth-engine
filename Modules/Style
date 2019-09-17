@@ -197,8 +197,10 @@ exports.GRAYMAP = [{ // Dial down the map saturation.
         visibility: 'off'
     }]
 }];
-
-exports.lightMap = [
+//var styles = {
+ // 'Soft Blue': [
+exports.mapStyles = {
+  'Light': [
     {
         "featureType": "administrative",
         "elementType": "labels.text.fill",
@@ -286,10 +288,8 @@ exports.lightMap = [
             }
         ]
     }
-]
-
-
-exports.Dark = [{
+],
+'Dark' : [{
         "featureType": "all",
         "elementType": "geometry.fill",
         "stylers": [{
@@ -524,4 +524,4 @@ exports.Dark = [{
             "visibility": "off"
         }]
     }
-]
+] }
