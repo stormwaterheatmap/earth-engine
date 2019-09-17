@@ -64,7 +64,11 @@ function handle_map_click(location) {
     print('ok....')
     //infoTab.setOptions({orientation: 'vertical'})
     //print(infoTab)
-      mapPanel.add(infoTab)
+    buttonPanel.add(ui.Button(
+      {label: 'Show Watershed Information Table', 
+        onClick: mapPanel.add(infoTab)
+      }))
+      
     return clicked_basin
     return clicked_basin_geom
     }
@@ -382,7 +386,7 @@ var histogramCard = function(layerObject) {
         chartbutton.style().set({shown: false}) 
         tablebutton.style().set({shown: true}) 
        chartCard.clear()
-       chartCard.add(charts.histogramImage(layerObject.layer.eeObject, clicked_basin_geom, 
+       chartCard.add(charts.histogramImage(layerObject, clicked_basin_geom, 
         mapPanel.getScale()))  
       }
   })
@@ -564,7 +568,7 @@ var makeReports = function () {
     var precipReport  = ui.Panel()//.add(cardTitle); 
 
     precipReport.add(histogramCard(layerProperties.Precipitation)) 
-        precipReport.add(charts.bigNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean'
+        precipReport.add(charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean'
   //    (layerObj, region, scale, reducerType) {
       ))
     sidePanel.add(precipReport); 
