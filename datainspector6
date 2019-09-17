@@ -688,7 +688,7 @@ var makeReports = function () {
     //    (layerObj, region, scale, reducerType) {
 
     sidePanel.add(precipReport);
-
+/*
     var cardTitle = ui.Label({
         value: 'Land Use',
         style: fonts.H3
@@ -865,10 +865,10 @@ ui.root.clear();
 var sidePanel = makeSidePanel();
 var mapPanel = makeMapPanel();
 var header = makeHeader();
-header.add(ui.Label('header'))
+//header.add(ui.Label('header')) debug
 var footer = makeFooter();
 footer.add(ui.Label('footer'))
-sidePanel.add(ui.Label('sidePanel'))
+//sidePanel.add(ui.Label('sidePanel')) debug
 mapPanel.add(ui.Label('mapPanel'))
 ui.root.setLayout(ui.Panel.Layout.flow(
     'vertical'))
@@ -883,7 +883,8 @@ ui.root.add(ui.SplitPanel(
             margin: '12px',
             padding: 0
         }
-    }).add(ui.Label('colMask')).add(sidePanel),
+    })//.add(ui.Label('colMask')) debug
+    .add(sidePanel),
     mapPanel));
 mapPanel.add(mapInfoPanel);
 ui.root.add(footer)
