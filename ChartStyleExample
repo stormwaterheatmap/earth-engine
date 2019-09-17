@@ -9,32 +9,37 @@ var histogram = ui.Chart.image.histogram({
   minBucketWidth: 300
 });
 
-histogram.style().set({width:'300px',height:'300px'})
+histogram.style().set({width:'300px',height:'185px'})
 histogram.setSeriesNames('elev',0)
 histogram.setOptions({
 //  fontSize:12,
  colors:['cadetblue','lightgreen','palegreen','green'],//groupWidth:'63%'},
- // fillOpacity: '50%',
+ //bar: {groupWidth: '90%'},
  legend: {position: 'none'},
  //explorer:{},
  vAxis: {
-  gridlines: {color: 'white'},
+  gridlines: {color: 'whitesmoke',
+    count:4
+  },
+  minorGridlines:{color:'white'},
  format: 'short',
  textPosition:'in',
  // baselineColor: 'black',
 //  viewWindowMode: 'maximized'
   },
-chartArea:{height:'80%', width:'85%'},
+chartArea:{//height:'80%', 
+//width:'100%',
+top:36,bottom:36,left:8,right:8},
  hAxis: {gridlines: {color:'white',
-   count: 4,
+ //  count: 4,
  },
  title:'elevation (meters)',
  //textPosition:'in',
 // format:'short',
-  viewWindowMode: 'maximized',
+ // viewWindowMode: 'maximized',
   //  baselineColor:'black'
   },
-  titlePosition: 'in',
+//  titlePosition: 'in',
  //theme:'maximized',
 title: 'Histogram of Elevation in Colorado (meters)'
 });
