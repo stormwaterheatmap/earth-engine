@@ -30,7 +30,7 @@ function handle_map_click(location) {
     clicked_basin = ee.Feature(clicked_basin_fc.first());
     clicked_basin_geom = clicked_basin.geometry();
     
-    var getFeatureInfo = function(clicked_basin) {
+/*    var getFeatureInfo = function(clicked_basin) {
     clicked_basin.evaluate(function () {
             var wsName = ui.Label({
                 value: ['WRIA Name:', clicked_basin.getString('WRIA_NM').getInfo()],
@@ -40,13 +40,13 @@ function handle_map_click(location) {
                 value: ['WRIA Number:', clicked_basin.getString('WRIA_NR').getInfo()]
             })
             var wsArea = clicked_basin.area()
-            print(wsArea)
+            print('Watershed area', wsArea)
             var featureInfo = ui.Panel([wsName,wsNum]); 
-            print(featureInfo) 
+            buttonPanel.add(featureInfo)
             })
             
        } 
-   print(getFeatureInfo)
+   print(getFeatureInfo)*/
    // buttonPanel.add(getFeatureInfo(clicked_basin))   
     print('Clicked Basin', clicked_basin)
                 accept.style().set({
@@ -57,6 +57,13 @@ function handle_map_click(location) {
     });
     mapPanel.addLayer(clicked_basin)
     mapPanel.centerObject(clicked_basin)
+    var featureinfo =  ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
+    var infoTab = ui.Panel({style: {position: 'bottom-center', stretch:'both'}})
+    infoTab.add(featureinfo)
+    print('ok....')
+    //infoTab.setOptions({orientation: 'vertical'})
+    //print(infoTab)
+      mapPanel.add(infoTab)
     return clicked_basin
     return clicked_basin_geom
     }
@@ -364,7 +371,9 @@ var clipLayers = function () {
 }
 //** results Cards 
 var histogramCard = function(layerObject) {
-  var chartCard =ui.Panel().add(ui.Label('ChartCard')) 
+  var chartCard =ui.Panel({style: Style.cardPanel
+    
+  }).add(ui.Label('ChartCard')) 
   var chartbutton = ui.Button({
      label: 'Display results as chart',
      onClick: function() {
@@ -394,7 +403,7 @@ var histogramCard = function(layerObject) {
   
   
 //make a panel to hold it 
-var card = ui.Panel({style: {width: '400px'}}).add(ui.Label({value: layerObject.layer.name})).add(chartCard).add(chartbutton).add(tablebutton).add(ui.Label('Read Methodology'))
+var card = ui.Panel({style: Style.cardPanel}).add(ui.Label({value: layerObject.layer.name, style: fonts.H3})).add(chartCard).add(chartbutton).add(tablebutton).add(ui.Label('Read Methodology'))
   //return the panel 
   return card
 }
@@ -544,7 +553,7 @@ var blankPanel = ui.Panel({
     }
 });
 var instructionsPanel = ui.Panel()
-var mapInfoPanel = ui.Panel({style:{shown:false}})
+var mapInfoPanel = ui.Panel({style:{shown:false, position:'bottom-center'}})
 var makeReports = function () {
     //Make a card for precipitation 
     var cardTitle = ui.Label({value: layerProperties.Precipitation.layer.name, 
@@ -552,10 +561,11 @@ var makeReports = function () {
     }).style().set({fontWeight: 'bold'});
     print(cardTitle)
     var precipReport  = ui.Panel()//.add(cardTitle); 
-    precipReport.add(charts.bigNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean'
+
+    precipReport.add(histogramCard(layerProperties.Precipitation)) 
+        precipReport.add(charts.bigNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean'
   //    (layerObj, region, scale, reducerType) {
       ))
-    precipReport.add(histogramCard(layerProperties.Precipitation)) 
     sidePanel.add(precipReport); 
     //print(precipReport)
     //Make a card for landuse 
