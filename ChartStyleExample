@@ -12,20 +12,20 @@ var histogram = ui.Chart.image.histogram({
 histogram.style().set({width:'300px',height:'200px'})
 histogram.setOptions({
 //  fontSize:12,
- colors:['plum','lightgreen','palegreen','green'],//groupWidth:'63%'},
+ colors:['cadetblue','lightgreen','palegreen','green'],//groupWidth:'63%'},
  // fillOpacity: '50%',
   legend: {position: 'none'},
  vAxis: {gridlines: {color: 'white'},
  // baselineColor: 'black',
    viewWindowMode: 'maximized'
   },
- chartArea:{height:'80%', width:'80%'},
+// chartArea:{height:'80%', width:'80%'},
   hAxis: {gridlines: {color:'whitesnow'},
     viewWindowMode: 'maximized',
   //  baselineColor:'black'
   },
-  titlePosition: 'in',
-// theme:'maximized',
+ // titlePosition: 'in',
+ //theme:'maximized',
 Title: 'Histogram of Elevation in Colorado (meters)'
 });
 Map.add(histogram.setChartType('BarChart'))
