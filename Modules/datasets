@@ -232,7 +232,10 @@ var rasters = {
             values: null,
             units: 'mm/year',
             labels: null,
-            vizType: 'bigNumberMean'
+            vizType: 'bigNumberMean', 
+            sourceName: 'PRISM Long-Term Average Climate Dataset',
+            sourceUrl: 'https://developers.google.com/earth-engine/datasets/catalog/OREGONSTATE_PRISM_Norm81m'
+
         },
         'Soils': {
             layer: {
@@ -488,3 +491,4 @@ exports.vectors = {
 exports.rasters = rasters
         
 print(rasters)
+print(prismP)
