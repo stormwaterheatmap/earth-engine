@@ -552,4 +552,11 @@ var color = style.colors.primary
 print(layTest)
 //Map.add(littleNum(layTest,geometry,100,'mean'))
 var hist = (histogramImage(layTest,geometry,100))
-Map.add(hist)
+//Map.add(hist)
+ var closeTab = ui.Button({label: 'close' , 
+ style: {margin: '0px', position: 'top-right', color: 'gray', 
+ fontSize: '20px', textAlign: 'right'}})
+
+ var pan = ui.Panel([closeTab,hist])
+ print(closeTab)
+print(pan.widgets())
