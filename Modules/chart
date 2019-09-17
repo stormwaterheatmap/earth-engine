@@ -532,7 +532,7 @@ else if (reducerType === 'percent') {
     return numPan
 
 }
-
+exports.littleNum = littleNum; 
 //Testing area 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 print(style)
