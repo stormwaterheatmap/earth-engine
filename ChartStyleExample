@@ -9,23 +9,24 @@ var histogram = ui.Chart.image.histogram({
   minBucketWidth: 300
 });
 
-histogram.style().set({width:'320px',height:'200px'})
+histogram.style().set({width:'300px',height:'200px'})
 histogram.setOptions({
 //  fontSize:12,
- colors:['lightgreen','palegreen','green'],//groupWidth:'63%'},
+ colors:['plum','lightgreen','palegreen','green'],//groupWidth:'63%'},
+ // fillOpacity: '50%',
   legend: {position: 'none'},
-  vAxis: {gridlines: {color: 'white'},
+ vAxis: {gridlines: {color: 'white'},
  // baselineColor: 'black',
-    viewWindowMode: 'maximized'
+   viewWindowMode: 'maximized'
   },
- chartArea:{height:'80%'},
-  hAxis: {gridlines: {color:'white'},
+ chartArea:{height:'80%', width:'80%'},
+  hAxis: {gridlines: {color:'whitesnow'},
     viewWindowMode: 'maximized',
   //  baselineColor:'black'
   },
-//  titlePosition: 'in',
+  titlePosition: 'in',
 // theme:'maximized',
-//itle: 'Histogram of Elevation in Colorado (meters)'
+Title: 'Histogram of Elevation in Colorado (meters)'
 });
 Map.add(histogram.setChartType('BarChart'))
 Map.addLayer(elevation.clip(colorado));
