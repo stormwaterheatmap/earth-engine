@@ -30,59 +30,75 @@ function handle_map_click(location) {
     var clicked_basin_fc = WS.filterBounds(clicked_point);
     clicked_basin = ee.Feature(clicked_basin_fc.first());
     clicked_basin_geom = clicked_basin.geometry();
-    
-/*    var getFeatureInfo = function(clicked_basin) {
-    clicked_basin.evaluate(function () {
-            var wsName = ui.Label({
-                value: ['WRIA Name:', clicked_basin.getString('WRIA_NM').getInfo()],
-                style: fonts.Caption3
-            });
-            var wsNum = ui.Label({
-                value: ['WRIA Number:', clicked_basin.getString('WRIA_NR').getInfo()]
-            })
-            var wsArea = clicked_basin.area()
-            print('Watershed area', wsArea)
-            var featureInfo = ui.Panel([wsName,wsNum]); 
-            buttonPanel.add(featureInfo)
-            })
-            
-       } 
-   print(getFeatureInfo)*/
-   // buttonPanel.add(getFeatureInfo(clicked_basin))   
+
+    /*    var getFeatureInfo = function(clicked_basin) {
+        clicked_basin.evaluate(function () {
+                var wsName = ui.Label({
+                    value: ['WRIA Name:', clicked_basin.getString('WRIA_NM').getInfo()],
+                    style: fonts.Caption3
+                });
+                var wsNum = ui.Label({
+                    value: ['WRIA Number:', clicked_basin.getString('WRIA_NR').getInfo()]
+                })
+                var wsArea = clicked_basin.area()
+                print('Watershed area', wsArea)
+                var featureInfo = ui.Panel([wsName,wsNum]); 
+                buttonPanel.add(featureInfo)
+                })
+                
+           } 
+       print(getFeatureInfo)*/
+    // buttonPanel.add(getFeatureInfo(clicked_basin))   
     print('Clicked Basin', clicked_basin)
-                accept.style().set({
-                shown: true}) 
+    accept.style().set({
+        shown: true
+    })
     mapPanel.layers().reset()
     mapPanel.style().set({
         cursor: 'hand'
     });
     mapPanel.addLayer(clicked_basin)
     mapPanel.centerObject(clicked_basin)
-    var featureinfo =  ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
-    var infoTab = ui.Panel({style: {position: 'bottom-center', stretch:'both', width: '80%', shown:false}})
+    var featureinfo = ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
+    var infoTab = ui.Panel({
+        style: {
+            position: 'bottom-center',
+            stretch: 'both',
+            width: '80%',
+            shown: false
+        }
+    })
     var closeTab = ui.Button({
-      label: 'Close Table', 
-      onClick: function() {
-      infoTab.style().set({shown: false})
-      }
-})
-   // infoTab.add(ui.Panel(ui.Label('⌧')))
-    infoTab.add(ui.Label({value:'Watershed Info Table', style: fonts.H3}))
+        label: 'Close Table',
+        onClick: function () {
+            infoTab.style().set({
+                shown: false
+            })
+        }
+    })
+    // infoTab.add(ui.Panel(ui.Label('⌧')))
+    infoTab.add(ui.Label({
+        value: 'Watershed Info Table',
+        style: fonts.H3
+    }))
     infoTab.add(featureinfo)
     infoTab.add(closeTab)
     print('ok....')
     //infoTab.setOptions({orientation: 'vertical'})
     //print(infoTab)
-    buttonPanel.add(ui.Button(
-      {label: 'Show Watershed Information Table', 
-        onClick: function() {mapPanel.add(infoTab)
-        infoTab.style().set({shown: true})
+    buttonPanel.add(ui.Button({
+        label: 'Show Watershed Information Table',
+        onClick: function () {
+            mapPanel.add(infoTab)
+            infoTab.style().set({
+                shown: true
+            })
         }
-      }))
-      
+    }))
+
     return clicked_basin
     return clicked_basin_geom
-    }
+}
 
 function handle_inspect_click() {
     print('inspector Activated')
@@ -112,7 +128,7 @@ function hline(pan) {
             height: '0px',
             padding: '0px ',
             margin: '0px 0px 0px 0px',
-            border: '1px solid whitesmoke',
+            border: '2px solid black',
             stretch: 'horizontal',
         }
     }));
@@ -206,7 +222,7 @@ var checkbox = function (layerObject) {
     } else {
         legend = (barLegend(layerObject))
     } //add reports  
-    
+
 
 
     var cb = ui.Checkbox({
@@ -386,46 +402,118 @@ var clipLayers = function () {
     }
 }
 //** results Cards 
-var histogramCard = function(layerObject) {
-  var chartCard =ui.Panel({style: Style.cardPanel
-    
-  }).add(ui.Label('ChartCard'))
-  chartCard.add((charts.histogramImage(layerObject, clicked_basin_geom, 
-        mapPanel.getScale())) )
-  var chartbutton = ui.Button({
-     label: 'Display results as chart',
-     onClick: function() {
-        //reset the panel 
-        chartbutton.style().set({shown: false}) 
-        tablebutton.style().set({shown: true}) 
-       chartCard.clear()
-       chartCard.add(charts.histogramImage(layerObject, clicked_basin_geom, 
-        mapPanel.getScale()))  
-      }
-  })
-  var tablebutton = ui.Button({
-    style: {shown: false}, //hides the button initially 
-     label: 'Display results as table',
-     onClick: function() {
-           //reset the panel 
-           tablebutton.style().set({shown: false}) 
-           chartbutton.style().set({shown: true}) 
-       chartCard.clear()
-       var chart = charts.histogramImage(layerObject.layer.eeObject, clicked_basin_geom, 
-        mapPanel.getScale()).setChartType('Table')
-        chart.setOptions({allowHtml: true, pageSize: 5}).style().set({stretch: 'both'})
-      chartCard.add(chart)
-        
-      }
-  })
-//make a panel to hold it 
-var card = ui.Panel({style: Style.cardPanel}
-).add(chartCard).add(chartbutton)//.add(tablebutton)//removed table buttons for now
+var histogramCard = function (layerObject) {
+    var chartCard = ui.Panel({
+        style: Style.cardPanel
 
-  //return the panel 
-  return card
+    }).add(ui.Label('ChartCard'))
+    chartCard.add((charts.histogramImage(layerObject, clicked_basin_geom,
+        mapPanel.getScale())))
+    var chartbutton = ui.Button({
+        label: 'Display results as chart',
+        onClick: function () {
+            //reset the panel 
+            chartbutton.style().set({
+                shown: false
+            })
+            tablebutton.style().set({
+                shown: true
+            })
+            chartCard.clear()
+            chartCard.add(charts.histogramImage(layerObject, clicked_basin_geom,
+                mapPanel.getScale()))
+        }
+    })
+    var tablebutton = ui.Button({
+        style: {
+            shown: false
+        }, //hides the button initially 
+        label: 'Display results as table',
+        onClick: function () {
+            //reset the panel 
+            tablebutton.style().set({
+                shown: false
+            })
+            chartbutton.style().set({
+                shown: true
+            })
+            chartCard.clear()
+            var chart = charts.histogramImage(layerObject.layer.eeObject, clicked_basin_geom,
+                mapPanel.getScale()).setChartType('Table')
+            chart.setOptions({
+                allowHtml: true,
+                pageSize: 5
+            }).style().set({
+                stretch: 'both'
+            })
+            chartCard.add(chart)
+
+        }
+    })
+    //make a panel to hold it 
+    var card = ui.Panel({
+        style: Style.cardPanel
+    }).add(chartCard).add(chartbutton) //.add(tablebutton)//removed table buttons for now
+
+    //return the panel 
+    return card
 }
 
+var pieCard = function (layerObject) {
+    var chartCard = ui.Panel({
+        style: Style.cardPanel
+
+    }).add(ui.Label('ChartCard'))
+    chartCard.add((charts.histogramImage(layerObject, clicked_basin_geom,
+        mapPanel.getScale())))
+    var chartbutton = ui.Button({
+        label: 'Display results as chart',
+        onClick: function () {
+            //reset the panel 
+            chartbutton.style().set({
+                shown: false
+            })
+            tablebutton.style().set({
+                shown: true
+            })
+            chartCard.clear()
+            chartCard.add(charts.pieChart(clicked_basin_geom, layerObject,holeSize)) //(geometry, properties, holeSize)
+        }
+    })
+    var tablebutton = ui.Button({
+        style: {
+            shown: false
+        }, //hides the button initially 
+        label: 'Display results as table',
+        onClick: function () {
+            //reset the panel 
+            tablebutton.style().set({
+                shown: false
+            })
+            chartbutton.style().set({
+                shown: true
+            })
+            chartCard.clear()
+            var chart = charts.histogramImage(layerObject.layer.eeObject, clicked_basin_geom,
+                mapPanel.getScale()).setChartType('Table')
+            chart.setOptions({
+                allowHtml: true,
+                pageSize: 5
+            }).style().set({
+                stretch: 'both'
+            })
+            chartCard.add(chart)
+
+        }
+    })
+    //make a panel to hold it 
+    var card = ui.Panel({
+        style: Style.cardPanel
+    }).add(chartCard).add(chartbutton) //.add(tablebutton)//removed table buttons for now
+
+    //return the panel 
+    return card
+}
 
 /** Returns a ui.Map with some UI configuration in place */
 function makeMapPanel() {
@@ -436,7 +524,7 @@ function makeMapPanel() {
             margin: '0'
         }
     });
-    map.setOptions('Dark', Style.mapStyles) 
+    map.setOptions('Dark', Style.mapStyles)
     map.setControlVisibility({
         all: false,
         zoomControl: true,
@@ -493,9 +581,9 @@ Slope: Object (6 properties)
 Soils: Object (6 properties)
 landCover: Object (6 properties)
 landUse: Object (6 properties)
-*/ 
+*/
 
-            
+
 
 //} 
 var mainPanel = ui.Panel({
@@ -572,65 +660,89 @@ var blankPanel = ui.Panel({
     }
 });
 var instructionsPanel = ui.Panel()
-var mapInfoPanel = ui.Panel({style:{shown:false, position:'bottom-center'}})
+var mapInfoPanel = ui.Panel({
+    style: {
+        shown: false,
+        position: 'bottom-center'
+    }
+})
 var makeReports = function () {
     //Make a card for precipitation 
-    var cardTitle = ui.Label({value: layerProperties.Precipitation.layer.name, 
-      style: fonts.H3
-    }).style().set({fontWeight: 'bold'});
-    print(cardTitle)
-    var precipReport  = ui.Panel({style: Style.cardPanel})//.add(cardTitle); 
-    precipReport.add(ui.Label({value: 'Precipitation', style: fonts.H3}))
-     precipReport.add(
-         charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(),
-          'mean'))
-   //  hline(precipReport)//line
-    precipReport.add(histogramCard(layerProperties.Precipitation)) 
-   // hline(precipReport) //adds a line 
-  //    (layerObj, region, scale, reducerType) {
-      
-    sidePanel.add(precipReport); 
-    //print(precipReport)
-    //Make a card for landuse 
-   // var luReport = resultCard('Land Use'); 
-   // luReport.add(charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize))
-   // luReport.add((charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize).setChartType('Table'))    
-   // )
+    var cardTitle = ui.Label({
+        value: 'Precipitation',
+        style: fonts.H3
+    }).style().set({
+        fontWeight: 'bold'
+    });
+   
+    var precipReport = ui.Panel({
+        style: Style.cardPanel
+    }) //.add(cardTitle); 
+    precipReport.add(cardTitle)
+    precipReport.add(
+        charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(),
+            'mean'))
+    //  hline(precipReport)//line
+    precipReport.add(histogramCard(layerProperties.Precipitation))
+    // hline(precipReport) //adds a line 
+    //    (layerObj, region, scale, reducerType) {
+
+    sidePanel.add(precipReport);
+
+    var cardTitle = ui.Label({
+        value: 'Land Use',
+        style: fonts.H3
+    }).style().set({
+        fontWeight: 'bold'
+    });
+    var luReport = ui.Panel({
+        style: Style.cardPanel
+    }) 
+   
+    luReport.add(PieCard(layerProperties.landUse))
+    // hline(precipReport) //adds a line 
+    //    (layerObj, region, scale, reducerType) {
+
+    sidePanel.add(luReport);
+    // var luReport = resultCard('Land Use'); 
+    // luReport.add(charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize))
+    // luReport.add((charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize).setChartType('Table'))    
+    // )
     //sidePanel.add(luReport)
     //Make a card for imperviousness 
     //contained in landcover card
     //Make a card for landcover 
-  //  var lcReport = resultCard('Land Cover'); 
+    //  var lcReport = resultCard('Land Cover'); 
     //lcReport.add(charts.bigNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'mean'))
     //lcReport.add(charts.pieChart(clicked_basin_geom, layerProperties.landCover, holeSize))
     //lcReport.add((charts.pieChart(clicked_basin_geom, layerProperties.landCover, holeSize).setChartType('Table'))    
     //)
-//    sidePanel.add(lcReport)
+    //    sidePanel.add(lcReport)
 
-        //Make a card for Age of Development  
-  //      var ageDevCard = resultCard('Age of Development'); 
-      //  ageDevCard.add(
-       //     charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), clicked_basin_geom) 
-        //    )
-        //    ageDevCard.add(charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), 
-         //   clicked_basin_geom).setChartType('Table'))  
+    //Make a card for Age of Development  
+    //      var ageDevCard = resultCard('Age of Development'); 
+    //  ageDevCard.add(
+    //     charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), clicked_basin_geom) 
+    //    )
+    //    ageDevCard.add(charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), 
+    //   clicked_basin_geom).setChartType('Table'))  
     //    sidePanel.add(ageDevCard)
     //    print('devage ok')
-//soils and lithology 
- //var soilsCard = resultCard('Soils and Lithology'); 
-// soilsCard.add(
-//             charts.pieChart(layerProperties.Soils, mapPanel.getScale(), clicked_basin_geom) 
-//             )
-//             soilsCard.add(charts.pieChart(layerProperties.Soils, mapPanel.getScale(), 
-//             clicked_basin_geom).setChartType('Table'))  
-//    //soilsCard.add(charts.pieChart(layerProperties.Lithology, mapPanel.getScale(), clicked_basin_geom) 
-//     //).setChartType('ColumnChart')
-   //  sidePanel.add(soilsCard)
-//Topography 
-//var topoCard = resultCard('Topography'); 
-  //  print('topcard ok')
-//    topoCard.add(charts.pieChart(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom)) //.setChartType('ColumnChart')
- //   topoCard.add(charts.pieChart(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom).setChartType('Table'))
+    //soils and lithology 
+    //var soilsCard = resultCard('Soils and Lithology'); 
+    // soilsCard.add(
+    //             charts.pieChart(layerProperties.Soils, mapPanel.getScale(), clicked_basin_geom) 
+    //             )
+    //             soilsCard.add(charts.pieChart(layerProperties.Soils, mapPanel.getScale(), 
+    //             clicked_basin_geom).setChartType('Table'))  
+    //    //soilsCard.add(charts.pieChart(layerProperties.Lithology, mapPanel.getScale(), clicked_basin_geom) 
+    //     //).setChartType('ColumnChart')
+    //  sidePanel.add(soilsCard)
+    //Topography 
+    //var topoCard = resultCard('Topography'); 
+    //  print('topcard ok')
+    //    topoCard.add(charts.pieChart(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom)) //.setChartType('ColumnChart')
+    //   topoCard.add(charts.pieChart(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom).setChartType('Table'))
     //sidePanel.add(topoCard)
     /*
     if (layerObject.vizType === 'pieChart') {
@@ -659,7 +771,7 @@ var makeReports = function () {
     
     }
     */
-    }
+}
 
 var deactiv_button = ui.Button({
     label: 'Reset Map',
@@ -669,8 +781,8 @@ var deactiv_button = ui.Button({
 var accept = ui.Button({
     // label: 'Accept Selected Watershed',
     label: 'Accept Selected Watershed ',
-    onClick: makeReports,  //also clear side panel todo
- //   style:{shown: false}
+    onClick: makeReports, //also clear side panel todo
+    //   style:{shown: false}
 });
 
 
@@ -682,9 +794,12 @@ var inspect_button = ui.Button({
 });
 //function to add user layer to the map
 var buttonPanel = ui.Panel({
-    widgets: [inspect_button, accept], 
+    widgets: [inspect_button, accept],
     layout: ui.Panel.Layout.flow('vertical'),
-    style: {position: 'top-left', stretch: 'both'}
+    style: {
+        position: 'top-left',
+        stretch: 'both'
+    }
 });
 
 //Labels 
@@ -702,8 +817,8 @@ var watershedSelect = ui.Select({
         print(selected)
         var WS = vectors[selected]
         mapPanel.addLayer(WS)
-        mapPanel.add( (buttonPanel))
-        
+        mapPanel.add((buttonPanel))
+
     }
 });
 // var selectItems = ['Debug', 'Precipitation', 'Land Cover/Land Use',
@@ -736,9 +851,9 @@ function mapReset() {
         all: false,
         zoomControl: true,
         mapTypeControl: true,
-        layerList: true, 
+        layerList: true,
         fullscreenControl: true
-        
+
     });
 }
 //mapPanel.setOptions('Dark', {'Dark': mapStyle.Dark});
@@ -770,7 +885,7 @@ ui.root.add(ui.SplitPanel(
         }
     }).add(ui.Label('colMask')).add(sidePanel),
     mapPanel));
-mapPanel.add(mapInfoPanel);     
+mapPanel.add(mapInfoPanel);
 ui.root.add(footer)
 //---------------- set the initial view
 var mapCenterLon = -122.423145;
