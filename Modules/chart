@@ -14,7 +14,7 @@ exports.histByClass = function (layerObject, scale, geom) {
     // Define chart customization options.
     var options = {
         legend: {
-            position: 'right'
+            position: 'none'
         },
         lineWidth: 1,
         vAxis: {
@@ -66,7 +66,9 @@ exports.histogramImage = function (image, WS, scale) {
         })
         .setOptions({
            theme:'maximize', 
-           // title: title, 
+           hAxisViewWindowMode: 'maximized',
+            //title: title, 
+            legend: {position: 'none'}
              //titleTextStyle: style.fonts.LegendTitle
         });
     return chart;
