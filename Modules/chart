@@ -56,23 +56,57 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
         });
     return chart;
 };
-exports.histogramImage = function (image, WS, scale) {
-    var chart = ui.Chart.image
-        .histogram({
-            image: image,
-            region: WS,
-            scale: scale,
-            maxBuckets: 16
-        })
-        .setOptions({
-           theme:'maximize', 
-           hAxisViewWindowMode: 'maximized',
-            //title: title, 
-            legend: {position: 'none'}
-             //titleTextStyle: style.fonts.LegendTitle
-        });
+
+var  histogramImage = function (layerObject, WS, scale) {
+    var chart = ui.Chart.image.histogram({
+  image: layerObject.layer.eeObject,
+  region: WS,
+  scale: scale,
+  maxBuckets: 16,
+});
+
+chart.style().set({width:'300px',height:'185px'})
+chart.setSeriesNames(
+  (layerObject.layer.name + ' ('+layerObject.units +')'),0)
+chart.setOptions({
+//  fontSize:12,
+ colors:['cadetblue','lightgreen','palegreen','green'],//groupWidth:'63%'},
+ //bar: {groupWidth: '90%'},
+ legend: {position: 'none'},
+ //explorer:{},
+ vAxis: {
+  gridlines: {color: 'whitesmoke',
+    count:4,
+    title:'title'
+  
+  },
+  minorGridlines:{color:'white'},
+ format: 'short',
+ textPosition:'in',
+ // baselineColor: 'black',
+//  viewWindowMode: 'maximized'
+  },
+chartArea:{//height:'80%', 
+//width:'100%',
+top:36,bottom:36,left:8,right:8},
+ hAxis: {gridlines: {color:'white',
+ //  count: 4,
+ },
+ title:(layerObject.layer.name +' (' +layerObject.units+' )')
+ //textPosition:'in',
+// format:'short',
+ // viewWindowMode: 'maximized',
+  //  baselineColor:'black'
+  },
+//  titlePosition: 'in',
+ //theme:'maximized',
+title: ('Histogram of '+ layerObject.layer.name)// Elevation in Colorado (meters)'
+
+  
+});
     return chart;
 };
+exports.histogramImage = histogramImage; 
 var makePieChart = function (geometry, properties, holeSize) {
     var AOI = geometry;
     var image = properties.layer.eeObject
@@ -516,4 +550,6 @@ var title = 'Mean Annual Precipitation'
 var color = style.colors.primary
 //var layTest = data.rasters.Imperviousness
 print(layTest)
-Map.add(littleNum(layTest,geometry,100,'mean'))
+//Map.add(littleNum(layTest,geometry,100,'mean'))
+var hist = (histogramImage(layTest,geometry,100))
+Map.add(hist)
