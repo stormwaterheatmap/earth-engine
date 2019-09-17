@@ -406,7 +406,7 @@ var histogramCard = function (layerObject) {
     var chartCard = ui.Panel({
         style: Style.cardPanel
 
-    }).add(ui.Label('ChartCard'))
+    })//.add(ui.Label('ChartCard'))
     chartCard.add((charts.histogramImage(layerObject, clicked_basin_geom,
         mapPanel.getScale())))
     var chartbutton = ui.Button({
@@ -447,14 +447,12 @@ var histogramCard = function (layerObject) {
                 stretch: 'both'
             })
             chartCard.add(chart)
-
         }
     })
     //make a panel to hold it 
     var card = ui.Panel({
-        style: Style.cardPanel
-    }).add(chartCard).add(chartbutton) //.add(tablebutton)//removed table buttons for now
-
+       // style: {border: '1px solid black'}
+    }).add(chartCard)//.add(chartbutton) //.add(tablebutton)//removed table buttons for now
     //return the panel 
     return card
 }
@@ -463,9 +461,8 @@ var pieCard = function (layerObject) {
     var chartCard = ui.Panel({
         style: Style.cardPanel
 
-    }).add(ui.Label('ChartCard'))
-    chartCard.add((charts.histogramImage(layerObject, clicked_basin_geom,
-        mapPanel.getScale())))
+    }).add(ui.Label('ChartCard')) //(geometry, properties, holeSize)
+    chartCard.add((charts.pieChart(clicked_basin_geom,layerObject,holeSize)))
     var chartbutton = ui.Button({
         label: 'Display results as chart',
         onClick: function () {
@@ -509,7 +506,7 @@ var pieCard = function (layerObject) {
     //make a panel to hold it 
     var card = ui.Panel({
         style: Style.cardPanel
-    }).add(chartCard).add(chartbutton) //.add(tablebutton)//removed table buttons for now
+    }).add(chartCard)//.add(chartbutton) //.add(tablebutton)//removed table buttons for now
 
     //return the panel 
     return card
@@ -668,13 +665,14 @@ var mapInfoPanel = ui.Panel({
 })
 var makeReports = function () {
     //Make a card for precipitation 
-    var cardTitle = ui.Label({
-        value: 'Precipitation',
-        style: fonts.H3
-    }).style().set({
-        fontWeight: 'bold'
-    });
-   
+    var chart = charts.littleNum(layerProperties.Precipitation, 
+    clicked_basin_geom, mapPanel.getScale(), 'mean')
+    var chart2 = histogramCard(layerProperties.Precipitation)
+  
+    var precipCard = cards('Precipitation',[chart, chart2])
+    sidePanel.add(precipCard)
+ //  print(precipCard)
+   /*
     var precipReport = ui.Panel({
         style: Style.cardPanel
     }) //.add(cardTitle); 
@@ -688,22 +686,18 @@ var makeReports = function () {
     //    (layerObj, region, scale, reducerType) {
 
     sidePanel.add(precipReport);
+*/ 
 
-    var cardTitle = ui.Label({
-        value: 'Land Use',
-        style: fonts.H3
-    }).style().set({
-        fontWeight: 'bold'
-    });
-    var luReport = ui.Panel({
-        style: Style.cardPanel
-    }) 
-   
-    luReport.add(PieCard(layerProperties.landUse))
+//make a landuse card 
+
+  var chart = pieCard(layerProperties.landUse)
+ var luCard = cards('Landuse',[chart])
+  sidePanel.add(luCard)
+      
     // hline(precipReport) //adds a line 
     //    (layerObj, region, scale, reducerType) {
 
-    sidePanel.add(luReport);
+ //   sidePanel.add(luReport);
     // var luReport = resultCard('Land Use'); 
     // luReport.add(charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize))
     // luReport.add((charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize).setChartType('Table'))    
@@ -773,6 +767,19 @@ var makeReports = function () {
     */
 }
 
+//cards function 
+var cards = function(title,widgetItems) {
+ var cardTitle = ui.Label({
+        value: title,
+        style: fonts.H3
+    })//.style().set({
+      //  fontWeight: 'bold'
+  var wholeCard = ui.Panel({widgets: widgetItems, style: {border: '8px solid whitesmoke', padding: '12px'}})
+  wholeCard.insert(0, cardTitle)
+  //wholeCard.add(widgetItems)
+    return wholeCard
+}
+
 var deactiv_button = ui.Button({
     label: 'Reset Map',
     //onClick: mapReset,//also clear side panel 
@@ -797,6 +804,7 @@ var buttonPanel = ui.Panel({
     widgets: [inspect_button, accept],
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
+      backgroundColor: colors.transparent, 
         position: 'top-left',
         stretch: 'both'
     }
