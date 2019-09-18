@@ -183,7 +183,8 @@ var makePieChart = function (
             //slices: createPieChartSliceDictionary(transition_fc).evaluate,
             sliceVisibilityThreshold: 0.02
         });
-    createPieChartSliceDictionary(transition_fc).evaluate(function(result) {
+    createPieChartSliceDictionary(transition_fc)
+    //.evaluate(function(result) {
     // When the server returns the value, show it.
     transition_summary_chart.setOptions({
       slices: transition_fc,
@@ -192,9 +193,9 @@ var makePieChart = function (
       pieSliceTextStyle: {color: 'black'}
      // titleTextStyle: style.fonts.LegendTitle
     })})
-    return (transition_summary_chart);
+ //   return (transition_summary_chart);
 
-}
+//
 exports.pieChart = makePieChart;
 
 var bigNum = function (layerObj, region, scale, reducerType) {
