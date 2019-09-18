@@ -13,14 +13,14 @@ exports.histByClass = function (layerObject, scale, geom) {
     // Define chart customization options.
     var options = {
         legend: {
-            position: 'none'
+            position: 'in'
         },
         lineWidth: 1,
         vAxis: {
             title: 'Hectares'
         },
-        title: layerObject.layer.name.concat(' in Watershed'),
-        colors: layerObject.layer.visParams.palette,
+   //     title: layerObject.layer.name.concat(' in Watershed'),
+   //     colors: layerObject.layer.visParams.palette,
         //theme: 'maximized', // {position: 'right'}
         // legend: 'none'
     };
