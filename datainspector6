@@ -835,11 +835,11 @@ ui.root.clear();
 var sidePanel = makeSidePanel();
 var mapPanel = makeMapPanel();
 var header = makeHeader();
-header.add(ui.Label('header'))
+//header.add(ui.Label('header'))
 var footer = makeFooter();
 footer.add(ui.Label('footer'))
-sidePanel.add(ui.Label('sidePanel'))
-mapPanel.add(ui.Label('mapPanel'))
+//sidePanel.add(ui.Label('sidePanel'))
+//mapPanel.add(ui.Label('mapPanel'))
 ui.root.setLayout(ui.Panel.Layout.flow(
     'vertical'))
 ui.root.add(header)
