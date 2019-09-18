@@ -747,12 +747,13 @@ var deactiv_button = ui.Button({
     label: 'Reset Map',
     //onClick: mapReset,//also clear side panel 
 });
-
 var accept = ui.Button({
     // label: 'Accept Selected Watershed',
     label: 'Accept Selected Watershed ',
-    onClick: makeReports, //also clear side panel todo
-    //   style:{shown: false}
+    onClick: function() {
+      makeReports() //also clear side panel todo
+       buttonPanel.style().set({shown: false})
+    }
 });
 
 
