@@ -192,7 +192,7 @@ var makePieChart = function (
       pieHole: holeSize,
       pieSliceTextStyle: {color: 'black'}
      // titleTextStyle: style.fonts.LegendTitle
-    })})
+    })
  //   return (transition_summary_chart);
 
 //
