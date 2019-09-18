@@ -199,8 +199,8 @@ var makePieChart = function (
   }
 
 //
-exports.pieChart = makePieChart[0]
-exports.fc = makePieChart[1]
+exports.pieChart = makePieChart
+//exports.fc = makePieChart[1]
 
 var bigNum = function (layerObj, region, scale, reducerType) {
     var panel = ui.Panel({
