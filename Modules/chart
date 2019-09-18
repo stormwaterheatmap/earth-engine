@@ -195,7 +195,7 @@ var makePieChart = function (
      // titleTextStyle: style.fonts.LegendTitle
     })
   
-  return (transition_summary_chart);
+  return [transition_summary_chart,transition_fc];
   }
 
 //
