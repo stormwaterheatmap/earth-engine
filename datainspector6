@@ -664,65 +664,27 @@ var mapInfoPanel = ui.Panel({
     }
 })
 var makeReports = function () {
-    //Make a card for precipitation 
-    var chart = charts.littleNum(layerProperties.Precipitation, 
-    clicked_basin_geom, mapPanel.getScale(), 'mean')
-    var chart2 = histogramCard(layerProperties.Precipitation)
-    var precipCard = cards('Precipitation',[chart, chart2])
+  
+    var pchart = charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean')
+    var pchart2 = charts.histogramImage(
+      layerProperties.Precipitation, clicked_basin_geom,
+        mapPanel.getScale()
+        )
+    var precipCard = cards('Precipitation',[pchart, pchart2])
     sidePanel.add(precipCard)
- //  print(precipCard)
-   /*
-    var precipReport = ui.Panel({
-        style: Style.cardPanel
-    }) //.add(cardTitle); 
-    precipReport.add(cardTitle)
-    precipReport.add(
-        charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(),
-            'mean'))
-    //  hline(precipReport)//line
-    precipReport.add(histogramCard(layerProperties.Precipitation))
-    // hline(precipReport) //adds a line 
-    //    (layerObj, region, scale, reducerType) {
-
-    sidePanel.add(precipReport);
-*/ 
-
-//make a landuse card 
-
-
- var luCard = cards('Landuse',[pieCard(layerProperties.landUse)])
-  sidePanel.add(luCard)
-      
-    // hline(precipReport) //adds a line 
-    //    (layerObj, region, scale, reducerType) {
-
- //   sidePanel.add(luReport);
-    // var luReport = resultCard('Land Use'); 
-    // luReport.add(charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize))
-    // luReport.add((charts.pieChart(clicked_basin_geom, layerProperties.landUse, holeSize).setChartType('Table'))    
-    // )
-    //sidePanel.add(luReport)
-    //Make a card for imperviousness 
-    //contained in landcover card
-    //Make a card for landcover 
-    //  var lcReport = resultCard('Land Cover'); 
-    //lcReport.add(charts.bigNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'mean'))
-    //lcReport.add(charts.pieChart(clicked_basin_geom, layerProperties.landCover, holeSize))
-    //lcReport.add((charts.pieChart(clicked_basin_geom, layerProperties.landCover, holeSize).setChartType('Table'))    
-    //)
-    //    sidePanel.add(lcReport)
-
-    //Make a card for Age of Development  
-    //      var ageDevCard = resultCard('Age of Development'); 
-    //  ageDevCard.add(
-    //     charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), clicked_basin_geom) 
-    //    )
-    //    ageDevCard.add(charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), 
-    //   clicked_basin_geom).setChartType('Table'))  
-    //    sidePanel.add(ageDevCard)
-    //    print('devage ok')
-    //soils and lithology 
-    //var soilsCard = resultCard('Soils and Lithology'); 
+//make a landuse card //geometry, properties, holeSize
+var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale())
+    var luCard = cards('Land Use',[luchart])
+    sidePanel.add(luCard)
+//Make a card for Age of Development 
+var ageCard = charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), clicked_basin_geom)
+    var ageCard = cards('Age of Development',[ageCard])
+    sidePanel.add(ageCard)
+var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale())     //soils and lithology 
+ var lithChart =  charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale())     //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
+   lithChart.setChartType('BarChart'); 
+       var soilsCard = cards('Soils and Lithology',[soilsChart, lithChart])
+    sidePanel.add(soilsCard)
     // soilsCard.add(
     //             charts.pieChart(layerProperties.Soils, mapPanel.getScale(), clicked_basin_geom) 
     //             )
@@ -769,14 +731,11 @@ var makeReports = function () {
 //cards function 
 print('cards function')
 var cards = function(title,widgetItems) {
- var cardTitle = ui.Label({
-        value: title,
-        style: fonts.H3
-    })//.style().set({
-      //  fontWeight: 'bold'
+  var cardTitle = ui.Label(title)
   var wholeCard = ui.Panel({
     widgets: widgetItems, 
-    style: {border: '8px solid whitesmoke', padding: '12px'}
+    style: {border: '8px solid whitesmoke', 
+    padding: '12px'}
   })
   wholeCard.insert(0, cardTitle)
   //wholeCard.add(widgetItems)
