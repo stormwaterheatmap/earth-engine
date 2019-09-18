@@ -2,6 +2,12 @@
 var elevation = ee.Image('CGIAR/SRTM90_V4');
 var colorado = ee.Geometry.Rectangle(-109.05, 37, -102.05, 41);
 // Generate the histogram data.  Use minBucketWidth for nice sized buckets.
+var colors = [//'4E79A7', 
+//'F28E2B', 
+'76B7B2', '59A14E', 'EDC949', 'B07AA2', 'FF9DA7', '9C755F', 
+ 'BAB0AC']
+
+
 var histogram = ui.Chart.image.histogram({
   image: elevation,
   region: colorado,
@@ -13,7 +19,7 @@ histogram.style().set({width:'300px',height:'185px'})
 histogram.setSeriesNames('elev',0)
 histogram.setOptions({
 //  fontSize:12,
- colors:['cadetblue','lightgreen','palegreen','green'],//groupWidth:'63%'},
+ colors:colors,//groupWidth:'63%'},
  //bar: {groupWidth: '90%'},
  legend: {position: 'none'},
  //explorer:{},
@@ -47,18 +53,8 @@ chartArea:{//height:'80%',
  //theme:'maximized',
 title: 'Histogram of Elevation in Colorado (meters)'
 });
-var table = histogram.setChartType('Table')
-//var cssClassNames = {headerRow: {color: 'red'},
-table.style().set({color: 'red'})
-var rowform = {style:{color:'red'}}; 
-//hoverTableRow: 'highlightClass'};
-table.setOptions(
-  {allowHtml: true,
-  alternatingRowStyle:false,
-  pagingButtons:'both'
-  }
-  )
+print(histogram)
 //table.setCell(22, 2, 15, 'Fifteen', {style: 'font-style:bold; font-size:22px;'});  
-print(table)
+
 Map.addLayer(elevation.clip(colorado));
 Map.setCenter(-107, 39, 6);
