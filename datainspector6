@@ -120,18 +120,19 @@ function handle_inspect_click() {
 
 }
 
-function hline(pan) {
-    pan.add(ui.Label({
+function hline() {
+    var line = (ui.Label({
         value: 'null',
         style: {
-            //width:'100%',
+            //width:'90%',
             height: '0px',
-            padding: '0px ',
-            margin: '0px 0px 0px 0px',
-            border: '2px solid black',
+            //padding: '0px ',
+            //margin: '0px 0px 0px 0px',
+            border: '1px solid whitesmoke',
             stretch: 'horizontal',
         }
     }));
+    return line
 }
 var layerList = Object.keys(layerProperties)
 var size = Object.keys(layerProperties).length
@@ -670,7 +671,7 @@ var makeReports = function () {
       layerProperties.Precipitation, clicked_basin_geom,
         mapPanel.getScale()
         )
-    var precipCard = cards('Precipitation',[pchart, pchart2])
+    var precipCard = cards('Precipitation',[pchart, hline(), pchart2])
     sidePanel.add(precipCard)
 //make a landuse card //geometry, properties, holeSize
 var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale())
@@ -683,7 +684,7 @@ var ageCard = charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), cl
 var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale())     //soils and lithology 
  var lithChart =  charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale())     //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
    lithChart.setChartType('BarChart'); 
-       var soilsCard = cards('Soils and Lithology',[soilsChart, lithChart])
+       var soilsCard = cards('Soils and Lithology',[soilsChart, hline(), lithChart])
     sidePanel.add(soilsCard)
     // soilsCard.add(
     //             charts.pieChart(layerProperties.Soils, mapPanel.getScale(), clicked_basin_geom) 
