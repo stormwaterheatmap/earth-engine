@@ -2,6 +2,7 @@
 var geometry = /* color: #d63000 */ee.Geometry.Polygon(
         [[[-122.18688550907996, 47.588485685274044],
           [-122.13882032353308, 47.53659182056817],
+          [-122.05814919641182, 47.57734993250728],
           [-122.11684766728308, 47.629223376175645],
           [-122.16903272587683, 47.67547769385542]]]);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
@@ -70,7 +71,7 @@ chart.setSeriesNames(
   (layerObject.layer.name + ' ('+layerObject.units +')'),0)
 chart.setOptions({
 //  fontSize:12,
- colors:['cadetblue','lightgreen','palegreen','green'],//groupWidth:'63%'},
+ 
  //bar: {groupWidth: '90%'},
  legend: {position: 'none'},
  //explorer:{},
@@ -553,16 +554,69 @@ var value = 'loading...'
 //
 var units = 'in/year'
 var title = 'Mean Annual Precipitation'
-var color = style.colors.primary
-//var layTest = data.rasters.Imperviousness
-print(layTest)
-//Map.add(littleNum(layTest,geometry,100,'mean'))
-var hist = (histogramImage(layTest,geometry,100))
-//Map.add(hist)
- var closeTab = ui.Button({label: 'close' , 
- style: {margin: '0px', position: 'top-right', color: 'gray', 
- fontSize: '20px', textAlign: 'right'}})
+var chartColors = ['76B7B2', '59A14E', 'EDC949', 'B07AA2', 'FF9DA7', '9C755F', 'BAB0AC']
+var layTest = data.rasters.DevAge
 
- var pan = ui.Panel([closeTab,hist])
- print(closeTab)
-print(pan.widgets())
+var hist = (histogramImage(layTest,geometry,100))//.setChartType('Pi')
+hist.setOptions({colors: chartColors, style: {width: '400px', stretch: 'both'}})
+print(hist)
+//Dev Age - stepped area chart 
+//layerProperties.DevAge.layer.eeObject = layerProperties.DevAge.layer.eeObject.clip(geometry)
+ var imgToFc = function (layerObject, geomtery, scale) {  
+   var AOI = geometry;
+    var image = layerObject.layer.eeObject
+    var withArea = ee.Image.pixelArea().addBands(image);
+    var clipImage = withArea.clip(AOI)
+    var reduction_results = (clipImage).reduceRegion({
+        reducer: ee.Reducer.sum().group({
+            groupField: 1,
+            groupName: 'class value',
+        }),
+        geometry: AOI,
+        scale: scale,
+        bestEffort: true,
+    });
+  var lookup_names = ee.Dictionary.fromLists(
+        ee.List(layerObject.values).map(ee.String),
+        layerObject.labels
+    );
+    print('lookup names', lookup_names)
+    //////////////////////////////////////////////////////////////   // Helper functions    //////////////////////////////////////////////////////////////
+    function createFeature(transition_class_stats) {
+        transition_class_stats = ee.Dictionary(transition_class_stats);
+        var class_number = transition_class_stats.get('class value');
+        var result = {
+            transition_class_number: class_number,
+            transition_class_name: lookup_names.get(class_number),
+            transition_class_palette: lookup_palette.get(class_number),
+            area_m2: transition_class_stats.get('sum')
+        };
+        return ee.Feature(null,
+            result); // Creates a feature without a geometry.
+    }
+    function createPieChartSliceDictionary(fc) {
+
+
+    var roi_stats = ee.List(reduction_results.get('groups'));
+//    print('roi stats', roi_stats)
+    var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
+    print('transition_fc', transition_fc);
+    // Add a summary chart.
+  
+    return transition_fc;
+  }
+}
+
+var fc = imgToFc(layerProperties.DevAge, geometry,100)
+print(fc)
+//write a fc dictionary for this area 
+
+//Dissolved Copper - Histogram 
+//Imperviousness - little num 
+//Runoff - little num and Histogram 
+//Slope - Histogram and stacked bar 
+//Soils - stacked bar 
+//landcover - pie 
+//landuse - pie 
+
+
