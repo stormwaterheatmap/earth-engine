@@ -7,7 +7,6 @@ var geometry = /* color: #d63000 */ee.Geometry.Polygon(
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var colors = style.colors
-
 exports.histByClass = function (layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(10000) //area in hectares 
     var image = ee.Image.cat(area, layerObject.layer.eeObject)
@@ -56,7 +55,6 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
         });
     return chart;
 };
-
 var  histogramImage = function (layerObject, WS, scale) {
     var chart = ui.Chart.image.histogram({
   image: layerObject.layer.eeObject,
@@ -108,7 +106,8 @@ title: ('Watershed histogram')// Elevation in Colorado (meters)'
     return chart;
 };
 exports.histogramImage = histogramImage; 
-var makePieChart = function (geometry, properties, holeSize) {
+var makePieChart = function (
+  geometry, properties, scale, holeSize) {
     var AOI = geometry;
     var image = properties.layer.eeObject
     var withArea = ee.Image.pixelArea().addBands(image);
@@ -157,14 +156,14 @@ var makePieChart = function (geometry, properties, holeSize) {
             groupName: 'class value',
         }),
         geometry: AOI,
-        scale: 1,
+        scale: scale,
         bestEffort: true,
     });
-    print('reduction_results', reduction_results);
+ //   print('reduction_results', reduction_results);
     var roi_stats = ee.List(reduction_results.get('groups'));
-    print('roi stats', roi_stats)
+//    print('roi stats', roi_stats)
     var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
-    print('transition_fc', transition_fc);
+//    print('transition_fc', transition_fc);
     // Add a summary chart.
     var transition_summary_chart = ui.Chart.feature.byFeature({
             features: transition_fc,
@@ -187,7 +186,7 @@ var makePieChart = function (geometry, properties, holeSize) {
     createPieChartSliceDictionary(transition_fc).evaluate(function(result) {
     // When the server returns the value, show it.
     transition_summary_chart.setOptions({
-      slices: result,
+      slices: transition_fc,
       title: properties.layer.name, 
       pieHole: holeSize,
       pieSliceTextStyle: {color: 'black'}
