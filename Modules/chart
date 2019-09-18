@@ -22,7 +22,7 @@ exports.histByClass = function (layerObject, scale, geom) {
         colors: colors,
    //     title: layerObject.layer.name.concat(' in Watershed'),
    //     colors: layerObject.layer.visParams.palette,
-        //theme: 'maximized', // {position: 'right'}
+        theme: 'maximized', // {position: 'right'}
         // legend: 'none'
     };
 
@@ -34,7 +34,7 @@ exports.histByClass = function (layerObject, scale, geom) {
             scale: scale,
             classLabels: layerObject.labels,
             //titleTextStyle: style.fonts.LegendTitle
-             xLabels: layerObject.labels
+        //     xLabels: layerObject.labels
         })
         .setOptions(options)
     )
