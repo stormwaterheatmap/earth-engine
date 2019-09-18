@@ -33,7 +33,7 @@ exports.histByClass = function (layerObject, scale, geom) {
             scale: scale,
             classLabels: layerObject.labels,
             //titleTextStyle: style.fonts.LegendTitle
-            // xLabels: ' '
+             xLabels: layerObject.labels
         })
         .setOptions(options)
     )
