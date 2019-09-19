@@ -43,7 +43,7 @@ exports.histByClass = function (layerObject, scale, geom) {
 
 }
 exports.stackedBar = function (layerObject, scale, geom) {
-    var area = ee.Image.pixelArea().divide(10000) //area in hectares 
+    var area = ee.Image.pixelArea().divide(4046.856) //area in acres 
     var image = ee.Image.cat(area, layerObject.layer.eeObject)
     // Define chart customization options.
     var options = {
@@ -73,12 +73,12 @@ exports.stackedBar = function (layerObject, scale, geom) {
     )
     
    // var stacked = histChart.setOptions({isStacked:true})
-    return [histChart]
+    return histChart
 
 }
 
 
-//exports.stackedBar = histByClass.setOptions({isStacked: true}); 
+
 exports.histogramFeature = function (region, propName, buckwidth, title) {
     var chart = ui.Chart.feature
         .histogram({
