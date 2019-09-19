@@ -127,8 +127,8 @@ var population2020 = population.filterDate('2020-01-01')
 
 
 exports.population2020 = population2020;*/
-exports.precip = precip.select('b1').resample().divide(
-    25.4); //exports precip as mm 
+exports.precip = precip.select('b1').divide(
+    25.4); //exports precip as in 
 //Vectors 
 //Ecology Watershed Assessment Units 
 exports.PS_AU = ee.FeatureCollection('users/cnilsen/PS_AU')
@@ -218,7 +218,7 @@ var rasters = {
         },
         'Precipitation': {
             layer: {
-                eeObject: prismP,
+                eeObject: prismP.divide(ee.Image(25.4)),
                 name: 'Mean Annual Preciptation',
                 visParams: {
                     palette: ['#00007f', '#002aff', '#00d4ff', '#7fff7f',
@@ -226,13 +226,13 @@ var rasters = {
                         '#ff2a00',
                         '#7f0000'
                     ],
-                    min: 400,
-                    max: 4000
+                    min: 20,
+                    max: 100
                 }
             },
             discrete: false,
             values: null,
-            units: 'mm/year',
+            units: 'in/year',
             labels: null,
             vizType: 'bigNumberMean', 
             sourceName: 'PRISM Long-Term Average Climate Dataset',
