@@ -149,7 +149,7 @@ var histogramImage = function (layerObject, WS, scale) {
         },
         //  titlePosition: 'in',
         //theme:'maximized',
-        title: ('Watershed histogram') // Elevation in Colorado (meters)'
+       // title: ('Watershed histogram') // Elevation in Colorado (meters)'
 
 
     });
