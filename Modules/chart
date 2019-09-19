@@ -37,11 +37,14 @@ var histByClass = function (layerObject, scale, geom) {
         })
         .setOptions(options)
     )
-
-    return histChart
+    
+    var stacked = histChart.setOptions({isStacked:true})
+    return [histChart, stacked]
 
 }
-exports.histByClass = histByClass; 
+exports.histByClass = histByClass[0]; 
+exports.stackedBar = histByClass[1];
+
 exports.stackedBar = histByClass.setOptions({isStacked: true}); 
 exports.histogramFeature = function (region, propName, buckwidth, title) {
     var chart = ui.Chart.feature
