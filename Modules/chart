@@ -121,12 +121,12 @@ var makePieChart = function (
         ee.List(properties.values).map(ee.String),
         properties.labels
     );
-    print('lookup names', lookup_names)
+    // print('lookup names', lookup_names)
     var lookup_palette = ee.Dictionary.fromLists(
         ee.List(properties.values).map(ee.String),
         properties.layer.visParams.palette
     );
-    print(ee.List(lookup_palette))
+    // print(ee.List(lookup_palette))
     //////////////////////////////////////////////////////////////   // Helper functions    //////////////////////////////////////////////////////////////
     function createFeature(transition_class_stats) {
         transition_class_stats = ee.Dictionary(transition_class_stats);
@@ -165,7 +165,7 @@ var makePieChart = function (
     var roi_stats = ee.List(reduction_results.get('groups'));
 //    print('roi stats', roi_stats)
     var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
-    print('transition_fc', transition_fc);
+  //  print('transition_fc', transition_fc);
     // Add a summary chart.
     var transition_summary_chart = 
     ui.Chart.feature.byFeature({
@@ -542,7 +542,7 @@ else if (reducerType === 'percent') {
 exports.littleNum = littleNum; 
 //Testing area 
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
-print(style)
+// print(style)
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 
@@ -571,11 +571,11 @@ legend: {position:'none'},
 //  pieSliceTextStyle:{color: 'black'},//fontSize:8},
   chartArea:{width:'80%',height:'90%'}
 })
-print(pie)
+// print(pie)
 
 var hist = (histogramImage(layTest,geometry,100))//.setChartType('Pi')
 hist.setOptions({colors: chartColors, style: {width: '400px', stretch: 'both'}})
-print(hist)
+// print(hist)
 //Dev Age - stepped area chart 
 //layerProperties.DevAge.layer.eeObject = layerProperties.DevAge.layer.eeObject.clip(geometry)
  var imgToFc = function (layerObject, geomtery, scale) {  
@@ -596,7 +596,7 @@ print(hist)
         ee.List(layerObject.values).map(ee.String),
         layerObject.labels
     );
-    print('lookup names', lookup_names)
+    // print('lookup names', lookup_names)
     //////////////////////////////////////////////////////////////   // Helper functions    //////////////////////////////////////////////////////////////
     function createFeature(transition_class_stats) {
         transition_class_stats = ee.Dictionary(transition_class_stats);
@@ -616,7 +616,7 @@ print(hist)
     var roi_stats = ee.List(reduction_results.get('groups'));
 //    print('roi stats', roi_stats)
     var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
-    print('transition_fc', transition_fc);
+    // print('transition_fc', transition_fc);
     // Add a summary chart.
   
     return transition_fc;
@@ -624,15 +624,6 @@ print(hist)
 }
 
 var fc = imgToFc(layerProperties.DevAge, geometry,100)
-print(fc)
-//write a fc dictionary for this area 
 
-//Dissolved Copper - Histogram 
-//Imperviousness - little num 
-//Runoff - little num and Histogram 
-//Slope - Histogram and stacked bar 
-//Soils - stacked bar 
-//landcover - pie 
-//landuse - pie 
 
 
