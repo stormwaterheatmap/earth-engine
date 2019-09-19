@@ -194,15 +194,6 @@ var makePieChart = function (
     createPieChartSliceDictionary(transition_fc)
     //.evaluate(function(result) {
     // When the server returns the value, show it.
-    transition_summary_chart.setOptions({
-        slices: transition_fc,
-        title: properties.layer.name,
-        pieHole: holeSize,
-        pieSliceTextStyle: {
-            color: 'black'
-        }
-        // titleTextStyle: style.fonts.LegendTitle
-    })
 
     return transition_summary_chart
 }
