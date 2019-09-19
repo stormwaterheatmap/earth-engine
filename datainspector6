@@ -522,7 +522,7 @@ function makeMapPanel() {
             margin: '0'
         }
     });
-    map.setOptions('Dark', Style.mapStyles)
+    map.setOptions('Light', Style.mapStyles)
     map.setControlVisibility({
         all: false,
         zoomControl: true,
@@ -679,7 +679,7 @@ var makeReports = function () {
     )
      holderpan.add(pchart).add(pchart2)
       var holderpan2 = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')})   
-      holderpan2.add(runoffChart, runoffHist)
+      holderpan2.add(runoffChart).add(runoffHist)
     //pchart2.setOptions()
     var precipCard = cards('Precipitation', [holderpan, hline(), holderpan2])
     sidePanel.add(precipCard)
@@ -754,7 +754,7 @@ var buttonPanel = ui.Panel({
     widgets: [inspect_button, accept],
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
-        backgroundColor: colors.transparent,
+        backgroundColor: 'whitesmoke',
         position: 'top-left',
         stretch: 'both'
     }
