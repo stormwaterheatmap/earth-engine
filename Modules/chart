@@ -464,7 +464,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         backgroundColor: style.colors.transparent,
         //color: colors.pDark,
         //position: 'middle-right', 
-        textAlign: 'left',
+        textAlign: 'center',
         // stretch: 'horizontal'
     })
 
