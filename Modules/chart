@@ -183,12 +183,11 @@ var makePieChart = function (
         .setOptions({
             // title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
-            //height: '200',
-            //width: '200',
-            pieSliceTextStyle: {
-                color: 'black',
-                padding: '8px'
-            },
+            is3d:true,
+        legend: 'none',
+        pieSliceText: 'label',
+        //title: 'Swiss Language Use (100 degree rotation)',
+        pieStartAngle: 100,
             //slices: createPieChartSliceDictionary(transition_fc).evaluate,
             sliceVisibilityThreshold: 0.02
         });
