@@ -668,16 +668,24 @@ var makeReports = function () {
 
     var pchart = charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean')
     var runoffChart = charts.littleNum(layerProperties.Runoff_in, clicked_basin_geom, mapPanel.getScale(), 'mean')
+    var holderpan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')})
+    var runoffHist = charts.histogramImage(
+        layerProperties.Runoff, clicked_basin_geom,
+        mapPanel.getScale()
+    )
     var pchart2 = charts.histogramImage(
         layerProperties.Precipitation, clicked_basin_geom,
         mapPanel.getScale()
     )
+     holderpan.add(pchart).add(pchart2)
+      var holderpan2 = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')})   
+      holderpan2.add(runoffChart, runoffHist)
     //pchart2.setOptions()
-    var precipCard = cards('Precipitation', [pchart, runoffChart, hline(), pchart2])
+    var precipCard = cards('Precipitation', [holderpan, hline(), holderpan2])
     sidePanel.add(precipCard)
 
     //make a landuse card //geometry, properties, holeSize
-    var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale())
+    var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale()).setChartType('Table')
     var luCard = cards('Land Use', [luchart])
     sidePanel.add(luCard)
 
@@ -695,18 +703,18 @@ var makeReports = function () {
     
     //Make a panel for topography 
     var topoChart = charts.histogramImage(layerProperties.SlopeCont, clicked_basin_geom, mapPanel.getScale()) 
+    topoChart.setOptions({title: 'Distribution of Slope in the Watershed'})
     var topoCats = charts.stackedBar(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom)
     var topoCard = cards('Topography', [topoChart, hline(), topoCats])
       print('topcard ok')
       sidePanel.add(topoCard)
     //Make a panel for runoff 
-
 }
 
 //cards function 
 print('cards function')
 var cards = function (title, widgetItems) {
-    var cardTitle = ui.Label(title)
+    var cardTitle = ui.Label({value: title, style: fonts.H2})
     var wholeCard = ui.Panel({
         widgets: widgetItems,
         style: {
