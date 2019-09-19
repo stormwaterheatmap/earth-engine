@@ -15,7 +15,7 @@ var histogram = ui.Chart.image.histogram({
   minBucketWidth: 300
 });
 
-histogram.style().set({width:'300px',height:'185px'})
+//histogram.style().set({width:'300px',height:'185px'})
 histogram.setSeriesNames('elev',0)
 histogram.setOptions({
 //  fontSize:12,
@@ -35,8 +35,8 @@ histogram.setOptions({
  // baselineColor: 'black',
 //  viewWindowMode: 'maximized'
   },
-chartArea:{//height:'80%', 
-//width:'100%',
+chartArea:{height:'80%', 
+width:'80%',
 //top:36,bottom:36,left:8,right:8
   
 },
