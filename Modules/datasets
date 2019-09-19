@@ -42,6 +42,7 @@ var lithology = ee.Image('CSP/ERGo/1_0/US/lithology').select('b1');
 var mean_annual_runoff = ee.Image(
     "users/cnilsen/Runoff1980s5m");
 var DissolvedCopper = ee.Image('users/cnilsen/DcuCon').multiply(mean_annual_runoff); 
+var palettes = require('users/gena/packages:palettes');
 /*
 Images 
 */
@@ -178,7 +179,6 @@ Map.addLayer(generalizedLU,{palette: LUpal})*/
 //water
 //open space
 /*
-var palettes = require('users/gena/packages:palettes');
 var pop = population
   .filter(ee.Filter.date('2019-01-01', '2021-12-31')).first()
 Map.addLayer(pop,{palette: //palettes.kovesi.linear_kryw_5_100_c64[7]}
@@ -273,6 +273,22 @@ var rasters = {
             units: null,
             labels: ['Flat', 'Moderate', 'Steep'],
             vizType: 'pieChart'
+        },
+         'SlopeCont': {
+            layer: {
+                eeObject: ee.Terrain.slope(NED),
+                name: 'Slope',
+                visParams: {
+                    palette: ['3f60ae','539eb6','6db388','cab843','e78532','d92120'], 
+                    min: 0,
+                    max: 25
+                }
+            },
+            discrete: true,
+            values: [0, 1],
+            units: '%',
+            labels: null,
+            vizType: 'hist'
         },
         'landCover': {
             layer: {
@@ -492,5 +508,5 @@ exports.vectors = {
         }
 exports.rasters = rasters
         
-print(rasters)
-print(prismP)
+//testing
+Map.layers().add(rasters.SlopeCont.layer)
