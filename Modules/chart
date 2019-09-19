@@ -13,18 +13,11 @@ exports.histByClass = function (layerObject, scale, geom) {
     var image = ee.Image.cat(area, layerObject.layer.eeObject)
     // Define chart customization options.
     var options = {
-        legend: {
-            position: 'in'
-        },
-        lineWidth: 1,
-        vAxis: {
-            title: 'Hectares'
-        },
-        //  colors: colors,
-        //     title: layerObject.layer.name.concat(' in Watershed'),
-        //     colors: layerObject.layer.visParams.palette,
-        theme: 'maximized', // {position: 'right'}
-        // legend: 'none'
+       chartArea: {width: '100%', height: '100%'},
+legend: {position: 'in'},
+titlePosition: 'in', axisTitlesPosition: 'in',
+//hAxis: {textPosition: 'in'}, 
+vAxis: {textPosition: 'in'}
     };
 
     var histChart = (ui.Chart.image.byClass({
