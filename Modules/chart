@@ -77,7 +77,7 @@ exports.stackedBar = function (layerObject, scale, geom) {
 
 }
 
-print(histByClass[0])
+
 //exports.stackedBar = histByClass.setOptions({isStacked: true}); 
 exports.histogramFeature = function (region, propName, buckwidth, title) {
     var chart = ui.Chart.feature
