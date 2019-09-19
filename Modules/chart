@@ -195,9 +195,9 @@ var makePieChart = function (
 width:'80%'}, 
         pieSliceText: 'label',
      //   title: 'Swiss Language Use (100 degree rotation)',
-        pieStartAngle: 100,
+      //  pieStartAngle: 100,
             //slices: createPieChartSliceDictionary(transition_fc).evaluate,
-            sliceVisibilityThreshold: 0.02
+            sliceVisibilityThreshold: 0.05
         });
 }
 
