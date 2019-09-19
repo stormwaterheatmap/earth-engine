@@ -193,7 +193,7 @@ var makePieChart = function (
         chartArea:{height:'80%', 
 width:'80%'}, 
         pieSliceText: 'label',
-     title: layerObj.layer.name,
+     title:  properties.layer.name, 
       //  pieStartAngle: 100,
             //slices: createPieChartSliceDictionary(transition_fc).evaluate,
             sliceVisibilityThreshold: 0.05
