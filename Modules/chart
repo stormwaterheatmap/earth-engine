@@ -191,6 +191,8 @@ var makePieChart = function (
             is3D:true,
         legend: {position: 'none'},
         forceIFrame: true,
+        chartArea:{height:'80%', 
+width:'80%'}, 
         pieSliceText: 'label',
      //   title: 'Swiss Language Use (100 degree rotation)',
         pieStartAngle: 100,
