@@ -13,12 +13,16 @@ exports.histByClass = function (layerObject, scale, geom) {
     var image = ee.Image.cat(area, layerObject.layer.eeObject)
     // Define chart customization options.
     var options = {
-      // chartArea: {width: '100%', height: '80%'},
-legend: {position: 'in'},
-//titlePosition: 'in', 
-axisTitlesPosition: 'in',
-//hAxis: {textPosition: 'in'}, 
-vAxis: {textPosition: 'in'}
+        // chartArea: {width: '100%', height: '80%'},
+        legend: {
+            position: 'in'
+        },
+        //titlePosition: 'in', 
+        axisTitlesPosition: 'in',
+        //hAxis: {textPosition: 'in'}, 
+        vAxis: {
+            textPosition: 'in'
+        }
     };
 
     var histChart = (ui.Chart.image.byClass({
@@ -150,11 +154,11 @@ var makePieChart = function (
     // https://developers.google.com/chart/interactive/docs/gallery/piechart
     function createPieChartSliceDictionary(fc) {
         return ee.List(fc.aggregate_array("transition_class_palette"))
-            .map(function (p) {
-                return {
-                    'color': p
-                };
-            });
+            // .map(function (p) {
+                //return {
+                 //   'color': p
+                //};
+            };
     }
     //var classValue = image.get('system:title')
     //print(classValue)
@@ -186,18 +190,21 @@ var makePieChart = function (
     // When the server returns the value, show it.
 
     return transition_summary_chart.setOptions({
-            // title: 'Summary of '.concat(properties.layer.eeObject.name),
-            pieHole: holeSize,
-            is3D:true,
-        legend: {position: 'none'},
-        chartArea:{height:'80%', 
-width:'80%'}, 
+        pieHole: holeSize,
+        is3D: true,
+        legend: {
+            position: 'none'
+        },
+        chartArea: {
+            height: '100%',
+            width: '100%'
+        },
         pieSliceText: 'label',
-     title:  properties.layer.name, 
-      //  pieStartAngle: 100,
-            //slices: createPieChartSliceDictionary(transition_fc).evaluate,
-            sliceVisibilityThreshold: 0.05
-        });
+        title: properties.layer.name,
+        //  pieStartAngle: 100,
+        //slices: createPieChartSliceDictionary(transition_fc).evaluate,
+        sliceVisibilityThreshold: 0.05
+    });
 }
 
 //
