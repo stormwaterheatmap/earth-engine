@@ -195,10 +195,10 @@ var makePieChart = function (
         legend: {
             position: 'none'
         },
-   //     chartArea: {
-    //        height: '100%',
-    //        width: '100%'
-    //    },
+        chartArea: {
+           height: '100%',
+          width: '100%'
+        },
         pieSliceText: 'label',
         title: properties.layer.name,
         //  pieStartAngle: 100,
