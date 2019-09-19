@@ -464,6 +464,24 @@ var rasters = {
             //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
 
         }, 
+        'Runoff_in': {
+            layer: {
+                eeObject: mean_annual_runoff.divide(ee.Image(25.4)), 
+                name: 'Mean Annual Runoff',
+                visParams: {
+                    palette:palettes.colorbrewer.GnBu[8],// ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
+                    min: 0,
+                    max: 60
+                }
+            },
+            discrete: false,
+            values: null,
+            units: 'in/year',
+            labels: null, //['Pervious', 'Impervious'],
+            vizType: 'histogram'
+            //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
+
+        }, 
         'DissolvedCopper': {
            layer: {
                 eeObject: DissolvedCopper,
@@ -509,4 +527,4 @@ exports.vectors = {
 exports.rasters = rasters
         
 //testing
-Map.layers().add(rasters.SlopeCont.layer)
+//Map.layers().add(rasters.Runoff_in.layer)
