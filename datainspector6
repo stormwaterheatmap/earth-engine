@@ -407,7 +407,7 @@ var histogramCard = function (layerObject) {
     var chartCard = ui.Panel({
         style: Style.cardPanel
 
-    })//.add(ui.Label('ChartCard'))
+    }) //.add(ui.Label('ChartCard'))
     chartCard.add((charts.histogramImage(layerObject, clicked_basin_geom,
         mapPanel.getScale())))
     var chartbutton = ui.Button({
@@ -452,8 +452,8 @@ var histogramCard = function (layerObject) {
     })
     //make a panel to hold it 
     var card = ui.Panel({
-       // style: {border: '1px solid black'}
-    }).add(chartCard)//.add(chartbutton) //.add(tablebutton)//removed table buttons for now
+        // style: {border: '1px solid black'}
+    }).add(chartCard) //.add(chartbutton) //.add(tablebutton)//removed table buttons for now
     //return the panel 
     return card
 }
@@ -463,7 +463,7 @@ var pieCard = function (layerObject) {
         style: Style.cardPanel
 
     }).add(ui.Label('ChartCard')) //(geometry, properties, holeSize)
-    chartCard.add((charts.pieChart(clicked_basin_geom,layerObject,holeSize)))
+    chartCard.add((charts.pieChart(clicked_basin_geom, layerObject, holeSize)))
     var chartbutton = ui.Button({
         label: 'Display results as chart',
         onClick: function () {
@@ -475,7 +475,7 @@ var pieCard = function (layerObject) {
                 shown: true
             })
             chartCard.clear()
-            chartCard.add(charts.pieChart(clicked_basin_geom, layerObject,holeSize)) //(geometry, properties, holeSize)
+            chartCard.add(charts.pieChart(clicked_basin_geom, layerObject, holeSize)) //(geometry, properties, holeSize)
         }
     })
     var tablebutton = ui.Button({
@@ -507,7 +507,7 @@ var pieCard = function (layerObject) {
     //make a panel to hold it 
     var card = ui.Panel({
         style: Style.cardPanel
-    }).add(chartCard)//.add(chartbutton) //.add(tablebutton)//removed table buttons for now
+    }).add(chartCard) //.add(chartbutton) //.add(tablebutton)//removed table buttons for now
 
     //return the panel 
     return card
@@ -665,81 +665,57 @@ var mapInfoPanel = ui.Panel({
     }
 })
 var makeReports = function () {
-  
+
     var pchart = charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean')
+    var runoffChart = charts.littleNum(layerProperties.Runoff_in, clicked_basin_geom, mapPanel.getScale(), 'mean')
     var pchart2 = charts.histogramImage(
-      layerProperties.Precipitation, clicked_basin_geom,
+        layerProperties.Precipitation, clicked_basin_geom,
         mapPanel.getScale()
-        )
-    var precipCard = cards('Precipitation',[pchart, hline(), pchart2])
+    )
+    //pchart2.setOptions()
+    var precipCard = cards('Precipitation', [pchart, runoffChart, hline(), pchart2])
     sidePanel.add(precipCard)
-//make a landuse card //geometry, properties, holeSize
-var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale())
-    var luCard = cards('Land Use',[luchart])
+
+    //make a landuse card //geometry, properties, holeSize
+    var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale())
+    var luCard = cards('Land Use', [luchart])
     sidePanel.add(luCard)
-//Make a card for Age of Development 
-var ageCard = charts.histByClass(layerProperties.DevAge, mapPanel.getScale(), clicked_basin_geom)
-    var ageCard = cards('Age of Development',[ageCard])
+
+    //Make a card for Age of Development 
+    var ageCard = charts.stackedBar(layerProperties.DevAge, mapPanel.getScale(), clicked_basin_geom)
+    var ageCard = cards('Age of Development', [ageCard])
     sidePanel.add(ageCard)
-var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale())     //soils and lithology 
- var lithChart =  charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale())     //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
-   lithChart.setChartType('BarChart'); 
-       var soilsCard = cards('Soils and Lithology',[soilsChart, hline(), lithChart])
+   
+   //Make a card for soils and Lithology
+    var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
+    var lithChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
+    lithChart.setChartType('BarChart');
+    var soilsCard = cards('Soils and Lithology', [soilsChart, hline(), lithChart])
     sidePanel.add(soilsCard)
-    // soilsCard.add(
-    //             charts.pieChart(layerProperties.Soils, mapPanel.getScale(), clicked_basin_geom) 
-    //             )
-    //             soilsCard.add(charts.pieChart(layerProperties.Soils, mapPanel.getScale(), 
-    //             clicked_basin_geom).setChartType('Table'))  
-    //    //soilsCard.add(charts.pieChart(layerProperties.Lithology, mapPanel.getScale(), clicked_basin_geom) 
-    //     //).setChartType('ColumnChart')
-    //  sidePanel.add(soilsCard)
-    //Topography 
-    //var topoCard = resultCard('Topography'); 
-    //  print('topcard ok')
-    //    topoCard.add(charts.pieChart(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom)) //.setChartType('ColumnChart')
-    //   topoCard.add(charts.pieChart(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom).setChartType('Table'))
-    //sidePanel.add(topoCard)
-    /*
-    if (layerObject.vizType === 'pieChart') {
-        report = charts.pieChart(clicked_basin_geom, layerObject, holeSize)
-        tableReport = charts.pieChart(clicked_basin_geom, layerObject, holeSize).setChartType('Table')
-    } else if (layerObject.vizType === 'histogram') { //two different histograms, depending on if the info is discrete or continuous
-        if (layerObject.discrete) {
-            report = charts.histByClass(layerObject, Map.getScale(), clicked_basin_geom) //layerProperties.DevAge, 1000, geometry) 
-        } else {
-            report = charts.histogramImage(layerObject.layer.eeObject,
-                clicked_basin_geom, Map.getScale(), layerObject.layer.name)
-        }
     
-        //exports.histogramImage = function (image, WS, scale, title)
-    } else if (layerObject.vizType === 'bigNumberMean') {
-    
-        report = charts.bigNum(layerObject, clicked_basin_geom, Map.getScale(), 'mean')
-    
-    } else if (layerObject.vizType === 'bigNumberSum') {
-    
-        report = charts.bigNum(layerObject, clicked_basin_geom, Map.getScale(), 'sum')
-    
-    } else if (layerObject.vizType === 'bigNumberPercent') {
-    
-        report = charts.bigNum(layerObject, clicked_basin_geom, Map.getScale(), 'percent')
-    
-    }
-    */
+    //Make a panel for topography 
+    var topoChart = charts.histogramImage(layerProperties.SlopeCont, clicked_basin_geom, mapPanel.getScale()) 
+    var topoCats = charts.stackedBar(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom)
+    var topoCard = cards('Topography', [topoChart, hline(), topoCats])
+      print('topcard ok')
+      sidePanel.add(topoCard)
+    //Make a panel for runoff 
+
 }
 
 //cards function 
 print('cards function')
-var cards = function(title,widgetItems) {
-  var cardTitle = ui.Label(title)
-  var wholeCard = ui.Panel({
-    widgets: widgetItems, 
-    style: {border: '8px solid whitesmoke', 
-    padding: '12px'}
-  })
-  wholeCard.insert(0, cardTitle)
-  //wholeCard.add(widgetItems)
+var cards = function (title, widgetItems) {
+    var cardTitle = ui.Label(title)
+    var wholeCard = ui.Panel({
+        widgets: widgetItems,
+        style: {
+            border: '8px solid whitesmoke',
+            padding: '12px'
+        }
+    })
+    wholeCard.insert(0, cardTitle)
+    //wholeCard.add(widgetItems)
     return wholeCard
 }
 
@@ -750,9 +726,11 @@ var deactiv_button = ui.Button({
 var accept = ui.Button({
     // label: 'Accept Selected Watershed',
     label: 'Accept Selected Watershed ',
-    onClick: function() {
-      makeReports() //also clear side panel todo
-       buttonPanel.style().set({shown: false})
+    onClick: function () {
+        makeReports() //also clear side panel todo
+        buttonPanel.style().set({
+            shown: false
+        })
     }
 });
 
@@ -768,7 +746,7 @@ var buttonPanel = ui.Panel({
     widgets: [inspect_button, accept],
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
-      backgroundColor: colors.transparent, 
+        backgroundColor: colors.transparent,
         position: 'top-left',
         stretch: 'both'
     }
