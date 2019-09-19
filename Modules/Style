@@ -7,7 +7,7 @@ var colors = {
     'pLight': //'#e7f4e6',//#
         '#80e27e',
     'pDark': '#4caf50',
-    'secondary': '#bdbdbd',
+    'secondary': '#80e27e',
     'sLight': '#eeeeee',
     'sDark': '#8c8c8c',
     'transparent': '#11ffee00',
