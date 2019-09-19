@@ -180,22 +180,22 @@ var makePieChart = function (
             yProperties: ['area_m2'] // 'transition_class_number']
         })
         .setChartType('PieChart') //le')
-        .setOptions({
+
+    createPieChartSliceDictionary(transition_fc)
+    //.evaluate(function(result) {
+    // When the server returns the value, show it.
+
+    return transition_summary_chart.setOptions({
             // title: 'Summary of '.concat(properties.layer.eeObject.name),
             pieHole: holeSize,
             is3d:true,
         legend: 'none',
         pieSliceText: 'label',
-        //title: 'Swiss Language Use (100 degree rotation)',
+        title: 'Swiss Language Use (100 degree rotation)',
         pieStartAngle: 100,
             //slices: createPieChartSliceDictionary(transition_fc).evaluate,
             sliceVisibilityThreshold: 0.02
         });
-    createPieChartSliceDictionary(transition_fc)
-    //.evaluate(function(result) {
-    // When the server returns the value, show it.
-
-    return transition_summary_chart
 }
 
 //
