@@ -73,7 +73,7 @@ exports.stackedBar = function (layerObject, scale, geom) {
     )
     
    // var stacked = histChart.setOptions({isStacked:true})
-    return histChart
+    return histChart.setChartType('BarChart')
 
 }
 
