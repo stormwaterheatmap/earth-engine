@@ -754,7 +754,7 @@ var buttonPanel = ui.Panel({
     widgets: [inspect_button, accept],
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
-        backgroundColor: 'whitesmoke',
+       // backgroundColor: 'whitesmoke',
         position: 'top-left',
         stretch: 'both'
     }
