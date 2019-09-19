@@ -9,7 +9,7 @@ var geometry = /* color: #d63000 */ee.Geometry.Polygon(
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var colors = style.colors
 exports.histByClass = function (layerObject, scale, geom) {
-    var area = ee.Image.pixelArea().divide(10000) //area in hectares 
+    var area = ee.Image.pixelArea().divide(4046.86) //area in acres 
     var image = ee.Image.cat(area, layerObject.layer.eeObject)
     // Define chart customization options.
     var options = {
@@ -160,7 +160,7 @@ var makePieChart = function (
     geometry, properties, scale, holeSize) {
     var AOI = geometry;
     var image = properties.layer.eeObject
-    var withArea = ee.Image.pixelArea().addBands(image);
+    var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image); //acres
     var clipImage = withArea.clip(AOI)
     //////////////////////////////////////////////////////////////
     // Calculations
@@ -592,7 +592,7 @@ exports.littleNum = littleNum;
 var imgToFc = function (layerObject, geomtery, scale) {
     var AOI = geometry;
     var image = layerObject.layer.eeObject
-    var withArea = ee.Image.pixelArea().addBands(image);
+    var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image);//acres
     var clipImage = withArea.clip(AOI)
     var reduction_results = (clipImage).reduceRegion({
         reducer: ee.Reducer.sum().group({
