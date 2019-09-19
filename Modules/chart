@@ -554,8 +554,24 @@ var value = 'loading...'
 //
 var units = 'in/year'
 var title = 'Mean Annual Precipitation'
-var chartColors = ['76B7B2', '59A14E', 'EDC949', 'B07AA2', 'FF9DA7', '9C755F', 'BAB0AC']
+var chartColors = ['76B7B2', 
+//'59A14E', 
+//'EDC949',
+'B07AA2',
+'FF9DA7', '9C755F', 'BAB0AC']
 var layTest = data.rasters.DevAge
+var pie = makePieChart(geometry,layTest,100,0.3
+)
+pie.setOptions({colors:['cadetblue',colors.primary, colors.pLight,
+colors.sDark, colors.primary],
+pieSliceText:'label',
+legend: {position:'none'},
+//is3D:true,
+//pieHole:0.4,
+//  pieSliceTextStyle:{color: 'black'},//fontSize:8},
+  chartArea:{width:'80%',height:'90%'}
+})
+print(pie)
 
 var hist = (histogramImage(layTest,geometry,100))//.setChartType('Pi')
 hist.setOptions({colors: chartColors, style: {width: '400px', stretch: 'both'}})
