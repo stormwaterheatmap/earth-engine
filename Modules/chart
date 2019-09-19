@@ -158,8 +158,8 @@ var makePieChart = function (
                 //return {
                  //   'color': p
                 //};
-            };
-    }
+            }
+    
     //var classValue = image.get('system:title')
     //print(classValue)
     var reduction_results = clipImage.reduceRegion({
@@ -205,7 +205,7 @@ var makePieChart = function (
         //slices: createPieChartSliceDictionary(transition_fc).evaluate,
         sliceVisibilityThreshold: 0.05
     });
-}
+}; 
 
 //
 exports.pieChart = makePieChart
