@@ -84,8 +84,8 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
         .histogram({
             features: region,
             property: propName,
-            maxBuckets: 16,
-            minBucketWidth: buckwidth
+           // maxBuckets: 16,
+            //minBucketWidth: buckwidth
         })
         .setOptions({
             title: title,
@@ -98,7 +98,7 @@ var histogramImage = function (layerObject, WS, scale) {
         image: layerObject.layer.eeObject,
         region: WS,
         scale: scale,
-        maxBuckets: 16,
+      //  maxBuckets: 16,
     });
 
     chart.style().set({ //width:'300px',
