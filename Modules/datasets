@@ -214,7 +214,10 @@ var rasters = {
             values: [0, 1],
             units: '.',
             labels: ['Pervious', 'Impervious'],
-            vizType: 'bigNumberPercent'
+            vizType: 'bigNumberPercent',
+            sourceName: 'Robertson et al, 20XX',
+            sourceUrl: []
+
         },
         'Precipitation': {
             layer: {
@@ -305,8 +308,11 @@ var rasters = {
                 5, 6, 7
             ],
             units: null,
-            labels: ['No data', 'Grass', 'Saturated/Ice', 'Tree', 'Bare soil', 'Water', 'Impervious', 'Impervious - Roofs'],
-            vizType: 'pieChart'
+            labels: ['No data', 'Grass', 'Saturated/Ice', 'Trees/Forest', 'Bare soil', 'Water', 'Impervious', 'Impervious - Roofs'],
+            vizType: 'pieChart', 
+            sourceName: 'Robertson et al, 20XX',
+            sourceUrl: []
+
         },
         'DevAge': {
             layer: {
