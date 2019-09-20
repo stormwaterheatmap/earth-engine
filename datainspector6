@@ -664,29 +664,58 @@ var mapInfoPanel = ui.Panel({
         position: 'bottom-center'
     }
 })
+//options for charting 
+var singleBar = {
+        height: 100,
+
+series: {
+  0:{color: '4BE3A6', //border: '1px solid black', 
+  visibleInLegend: false,
+ strokeWidth: 4},
+  1:{color: 'cfcfcf', //dataOpacity: 0.50, 
+  visibleInLegend: false}
+},
+        legend:{position:'none'},
+        bar: {groupWidth: "61.8%"},
+        chartArea: {width: '80%', height: '20%'},
+        isStacked: 'percent',
+        vAxis: {textPosition: 'none'}, 
+        hAxis: { 
+        textPosition: 'none', 
+          gridlines: {color: 'transparent'}, 
+        },
+      };
+
+
 var makeReports = function () {
 
     var pchart = charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean')
-    var runoffChart = charts.littleNum(layerProperties.Runoff_in, clicked_basin_geom, mapPanel.getScale(), 'mean')
     var holderpan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')})
-    var runoffHist = charts.histogramImage(
-        layerProperties.Runoff, clicked_basin_geom,
-        mapPanel.getScale()
-    )
     var pchart2 = charts.histogramImage(
         layerProperties.Precipitation, clicked_basin_geom,
         mapPanel.getScale()
     )
      holderpan.add(pchart).add(pchart2)
-      var holderpan2 = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')})   
-      holderpan2.add(runoffChart).add(runoffHist)
     //pchart2.setOptions()
-    var precipCard = cards('Precipitation', [holderpan, hline(), holderpan2])
+    var precipCard = cards('Precipitation', [holderpan])
     sidePanel.add(precipCard)
 
     //make a landuse card //geometry, properties, holeSize
+   //make a bar chart of imperviousness
+    var impChart = charts.stackedBar(layerProperties.Imperviousness, mapPanel.getScale(), clicked_basin_geom)
+    impChart.setOptions(singleBar)
+    //make a number card
+    var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
+    //make a panel to hold the two, 
+    var holderpanLU = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')})
+     //add to the panel
+      holderpanLU.add(impChart).add(impNum)
+      
     var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale()).setChartType('Table')
-    var luCard = cards('Land Use', [luchart])
+   
+   
+   
+    var luCard = cards('Land Use', [luchart, holderpanLU])
     sidePanel.add(luCard)
 
     //Make a card for Age of Development 
