@@ -552,7 +552,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
 
     } else if (reducerType === 'sum') {
         //reduced = reduced.toFixed()
-        var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+         reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
             reducer: ee.Reducer.sum(),
             geometry: region,
             scale: scale,
@@ -567,7 +567,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
 
     } else if (reducerType === 'percent') {
         //reduced = reduced.toFixed()
-        var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+         reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
             reducer: ee.Reducer.mean(),
             geometry: region,
             scale: scale,
