@@ -40,7 +40,7 @@ var histByClass = function (layerObject, scale, geom) {
     )
     
    // var stacked = histChart.setOptions({isStacked:true})
-    return [histChart]
+    return histChart
 
 }
 
@@ -656,9 +656,11 @@ var numPan = littleNum(layerObject, geometry, 500, 'percent');
 */
 
 var layerObject = layerProperties.landUse 
-var chart = 
+var chart = histByClass(layerObject, 100, geometry); 
+print(chart) 
 var testPan = ui.Panel({style: {width: 400, height: '800px'}}); 
-testPan.add(numPan)
-print(testPan) 
+var options 
+//testPan.add(chart)
+Map.add(testPan) 
 
 
