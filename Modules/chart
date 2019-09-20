@@ -448,16 +448,17 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     });
 
     bigNum.style().set({
-       //margin: '0px 0px 0px 4px', //'5px',
-       padding: '0px 4px 0px 4px',
+      margin: 2,
+       padding: 2,
+       width: '80%',
         fontSize: '30px',
         fontFamily: [ 'Roboto', 'Helvetica Neue',
            'Arial', 'sans-serif'
        ], 
         fontWeight: 500, 
-        //border: '1px solid blue', 
+      //  border: '1px solid blue', 
         backgroundColor: style.colors.transparent,
-        textAlign: 'center',
+        textAlign: 'right',
     })
 
     var titleLabel = ui.Label({
@@ -465,9 +466,11 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         style: style.fonts.H4
     });
     titleLabel.style().set({
-      //  margin: 0,
-        padding: '0px 2px 0px 4px',
-        textAlign: 'left',
+       margin: 0,
+       padding: 0, //0px 2px 0px 4px',
+         width: '80%',
+        textAlign: 'right',
+     //   border: '1px solid red'
     });
 
     units = ui.Label({
@@ -475,20 +478,24 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         style: style.fonts.Caption3
     });
     units.style().set({
-        textAlign: 'left',
+        textAlign: 'right',
+           width: '80%', 
        // margin: 0,
-        padding: '0px 4px 8px 5px',
+        // padding: 0, //padding: '0px 4px 8px 5px',
         //stretch: 'horizontal'
     });
 
     var numPan = ui.Panel({
-       // layout: ui.Panel.Layout.flow('vertical', true),
+       layout: ui.Panel.Layout.flow('vertical'),
         style: {
          //  width: '200px', 
-           stretch: 'vertical',
-            padding: '0px 0px 0px 0px',
-          //  position: 'middle-right', 
-           // border: '1px solid black',
+          // stretch: 'vertical',
+           textAlign: 'right',
+           padding: 2, 
+           margin: 2, 
+            //padding: '0px 0px 0px 0px',
+           //position: 'middle-right', 
+        //    border: '1px solid black',
       //     height: '100%',
         }
     }) //height: '200px'}}); 
@@ -502,10 +509,13 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         style: style.fonts.Caption3
     })
     infoLabel.style().set({
-      //  margin: 0, //
+      margin: 0,
+       padding: 2,//  margin: 0, //
         fontSize: '10px',
+           textAlign: 'right', 
+        //   border: '1px solid green',
+                      width: '80%', 
         color: style.colors.sDark,
-        padding: '8px 4px 0px 4px'
     })
     var labelText = (
         'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale)
@@ -515,8 +525,12 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     labelText2.style().set({
      //   margin: 0, //fontSize: '10px',
         //color:style.colors.sDark,
+        margin: 2,
+       padding: 2,
+           textAlign: 'right', 
+                      width: '80%',
+                //      border: '1px solid pink', 
         fontSize: '10px',
-        padding: '2px 4px 0px 4px'
     });
     labelText2.setValue('Source: ' + layerObj.sourceName)
     labelText2.setUrl(layerObj.sourceUrl);
@@ -638,6 +652,6 @@ var numPan = littleNum(layerObject, geometry, 500, 'percent');
 
 var testPan = ui.Panel({style: {width: 400, height: '800px'}}); 
 testPan.add(numPan)
-Map.add(testPan) 
+print(testPan) 
 
 
