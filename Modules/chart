@@ -484,7 +484,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     var numPan = ui.Panel({
        // layout: ui.Panel.Layout.flow('vertical', true),
         style: {
-           width: '200px', 
+         //  width: '200px', 
            stretch: 'vertical',
             padding: '0px 0px 0px 0px',
           //  position: 'middle-right', 
