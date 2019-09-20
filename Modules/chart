@@ -44,7 +44,7 @@ var histByClass = function (layerObject, scale, geom) {
 
 }
 
-exports.histByClass = histByClass
+
 
 exports.stackedBar = function (layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(4046.856) //area in acres 
@@ -80,7 +80,9 @@ exports.stackedBar = function (layerObject, scale, geom) {
     return histChart.setChartType('BarChart')
 
 }
-
+var imageBar = function (layerObject, scale, geom) {
+  var imgchart = ui.chart.image
+}
 
 
 exports.histogramFeature = function (region, propName, buckwidth, title) {
@@ -234,13 +236,13 @@ var makePieChart = function (
     return transition_summary_chart.setOptions({
         pieHole: holeSize,
         is3D: true,
-        legend: {
-            position: 'none'
-        },
-        chartArea: {
-           height: '100%',
-          width: '100%'
-        },
+     //   legend: {
+     //       position: 'none'
+    //    },
+   //     chartArea: {
+     //      height: '100%',
+     //     width: '100%'
+     //   },
         pieSliceText: 'label',
         title: properties.layer.name,
         //  pieStartAngle: 100,
@@ -654,13 +656,16 @@ var layerProperties = data.rasters
 /*var layerObject = layerProperties.Imperviousness
 var numPan = littleNum(layerObject, geometry, 500, 'percent'); 
 */
+// geometry, properties, scale, holeSize
 
 var layerObject = layerProperties.landUse 
+var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
 var chart = histByClass(layerObject, 100, geometry); 
-print(chart) 
+//print(chart) 
 var testPan = ui.Panel({style: {width: 400, height: '800px'}}); 
-var options 
-//testPan.add(chart)
-Map.add(testPan) 
+chart.setChartType('BarChart')
+//var options = 
+testPan.add(chart2)
+Map.add(testPan)
 
 
