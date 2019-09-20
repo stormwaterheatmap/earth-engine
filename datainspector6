@@ -188,7 +188,12 @@ var drawingfunction = function () {
 }
 
 
+var layerButton = ui.Button({label: 'Add layer to Map', onClick: function() {
+//
 
+}, 
+
+})
 
 var drawOwnCheck = ui.Checkbox({
     label: 'I want to draw my own',
@@ -282,7 +287,7 @@ var removeObject = function (eeobject, map) {
 var addObject = function (layerObject) {
     // var pobj = ui.mapPanel.Layer({eeObject: layerProperties.Precipitation.layer.eeObject}).getEeObject()//redefine inputs as ui.mapPanel.layer
     // mapPanel.add(layerObject.uiLayer)
-    mapPanel.layers().add(layerObject.uiLayer)
+    mapPanel.layers().add(layerObject.layer)
     // mapPanel.layers().add(layerObject.layer)
 }
 //layerProperties.Precipitation.uiLayer
@@ -666,84 +671,127 @@ var mapInfoPanel = ui.Panel({
 })
 //options for charting 
 var singleBar = {
-        height: 100,
+    height: 100,
 
-series: {
-  0:{color: '4BE3A6', //border: '1px solid black', 
-  visibleInLegend: false,
- strokeWidth: 4},
-  1:{color: 'cfcfcf', //dataOpacity: 0.50, 
-  visibleInLegend: false}
-},
-        legend:{position:'none'},
-        bar: {groupWidth: "61.8%"},
-        chartArea: {width: '80%', height: '20%'},
-        isStacked: 'percent',
-        vAxis: {textPosition: 'none'}, 
-        hAxis: { 
-        textPosition: 'none', 
-          gridlines: {color: 'transparent'}, 
+    series: {
+        0: {
+            color: '4BE3A6', //border: '1px solid black', 
+            visibleInLegend: false,
+            strokeWidth: 4
         },
-      };
+        1: {
+            color: 'cfcfcf', //dataOpacity: 0.50, 
+            visibleInLegend: false
+        }
+    },
+    legend: {
+        position: 'none'
+    },
+    bar: {
+        groupWidth: "61.8%"
+    },
+    chartArea: {
+        width: '80%',
+        height: '20%'
+    },
+    isStacked: 'percent',
+    vAxis: {
+        textPosition: 'none'
+    },
+    hAxis: {
+        textPosition: 'none',
+        gridlines: {
+            color: 'transparent'
+        },
+    },
+};
+
+var imageBar = (  {chartArea: {left: '50%'}, //style for horizontal image bar 
+  hAxis: {
+          title: 'Area (acres)',
+          minValue: 0,
+        }, 
+        legend: {position: 'none'}, 
+        
+        }) 
 
 
 var makeReports = function () {
 
     var pchart = charts.littleNum(layerProperties.Precipitation, clicked_basin_geom, mapPanel.getScale(), 'mean')
-    var holderpan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')})
+    var holderpan = ui.Panel({
+        layout: ui.Panel.Layout.flow('horizontal')
+    })
     var pchart2 = charts.histogramImage(
         layerProperties.Precipitation, clicked_basin_geom,
         mapPanel.getScale()
     )
-     holderpan.add(pchart).add(pchart2)
+    holderpan.add(pchart).add(pchart2)
     //pchart2.setOptions()
     var precipCard = cards('Precipitation', [holderpan])
     sidePanel.add(precipCard)
 
     //make a landuse card //geometry, properties, holeSize
-   //make a bar chart of imperviousness
+    //make a bar chart of imperviousness
     var impChart = charts.stackedBar(layerProperties.Imperviousness, mapPanel.getScale(), clicked_basin_geom)
     impChart.setOptions(singleBar)
     //make a number card
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
     //make a panel to hold the two, 
-    var holderpanLU = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')})
-     //add to the panel
-      holderpanLU.add(impChart).add(impNum)
-      
-    var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale()).setChartType('Table')
-   
-   
-   
-    var luCard = cards('Land Use', [luchart, holderpanLU])
+    var holderpanLU = ui.Panel({
+        layout: ui.Panel.Layout.flow('horizontal')
+    })
+    //add to the panel
+    holderpanLU.add(impNum).add(impChart)
+
+    var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale()).setChartType('BarChart')
+    luchart.setOptions(imageBar) 
+     var lcchart = charts.pieChart(clicked_basin_geom, layerProperties.landCover, mapPanel.getScale()).setChartType('BarChart')
+    lcchart.setOptions(imageBar) 
+    var luCard = cards('Land Use', [holderpanLU, luchart, lcchart])
     sidePanel.add(luCard)
 
     //Make a card for Age of Development 
-    var ageCard = charts.stackedBar(layerProperties.DevAge, mapPanel.getScale(), clicked_basin_geom)
+    //show percent developed prior to 1999
+    var ageCard = charts.pieChart(clicked_basin_geom, layerProperties.DevAge, mapPanel.getScale())
+    ageCard.setChartType('BarChart')
+    ageCard.setOptions(imageBar)
     var ageCard = cards('Age of Development', [ageCard])
     sidePanel.add(ageCard)
-   
-   //Make a card for soils and Lithology
+    //Make a card for soils and Lithology
     var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
-    var lithChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
+    soilsChart.setChartType('BarChart');
+    soilsChart.setOptions(imageBar) 
+    var lithChart = charts.pieChart(clicked_basin_geom, layerProperties.Lithology, mapPanel.getScale()) //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
     lithChart.setChartType('BarChart');
+    lithChart.setOptions(imageBar) 
     var soilsCard = cards('Soils and Lithology', [soilsChart, hline(), lithChart])
     sidePanel.add(soilsCard)
-    
+
     //Make a panel for topography 
-    var topoChart = charts.histogramImage(layerProperties.SlopeCont, clicked_basin_geom, mapPanel.getScale()) 
-    topoChart.setOptions({title: 'Distribution of Slope in the Watershed'})
-    var topoCats = charts.stackedBar(layerProperties.Slope, mapPanel.getScale(), clicked_basin_geom)
+    var topoChart = charts.histogramImage(layerProperties.SlopeCont, clicked_basin_geom, mapPanel.getScale())
+    topoChart.setOptions({
+        title: 'Distribution of Slope in the Watershed'
+    })
+    var topoCats = charts.pieChart(clicked_basin_geom, layerProperties.Slope, mapPanel.getScale() )
+    topoCats.setChartType('BarChart') 
+    topoCats.setOptions(imageBar)
     var topoCard = cards('Topography', [topoChart, hline(), topoCats])
-      print('topcard ok')
-      sidePanel.add(topoCard)
-    //Make a panel for runoff 
+    print('topcard ok')
+    sidePanel.add(topoCard)
+    //Make a panel for pollutants 
+  //copper 
+    //ToDo
+    
 }
 
 //cards function 
 print('cards function')
 var cards = function (title, widgetItems) {
-    var cardTitle = ui.Label({value: title, style: fonts.H2})
+    var cardTitle = ui.Label({
+        value: title,
+        style: fonts.H2
+    })
     var wholeCard = ui.Panel({
         widgets: widgetItems,
         style: {
@@ -783,7 +831,7 @@ var buttonPanel = ui.Panel({
     widgets: [inspect_button, accept],
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
-       // backgroundColor: 'whitesmoke',
+        // backgroundColor: 'whitesmoke',
         position: 'top-left',
         stretch: 'both'
     }
