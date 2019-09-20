@@ -657,7 +657,7 @@ var layerProperties = data.rasters
 var numPan = littleNum(layerObject, geometry, 500, 'percent'); 
 */
 // geometry, properties, scale, holeSize
-
+/*
 var layerObject = layerProperties.landUse 
 var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
 var imageBar = (  {chartArea: {left: '50%'},
@@ -678,3 +678,4 @@ testPan.add(chart2)
 Map.add(testPan)
 
 
+*/
