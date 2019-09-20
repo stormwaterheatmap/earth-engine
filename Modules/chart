@@ -8,7 +8,8 @@ var geometry = /* color: #d63000 */ee.Geometry.Polygon(
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var colors = style.colors
-exports.histByClass = function (layerObject, scale, geom) {
+
+var histByClass = function (layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(4046.86) //area in acres 
     var image = ee.Image.cat(area, layerObject.layer.eeObject)
     // Define chart customization options.
@@ -42,6 +43,9 @@ exports.histByClass = function (layerObject, scale, geom) {
     return [histChart]
 
 }
+
+exports.histByClass = histByClass
+
 exports.stackedBar = function (layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(4046.856) //area in acres 
     var image = ee.Image.cat(area, layerObject.layer.eeObject)
@@ -647,9 +651,12 @@ exports.imgToFc = imgToFc
 
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var layerProperties = data.rasters
-var layerObject = layerProperties.Imperviousness
+/*var layerObject = layerProperties.Imperviousness
 var numPan = littleNum(layerObject, geometry, 500, 'percent'); 
+*/
 
+var layerObject = layerProperties.landUse 
+var chart = 
 var testPan = ui.Panel({style: {width: 400, height: '800px'}}); 
 testPan.add(numPan)
 print(testPan) 
