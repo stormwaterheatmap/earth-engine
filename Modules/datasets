@@ -119,7 +119,7 @@ exports.slope = slopeZone;
 var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select(
     'built')
     age_of_development = age_of_development.mask(age_of_development.neq(1))
-    Map.addLayer(age_of_development)
+    //Map.addLayer(age_of_development)
 /*
 var population2020 = population.filterDate('2020-01-01')
     .first();
