@@ -187,9 +187,9 @@ var makePieChart = function (
         var class_number = transition_class_stats.get('class value');
         var result = {
             transition_class_number: class_number,
-            transition_class_name: lookup_names.get(class_number),
+            Class: lookup_names.get(class_number),
             transition_class_palette: lookup_palette.get(class_number),
-            area_m2: transition_class_stats.get('sum')
+            Area: transition_class_stats.get('sum')
         };
         return ee.Feature(null,
             result); // Creates a feature without a geometry.
@@ -224,8 +224,8 @@ var makePieChart = function (
     var transition_summary_chart =
         ui.Chart.feature.byFeature({
             features: transition_fc,
-            xProperty: 'transition_class_name',
-            yProperties: ['area_m2'] // 'transition_class_number']
+            xProperty: 'Class',
+            yProperties: ['Area'] // 'transition_class_number']
         })
         .setChartType('PieChart') //le')
 
@@ -627,9 +627,9 @@ var imgToFc = function (layerObject, geomtery, scale) {
         var class_number = transition_class_stats.get('class value');
         var result = {
             transition_class_number: class_number,
-            transition_class_name: lookup_names.get(class_number),
+            Class: lookup_names.get(class_number),
             transition_class_palette: lookup_palette.get(class_number),
-            area_m2: transition_class_stats.get('sum')
+            Area: transition_class_stats.get('sum')
         };
         return ee.Feature(null,
             result); // Creates a feature without a geometry.
@@ -660,10 +660,19 @@ var numPan = littleNum(layerObject, geometry, 500, 'percent');
 
 var layerObject = layerProperties.landUse 
 var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
+var imageBar = (  {chartArea: {left: '50%'},
+  hAxis: {
+          title: 'Area (acres)',
+          minValue: 0,
+        }, 
+        legend: {position: 'none'}, 
+        
+        }) 
+
 var chart = histByClass(layerObject, 100, geometry); 
-//print(chart) 
-var testPan = ui.Panel({style: {width: 400, height: '800px'}}); 
+
 chart.setChartType('BarChart')
+chart2.setOptions(imageBar)
 //var options = 
 testPan.add(chart2)
 Map.add(testPan)
