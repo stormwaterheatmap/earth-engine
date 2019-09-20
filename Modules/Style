@@ -14,7 +14,9 @@ var colors = {
     'lightBlack': '#0c0c0d',
     'grey': '#737373',
     'tncgreen': '#799e4b',
-    'tncblue': '#078AB4'
+    'tncblue': '#078AB4', 
+    'pChart' : '#4BE3A6', 
+    'sChart' : 'cfcfcf', 
 
 };
 exports.colors = colors
