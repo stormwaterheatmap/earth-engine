@@ -397,7 +397,7 @@ var bigNum = function (layerObj, region, scale, reducerType) {
         })
     } else if (reducerType === 'sum') {
         //reduced = reduced.toFixed()
-        var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+         reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
             reducer: ee.Reducer.sum(),
             geometry: region,
             scale: scale,
@@ -457,7 +457,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     });
 
     bigNum.style().set({
-        margin: 0, //'5px',
+        //margin: 0, //'5px',
         padding: '2px 0px 2px 4px',
         fontSize: '24px',
         //fontWeight: '400',
@@ -465,7 +465,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         //color: colors.pDark,
         //position: 'middle-right', 
         textAlign: 'center',
-        // stretch: 'horizontal'
+      // stretch: 'horizontal'
     })
 
     var titleLabel = ui.Label({
@@ -499,12 +499,14 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     var numPan = ui.Panel({
         layout: ui.Panel.Layout.flow('vertical', true),
         style: {
-            width: '200px'
+            width: '200px', 
+            stretch: 'vertical'
         }
     }) //height: '200px'}}); 
 
     numPan.add(titleLabel) //.add(infoLabel)
     numPan.add(bigNum)
+    //if 
     numPan.add(units)
 
     var infoLabel = ui.Label({
@@ -567,6 +569,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
 
     } else if (reducerType === 'percent') {
         //reduced = reduced.toFixed()
+        print('percent')
          reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
             reducer: ee.Reducer.mean(),
             geometry: region,
@@ -574,10 +577,11 @@ var littleNum = function (layerObj, region, scale, reducerType) {
             bestEffort: true
 
         }).get(layerObj.layer.eeObject.bandNames().get(0)))
-
+        numPan.remove(units)//don't display units for percent 
 
         reduced.evaluate(function (result) {
             // When the server returns the value, show it.
+            print(574)
             bigNum.setValue(
                 result.toFixed(0).toString().concat(
                     "%"))
@@ -636,3 +640,13 @@ var imgToFc = function (layerObject, geomtery, scale) {
 }
 
 exports.imgToFc = imgToFc
+//testing 
+
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var layerProperties = data.rasters
+var layerObject = layerProperties.Imperviousness
+var numPan = littleNum(layerObject, geometry, 500, 'percent'); 
+print(numPan)
+
+
+
