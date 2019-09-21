@@ -515,18 +515,8 @@ var pieCard = function (layerObject) {
 }
 
 //**function for buttons to display layers on map
-
-
-    function addLayer() {
-        });
-        addbutton.style().set({
-            shown: false
-        });
-    }
-
-    function removeLayer() {
-    }
-
+var layerButton = function (layerObject){
+    
     return ui.Panel([
       //addbutton//, 
 ui.Button({
@@ -552,9 +542,11 @@ ui.Button({
             shown: true
         });
         }
-    });
+    })
       
       ])
+
+}
 
 
 
