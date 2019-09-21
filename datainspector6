@@ -58,7 +58,13 @@ function handle_map_click(location) {
     mapPanel.style().set({
         cursor: 'hand'
     });
-    mapPanel.addLayer(clicked_basin_fc.style(Style.watershedStyle))
+    //mapPanel.addLayer(clicked_basin_fc.style(Style.watershedStyle))
+    mapPanel.adddLayer(
+     ee.Image().paint({
+  featureCollection: clicked_basin_fc,
+  color:'white',
+  width: 1
+}));
     mapPanel.centerObject(clicked_basin)
     var featureinfo = ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
     var infoTab = ui.Panel({
