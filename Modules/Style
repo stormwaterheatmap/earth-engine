@@ -142,7 +142,7 @@ exports.fonts = fonts
 
 var panelBorderStyle = '1px BDBDBD, 0, 0, 0'
 var cardBorderStyle = '1px solid #BDBDBD'
-
+var watershedStyle = {color: '26458d', fillColor: '00000000'};
 
 var bgkd = '#F9F9FA'
 //Testing 
