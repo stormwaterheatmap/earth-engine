@@ -515,25 +515,9 @@ var pieCard = function (layerObject) {
 }
 
 //**function for buttons to display layers on map
-var layerButton = function (eeObject) {
-    var addbutton = ui.Button({
-        label: 'Show Layer',
-        onClick: addLayer
-    });
-    var removebutton = ui.Button({
-        label: 'Remove Layer',
-        onClick:removeLayer ,
-        style: {
-            shown: false
-        }
-    });
+
 
     function addLayer() {
-        mapPanel.layers().clear()
-        mapPanel.add(eeObject.layer)
-         mapPanel.addLayer(clicked_basin)
-        removebutton.style().set({
-            shown: true
         });
         addbutton.style().set({
             shown: false
@@ -541,20 +525,38 @@ var layerButton = function (eeObject) {
     }
 
     function removeLayer() {
-        mapPanel.layers().clear() 
+    }
+
+    return ui.Panel([
+      //addbutton//, 
+ui.Button({
+        label: 'Show Layer',
+        onClick: function() {
+        mapPanel.layers().reset()
+        mapPanel.add(eeObject.layer)
+         mapPanel.addLayer(clicked_basin)
+        removebutton.style().set({
+            shown: true
+    })
+        }
+})
+      ,
+      //removebutton
+    ui.Button({
+        label: 'Remove Layer',
+        onClick: function() {
+        mapPanel.layers().reset() 
         mapPanel.addLayer(clicked_basin) //remove(eeObject.layer)
         print(mapPanel.layers())
         addbutton.style().set({
             shown: true
         });
-        removebutton.style().set({
-            shown: false
-        });
-    }
+        }
+    });
+      
+      ])
 
-    return ui.Panel([addbutton, removebutton])
 
-}
 
 
 /** Returns a ui.Map with some UI configuration in place */
