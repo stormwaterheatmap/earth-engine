@@ -205,15 +205,9 @@ var drawOwnCheck = ui.Checkbox({
     }
 }) //, onChage: drawMyOwn()})
 
-var checkbox = function (layerObject) {
+var makeLegend = function (layerObject) {
     //make a ui.Layer for display 
-    layerObject.uiLayer = ui.Map.Layer({
-        eeObject: layerObject.layer.eeObject.clip(clicked_basin_geom),
-        visParams: layerObject.layer.visParams,
-        name: layerObject.layer.name,
-        shown: false,
-        opacity: 1
-    })
+    
     // make a legend for that layer 
     var legend
     if (layerObject.discrete) {
@@ -224,43 +218,11 @@ var checkbox = function (layerObject) {
         legend = (barLegend(layerObject))
     } //add reports  
 
+        
+    //add legend 
+    legendPanel.clear()
+    legendPanel.add(legend)
 
-
-    var cb = ui.Checkbox({
-        label: layerObject.layer.name, //layerObject.layer.name,
-        value: 0,
-        style: fonts.Body2
-        /*{
-                    margin: '0px',
-                    padding: '4px',
-                    fontSize: '10px'
-                }*/
-    })
-    cb.onChange(function (checked) {
-
-        if (checked) {
-            //add layer
-            mapPanel.layers().add(layerObject.uiLayer.setShown(true))
-            print('checked')
-            //add legend 
-            legendPanel.clear()
-
-            //tableReport = report.getDataTable().setChartType('Table')
-            reportsPanel.clear()
-            legendPanel.add(legend)
-            legendPanel.add(report)
-            legendPanel.add(tableReport)
-
-        } else {
-            mapPanel.layers().remove(layerObject.uiLayer)
-            //legendPanel.remove(legend)
-            legendPanel.clear()
-            reportsPanel.clear()
-            // reportsPanel.remove(report)
-            // reportsPanel.remove(tableReport)
-        }
-    })
-    return cb
 
 }
 //var f = map.removeObject(imgElem1.getEeObject(), Map) //this worked!
@@ -515,36 +477,37 @@ var pieCard = function (layerObject) {
 }
 
 //**function for buttons to display layers on map
-var layerButton = function (layerObject){
-    
+var layerButton = function (layerObject) {
+
     return ui.Panel([
-      //addbutton//, 
-ui.Button({
-        label: 'Show Layer',
-        onClick: function() {
-        mapPanel.layers().reset()
-        mapPanel.add(eeObject.layer)
-         mapPanel.addLayer(clicked_basin)
-        removebutton.style().set({
-            shown: true
-    })
-        }
-})
-      ,
-      //removebutton
-    ui.Button({
-        label: 'Remove Layer',
-        onClick: function() {
-        mapPanel.layers().reset() 
-        mapPanel.addLayer(clicked_basin) //remove(eeObject.layer)
-        print(mapPanel.layers())
-        addbutton.style().set({
-            shown: true
-        });
-        }
-    })
-      
-      ])
+        //addbutton//, 
+        ui.Button({
+            label: 'Show Layer',
+            onClick: function () {
+                print('click function started')
+                mapPanel.layers().reset()
+                mapPanel.layers().add(layerObject.layer)
+                mapPanel.addLayer(clicked_basin)
+                //add legend 
+                makeLegend(eeObject)
+                // removebutton.style().set({
+                //  shown: true
+            }
+        }),
+        //removebutton
+        ui.Button({
+            label: 'Remove Layer',
+            onClick: function () {
+                mapPanel.layers().reset()
+                mapPanel.addLayer(clicked_basin) //remove(eeObject.layer)
+                print(mapPanel.layers())
+                // addbutton.style().set({
+                //     shown: true
+            }
+        })
+
+
+    ])
 
 }
 
@@ -739,14 +702,19 @@ var singleBar = {
     },
 };
 
-var imageBar = (  {chartArea: {left: '50%'}, //style for horizontal image bar 
-  hAxis: {
-          title: 'Area (acres)',
-          minValue: 0,
-        }, 
-        legend: {position: 'none'}, 
-        
-        }) 
+var imageBar = ({
+    chartArea: {
+        left: '50%'
+    }, //style for horizontal image bar 
+    hAxis: {
+        title: 'Area (acres)',
+        minValue: 0,
+    },
+    legend: {
+        position: 'none'
+    },
+
+})
 
 
 var makeReports = function () {
@@ -761,8 +729,8 @@ var makeReports = function () {
     )
     holderpan.add(pchart).add(pchart2)
     //pchart2.setOptions()
-    var laybut = layerButton(layerProperties.Precipitation) 
-    var precipCard = cards('Precipitation', [holderpan,laybut])
+    var laybut = layerButton(layerProperties.Precipitation)
+    var precipCard = cards('Precipitation', [holderpan, laybut])
     sidePanel.add(precipCard)
 
     //make a landuse card //geometry, properties, holeSize
@@ -779,9 +747,9 @@ var makeReports = function () {
     holderpanLU.add(impNum).add(impChart)
 
     var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale()).setChartType('BarChart')
-    luchart.setOptions(imageBar) 
-     var lcchart = charts.pieChart(clicked_basin_geom, layerProperties.landCover, mapPanel.getScale()).setChartType('BarChart')
-    lcchart.setOptions(imageBar) 
+    luchart.setOptions(imageBar)
+    var lcchart = charts.pieChart(clicked_basin_geom, layerProperties.landCover, mapPanel.getScale()).setChartType('BarChart')
+    lcchart.setOptions(imageBar)
     var luCard = cards('Land Use', [holderpanLU, luchart, lcchart])
     sidePanel.add(luCard)
 
@@ -795,10 +763,10 @@ var makeReports = function () {
     //Make a card for soils and Lithology
     var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
     soilsChart.setChartType('BarChart');
-    soilsChart.setOptions(imageBar) 
+    soilsChart.setOptions(imageBar)
     var lithChart = charts.pieChart(clicked_basin_geom, layerProperties.Lithology, mapPanel.getScale()) //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
     lithChart.setChartType('BarChart');
-    lithChart.setOptions(imageBar) 
+    lithChart.setOptions(imageBar)
     var soilsCard = cards('Soils and Lithology', [soilsChart, hline(), lithChart])
     sidePanel.add(soilsCard)
 
@@ -807,16 +775,16 @@ var makeReports = function () {
     topoChart.setOptions({
         title: 'Distribution of Slope in the Watershed'
     })
-    var topoCats = charts.pieChart(clicked_basin_geom, layerProperties.Slope, mapPanel.getScale() )
-    topoCats.setChartType('BarChart') 
+    var topoCats = charts.pieChart(clicked_basin_geom, layerProperties.Slope, mapPanel.getScale())
+    topoCats.setChartType('BarChart')
     topoCats.setOptions(imageBar)
     var topoCard = cards('Topography', [topoChart, hline(), topoCats])
     print('topcard ok')
     sidePanel.add(topoCard)
     //Make a panel for pollutants 
-  //copper 
+    //copper 
     //ToDo
-    
+
 }
 
 //cards function 
@@ -846,7 +814,10 @@ var accept = ui.Button({
     // label: 'Accept Selected Watershed',
     label: 'Accept Selected Watershed ',
     onClick: function () {
-       sidePanel.style().set({shown: true});  //show the side panel
+        sidePanel.style().set({
+            shown: true
+        }); //show the side panel
+        mapPanel.add(legendPanel) //add legend panel to the map
         makeReports() //also clear side panel todo
         buttonPanel.style().set({
             shown: false
@@ -946,14 +917,14 @@ ui.root.add(header)
 ui.root.add(ui.SplitPanel(
     ui.Panel({
         style: {
-           width: 0,//'38.2%',
+            width: 0, //'38.2%',
             backgroundColor: 'white',
             // border: '1px solid silver',
             stretch: 'vertical',
             margin: '12px',
             padding: 0
         }
-    })//.add(ui.Label('colMask'))
+    }) //.add(ui.Label('colMask'))
     .add(sidePanel),
     mapPanel));
 mapPanel.add(mapInfoPanel);
