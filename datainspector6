@@ -28,7 +28,7 @@ function handle_map_click(location) {
 
     print('hi from handleMapClick')
     var clicked_point = ee.Geometry.Point(location.lon, location.lat);
-    var clicked_basin_fc = WS.filterBounds(clicked_point); //use for display
+    clicked_basin_fc = WS.filterBounds(clicked_point); //use for display
     clicked_basin = ee.Feature(clicked_basin_fc.first());
     clicked_basin_geom = (clicked_basin_fc.first()).geometry();
 
@@ -487,30 +487,28 @@ var layerButton = function (layerObject) {
             label: 'Show Layer',
             onClick: function () {
                 print('click function started')
+                print(clicked_basin_fc)
                 mapPanel.layers().reset()
                 mapPanel.layers().add(layerObject.layer)
                 mapPanel.addLayer(clicked_basin)
                 var empty = ee.Image().byte()  
-                mapPanel.addLayer(
-     empty.paint({
-  featureCollection: clicked_basin_fc,
-  color:1,
-  width: 1
-}))
-                
-                //add legend 
+                var outline = empty.paint(clicked_basin_fc);
+                mapPanel.addLayer(outline, {palette: 'FF0000'}, 'edges')
                 legendPanel.style().set({shown:true})
                 makeLegend(layerObject)
-                // removebutton.style().set({
-                //  shown: true
             }
-        }),
+              
+            })
+        ,
         //removebutton
         ui.Button({
             label: 'Remove Layer',
             onClick: function () {
                 mapPanel.layers().reset()
-                mapPanel.addLayer(clicked_basin_fc.style(Style.watershedStyle))
+                var empty = ee.Image().byte()  
+                var outline = empty.paint(clicked_basin_fc);
+                mapPanel.addLayer(outline, {palette: 'FF0000'}, 'edges')
+                
                 legendPanel.style().set({shown:false})//remove(eeObject.layer)
                 print(mapPanel.layers())
                 // addbutton.style().set({
@@ -519,7 +517,7 @@ var layerButton = function (layerObject) {
         })
 
 
-    ])
+    ]).setLayout(ui.Panel.Layout.flow('horizontal') 
 
 }
 
