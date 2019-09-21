@@ -188,12 +188,7 @@ var drawingfunction = function () {
 }
 
 
-var layerButton = ui.Button({label: 'Add layer to Map', onClick: function() {
-//
 
-}, 
-
-})
 
 var drawOwnCheck = ui.Checkbox({
     label: 'I want to draw my own',
@@ -269,7 +264,7 @@ var checkbox = function (layerObject) {
 
 }
 //var f = map.removeObject(imgElem1.getEeObject(), Map) //this worked!
-var removeObject = function (eeobject, map) {
+var removeObject = function (eeObject, map) {
     var m = map || Map
     var layers = m.layers()
     var layersJS = layers.getJsArray()
@@ -518,6 +513,46 @@ var pieCard = function (layerObject) {
     return card
 }
 
+//**function for buttons to display layers on map
+var layerButton = function (eeObject) {
+    var addbutton = ui.Button({
+        label: 'Show Layer',
+        onClick: addLayer
+    });
+    var removebutton = ui.Button({
+        label: 'Remove Layer',
+        onClick:removeObject(eeObject, mapPanel) ,
+        style: {
+            shown: false
+        }
+    });
+
+    function addLayer() {
+        mapPanel.layers().add(eeObject.layer)
+        removebutton.style().set({
+            shown: true
+        });
+        addbutton.style().set({
+            shown: false
+        });
+    }
+
+    function removeLayer() {
+        mapPanel.layers().remove(eeObject.layer)
+        print(mapPanel.layers())
+        addbutton.style().set({
+            shown: true
+        });
+        removebutton.style().set({
+            shown: false
+        });
+    }
+
+    return ui.Panel([addbutton, removebutton])
+
+}
+
+
 /** Returns a ui.Map with some UI configuration in place */
 function makeMapPanel() {
     var map = ui.Map({
@@ -728,7 +763,8 @@ var makeReports = function () {
     )
     holderpan.add(pchart).add(pchart2)
     //pchart2.setOptions()
-    var precipCard = cards('Precipitation', [holderpan])
+    var laybut = layerButton(layerProperties.Precipitation) 
+    var precipCard = cards('Precipitation', [holderpan,laybut])
     sidePanel.add(precipCard)
 
     //make a landuse card //geometry, properties, holeSize
