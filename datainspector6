@@ -521,7 +521,7 @@ var layerButton = function (eeObject) {
     });
     var removebutton = ui.Button({
         label: 'Remove Layer',
-        onClick:removeObject(eeObject, mapPanel) ,
+        onClick:removeLayer ,
         style: {
             shown: false
         }
