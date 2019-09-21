@@ -489,7 +489,8 @@ var layerButton = function (layerObject) {
                 mapPanel.layers().add(layerObject.layer)
                 mapPanel.addLayer(clicked_basin)
                 //add legend 
-                makeLegend(eeObject)
+                legendPanel.style().set({shown:true))/
+                makeLegend(layerObject)
                 // removebutton.style().set({
                 //  shown: true
             }
@@ -499,7 +500,8 @@ var layerButton = function (layerObject) {
             label: 'Remove Layer',
             onClick: function () {
                 mapPanel.layers().reset()
-                mapPanel.addLayer(clicked_basin) //remove(eeObject.layer)
+                mapPanel.addLayer(clicked_basin)
+                legendPanel.style().set({shown:false))//remove(eeObject.layer)
                 print(mapPanel.layers())
                 // addbutton.style().set({
                 //     shown: true
@@ -640,12 +642,13 @@ var reportsPanel = ui.Panel({
 
 var legendPanel = ui.Panel({
     style: {
-        position: 'bottom-left',
-        width: '20%',
+        position: 'bottom-right',
+       // width: '20%',
         //height: '80%',
         padding: '12 px',
-        backgroundColor: colors.sLight,
-        stretch: 'horizontal',
+        backgroundColor: colors.transparent,
+        stretch: 'both',
+        shown: false,
         // position: 'top-right'
     },
 
