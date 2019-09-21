@@ -58,13 +58,8 @@ function handle_map_click(location) {
     mapPanel.style().set({
         cursor: 'hand'
     });
-    //mapPanel.addLayer(clicked_basin_fc.style(Style.watershedStyle))
-    mapPanel.adddLayer(
-     ee.Image().paint({
-  featureCollection: clicked_basin_fc,
-  color:'white',
-  width: 1
-}));
+  mapPanel.addLayer(clicked_basin_fc.style(Style.watershedStyle))
+
     mapPanel.centerObject(clicked_basin)
     var featureinfo = ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
     var infoTab = ui.Panel({
@@ -494,7 +489,15 @@ var layerButton = function (layerObject) {
                 print('click function started')
                 mapPanel.layers().reset()
                 mapPanel.layers().add(layerObject.layer)
-                mapPanel.addLayer(clicked_basin_fc)
+                mapPanel.addLayer(clicked_basin)
+                var empty = ee.Image().byte()  
+                mapPanel.addLayer(
+     empty.paint({
+  featureCollection: clicked_basin_fc,
+  color:1,
+  width: 1
+}))
+                
                 //add legend 
                 legendPanel.style().set({shown:true})
                 makeLegend(layerObject)
