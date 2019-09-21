@@ -385,6 +385,7 @@ function makeSidePanel() {
             //  border: '1px solid silver',
             //margin:'0',
             padding: '12px',
+            shown: false,
             stretch: 'horizontal'
         }
     })
@@ -528,7 +529,9 @@ var layerButton = function (eeObject) {
     });
 
     function addLayer() {
-        mapPanel.layers().add(eeObject.layer)
+        mapPanel.layers().clear()
+        mapPanel.add(eeObject.layer)
+         mapPanel.addLayer(clicked_basin)
         removebutton.style().set({
             shown: true
         });
@@ -538,7 +541,8 @@ var layerButton = function (eeObject) {
     }
 
     function removeLayer() {
-        mapPanel.layers().remove(eeObject.layer)
+        mapPanel.layers().clear() 
+        mapPanel.addLayer(clicked_basin) //remove(eeObject.layer)
         print(mapPanel.layers())
         addbutton.style().set({
             shown: true
@@ -848,6 +852,7 @@ var accept = ui.Button({
     // label: 'Accept Selected Watershed',
     label: 'Accept Selected Watershed ',
     onClick: function () {
+       sidePanel.style().set({shown: true});  //show the side panel
         makeReports() //also clear side panel todo
         buttonPanel.style().set({
             shown: false
@@ -947,14 +952,15 @@ ui.root.add(header)
 ui.root.add(ui.SplitPanel(
     ui.Panel({
         style: {
-            width: '38.2%',
+           width: 0,//'38.2%',
             backgroundColor: 'white',
             // border: '1px solid silver',
             stretch: 'vertical',
             margin: '12px',
             padding: 0
         }
-    }).add(ui.Label('colMask')).add(sidePanel),
+    })//.add(ui.Label('colMask'))
+    .add(sidePanel),
     mapPanel));
 mapPanel.add(mapInfoPanel);
 ui.root.add(footer)
