@@ -317,13 +317,9 @@ var rasters = {
         'DevAge': {
             layer: {
                 eeObject: age_of_development, //var visParams = {
-                min: 2.0,
-                max: 6.0,
-
                 name: 'Age of Development',
                 visParams: {
                     palette: ['000000', '448564', '70daa4', '83ffbf', 'ffffff'],
-
                     min: 2,
                     max: 6
                 }
@@ -520,9 +516,9 @@ exports.vectors = {
                 //  PugetSound),
               //HUC06: ee.FeatureCollection("USGS/WBD/2017/HUC06").filterBounds(
               //    PugetSound),
-            //  NHDPlus: ee.FeatureCollection(
-              //    'users/cnilsen/PugetSoundNHDPlusWatersheds'),
-            //PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
+              NHDPlus: ee.FeatureCollection(
+                  'users/cnilsen/PugetSoundNHDPlusWatersheds'),
+          PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
             WRIA: ee.FeatureCollection(
                     "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
                 )
