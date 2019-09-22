@@ -425,10 +425,10 @@ var layerButton = function (layerObject) {
                 print(clicked_basin_fc)
                 mapPanel.layers().reset()
                 mapPanel.layers().add(layerObject.layer)
-                mapPanel.addLayer(clicked_basin)
+               
                 var empty = ee.Image().byte()  
-                var outline = empty.paint(clicked_basin_fc, 1, 1.5);
-                mapPanel.addLayer(outline, {palette: 'FF0000'}, 'edges')
+                 var outline = empty.paint(clicked_basin_fc,1,2);
+                mapPanel.addLayer(outline, {palette: 'whitesmoke'}, 'edges')
                 legendPanel.style().set({shown:true})
                 makeLegend(layerObject)
             }
