@@ -441,8 +441,8 @@ var layerButton = function (layerObject) {
             onClick: function () {
                 mapPanel.layers().reset()
                 var empty = ee.Image().byte()  
-                var outline = empty.paint(clicked_basin_fc);
-                mapPanel.addLayer(outline, {palette: 'FF0000'}, 'edges')
+                var outline = empty.paint(clicked_basin_fc,1,2);
+                mapPanel.addLayer(outline, {palette: 'whitesmoke'}, 'edges')
                 
                 legendPanel.style().set({shown:false})//remove(eeObject.layer)
                 print(mapPanel.layers())
