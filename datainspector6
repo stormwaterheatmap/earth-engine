@@ -492,7 +492,7 @@ var layerButton = function (layerObject) {
                 mapPanel.layers().add(layerObject.layer)
                 mapPanel.addLayer(clicked_basin)
                 var empty = ee.Image().byte()  
-                var outline = empty.paint(clicked_basin_fc);
+                var outline = empty.paint(clicked_basin_fc, 1, 1.5);
                 mapPanel.addLayer(outline, {palette: 'FF0000'}, 'edges')
                 legendPanel.style().set({shown:true})
                 makeLegend(layerObject)
@@ -517,7 +517,7 @@ var layerButton = function (layerObject) {
         })
 
 
-    ]).setLayout(ui.Panel.Layout.flow('horizontal') 
+    ]).setLayout(ui.Panel.Layout.flow('horizontal')) 
 
 }
 
@@ -761,7 +761,10 @@ var makeReports = function () {
     luchart.setOptions(imageBar)
     var lcchart = charts.pieChart(clicked_basin_geom, layerProperties.landCover, mapPanel.getScale()).setChartType('BarChart')
     lcchart.setOptions(imageBar)
-    var luCard = cards('Land Use', [holderpanLU, luchart, lcchart])
+    var luCard = cards('Land Use', [holderpanLU, layerButton(layerProperties.Imperviousness), 
+    luchart,
+    layerButton(layerProperties.landUse),
+    lcchart, layerButton(layerProperties.landCover)])
     sidePanel.add(luCard)
 
     //Make a card for Age of Development 
@@ -769,7 +772,7 @@ var makeReports = function () {
     var ageCard = charts.pieChart(clicked_basin_geom, layerProperties.DevAge, mapPanel.getScale())
     ageCard.setChartType('BarChart')
     ageCard.setOptions(imageBar)
-    var ageCard = cards('Age of Development', [ageCard])
+    var ageCard = cards('Age of Development', [ageCard,layerButton(layerProperties.DevAge)])
     sidePanel.add(ageCard)
     //Make a card for soils and Lithology
     var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
@@ -778,7 +781,7 @@ var makeReports = function () {
     var lithChart = charts.pieChart(clicked_basin_geom, layerProperties.Lithology, mapPanel.getScale()) //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
     lithChart.setChartType('BarChart');
     lithChart.setOptions(imageBar)
-    var soilsCard = cards('Soils and Lithology', [soilsChart, hline(), lithChart])
+    var soilsCard = cards('Soils and Lithology', [soilsChart, layerButton(layerProperties.Soils), hline(), lithChart, layerButton(layerProperties.Lithology)])
     sidePanel.add(soilsCard)
 
     //Make a panel for topography 
@@ -789,7 +792,7 @@ var makeReports = function () {
     var topoCats = charts.pieChart(clicked_basin_geom, layerProperties.Slope, mapPanel.getScale())
     topoCats.setChartType('BarChart')
     topoCats.setOptions(imageBar)
-    var topoCard = cards('Topography', [topoChart, hline(), topoCats])
+    var topoCard = cards('Topography', [topoChart, layerButton(layerProperties.SlopeCont), hline(), topoCats, layerButton(layerProperties.Slope)])
     print('topcard ok')
     sidePanel.add(topoCard)
     //Make a panel for pollutants 
