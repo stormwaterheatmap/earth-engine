@@ -98,8 +98,7 @@ exports.landuse = generalizedLU;
 var tncLC = ee.Image(
   "users/jrobertson2000/psLandCover_1m_finPS_roofs");
 var water=  tncLC.neq(5)
-var imp = tncLC.eq(6).or(tncLC.eq(7)).multiply(ee
-    .Image(100))
+var imp = tncLC.eq(6).or(tncLC.eq(7))
 var imp = imp.updateMask(water)
 var soils = ee.Image("users/stormwaterheatmap/soils");
 exports.soils = ee.Image("users/stormwaterheatmap/soils");
