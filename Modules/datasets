@@ -202,7 +202,8 @@ var rasters = {
                 visParams: {
                     palette: ['#115e10', '#cbd4c2'],
                     min: 0,
-                    max: 1
+                    max: 1, 
+                    opacity: 0.6, 
                 }
             },
             discrete: true,
@@ -225,7 +226,8 @@ var rasters = {
                         '#7f0000'
                     ],
                     min: 20,
-                    max: 100
+                    max: 100,
+                    opacity: 0.6 
                 }
             },
             discrete: false,
@@ -248,7 +250,8 @@ var rasters = {
                         '#05668D'
                     ],
                     min: 0,
-                    max: 4
+                    max: 4,
+                    opacity: 0.6 
                 }
             },
             discrete: true,
@@ -265,7 +268,8 @@ var rasters = {
                     palette: ['#009B9E', '#F1F1F1', '#C75DAB'],
 
                     min: 0,
-                    max: 2
+                    max: 2,
+                    opacity: 0.6 
                 }
             },
             discrete: true,
@@ -281,7 +285,8 @@ var rasters = {
                 visParams: {
                     palette: ['3f60ae','539eb6','6db388','cab843','e78532','d92120'], 
                     min: 0,
-                    max: 25
+                    max: 25,
+                    opacity: 0.6 
                 }
             },
             discrete: false,
@@ -297,7 +302,8 @@ var rasters = {
                 visParams: {
                     palette: ["ffffff", "3ead63", "c9fbff", "26532b", "a39171", "476b9d", "adacb5", "d8d5db"], 
                     min: 0,
-                    max: 7
+                    max: 7,
+                    opacity: 0.6 
                 }
             },
             discrete: true,
@@ -318,7 +324,8 @@ var rasters = {
                 visParams: {
                     palette: ['000000', '448564', '70daa4', '83ffbf', 'ffffff'],
                     min: 2,
-                    max: 6
+                    max: 6,
+                    opacity: 0.6 
                 }
             },
             discrete: true,
@@ -348,6 +355,7 @@ var rasters = {
             ],
             min: 0,
             max: 20,
+            opacity: 0.6 
           }
     },
     discrete: true,
@@ -403,7 +411,8 @@ var rasters = {
                 visParams: {
                     palette: ['#2f0f3e', '#66185c', '#9f2462', '#ce4356', '#eb7858', '#f7b37c', '#feedb0'],
                     min: 20,
-                    max: 200
+                    max: 200,
+                    opacity: 0.6 
                 }
             },
             discrete: false,
@@ -428,7 +437,8 @@ var rasters = {
                         '#256C61'
                     ],
                     min: 1,
-                    max: 8
+                    max: 8,
+                    opacity: 0.6 
                 }
             },
             discrete: true,
@@ -452,7 +462,8 @@ var rasters = {
                 visParams: {
                     palette: ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
                     min: 100,
-                    max: 1000
+                    max: 1000,
+                    opacity: 0.6 
                 }
             },
             discrete: false,
@@ -470,7 +481,8 @@ var rasters = {
                 visParams: {
                     palette:palettes.colorbrewer.GnBu[8],// ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
                     min: 0,
-                    max: 60
+                    max: 60,
+                    opacity: 0.6 
                 }
             },
             discrete: false,
@@ -490,7 +502,8 @@ var rasters = {
                     ["#352a87", "#056ede", "#089bce", "#33b7a0", 
                     "#a3bd6a", "#f9bd3f", "#f9fb0e"],
                     min: 0,
-                    max: 2000
+                    max: 2000,
+                    opacity: 0.6 
                 }
             },
             discrete: false,
