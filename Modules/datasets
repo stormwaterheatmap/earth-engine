@@ -527,5 +527,5 @@ exports.vectors = {
 exports.rasters = rasters
         
 //testing
-Map.addLayer(image6)
+//Map.addLayer(image6)
 //Map.layers().add(rasters.Runoff_in.layer)
