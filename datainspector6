@@ -104,7 +104,7 @@ function handle_map_click(location) {
     return clicked_basin
     return clicked_basin_geom
 }
-
+print(107)
 function handle_inspect_click() {
     print('inspector Activated')
     mapPanel.style().set({
@@ -266,7 +266,7 @@ UI Functions
 ---------------------------------------------------------------------------------------------------- 
 */
 
-
+print(269)
 function makeSidePanel() {
 
     var col1 = ui.Panel({
@@ -406,6 +406,7 @@ var pieCard = function (layerObject) {
 }
 
 //**function for buttons to display layers on map
+print(409)
 var layerButton = function (layerObject) {
 
     return ui.Panel([
@@ -521,7 +522,7 @@ var makeFooter = function () {
     reportsPanel.add(reportTitle);
 
 }*/
-
+print(525)
 /* 
 Object (6 properties)
 DissolvedCopper: Object (6 properties)
@@ -550,6 +551,7 @@ var mainPanel = ui.Panel({widgets: watershedSelect,
         //backgroundColor: colors.transparent
     }
 });
+print(554)
 var subPanel = ui.Panel({
     layout: ui.Panel.Layout.flow('vertical', true),
     style: {
@@ -570,6 +572,7 @@ var hPanel = ui.Panel({
     }
 })
 // App title and information 
+print(575)
 var titleLabel = ui.Label({
     value: 'Watershed Insights',
     style: fonts.H1})
@@ -578,18 +581,30 @@ var descriptionLabel = ui.Label(descriptionText);
 var watershedSelectLabel = ui.Label({
     value: 'Select a watershed dataset:',
 });
+print(584)
 var reportsPanel = ui.Panel({
     style: { // position: 'top-right',
         width: '75%',
         //   height: '25%',
-        padding: '12 px',
+        padding: '12px',
         backgroundColor: colors.transparent,
         stretch: 'horizontal',
         position: 'bottom-right'
     },
 
-}).setLayout(ui.Panel.Layout.flow('horizontal'));
-
+}).setLayout(ui.Panel.Layout.flow('vertical'));
+print(596)
+var prioritizePanel = ui.Panel({
+  style: {// position: 'top-right',
+        width: '75%',
+        //   height: '25%',
+        padding: '12 px',
+        backgroundColor: colors.transparent,
+        stretch: 'horizontal',
+        position: 'bottom-right', 
+        shown: false
+    }, layout: ui.Panel.Layout.flow('horizontal')})
+print(606)
 var legendPanel = ui.Panel({
     style: {
         position: 'bottom-right',
@@ -603,7 +618,7 @@ var legendPanel = ui.Panel({
     },
 
 }).setLayout(ui.Panel.Layout.flow('vertical'));
-
+print(618)
 var blankPanel = ui.Panel({
     style: {
         backgroundColor: colors.pDark,
@@ -686,7 +701,7 @@ var makeReports = function () {
     //pchart2.setOptions()
     var laybut = layerButton(layerProperties.Precipitation)
     var precipCard = cards('Precipitation', [pchart, pchart2, laybut])
-    mainPanel.add(precipCard)
+    reportsPanel.add(precipCard)
 
     //make a landuse card //geometry, properties, holeSize
     //make a bar chart of imperviousness
@@ -710,7 +725,7 @@ var makeReports = function () {
         layerButton(layerProperties.landUse),
         lcchart, layerButton(layerProperties.landCover)
     ])
-    mainPanel.add(luCard)
+    reportsPanel.add(luCard)
 
     //Make a card for Age of Development 
     //show percent developed prior to 1999
@@ -718,7 +733,7 @@ var makeReports = function () {
     ageCard.setChartType('BarChart')
     ageCard.setOptions(imageBar)
     var ageCard = cards('Age of Development', [ageCard, layerButton(layerProperties.DevAge)])
-    mainPanel.add(ageCard)
+    reportsPanel.add(ageCard)
     //Make a card for soils and Lithology
     var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
     soilsChart.setChartType('BarChart');
@@ -727,7 +742,7 @@ var makeReports = function () {
     lithChart.setChartType('BarChart');
     lithChart.setOptions(imageBar)
     var soilsCard = cards('Soils and Lithology', [soilsChart, layerButton(layerProperties.Soils), hline(), lithChart, layerButton(layerProperties.Lithology)])
-    mainPanel.add(soilsCard)
+    reportsPanel.add(soilsCard)
 
     //Make a panel for topography 
     var topoChart = charts.histogramImage(layerProperties.SlopeCont, clicked_basin_geom, mapPanel.getScale())
@@ -739,7 +754,7 @@ var makeReports = function () {
     topoCats.setOptions(imageBar)
     var topoCard = cards('Topography', [topoChart, layerButton(layerProperties.SlopeCont), hline(), topoCats, layerButton(layerProperties.Slope)])
     print('topcard ok')
-    mainPanel.add(topoCard)
+    reportsPanel.add(topoCard)
     //Make a panel for pollutants 
     //copper 
     //ToDo
@@ -837,10 +852,27 @@ var watershedSelect = ui.Select({
 //     //value: 'HUC 12'
 //     onChange: addreports
 // });
+/*---
+Controls to select mode 
+*/ 
+//make a button to hide the reports panel and display the prioritizer 
+var modeButton = ui.Button({
+            label: 'Prioritize',
+            onClick: function () {
+                reportsPanel.style().set({
+                    shown: false
+                })
+                prioritizePanel.style().set({
+                    shown: true
+                })}
+            })
+
 /* 
 Prioritizer functions and vars
 ----------------------------------------------------------------------------------------------------
 */
+
+
 
 var boundarySelect = ui.Select({items: ['HUC 12 Boundaries', 'NHDPlus Boundaries', 'Use automatic clustering'] })
 var prioritizeAccept = ui.Button({
@@ -934,10 +966,11 @@ var reduceParameter = function(key) {
 //});
    mapPanel.addLayer(reduced.style(featureStyle),{}, 'reduced Parameter feature layer')
   //add chart of values 
-  var histogramPanel = ui.Panel({style:{position:'bottom-left'}})
-  histogramPanel.add(ui.Chart.feature.histogram(reduced, 'sum', 16)) //region, propName, buckwidth, title
-  mapPanel.add(histogramPanel)
+  //var histogramPanel = ui.Panel({style:{position:'bottom-left'}})
+  prioritizePanel.add(ui.Chart.feature.histogram(reduced, 'sum', 16)) //region, propName, buckwidth, title
+  //mapPanel.add(histogramPanel)
 }
+print(970)
 /* 
 Set up User Interface
 ----------------------------------------------------------------------------------------------------
@@ -989,9 +1022,11 @@ ui.root.add(/*ui.SplitPanel(
     .add(sidePanel)*/
     mapPanel);
 mapPanel.add(mapInfoPanel);
+mainPanel.add(reportsPanel); 
 mapPanel.add(mainPanel); 
 mainPanel.add(blankPanel); 
-
+mainPanel.add(prioritizePanel)
+mainPanel.add(modeButton) 
 //mainPanel.add(titleLabel); 
 mainPanel.add(watershedSelect)
 ui.root.add(footer)
