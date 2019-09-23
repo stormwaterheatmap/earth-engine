@@ -216,7 +216,8 @@ var makePieChart = function (
     //   print('reduction_results', reduction_results);
     var roi_stats = ee.List(reduction_results.get('groups'));
     //    print('roi stats', roi_stats)
-    var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
+    var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature)).
+    sort('Area',false);
     //  print('transition_fc', transition_fc);
     // Add a summary chart.
     var transition_summary_chart =
@@ -650,7 +651,7 @@ var imgToFc = function (
 
     var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
 
-    return transition_fc
+    return transition_fc.sort('Area',false)
 };
 
 
@@ -662,7 +663,8 @@ var layerProperties = data.rasters
 var layerObject = layerProperties.landUse;
 var fctest = imgToFc(geometry, layerObject, 200)
 print(fctest)
-print(ui.Chart.feature.byFeature(fctest,'Class','Area'))
+print(ui.Chart.feature.byFeature(fctest,'Class','Area').setChartType(
+  'BarChart'))
 
 //(layerObject, geomtery, scale)
 // geometry, properties, scale, holeSize
