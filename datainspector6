@@ -15,7 +15,9 @@ var holeSize = 0.5 //85;
 */
 var colors = Style.colors
 var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
-
+ var featureStyle = {
+color: 'white', fillColor: '00000000'}
+var imageVisParam = {"opacity":0.81,"bands":["first"],"min":5845.408857739145,"max":8458888.910842622,"palette":["1a9641","a6d96a","ffffbf","fdae61","d7191c"]};
 print(layerProperties)
 /*Global Variables------------------------------------------------------------------------------------- 
  */
@@ -23,6 +25,7 @@ var clicked_basin
 var clicked_basin_geom
 var clicked_basin_fc
 var WS
+ var bounds 
 
 function handle_map_click(location) {
 
@@ -492,6 +495,8 @@ var makeHeader = function () {
         }
     })
    // header.
+   header.add(titleLabel)
+   header.add(prioritizeAccept)
     return header
 }; 
 var makeFooter = function () {
@@ -838,7 +843,7 @@ Prioritizer functions and vars
 */
 
 var boundarySelect = ui.Select({items: ['HUC 12 Boundaries', 'NHDPlus Boundaries', 'Use automatic clustering'] })
-var accept = ui.Button({
+var prioritizeAccept = ui.Button({
     // label: 'Accept Selected Watershed',
     label: 'Accept Selected Watershed ',
     onClick: function() {
@@ -969,7 +974,7 @@ footer.add(ui.Label('footer'))
 //mapPanel.add(ui.Label('mapPanel'))
 ui.root.setLayout(ui.Panel.Layout.flow(
     'vertical'))
-ui.root.add(header)
+blankPanel.add(header)
 ui.root.add(/*ui.SplitPanel(
     ui.Panel({
         style: {
@@ -987,7 +992,7 @@ mapPanel.add(mapInfoPanel);
 mapPanel.add(mainPanel); 
 mainPanel.add(blankPanel); 
 
-mainPanel.add(titleLabel); 
+//mainPanel.add(titleLabel); 
 mainPanel.add(watershedSelect)
 ui.root.add(footer)
 //---------------- set the initial view
