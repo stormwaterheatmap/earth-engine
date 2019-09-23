@@ -43,9 +43,6 @@ var histByClass = function (layerObject, scale, geom) {
     return histChart
 
 }
-
-
-
 exports.stackedBar = function (layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(4046.856) //area in acres 
     var image = ee.Image.cat(area, layerObject.layer.eeObject)
@@ -83,8 +80,6 @@ exports.stackedBar = function (layerObject, scale, geom) {
 var imageBar = function (layerObject, scale, geom) {
   var imgchart = ui.chart.image
 }
-
-
 exports.histogramFeature = function (region, propName, buckwidth, title) {
     var chart = ui.Chart.feature
         .histogram({
@@ -104,10 +99,11 @@ var histogramImage = function (layerObject, WS, scale) {
         image: layerObject.layer.eeObject,
         region: WS,
         scale: scale,
+        minBucketWidth: 0.5,
       //  maxBuckets: 16,
     });
 
-    chart.style().set({ //width:'300px',
+    chart.style().set({ width:'90%',
         height: '185px'
     })
     chart.setSeriesNames(
@@ -162,6 +158,7 @@ var histogramImage = function (layerObject, WS, scale) {
     return chart;
 };
 exports.histogramImage = histogramImage;
+
 var makePieChart = function (
     geometry, properties, scale, holeSize) {
     var AOI = geometry;
@@ -229,7 +226,6 @@ var makePieChart = function (
         })
         .setChartType('PieChart') //le')
 
-    createPieChartSliceDictionary(transition_fc)
     //.evaluate(function(result) {
     // When the server returns the value, show it.
 
@@ -246,7 +242,7 @@ var makePieChart = function (
         pieSliceText: 'label',
         title: properties.layer.name,
         //  pieStartAngle: 100,
-        //slices: createPieChartSliceDictionary(transition_fc).evaluate,
+        slices: createPieChartSliceDictionary(transition_fc).evaluate,
         sliceVisibilityThreshold: 0.05
     });
 }; 
@@ -602,26 +598,23 @@ var littleNum = function (layerObj, region, scale, reducerType) {
 }
 exports.littleNum = littleNum;
 
-var imgToFc = function (layerObject, geomtery, scale) {
+var imgToFc = function (geometry, properties, scale) {
+  print('scale', scale); 
     var AOI = geometry;
-    var image = layerObject.layer.eeObject
-    var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image);//acres
+    var image = properties.layer.eeObject
+    var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image); //acres
     var clipImage = withArea.clip(AOI)
-    var reduction_results = (clipImage).reduceRegion({
-        reducer: ee.Reducer.sum().group({
-            groupField: 1,
-            groupName: 'class value',
-        }),
-        geometry: AOI,
-        scale: scale,
-        bestEffort: true,
-    });
+    // Calculations
     var lookup_names = ee.Dictionary.fromLists(
-        ee.List(layerObject.values).map(ee.String),
-        layerObject.labels
+        ee.List(properties.values).map(ee.String),
+        properties.labels
     );
     // print('lookup names', lookup_names)
-    //////////////////////////////////////////////////////////////   // Helper functions    //////////////////////////////////////////////////////////////
+    var lookup_palette = ee.Dictionary.fromLists(
+        ee.List(properties.values).map(ee.String),
+        properties.layer.visParams.palette
+    );
+    // print(ee.List(lookup_palette))
     function createFeature(transition_class_stats) {
         transition_class_stats = ee.Dictionary(transition_class_stats);
         var class_number = transition_class_stats.get('class value');
@@ -634,28 +627,59 @@ var imgToFc = function (layerObject, geomtery, scale) {
         return ee.Feature(null,
             result); // Creates a feature without a geometry.
     }
-
+    // Create a JSON dictionary that defines piechart colors based on thetransition class palette.
+    // https://developers.google.com/chart/interactive/docs/gallery/piechart
     function createPieChartSliceDictionary(fc) {
+        return ee.List(fc.aggregate_array("transition_class_palette"))
+            // .map(function (p) {
+                //return {
+                 //   'color': p
+                //};
+            }
+    
+    //var classValue = image.get('system:title')
+    //print(classValue)
+    var reduction_results = clipImage.reduceRegion({
+        reducer: ee.Reducer.sum().group({
+            groupField: 1,
+            groupName: 'class value',
+        }),
+        geometry: AOI,
+        scale: scale,
+        bestEffort: true,
+    });
+    //   print('reduction_results', reduction_results);
+    var roi_stats = ee.List(reduction_results.get('groups'));
+    //    print('roi stats', roi_stats)
+    var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
+    //  print('transition_fc', transition_fc);
+    // Add a summary chart.
+    var transition_summary_chart =
+        ui.Chart.feature.byFeature({
+            features: transition_fc,
+            xProperty: 'Class',
+            yProperties: ['Area'] // 'transition_class_number']
+        })
+        .setChartType('PieChart') //le')
 
+    //.evaluate(function(result) {
+    // When the server returns the value, show it.
 
-        var roi_stats = ee.List(reduction_results.get('groups'));
-        //    print('roi stats', roi_stats)
-        var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
-        // print('transition_fc', transition_fc);
-        // Add a summary chart.
+    return transition_fc
+}; 
 
-        return transition_fc;
-    }
-}
 
 exports.imgToFc = imgToFc
 //testing 
 
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var layerProperties = data.rasters
-/*var layerObject = layerProperties.Imperviousness
-var numPan = littleNum(layerObject, geometry, 500, 'percent'); 
-*/
+var layerObject = layerProperties.Imperviousness
+var fctest = makePieChart(geometry, layerObject, 200) 
+print(fctest)
+
+  //(layerObject, geomtery, scale)
+  
 // geometry, properties, scale, holeSize
 /*
 var layerObject = layerProperties.landUse 
