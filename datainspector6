@@ -652,7 +652,7 @@ var singleBar = {
 
 var imageBar = ({
     chartArea: {
-        left: '50%'
+        left: '38%'
     }, //style for horizontal image bar 
     hAxis: {
         title: 'Area (acres)',
