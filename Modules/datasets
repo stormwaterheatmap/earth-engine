@@ -519,7 +519,7 @@ var rasters = {
 exports.vectors = {
               counties: ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
                   PugetSound),
-             // HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
+              HUC12: ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
                   //PugetSound),
             //  HUC10: ee.FeatureCollection("USGS/WBD/2017/HUC10").filterBounds(
                   //PugetSound),
