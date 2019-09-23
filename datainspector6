@@ -584,12 +584,13 @@ var watershedSelectLabel = ui.Label({
 print(584)
 var reportsPanel = ui.Panel({
     style: { // position: 'top-right',
-        width: '75%',
+        width: '100%',
         //   height: '25%',
         padding: '12px',
+        margin: 0,
         backgroundColor: colors.transparent,
         stretch: 'horizontal',
-        position: 'bottom-right'
+        //position: 'bottom-right'
     },
 
 }).setLayout(ui.Panel.Layout.flow('vertical'));
@@ -893,7 +894,7 @@ var prioritizeAccept = ui.Button({
   var select = boundarySelect.getValue()
   print(select)
   print(clicked_basin)
- 
+ print(clicked_basin_geom)
   if (select === 'HUC 12 Boundaries') {
     bounds = vectors.HUC12.filterBounds(clicked_basin_geom)
  //   mapPanel.addLayer(bounds.style(featureStyle))//.filterBounds(WS))
