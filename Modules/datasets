@@ -13,7 +13,8 @@ var NED = ee.Image("USGS/NED"),
     image5 = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip"),
     GLCF_trees = ee.ImageCollection("GLCF/GLS_TCC"),
     imageCollection = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Density"),
-    image6 = ee.Image("users/stormwaterheatmap/CigP2500");
+    image6 = ee.Image("users/stormwaterheatmap/CigP2500"),
+    table5 = ee.FeatureCollection("users/stormwaterheatmap/MS4_bounds");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 // Author: Christian Nilsen, Geosyntec Consultants 
@@ -526,15 +527,15 @@ exports.vectors = {
                 //  PugetSound),
               //HUC06: ee.FeatureCollection("USGS/WBD/2017/HUC06").filterBounds(
               //    PugetSound),
-              NHDPlus: ee.FeatureCollection(
-                  'users/cnilsen/PugetSoundNHDPlusWatersheds'),
+             // NHDPlus: ee.FeatureCollection(
+             //     'users/cnilsen/PugetSoundNHDPlusWatersheds'),
           PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
             WRIA: ee.FeatureCollection(
                     "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
                 )
-                .filterBounds(PugetSound)
-            //add LJ 
-            //add NPDES Bounds 
+                .filterBounds(PugetSound), 
+           MS4: ee.FeatureCollection("users/stormwaterheatmap/MS4_bounds")
+           .filterBounds(PugetSound),
         }
 exports.rasters = rasters
         
