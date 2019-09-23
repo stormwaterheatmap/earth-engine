@@ -940,7 +940,6 @@ var parameterSelect = ui.Select({
 }); 
 var reduceParameter = function(key) {
 
-  
   //accumulate based on mean value
   var reduced = layerProperties[key].layer.eeObject.reduceRegions({
     collection: bounds, 
@@ -949,7 +948,10 @@ var reduceParameter = function(key) {
   }); 
   print('reduced', reduced)
  // mapPanel.layers().reset() 
-  ;
+  //make a chart of the reduced feature collection 
+  var scoreChart = charts.histogramFeature(reduced, 'sum', {}, 'Prioritization Score')
+  prioritizePanel.add(scoreChart); 
+  
   
   var reducedParmImage = reduced.reduceToImage({
     properties: ['sum'],
