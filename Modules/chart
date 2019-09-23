@@ -38,8 +38,8 @@ var histByClass = function (layerObject, scale, geom) {
         })
         .setOptions(options)
     )
-    
-   // var stacked = histChart.setOptions({isStacked:true})
+
+    // var stacked = histChart.setOptions({isStacked:true})
     return histChart
 
 }
@@ -72,20 +72,20 @@ exports.stackedBar = function (layerObject, scale, geom) {
         })
         .setOptions(options)
     )
-    
-   // var stacked = histChart.setOptions({isStacked:true})
+
+    // var stacked = histChart.setOptions({isStacked:true})
     return histChart.setChartType('BarChart')
 
 }
 var imageBar = function (layerObject, scale, geom) {
-  var imgchart = ui.chart.image
+    var imgchart = ui.chart.image
 }
 exports.histogramFeature = function (region, propName, buckwidth, title) {
     var chart = ui.Chart.feature
         .histogram({
             features: region,
             property: propName,
-           // maxBuckets: 16,
+            // maxBuckets: 16,
             //minBucketWidth: buckwidth
         })
         .setOptions({
@@ -100,10 +100,11 @@ var histogramImage = function (layerObject, WS, scale) {
         region: WS,
         scale: scale,
         minBucketWidth: 0.5,
-      //  maxBuckets: 16,
+        //  maxBuckets: 16,
     });
 
-    chart.style().set({ width:'90%',
+    chart.style().set({
+        width: '90%',
         height: '185px'
     })
     chart.setSeriesNames(
@@ -151,7 +152,7 @@ var histogramImage = function (layerObject, WS, scale) {
         },
         //  titlePosition: 'in',
         //theme:'maximized',
-       // title: ('Watershed histogram') // Elevation in Colorado (meters)'
+        // title: ('Watershed histogram') // Elevation in Colorado (meters)'
 
 
     });
@@ -195,12 +196,12 @@ var makePieChart = function (
     // https://developers.google.com/chart/interactive/docs/gallery/piechart
     function createPieChartSliceDictionary(fc) {
         return ee.List(fc.aggregate_array("transition_class_palette"))
-            // .map(function (p) {
-                //return {
-                 //   'color': p
-                //};
-            }
-    
+        // .map(function (p) {
+        //return {
+        //   'color': p
+        //};
+    }
+
     //var classValue = image.get('system:title')
     //print(classValue)
     var reduction_results = clipImage.reduceRegion({
@@ -232,20 +233,20 @@ var makePieChart = function (
     return transition_summary_chart.setOptions({
         pieHole: holeSize,
         is3D: true,
-     //   legend: {
-     //       position: 'none'
-    //    },
-   //     chartArea: {
-     //      height: '100%',
-     //     width: '100%'
-     //   },
+        //   legend: {
+        //       position: 'none'
+        //    },
+        //     chartArea: {
+        //      height: '100%',
+        //     width: '100%'
+        //   },
         pieSliceText: 'label',
         title: properties.layer.name,
         //  pieStartAngle: 100,
         slices: createPieChartSliceDictionary(transition_fc).evaluate,
         sliceVisibilityThreshold: 0.05
     });
-}; 
+};
 
 //
 exports.pieChart = makePieChart
@@ -383,7 +384,7 @@ exports.pieChart = makePieChart
     card.add(title).add(infoLabel).add(rightPan)
     outerCard.add(card).add(info)
     }*/
-    /*
+/*
     //makePanels()
     if (reducerType === 'mean') {
         var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
@@ -450,15 +451,15 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     });
 
     bigNum.style().set({
-      margin: 2,
-       padding: 2,
-       width: '80%',
+        margin: 2,
+        padding: 2,
+        width: '80%',
         fontSize: '30px',
-        fontFamily: [ 'Roboto', 'Helvetica Neue',
-           'Arial', 'sans-serif'
-       ], 
-        fontWeight: 500, 
-      //  border: '1px solid blue', 
+        fontFamily: ['Roboto', 'Helvetica Neue',
+            'Arial', 'sans-serif'
+        ],
+        fontWeight: 500,
+        //  border: '1px solid blue', 
         backgroundColor: style.colors.transparent,
         textAlign: 'right',
     })
@@ -468,11 +469,11 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         style: style.fonts.H4
     });
     titleLabel.style().set({
-       margin: 0,
-       padding: 0, //0px 2px 0px 4px',
-         width: '80%',
+        margin: 0,
+        padding: 0, //0px 2px 0px 4px',
+        width: '80%',
         textAlign: 'right',
-     //   border: '1px solid red'
+        //   border: '1px solid red'
     });
 
     units = ui.Label({
@@ -481,24 +482,24 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     });
     units.style().set({
         textAlign: 'right',
-           width: '80%', 
-       // margin: 0,
+        width: '80%',
+        // margin: 0,
         // padding: 0, //padding: '0px 4px 8px 5px',
         //stretch: 'horizontal'
     });
 
     var numPan = ui.Panel({
-       layout: ui.Panel.Layout.flow('vertical'),
+        layout: ui.Panel.Layout.flow('vertical'),
         style: {
-         //  width: '200px', 
-          // stretch: 'vertical',
-           textAlign: 'right',
-           padding: 2, 
-           margin: 2, 
+            //  width: '200px', 
+            // stretch: 'vertical',
+            textAlign: 'right',
+            padding: 2,
+            margin: 2,
             //padding: '0px 0px 0px 0px',
-           //position: 'middle-right', 
-        //    border: '1px solid black',
-      //     height: '100%',
+            //position: 'middle-right', 
+            //    border: '1px solid black',
+            //     height: '100%',
         }
     }) //height: '200px'}}); 
 
@@ -511,12 +512,12 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         style: style.fonts.Caption3
     })
     infoLabel.style().set({
-      margin: 0,
-       padding: 2,//  margin: 0, //
+        margin: 0,
+        padding: 2, //  margin: 0, //
         fontSize: '10px',
-           textAlign: 'right', 
+        textAlign: 'right',
         //   border: '1px solid green',
-                      width: '80%', 
+        width: '80%',
         color: style.colors.sDark,
     })
     var labelText = (
@@ -525,13 +526,13 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         style: style.fonts.Caption3
     });
     labelText2.style().set({
-     //   margin: 0, //fontSize: '10px',
+        //   margin: 0, //fontSize: '10px',
         //color:style.colors.sDark,
         margin: 2,
-       padding: 2,
-           textAlign: 'right', 
-                      width: '80%',
-                //      border: '1px solid pink', 
+        padding: 2,
+        textAlign: 'right',
+        width: '80%',
+        //      border: '1px solid pink', 
         fontSize: '10px',
     });
     labelText2.setValue('Source: ' + layerObj.sourceName)
@@ -559,7 +560,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
 
     } else if (reducerType === 'sum') {
         //reduced = reduced.toFixed()
-         reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+        reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
             reducer: ee.Reducer.sum(),
             geometry: region,
             scale: scale,
@@ -575,14 +576,14 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     } else if (reducerType === 'percent') {
         //reduced = reduced.toFixed()
         print('percent')
-         reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+        reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
             reducer: ee.Reducer.mean(),
             geometry: region,
             scale: scale,
             bestEffort: true
 
         }).get(layerObj.layer.eeObject.bandNames().get(0)))
-        numPan.remove(units)//don't display units for percent 
+        numPan.remove(units) //don't display units for percent 
 
         reduced.evaluate(function (result) {
             // When the server returns the value, show it.
@@ -598,13 +599,13 @@ var littleNum = function (layerObj, region, scale, reducerType) {
 }
 exports.littleNum = littleNum;
 
-var imgToFc = function (geometry, properties, scale) {
-  print('scale', scale); 
+var imgToFc = function (
+    geometry, properties, scale) {
     var AOI = geometry;
     var image = properties.layer.eeObject
     var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image); //acres
     var clipImage = withArea.clip(AOI)
-    // Calculations
+   
     var lookup_names = ee.Dictionary.fromLists(
         ee.List(properties.values).map(ee.String),
         properties.labels
@@ -631,14 +632,11 @@ var imgToFc = function (geometry, properties, scale) {
     // https://developers.google.com/chart/interactive/docs/gallery/piechart
     function createPieChartSliceDictionary(fc) {
         return ee.List(fc.aggregate_array("transition_class_palette"))
-            // .map(function (p) {
-                //return {
-                 //   'color': p
-                //};
-            }
-    
-    //var classValue = image.get('system:title')
-    //print(classValue)
+        // .map(function (p) {
+        //return {
+        //   'color': p
+        //};
+    }
     var reduction_results = clipImage.reduceRegion({
         reducer: ee.Reducer.sum().group({
             groupField: 1,
@@ -648,25 +646,12 @@ var imgToFc = function (geometry, properties, scale) {
         scale: scale,
         bestEffort: true,
     });
-    //   print('reduction_results', reduction_results);
     var roi_stats = ee.List(reduction_results.get('groups'));
-    //    print('roi stats', roi_stats)
-    var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
-    //  print('transition_fc', transition_fc);
-    // Add a summary chart.
-    var transition_summary_chart =
-        ui.Chart.feature.byFeature({
-            features: transition_fc,
-            xProperty: 'Class',
-            yProperties: ['Area'] // 'transition_class_number']
-        })
-        .setChartType('PieChart') //le')
 
-    //.evaluate(function(result) {
-    // When the server returns the value, show it.
+    var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
 
     return transition_fc
-}; 
+};
 
 
 exports.imgToFc = imgToFc
@@ -674,12 +659,12 @@ exports.imgToFc = imgToFc
 
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var layerProperties = data.rasters
-var layerObject = layerProperties.Imperviousness
-var fctest = makePieChart(geometry, layerObject, 200) 
+var layerObject = layerProperties.landUse;
+var fctest = imgToFc(geometry, layerObject, 200)
 print(fctest)
+print(ui.Chart.feature.byFeature(fctest,'Class','Area'))
 
-  //(layerObject, geomtery, scale)
-  
+//(layerObject, geomtery, scale)
 // geometry, properties, scale, holeSize
 /*
 var layerObject = layerProperties.landUse 
