@@ -518,7 +518,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         fontSize: '10px',
         textAlign: 'right',
         //   border: '1px solid green',
-        width: '80%',
+        //width: '80%',
         color: style.colors.sDark,
     })
     var labelText = (
