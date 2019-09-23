@@ -537,8 +537,8 @@ var mainPanel = ui.Panel({widgets: watershedSelect,
         stretch: 'vertical',
        // margin: '500px',
         //padding: '100px', 
-        height: '85%',
-        width: '38.2%', //the golden ratio!',
+       // height: '85%',
+       // width: '38.2%', //the golden ratio!',
         position: 'top-left',
       //  border: '1px solid silver'
         //shown: true, 
@@ -769,7 +769,9 @@ var accept = ui.Button({
     label: 'Accept Selected Watershed ',
     onClick: function () {
         mainPanel.style().set({
-            shown: true
+            shown: true,
+            height: '85%',
+            width: '32.8%',
         }); //show the side panel
         mapPanel.add(legendPanel) //add legend panel to the map
         makeReports() //also clear side panel todo
@@ -830,7 +832,107 @@ var watershedSelect = ui.Select({
 //     //value: 'HUC 12'
 //     onChange: addreports
 // });
+/* 
+Prioritizer functions and vars
+----------------------------------------------------------------------------------------------------
+*/
 
+var boundarySelect = ui.Select({items: ['HUC 12 Boundaries', 'NHDPlus Boundaries', 'Use automatic clustering'] })
+var accept = ui.Button({
+    // label: 'Accept Selected Watershed',
+    label: 'Accept Selected Watershed ',
+    onClick: function() {
+    print('begin Clustering')
+    mapPanel.unlisten()
+     //decide how to divde watershed 
+      //option 1: HUC 12 boundaries
+      //option 2: NHDPlus Boundaries 
+      //option 3: use automatic clustering 
+      //add a select box 
+      //bring up options 
+  mainPanel.add(boundarySelect)
+  
+  boundarySelect.onChange(function() {
+  var select = boundarySelect.getValue()
+  print(select)
+  print(clicked_basin)
+ 
+  if (select === 'HUC 12 Boundaries') {
+    bounds = vectors.HUC12.filterBounds(clicked_basin_geom)
+ //   mapPanel.addLayer(bounds.style(featureStyle))//.filterBounds(WS))
+  }
+  if (select === 'NHDPlus Boundaries') {
+    bounds = vectors.NHDPlus.filterBounds(clicked_basin_geom)
+  //  mapPanel.addLayer(bounds.style(featureStyle))
+  }
+  if (select === 'Use automatic clustering') {
+  print('insert clustering alorithim')
+  } 
+//begin prioritizing...todo 
+mapPanel.addLayer(bounds.style(featureStyle))
+ mainPanel.add(parameterSelect)
+})
+}
+});
+var parameterSelect = ui.Select({
+  items: ['Imperviousness', 'Dissolved Copper', 'TSS', 'Mean Annual Runoff', 'Hydrologic Index']
+  , 
+  onChange: function() {
+  var parameter = parameterSelect.getValue(); 
+  print(parameter)
+  var key
+    if (parameter === 'Imperviousness') {
+       key = 'Imperviousness'
+    }
+    if (parameter === 'Dissolved Copper') {
+       key = 'DissolvedCopper'
+    }
+    else (key === 'Runoff') //for debugging for now
+  //clip the layer 
+  layerProperties[key].layer.eeObject = layerProperties[key].layer.eeObject.clip(bounds) 
+        print('key', key)
+  mapPanel.addLayer(
+    layerProperties[key].layer.eeObject,
+    layerProperties[key].layer.visParams,
+    'image to reduce')
+  //add a legend 
+ var legend = (barLegend(layerProperties[key]))
+    mapPanel.add(legend)
+  reduceParameter(key)
+    }
+}); 
+var reduceParameter = function(key) {
+
+  
+  //accumulate based on mean value
+  var reduced = layerProperties[key].layer.eeObject.reduceRegions({
+    collection: bounds, 
+    reducer: ee.Reducer.sum(), 
+    scale: 100,
+  }); 
+  print('reduced', reduced)
+ // mapPanel.layers().reset() 
+  ;
+  
+  var reducedParmImage = reduced.reduceToImage({
+    properties: ['sum'],
+    reducer: ee.Reducer.first()})
+    var displayMinMax = [reduced.aggregate_min('sum'), 
+    reduced.aggregate_max('sum')]
+   print(reducedParmImage)
+   print(displayMinMax)
+  //   displayMinMax.evaluate(function(result) {
+       mapPanel.addLayer(reducedParmImage, imageVisParam,//colorbrewer.RdYlGn | 3,4,5
+       //{min: result.get(0), max: result.get(1)},
+       'reduced image') 
+       // add legend 
+//});
+   mapPanel.addLayer(reduced.style(featureStyle),{}, 'reduced Parameter feature layer')
+  //add chart of values 
+  var histogramPanel = ui.Panel({style:{position:'bottom-left'}})
+  histogramPanel.add(ui.Chart.feature.histogram(reduced, 'sum', 16)) //region, propName, buckwidth, title
+  mapPanel.add(histogramPanel)
+}
 /* 
 Set up User Interface
 ----------------------------------------------------------------------------------------------------
@@ -883,6 +985,8 @@ ui.root.add(/*ui.SplitPanel(
     mapPanel);
 mapPanel.add(mapInfoPanel);
 mapPanel.add(mainPanel); 
+mainPanel.add(blankPanel); 
+
 mainPanel.add(titleLabel); 
 mainPanel.add(watershedSelect)
 ui.root.add(footer)
