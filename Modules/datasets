@@ -12,7 +12,8 @@ var NED = ee.Image("USGS/NED"),
     image4 = ee.Image("users/stormwaterheatmap/nasaPAll"),
     image5 = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip"),
     GLCF_trees = ee.ImageCollection("GLCF/GLS_TCC"),
-    imageCollection = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Density");
+    imageCollection = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Density"),
+    image6 = ee.Image("users/stormwaterheatmap/CigP2500");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 // Author: Christian Nilsen, Geosyntec Consultants 
@@ -48,12 +49,7 @@ Images
 */
 //Precipitation
 
-//var NASA_precip =  ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip")
-exports.NASA_precip = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip")
-//exports.climp = climP.select('pr').first();
-var prismP = ee.Image('users/cnilsen/precip/PRISM800meter')
-//var prismP = prism.select('ppt').mean()
-exports.prismP = prismP
+var precip = ee.Image("users/stormwaterheatmap/CigP2500"); 
 //
 var lu = ee.Image(
     "users/cnilsen/lu_5m_pyramid"); //remap these categories to the following: 
@@ -221,7 +217,7 @@ var rasters = {
         },
         'Precipitation': {
             layer: {
-                eeObject: prismP.divide(ee.Image(25.4)),
+                eeObject: precip.divide(ee.Image(25.4)),
                 name: 'Mean Annual Preciptation',
                 visParams: {
                     palette: ['#00007f', '#002aff', '#00d4ff', '#7fff7f',
@@ -238,8 +234,10 @@ var rasters = {
             units: 'in/year',
             labels: null,
             vizType: 'bigNumberMean', 
-            sourceName: 'PRISM Long-Term Average Climate Dataset',
-            sourceUrl: 'https://developers.google.com/earth-engine/datasets/catalog/OREGONSTATE_PRISM_Norm81m'
+            sourceName: 'Salathé, EP, AF Hamlet, CF Mass M Stumbaugh, S-Y Lee, R Steed: Estimates of 21st Century Flood Risk in the Pacific Northwest Based on Regional Scale Climate Model Simulations.',
+            sourceUrl: 'https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/'
+            
+        
 
         },
         'Soils': {
@@ -529,4 +527,5 @@ exports.vectors = {
 exports.rasters = rasters
         
 //testing
+Map.addLayer(image6)
 //Map.layers().add(rasters.Runoff_in.layer)
