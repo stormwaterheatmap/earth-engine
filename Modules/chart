@@ -577,7 +577,8 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     } else if (reducerType === 'percent') {
         //reduced = reduced.toFixed()
         print('percent')
-        reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+        reduced = ee.Number((layerObj.layer.eeObject).multiply(ee.Image(100))
+        .reduceRegion({
             reducer: ee.Reducer.mean(),
             geometry: region,
             scale: scale,
