@@ -12,7 +12,13 @@ var colors = {
     secondary: '512ca8',
     dSecondary: '140078',
     lSecondary: '8558da',
+       transparent: '#11ffee00',
+    
+    
+    
 };
+print(colors.sText) 
+
 exports.colors = colors; 
 
 var charts = {
