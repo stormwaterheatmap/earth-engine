@@ -857,7 +857,7 @@ var makeReports = function () {
     //pchart2.setOptions()
     var laybut = layerButton(layerProperties.Precipitation)
     var precipCard = cards('Precipitation', [pchart, pchart2, laybut])
-    reportsPanel.add(precipCard)
+    analyzePanel.add(precipCard)
 
     //make a landuse card //geometry, properties, holeSize
     //make a bar chart of imperviousness
@@ -881,7 +881,7 @@ var makeReports = function () {
         layerButton(layerProperties.landUse),
         lcchart, layerButton(layerProperties.landCover)
     ])
-    reportsPanel.add(luCard)
+    analyzePanel.add(luCard)
 
     //Make a card for Age of Development 
     //show percent developed prior to 1999
@@ -889,7 +889,7 @@ var makeReports = function () {
     ageCard.setChartType('BarChart')
     ageCard.setOptions(imageBar)
     var ageCard = cards('Age of Development', [ageCard, layerButton(layerProperties.DevAge)])
-    reportsPanel.add(ageCard)
+    analyzePanel.add(ageCard)
     //Make a card for soils and Lithology
     var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
     soilsChart.setChartType('BarChart');
@@ -898,7 +898,7 @@ var makeReports = function () {
     lithChart.setChartType('BarChart');
     lithChart.setOptions(imageBar)
     var soilsCard = cards('Soils and Lithology', [soilsChart, layerButton(layerProperties.Soils), hline(), lithChart, layerButton(layerProperties.Lithology)])
-    reportsPanel.add(soilsCard)
+    analyzePanel.add(soilsCard)
 
     //Make a panel for topography 
     var topoChart = charts.histogramImage(layerProperties.SlopeCont, clicked_basin_geom, mapPanel.getScale())
@@ -910,7 +910,7 @@ var makeReports = function () {
     topoCats.setOptions(imageBar)
     var topoCard = cards('Topography', [topoChart, layerButton(layerProperties.SlopeCont), hline(), topoCats, layerButton(layerProperties.Slope)])
     print('topcard ok')
-    reportsPanel.add(topoCard)
+    analyzePanel.add(topoCard)
     //Make a panel for pollutants 
     //copper 
     //ToDo
@@ -1165,6 +1165,7 @@ var analyzePanel = ui.Panel({
         shown: false
     }
 }).add(ui.Label('analyzePanel'))
+
 var prioritizePanel = ui.Panel({
     style: {
         shown: false
@@ -1200,13 +1201,13 @@ ui.root.add(
         .add(sidePanel)*/
     mapPanel);
 mapPanel.add(mapInfoPanel);
-mainPanel.add(reportsPanel);
+//mainPanel.add(reportsPanel);
 mapPanel.add(mainPanel);
 //mainPanel.add(blankPanel); 
 //mainPanel.add(prioritizePanel)
 //mainPanel.add(prioritizeButton) 
 //mainPanel.add(titleLabel); 
-mainPanel.add(watershedSelect)
+analyzePanel.add(watershedSelect)
 ui.root.add(footer)
 //---------------- set the initial view
 var mapCenterLon = -122.423145;
