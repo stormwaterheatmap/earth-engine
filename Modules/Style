@@ -3,23 +3,74 @@ Style defaults
 ---------------------------------------------------------------------------------------------------- 
 */
 var colors = {
-    'primary': '#4caf50',
-    'pLight': //'#e7f4e6',//#
-        '#80e27e',
-    'pDark': '#807f23',
-    'secondary': '#bdbdbd',
-    'sLight': '#efefef',
-    'sDark': '#8d8d8d',
-    'transparent': '#11ffee00',
-    'lightBlack': '#0c0c0d',
-    'grey': '#737373',
-    'tncgreen': '#799e4b',
-    'tncblue': '#078AB4', 
-    'pChart' : '#4BE3A6', 
-    'sChart' : 'cfcfcf', 
-
+   primary: '#004d40',
+        dPrimary: '#002419', // 
+        lPrimary: '#38786a',
+        text: '#212121', //light black
+        sText: '#757575', //secondary text 
+        divider: '#BDBDBD',
+        secondary: '512ca8',
+        dSecondary: '140078',
+        lSecondary: '8558da', 
 };
 exports.colors = colors
+
+var charts = {
+  singleBar:  {
+    height: 100,
+    series: {
+        0: {
+            color: colors.secondary, //border: '1px solid black', 
+            visibleInLegend: false,
+            strokeWidth: 4
+        },
+        1: {
+            color: 'cfcfcf', //dataOpacity: 0.50, 
+            visibleInLegend: false
+        }
+    },
+    legend: {
+        position: 'none'
+    },
+    bar: {
+        groupWidth: "61.8%"
+    },
+    chartArea: {
+        width: '80%',
+        height: '20%'
+    },
+    isStacked: 'percent',
+    vAxis: {
+        textPosition: 'none'
+    },
+    hAxis: {
+        textPosition: 'none',
+        gridlines: {
+            color: 'transparent'
+        },
+    },
+  }, 
+imageBar: {
+    chartArea: {
+        left: '38%'
+    }, //style for horizontal image bar 
+//    hAxis: {
+//        title: 'Area (acres)',
+//        minValue: 0,
+//    },
+colors: [colors.secondary, colors.dSecondary, colors.lSecondary], 
+    axes: {
+          y: {
+            0: {side: 'right'}
+          }
+        },
+    legend: {
+        position: 'none'
+    }
+} 
+
+}
+
 //fonts from https://design.firefox.com/photon/visuals/typography.html
 var fonts = {
     H1: {
