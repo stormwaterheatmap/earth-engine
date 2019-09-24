@@ -13,11 +13,8 @@ var colors = {
     dSecondary: '140078',
     lSecondary: '8558da',
        transparent: '#11ffee00',
-    
-    
-    
-};
-print(colors.sText) 
+  };
+//print(colors.sText) 
 
 exports.colors = colors; 
 
