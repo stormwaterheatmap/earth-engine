@@ -13,6 +13,17 @@ var colors = {
     dSecondary: '140078',
     lSecondary: '8558da',
        transparent: '#11ffee00',
+       pLight: //'#e7f4e6',//#
+        '#80e27e',
+    'pDark': '#807f23',
+    'sLight': '#efefef',
+    'sDark': '#8d8d8d',
+    'lightBlack': '#0c0c0d',
+    'grey': '#737373',
+    'tncgreen': '#799e4b',
+    'tncblue': '#078AB4', 
+    'pChart' : '#4BE3A6', 
+    'sChart' : 'cfcfcf', 
   };
 //print(colors.sText) 
 
