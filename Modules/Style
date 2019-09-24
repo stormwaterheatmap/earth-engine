@@ -16,7 +16,8 @@ var colors = {
   };
 //print(colors.sText) 
 
-exports.colors = colors; 
+exports.colors = colors;
+print(colors.primary) 
 
 var charts = {
     singleBar: {
