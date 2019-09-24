@@ -37,7 +37,7 @@ var charts = {
         position: 'none'
     },
     vAxis: {
-        title: 'Area',
+        //title: 'Area',
         textPosition: 'in',
         gridlines: {
             color: 'whitesmoke',
@@ -57,7 +57,7 @@ var charts = {
         gridlines: {
             color: 'white',
         },
-        title: 'elevation (meters)',
+      //  title: 'elevation (meters)',
     },
 }, 
     singleBar: {
