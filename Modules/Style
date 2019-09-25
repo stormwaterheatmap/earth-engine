@@ -9,7 +9,7 @@ var colors = {
     text: '#212121', //light black
     sText: '#757575', //secondary text 
     divider: '#BDBDBD',
-    secondary: '563daf',//'0091ea',//'00bfa5',//26a69a',//,'3d74bd',//'00334d' ,//'#512ca8',
+    secondary:'00acc1',// '563daf',//'0091ea',//'00bfa5',//26a69a',//,'3d74bd',//'00334d' ,//'#512ca8',
     dSecondary: '#140078',
     lSecondary: '#8558da',
        transparent: '#11ffee00',
