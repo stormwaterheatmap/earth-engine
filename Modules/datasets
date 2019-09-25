@@ -544,4 +544,53 @@ exports.rasters = rasters
         
 //testing
 //Map.addLayer(image6)
-//Map.layers().add(rasters.Runoff_in.layer)
+Map.layers().add(rasters.Runoff_in.layer)
+var layerProperties = rasters
+//make a remove button 
+var makeremoveButton = function(layerObject) {
+var layerDisp = layerObject.layer
+//print(layerDisp) 
+var remBut = ui.Button({label: 'remove', onClick: 
+  function () {
+   // print(layerDisp) 
+    var eeobject = layerDisp.eeObject
+    //
+    var layers = Map.layers()
+    var layersJS = layers.getJsArray()
+    print(layersJS) 
+    var removedIndexes = []
+    for (var i in layersJS) {
+        var layer = layersJS[i]
+        var object = layer.getEeObject()
+        print('object', object)
+        print('eeobject', eeobject) 
+        if (object === eeobject) {
+            Map.remove(layer)
+            removedIndexes.push(Number(i))
+        }
+    }
+    return removedIndexes
+}
+})
+return remBut
+}
+
+var button = makeremoveButton(rasters.Runoff_in) 
+print(button) 
+/*var layers = Map.layers()
+var layersJS = layers.getJsArray()
+var removedIndexes = []
+print(layersJS)    
+var lay = layersJS[0]
+print(lay.getEeObject()) 
+print(lay)
+Map.remove(lay)*/
+//print(layersJS)     
+ /*   for (var i in layersJS) {
+        var layer = layersJS[i]
+        var object = layer.getEeObject()
+        if (object === eeobject) {
+            m.remove(layer)
+            removedIndexes.push(Number(i))
+        }
+    }*/
