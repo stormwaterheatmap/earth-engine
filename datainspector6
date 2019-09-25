@@ -583,7 +583,7 @@ function makeMainPanel() { //function that makes the main control panel
             border: '1px solid black'
         }
     })
-    mainPanel.add(ui.Label('MainPanel'))
+    //mainPanel.add(ui.Label('MainPanel'))
 
     var head = ui.Panel({ //header panel holds xxx ?
         style: {
@@ -676,7 +676,7 @@ function makeMainPanel() { //function that makes the main control panel
             backgroundColor: '087f23', //height:'8px' //subpanel holds xx 
         }
     })
-    topP.add(ui.Label('Beta testing version', {
+    topP.add(ui.Label('Beta testing', {
         backgroundColor: '00000000', //fontWeight:400,
         margin: '0px 8px 4px 8px',
         //padding: 0, 
@@ -1190,41 +1190,41 @@ function makeInfoPanel() {
     }).add(ui.Label('infoPanel'))
    infoPanel.add(ui.Label({
        value: 'How the Stormwater Heatmap Works', 
-       style: fonts.H1}))
+       style: fonts.H2}))
     infoPanel.add(ui.Label({
         value: '1. Analyze a Watershed',
-        style: fonts.Body1
+        style: fonts.Body2
     })) 
     infoPanel.add(ui.Label({
         value: 'Analyze instructions here',
-        style: fonts.Caption1
+        style: fonts.Caption2
     }))  
     infoPanel.add(ui.Label({
         value: '2. Prioritize Locations',
-        style: fonts.Body1
+        style: fonts.Body2
     }))
     infoPanel.add(ui.Label({
         value: 'Prioritize instructions here',
-        style: fonts.Caption1
+        style: fonts.Caption2
     }))  
    
 infoPanel.add(ui.Label({
     value: '3. Download Data',
-    style: fonts.Body1
+    style: fonts.Body2
     }))
 infoPanel.add(ui.Label({
     value: 'Download instructions here',
-    style: fonts.Caption1
-}))
-
-infoPanel.add(ui.Label({
-    value: 'This site is in Beta testing. Send bug reports and comments to',
     style: fonts.Caption2
+}))
+infoPanel.add(hline()) 
+infoPanel.add(ui.Label({
+    value: 'This site is in Beta testing. Send bug reports and comments to:',
+    style: fonts.Caption3
 }))
 
 infoPanel.add(ui.Label({
         value: 'stormwaterheatmap@gmail.com',
-        style: fonts.Caption2,
+        style: fonts.Caption3,
         targetUrl: 'mailto:stormwaterheatmap@gmail.com'
     })) 
 
