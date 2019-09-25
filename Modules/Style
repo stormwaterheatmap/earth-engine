@@ -127,6 +127,7 @@ var fonts = {
         ],
         fontSize: '28px',
         fontWeight: 700,
+        color: colors.text
         // color: colors.tncblue
     },
     H2: {
@@ -136,6 +137,7 @@ var fonts = {
         ],
         fontSize: '22px',
         fontWeight: 200,
+        color: colors.text
         // color: colors.tncblue
 
     },
@@ -145,7 +147,8 @@ var fonts = {
             'Arial', 'sans-serif'
         ],
         fontSize: '17px',
-        fontWeight: 500
+        fontWeight: 500, 
+        color: colors.text
     },
     H4: {
         fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
@@ -154,6 +157,7 @@ var fonts = {
         ],
         fontSize: '13',
         fontWeight: 500,
+        color: colors.text
         // wrap: true
     },
     Body1: {
@@ -162,49 +166,51 @@ var fonts = {
             'Arial', 'sans-serif'
         ],
         fontSize: '17px',
-        fontWeight: 400
+        fontWeight: 400, 
+        color: colors.text
     },
     Body2: {
         fontFamily: ['Roboto', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '15px',
-        fontWeight: 400
+        fontWeight: 400, 
+        color: colors.text
     },
     Body3: {
         fontFamily: ['Roboto', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '13px',
-        fontWeight: 400
+        fontWeight: 400, 
+        color: colors.text
     },
     Caption1: {
-        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-            //'Dejavu Sans', 'Helvetica Neue',
+        fontFamily:  ['Roboto', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '15px',
-        fontWeight: 300
+        fontWeight: 300, 
+        color: colors.sText
     },
     Caption2: {
-        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-            //'Dejavu Sans', 'Helvetica Neue',
+        fontFamily: ['Roboto', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '13px',
-        fontWeight: 300
+        fontWeight: 300, 
+        color: colors.sText
     },
     Caption3: {
-        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-            // 'Dejavu Sans', 'Helvetica Neue',
+        fontFamily:  ['Roboto', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontSize: '11px',
-        fontWeight: 300
+        fontWeight: 300, 
+        color: colors.sText
     },
     LegendTitle: {
-        fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-            //'Dejavu Sans', 'Helvetica Neue',
+        fontFamily: ['Roboto', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
         fontWeight: 'bold',
