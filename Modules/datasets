@@ -480,7 +480,8 @@ var rasters = {
                 eeObject: mean_annual_runoff.divide(ee.Image(25.4)), 
                 name: 'Mean Annual Runoff',
                 visParams: {
-                    palette:palettes.colorbrewer.GnBu[8],// ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
+                    palette: ['440154','433982','30678d','218f8b','36b677','8ed542','fde725'], 
+                                        //palette:palettes.colorbrewer.GnBu[8],// ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
                     min: 0,
                     max: 60,
                     opacity: 0.6 
