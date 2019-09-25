@@ -435,7 +435,7 @@ var rasters = {
                         '#efcb09', //ag
                         '#a0c29b', //timber
                         '#5b6acb', // water
-                        '#4c6coa', //open space 
+                        '#4c6c0a', //open space 
                         //'#256C61' //
                     ],
                     min: 1,
