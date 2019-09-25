@@ -125,7 +125,7 @@ var fonts = {
             'Dejavu Sans', 'Helvetica Neue',
             'Arial', 'sans-serif'
         ],
-        fontSize: '28px',
+        fontSize: '25px',
         fontWeight: 700,
         color: colors.text
         // color: colors.tncblue
