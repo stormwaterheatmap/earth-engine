@@ -14,6 +14,7 @@ var holeSize = 0.5 //85;
 ---------------------------------------------------------------------------------------------------- 
 */
 var colors = Style.colors
+print(colors) 
 var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
 var featureStyle = {
     color: 'white',
@@ -578,7 +579,7 @@ function makeMainPanel() { //function that makes the main control panel
     })
     mainPanel.add(ui.Label('MainPanel'))
 
-    var head = ui.Panel({ //header panel holds xxx 
+    var head = ui.Panel({ //header panel holds xxx ?
         style: {
             backgroundColor: panelColors.lPrimary,
             width: '100%',
@@ -648,13 +649,18 @@ function makeMainPanel() { //function that makes the main control panel
             backgroundColor: panelColors.primary, //height:'8px'
         }
     })
-    topP.add(ui.Label('Puget Sound Stormwater Heatmap', {
-        backgroundColor: '00000000', //transparent background 
-        fontWeight: 400,
-        fontSize: '20px', //margin: 0, 
-        //padding: 0, 
-        color: 'white'
-    }))
+    topP.add(ui.Label({
+        value: 'Puget Sound Stormwater Heatmap', 
+        style: {fontFamily: fonts.H1.fontFamily,
+             fontSize:  fonts.H1.fontSize, 
+             fontWeight: fonts.H1.fontWeight,
+             backgroundColor:colors.transparent, 
+             color: 'white'}
+            }))
+    
+   
+
+    
     mainPanel.add(topP)
 
     var subPan = ui.Panel({
@@ -729,8 +735,7 @@ var titleLabel = ui.Label({
     value: 'Watershed Insights',
     style: fonts.H1
 })
-var descriptionText = 'This app allows you to interactively explore heatmap data by watershed.';
-var descriptionLabel = ui.Label(descriptionText);
+
 var watershedSelectLabel = ui.Label({
     value: 'Select a watershed dataset:',
 });
@@ -777,7 +782,7 @@ var legendPanel = ui.Panel({
 print(618)
 var blankPanel = ui.Panel({
     style: {
-        backgroundColor: colors.pDark,
+        backgroundColor: colors.dPrimary,
         width: '100%',
         //height: '4px'
     }
@@ -853,6 +858,8 @@ var makeReports = function () {
         layerProperties.Precipitation, clicked_basin_geom,
         mapPanel.getScale()
     )
+    pchart2.setOptions(Style.charts.histogram) 
+    pchart2.setSeriesNames
     //holderpan.add(pchart).add(pchart2)
     //pchart2.setOptions()
     var laybut = layerButton(layerProperties.Precipitation)
@@ -862,7 +869,7 @@ var makeReports = function () {
     //make a landuse card //geometry, properties, holeSize
     //make a bar chart of imperviousness
     var impChart = charts.stackedBar(layerProperties.Imperviousness, mapPanel.getScale(), clicked_basin_geom)
-    impChart.setOptions(singleBar)
+    impChart.setOptions(Style.charts.singleBar)
     //make a number card
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
     //make a panel to hold the two, 
@@ -927,8 +934,8 @@ var cards = function (title, widgetItems) {
     var wholeCard = ui.Panel({
         widgets: widgetItems,
         style: {
-            border: '8px solid whitesmoke',
-            padding: '12px'
+            border: '24px solid whitesmoke',
+            padding: '24px'
         }
     })
     wholeCard.insert(0, cardTitle)
@@ -990,7 +997,7 @@ var watershedSelect = ui.Select({
         print(selected)
         var WS = vectors[selected]
         mapPanel.addLayer(WS)
-        mainPanel.add((buttonPanel))
+        analyzePanel.add((buttonPanel))
 
     }
 });
@@ -1155,11 +1162,59 @@ var sidePanel = makeSidePanel();
 var mapPanel = makeMapPanel();
 var mainSubPanel = makeMainSubPanel();
 //
-var infoPanel = ui.Panel({
-    style: {
-        shown: true
-    }
-}).add(ui.Label('infoPanel'))
+var infoPanel = makeInfoPanel() 
+
+function makeInfoPanel() {
+    var infoPanel = ui.Panel({
+        style: {
+            shown: true
+        }
+    }).add(ui.Label('infoPanel'))
+   infoPanel.add(ui.Label({
+       value: 'How the Stormwater Heatmap Works', 
+       style: fonts.H1}))
+    infoPanel.add(ui.Label({
+        value: '1. Analyze a Watershed',
+        style: fonts.Body1
+    })) 
+    infoPanel.add(ui.Label({
+        value: 'Analyze instructions here',
+        style: fonts.Caption1
+    }))  
+    infoPanel.add(ui.Label({
+        value: '2. Prioritize Locations',
+        style: fonts.Body1
+    }))
+    infoPanel.add(ui.Label({
+        value: 'Prioritize instructions here',
+        style: fonts.Caption1
+    }))  
+   
+infoPanel.add(ui.Label({
+    value: '3. Download Data',
+    style: fonts.Body1
+    }))
+infoPanel.add(ui.Label({
+    value: 'Download instructions here',
+    style: fonts.Caption1
+}))
+
+infoPanel.add(ui.Label({
+    value: 'This site is in Beta testing. Send bug reports and comments to',
+    style: fonts.Caption2
+}))
+
+infoPanel.add(ui.Label({
+        value: 'stormwaterheatmap@gmail.com',
+        style: fonts.Caption2,
+        targetUrl: 'mailto:stormwaterheatmap@gmail.com'
+    })) 
+
+return infoPanel
+}
+
+
+
 var analyzePanel = ui.Panel({
     style: {
         shown: false
