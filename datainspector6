@@ -70,7 +70,20 @@ function handle_map_click(location) {
     mapPanel.style().set({
         cursor: 'hand'
     });
-    mapPanel.addLayer(clicked_basin_fc.style(Style.watershedStyle))
+    //mapPanel.addLayer(clicked_basin_fc.style(Style.watershedStyle))
+    //make an opacity mask to display watershed 
+                var con = ee.Image(1).byte().clip(clicked_basin_geom) //check
+                var shade = ee.Image(1).byte()
+                var opacityMask = shade.where(shade.eq(con), 0).selfMask()
+                var empty = ee.Image().byte()
+                var outline = empty.paint(clicked_basin_fc, 1, 2);
+                mapPanel.addLayer(opacityMask, {
+                    palette: '000000',
+                    opacity: 0.6
+                });
+                mapPanel.addLayer(outline, {
+                    palette: 'whitesmoke'
+                }, 'edges')
 
     mapPanel.centerObject(clicked_basin)
     var featureinfo = ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
@@ -427,22 +440,11 @@ var layerButton = function (layerObject) {
             onClick: function () {
                 print('click function started')
                 print(clicked_basin_fc)
-                mapPanel.layers().reset()
-                mapPanel.layers().add(layerObject.layer)
-
-                //make an opacity mask to display watershed 
-                var con = ee.Image(1).byte().clip(clicked_basin_geom) //check
-                var shade = ee.Image(1).byte()
-                var opacityMask = shade.where(shade.eq(con), 0).selfMask()
-                var empty = ee.Image().byte()
-                var outline = empty.paint(clicked_basin_fc, 1, 2);
-                mapPanel.addLayer(opacityMask, {
-                    palette: '000000',
-                    opacity: 0.6
-                });
-                mapPanel.addLayer(outline, {
-                    palette: 'whitesmoke'
-                }, 'edges')
+               // mapPanel.layers().reset()
+                mapPanel.layers().insert(0,layerObject.layer)
+                //var lay = Map.layers().get(0)
+                //mapPanel.layers().add(layerObject.layer)
+                
                 legendPanel.style().set({
                     shown: true
                 })
@@ -454,12 +456,16 @@ var layerButton = function (layerObject) {
         ui.Button({
             label: 'Remove Layer',
             onClick: function () {
-                mapPanel.layers().reset()
-                var empty = ee.Image().byte()
-                var outline = empty.paint(clicked_basin_fc, 1, 2);
-                mapPanel.addLayer(outline, {
+                //mapPanel.layers().reset()
+                var lay = mapPanel.layers().get(0) //gets the bottom layer (hopefully the layer needed) 
+                mapPanel.layers().remove(lay)//ayerProperties.
+  
+                
+             //   var empty = ee.Image().byte()
+              //  var outline = empty.paint(clicked_basin_fc, 1, 2);
+             /*   mapPanel.addLayer(outline, {
                     palette: 'whitesmoke'
-                }, 'edges')
+                }, 'edges')*/
 
                 legendPanel.style().set({
                     shown: false
@@ -880,13 +886,14 @@ var makeReports = function () {
     //holderpanLU.add(impNum).add(impChart)
 
     var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale()).setChartType('BarChart')
-    luchart.setOptions(imageBar)
+    luchart.setOptions(Style.charts.imageBar)
     var lcchart = charts.pieChart(clicked_basin_geom, layerProperties.landCover, mapPanel.getScale()).setChartType('BarChart')
-    lcchart.setOptions(imageBar)
-    var luCard = cards('Land Use', [impNum, impChart, layerButton(layerProperties.Imperviousness),
-        luchart,
+    lcchart.setOptions(Style.charts.imageBar)
+    var luCard = cards('Land Use', [subtitle('Imperviousness'), impNum, impChart, layerButton(layerProperties.Imperviousness),
+        hline(), subtitle('Land Use Classifications'), luchart,
         layerButton(layerProperties.landUse),
-        lcchart, layerButton(layerProperties.landCover)
+        hline(), 
+        subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties.landCover)
     ])
     analyzePanel.add(luCard)
 
@@ -894,30 +901,36 @@ var makeReports = function () {
     //show percent developed prior to 1999
     var ageCard = charts.pieChart(clicked_basin_geom, layerProperties.DevAge, mapPanel.getScale())
     ageCard.setChartType('BarChart')
-    ageCard.setOptions(imageBar)
+    ageCard.setOptions(Style.charts.imageBar)
     var ageCard = cards('Age of Development', [ageCard, layerButton(layerProperties.DevAge)])
     analyzePanel.add(ageCard)
     //Make a card for soils and Lithology
     var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
     soilsChart.setChartType('BarChart');
-    soilsChart.setOptions(imageBar)
+    soilsChart.setOptions(Style.charts.imageBar)
     var lithChart = charts.pieChart(clicked_basin_geom, layerProperties.Lithology, mapPanel.getScale()) //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
     lithChart.setChartType('BarChart');
-    lithChart.setOptions(imageBar)
-    var soilsCard = cards('Soils and Lithology', [soilsChart, layerButton(layerProperties.Soils), hline(), lithChart, layerButton(layerProperties.Lithology)])
+    lithChart.setOptions(Style.charts.imageBar)
+    var soilsCard = cards('Soils and Lithology', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(), 
+    subtitle('Lithology'), lithChart, layerButton(layerProperties.Lithology)])
     analyzePanel.add(soilsCard)
 
     //Make a panel for topography 
     var topoChart = charts.histogramImage(layerProperties.SlopeCont, clicked_basin_geom, mapPanel.getScale())
-    topoChart.setOptions({
-        title: 'Distribution of Slope in the Watershed'
-    })
+    // topoChart.setOptions({
+    //     title: 'Distribution of Slope in the Watershed'
+    // })
     var topoCats = charts.pieChart(clicked_basin_geom, layerProperties.Slope, mapPanel.getScale())
     topoCats.setChartType('BarChart')
-    topoCats.setOptions(imageBar)
-    var topoCard = cards('Topography', [topoChart, layerButton(layerProperties.SlopeCont), hline(), topoCats, layerButton(layerProperties.Slope)])
+    topoCats.setOptions(Style.charts.imageBar)
+    var topoCard = cards('Topography', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties.SlopeCont), hline(), 
+    subtitle('Slope Categories'), topoCats, layerButton(layerProperties.Slope)])
     print('topcard ok')
     analyzePanel.add(topoCard)
+    //Make a panel for runoff 
+    var MeanQ = charts.histogramImage(layerProperties.Runoff_in, clicked_basin_geom, mapPanel.getScale())
+    var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties.Runoff)]) 
+    analyzePanel.add(qCard)
     //Make a panel for pollutants 
     //copper 
     //ToDo
@@ -926,6 +939,11 @@ var makeReports = function () {
 
 //cards function 
 print('cards function')
+var subtitle = function(label) {
+ return ui.Label({value: label, 
+  style: fonts.H3}) 
+}
+
 var cards = function (title, widgetItems) {
     var cardTitle = ui.Label({
         value: title,
