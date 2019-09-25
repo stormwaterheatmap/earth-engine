@@ -455,25 +455,30 @@ var layerButton = function (layerObject) {
         //removebutton
         ui.Button({
             label: 'Remove Layer',
-            onClick: function () {
-                //mapPanel.layers().reset()
-                var lay = mapPanel.layers().get(0) //gets the bottom layer (hopefully the layer needed) 
-                mapPanel.layers().remove(lay)//ayerProperties.
-  
-                
-             //   var empty = ee.Image().byte()
-              //  var outline = empty.paint(clicked_basin_fc, 1, 2);
-             /*   mapPanel.addLayer(outline, {
-                    palette: 'whitesmoke'
-                }, 'edges')*/
-
-                legendPanel.style().set({
+            onClick: 
+  function () {
+   // print(layerDisp) 
+   legendPanel.style().set({
                     shown: false
-                }) //remove(eeObject.layer)
-                print(mapPanel.layers())
-                // addbutton.style().set({
-                //     shown: true
-            }
+                })
+    var eeobject = layerObject.layer.eeObject
+    //
+    var layers = mapPanel.layers()
+    var layersJS = layers.getJsArray()
+    print(layersJS) 
+    var removedIndexes = []
+    for (var i in layersJS) {
+        var layer = layersJS[i]
+        var object = layer.getEeObject()
+        print('object', object)
+        print('eeobject', eeobject) 
+        if (object === eeobject) {
+            mapPanel.remove(layer)
+            removedIndexes.push(Number(i))
+        }
+    }
+    return removedIndexes
+}
         })
 
 
