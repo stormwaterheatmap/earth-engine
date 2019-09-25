@@ -577,7 +577,7 @@ function makeMainPanel() { //function that makes the main control panel
     var mainPanel = ui.Panel({
         style: {
             width: 400, //main panel is white 
-            height: '70%',
+            //height: '70%',
             padding: 0,
             position: 'top-left',
             border: '1px solid black'
@@ -929,7 +929,7 @@ var makeReports = function () {
     analyzePanel.add(topoCard)
     //Make a panel for runoff 
     var MeanQ = charts.histogramImage(layerProperties.Runoff_in, clicked_basin_geom, mapPanel.getScale())
-    var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties.Runoff)]) 
+    var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties.Runoff_in)]) 
     analyzePanel.add(qCard)
     //Make a panel for pollutants 
     //copper 
