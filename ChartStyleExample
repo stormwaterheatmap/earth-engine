@@ -1,59 +1,31 @@
 // Plot a histogram of elevation in Colorado.
+
+var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var elevation = ee.Image('CGIAR/SRTM90_V4');
 var colorado = ee.Geometry.Rectangle(-109.05, 37, -102.05, 41);
 // Generate the histogram data.  Use minBucketWidth for nice sized buckets.
-var colors = [//'4E79A7', 
-//'F28E2B', 
-'76B7B2', '59A14E', 'EDC949', 'B07AA2', 'FF9DA7', '9C755F', 
- 'BAB0AC']
-
+var colors = style.colors
+print(colors.secondary) 
 
 var histogram = ui.Chart.image.histogram({
-  image: elevation,
-  region: colorado,
-  scale: 200,
-  minBucketWidth: 300
+    image: elevation,
+    region: colorado,
+    scale: 200,
+    minBucketWidth: 300
+    
 });
 
 //histogram.style().set({width:'300px',height:'185px'})
-histogram.setSeriesNames('elev',0)
-histogram.setOptions({
-//  fontSize:12,
- colors:colors,//groupWidth:'63%'},
- //bar: {groupWidth: '90%'},
- legend: {position: 'none'},
- //explorer:{},
- vAxis: {
-   title: 'Area', 
-   textPosition: 'in', 
-  gridlines: {color: 'whitesmoke',
-    count:4
-  },
-  minorGridlines:{color:'white'},
- format: 'short',
- //textPosition:'in',
- // baselineColor: 'black',
-//  viewWindowMode: 'maximized'
-  },
-chartArea:{height:'80%', 
-width:'80%',
-//top:36,bottom:36,left:8,right:8
+histogram.setSeriesNames('elev', 0)
+print(style.charts) 
+print(histogram.style()) 
+//histogram.style().set({backgroundColor: 'blue'}); 
   
-},
- hAxis: {gridlines: {color:'white',
- //  count: 4,
- },
- title:'elevation (meters)',
- //textPosition:'in',
-// format:'short',
- // viewWindowMode: 'maximized',
-  //  baselineColor:'black'
-  },
-//  titlePosition: 'in',
- //theme:'maximized',
-title: 'Histogram of Elevation in Colorado (meters)'
-});
-print(histogram)
+//(histogram.style().set({margin:  '24px'}))// updates on the fly 
+print(histogram)  
+print(histogram.style()) 
+
+//print(histogram)
 //table.setCell(22, 2, 15, 'Fifteen', {style: 'font-style:bold; font-size:22px;'});  
 
 Map.addLayer(elevation.clip(colorado));
