@@ -1,0 +1,61 @@
+var regressionList = {
+  'Total_Copper': {
+    'B0': 1.2111,
+    'B_impee': 5.7449, // imperviousness
+    'B_elev': -1.7530, // elevation
+    'B_roads': -3.7585, // roads
+  },
+  'Dissolved_Copper':{
+    'B0':0,
+    'B_impee':2.4641978, // imperviousness
+  },
+    'Dissolved_Orthophosphate':{
+    'B0':	4.3582,
+    'B1':0, // no significant parameters
+  },
+  'D_Zinc': {
+    'B0': 3.4662,
+    'B1': 0, // no significant parameters
+  },
+  'Dissolved_Nitrite_Nitrate':{
+    'B0': 0.5233,
+    'B_ind': -4.5866, // industrial land use
+    'B_mfr': 4.4896, // multi-family residential
+    'B_elev': -3.4289, // elevation
+    'B_ndbi': 12.0151, // normalized difference built-up index
+    'B_impee': -10.6535, // imperviousness
+    'B_ghm': -3.7518,  // global human modification dataset
+  },
+    'Total_Kjeldahl_Nitrogen':{
+    'B0': 6.2398,
+    'B_ind': 2.5966, // industrial land use
+    'B_mfr': 0.9021, // multi-family residential
+    'B_pm25': 0.5592, // atmospheric particulate matter
+    'B_roofs': 1.6718, // roofs
+  },
+  'PAH':{
+    'B0': 0,
+    'B1': 0, // no parameters or intercept are significant
+  },
+  'Total_Phosphorus':{
+    'B0': 4.6064,
+    'B_ind': 6.9319, // industrial land use
+    'B_pm25': 2.4470, // atmospheric particulate matter
+    'B_roofs': 4.3171, // roofs
+    'B_ghm': -2.6088, // global human modification dataset
+    'B_impee': -3.0053, // imperviousness
+    'B_ndbi': 2.6501, // normalized difference built-up index
+  },
+  'Total_Zinc':{
+    'B0': 3.0626,
+    'B_mfr': 2.3495, // multi-family residential
+    'B_pm25': 1.9735, // atmospheric particulate matter
+  },
+  'Total_Suspended_Solids':{
+    'B0': 10.2597,
+    'B_ind': 5.4797, // industrial land use
+    'B_elev': -0.8994, // elevation
+    'B_roofs': 3.4190, // roofs
+  },
+};
+print(regressionList); 
