@@ -929,6 +929,9 @@ var makeReports = function () {
     analyzePanel.add(topoCard)
     //Make a panel for runoff 
     var MeanQ = charts.histogramImage(layerProperties.Runoff_in, clicked_basin_geom, mapPanel.getScale())
+MeanQ.setOptions({
+  vAxis: { logscale: true }
+  }); 
     var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties.Runoff_in)]) 
     analyzePanel.add(qCard)
     //Make a panel for pollutants 
