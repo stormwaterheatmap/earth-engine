@@ -428,14 +428,15 @@ var rasters = {
                 name: 'Land Use',
                 visParams: {
                     palette: [
-                        '#D45A51',
-                        '#CD770C',
-                        '#949989',
-                        '#2E7BAF',
-                        '#C3931E',
-                        '#4BA891',
-                        '#466b9f',
-                        '#256C61'
+                        '#eb3121', //res
+                        '#6203ae', //ind
+                        '#845609', //trans
+                        '#ae39f3', //com
+                        '#efcb09', //ag
+                        '#a0c29b', //timber
+                        '#5b6acb', // water
+                        '#4c6coa', //open space 
+                        //'#256C61' //
                     ],
                     min: 1,
                     max: 8,
