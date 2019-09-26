@@ -44,7 +44,7 @@ var rgbVis = {
   bands: ['B4', 'B3', 'B2'],
 };
 
-var S2ndvi = s2.normalizedDifference(['B8', 'B4']).rename('NDVI').clamp(0.012,0.693);
+//var S2ndvi = s2.normalizedDifference(['B8', 'B4']).rename('NDVI').clamp(0.012,0.693);
 
 // regression values 
 var B0 = 4.4764
@@ -52,9 +52,11 @@ var B1 = 1.3056
 var B2 = -5.1560 
 
 //var B3 =  7.3191
-var impWS = imp.convolve(squareKernel).clamp(0,1); 
+var impWS = imp.convolve(squareKernel)//.clamp(0.064,0.886);
+Map.addLayer(impWS,{},'impws')
+
 //Map.addLayer(COMINDmean, {max: 1}, 'forest cover at MODIS scale');
-var Zinc = (ee.Image(B0).add(ee.Image(B1).multiply(WS)).add(ee.Image(B2).multiply(S2ndvi))).exp()//S2ndvi
+//var Zinc = (ee.Image(B0).add(ee.Image(B1).multiply(WS)).add(ee.Image(B2).multiply(S2ndvi))).exp()//S2ndvi
 
 
 //multiply by impervious areas 
@@ -64,10 +66,9 @@ var high = 72784
 
 //runoff 
 //var Zinc = Zinc.focal_mean(); 
-var zincConcentration = Zinc
-Map.addLayer(zincConcentration)
+//var zincConcentration = Zinc
+//Map.addLayer(zincConcentration)
 
-exports.zincConcentration = zincConcentration
 
 
 
@@ -132,6 +133,10 @@ var regressionList = {
     'B_roofs': 3.4190, // roofs
   },
 };
-print(regressionList); 
+var Dissolved_Copper = (ee.Image(regressionList.Total_Copper.B0)
+  .add(ee.Image(regressionList.Total_Copper.B0).multiply(impWS))).exp()
 
-var 
+var Total_Suspended_Solids  =  
+  
+  Map.addLayer(Dissolved_Copper) 
+
