@@ -1,3 +1,77 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("USGS/SRTMGL1_003");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var studyArea = ee.Image("users/cnilsen/studyArea2")
+var impervious = data.rasters.Imperviousness.layer.eeObject 
+var elevation = ee.Image("USGS/SRTMGL1_003").select('elevation'); 
+var palettes = require('users/gena/packages:palettes');
+var lightsPal = palettes.misc.parula[7];
+var vegPal = palettes.colorbrewer.PRGn[11]; 
+
+var dataset = ee.ImageCollection('NOAA/DMSP-OLS/CALIBRATED_LIGHTS_V4')
+                  .filter(ee.Filter.date('2009-01-01', '2013-12-31'));
+var nighttimeLights = dataset.select('avg_vis').median();
+ 
+var generalizedLU = data.rasters.landUse.layer.eeObject 
+Map.addLayer(generalizedLU) 
+
+
+//Map.addLayer(studyArea,{},'studyArea'); 
+var COM = studyArea.neq(1).blend(generalizedLU.eq(4))//
+Map.addLayer(COM,{},'COMIND',false); 
+ 
+var WSSize = 200;  // Radius of a ws, in meters.
+//var circleKernel = ee.Kernel.circle(farmSize, 'meters');
+var squareKernel = ee.Kernel.circle(WSSize, 'meters', true);
+var WS = COM.convolve(squareKernel).clamp(0,1);
+Map.addLayer(WS,{},'ws',false)
+var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
+Map.addLayer(tncLC,{},'tncLC',0)
+//Normalize other layers 
+//var pm25 = pm25.subtract(3).divide(4)//clamp to min and max used in regression
+var lights = nighttimeLights.divide(300).clamp(0.087,0.89)
+var imp = tncLC.eq(7).or(tncLC.eq(6))
+Map.addLayer(imp,{},'imp',false); 
+
+//NDVI
+// Load Sentinel-2 TOA reflectance data.
+
+
+var rgbVis = {
+  min: 0.0,
+  max: 0.3,
+  bands: ['B4', 'B3', 'B2'],
+};
+
+var S2ndvi = s2.normalizedDifference(['B8', 'B4']).rename('NDVI').clamp(0.012,0.693);
+
+// regression values 
+var B0 = 4.4764
+var B1 = 1.3056 
+var B2 = -5.1560 
+
+//var B3 =  7.3191
+var impWS = imp.convolve(squareKernel).clamp(0,1); 
+//Map.addLayer(COMINDmean, {max: 1}, 'forest cover at MODIS scale');
+var Zinc = (ee.Image(B0).add(ee.Image(B1).multiply(WS)).add(ee.Image(B2).multiply(S2ndvi))).exp()//S2ndvi
+
+
+//multiply by impervious areas 
+var LCmask = tncLC.neq(5).and(tncLC.neq(0))
+var low = 100
+var high = 72784
+
+//runoff 
+//var Zinc = Zinc.focal_mean(); 
+var zincConcentration = Zinc
+Map.addLayer(zincConcentration)
+
+exports.zincConcentration = zincConcentration
+
+
+
+
 var regressionList = {
   'Total_Copper': {
     'B0': 1.2111,
