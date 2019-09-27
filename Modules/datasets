@@ -387,7 +387,7 @@ var rasters = {
     vizType: 'pieChart'
 },
 
-        'HRUs': {
+       /* 'HRUs': {
             layer: {
                 eeObject: hruBands,
                 name: 'Hydrologic Response Units',
@@ -404,7 +404,7 @@ var rasters = {
             units: null,
             labels: null, //['Pervious', 'Impervious'],
             vizType: 'pieChart'
-        },
+        }, */ 
         'Population': {
             layer: {
                 eeObject: population,
