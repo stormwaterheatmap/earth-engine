@@ -131,7 +131,7 @@ exports.precip = precip.select('b1').divide(
 //Ecology Watershed Assessment Units 
 exports.PS_AU = ee.FeatureCollection('users/cnilsen/PS_AU')
 //exports.PS_AU = PS_AU*/
-exports.PugetSound = (ee.FeatureCollection("USGS/WBD/2017/HUC04")).filter(ee.Filter
+var PugetSound = (ee.FeatureCollection("USGS/WBD/2017/HUC04")).filter(ee.Filter
     .eq('huc4', '1711'));
 //Map.addLayer(PugetSound)
 var counties = ee.FeatureCollection("TIGER/2018/Counties").filterBounds(
@@ -534,6 +534,7 @@ exports.vectors = {
               //    PugetSound),
              // NHDPlus: ee.FeatureCollection(
              //     'users/cnilsen/PugetSoundNHDPlusWatersheds'),
+             PugetSound: PugetSound, 
           PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
             WRIA: ee.FeatureCollection(
                     "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
