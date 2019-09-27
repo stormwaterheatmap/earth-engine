@@ -534,6 +534,7 @@ exports.vectors = {
              // NHDPlus: ee.FeatureCollection(
              //     'users/cnilsen/PugetSoundNHDPlusWatersheds'),
           PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
+          PugetSound: PugetSound, 
             WRIA: ee.FeatureCollection(
                     "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
                 )
