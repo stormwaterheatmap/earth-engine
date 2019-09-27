@@ -109,9 +109,8 @@ var thresholds = ee.Image([5.0, 15, 100]);
 var slopeZone = ee.Terrain.slope(NED).gt(thresholds).reduce('sum');
 exports.slope = slopeZone;
 
-/*var imp = landcover.eq(6).or(landcover.eq(7)).multiply(ee
-    .Image(100))
-*/
+var imp = landcover.eq(6).or(landcover.eq(7))
+
 //exports.hrus = 
 var age_of_development = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1').select(
     'built')
