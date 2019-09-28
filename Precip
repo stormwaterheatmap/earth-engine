@@ -50,7 +50,8 @@ var barLegend = function (obj) {
         style: {
             position: 'top-left',
             padding: '12px', 
-            width:  '230px'
+            width:  '300px', 
+            fontSize: '13px'
         }
     })
 
@@ -89,4 +90,4 @@ Map.setOptions('Dark', Style.mapStyles)
     //---------------- set the initial view
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
-Map.setCenter(mapCenterLon, mapCenterLat, 7)
+Map.setCenter(mapCenterLon, mapCenterLat, 8)
