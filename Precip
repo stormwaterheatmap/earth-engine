@@ -1,0 +1,91 @@
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var fonts = Style.fonts
+var layerProperties = data.rasters
+var vectors = data.vectors
+var holeSize = 0.5 //85;
+var barLegend = function (obj) {
+    //  var labelPanel = ui.Panel(
+    var palette = obj.layer.visParams.palette
+    var low = obj.layer.visParams.min
+    var high = obj.layer.visParams.max
+    var mid = (low + high) / 2
+    var labelPanel = ui.Panel(
+        [
+            ui.Label(low, {
+                margin: '4px 8px',
+                textAlign: 'left',
+                stretch: 'horizontal'
+            }),
+            ui.Label(mid, {
+                margin: '4px 8px',
+                textAlign: 'center',
+                stretch: 'horizontal'
+            }),
+            ui.Label(high, {
+                margin: '4px 8px',
+                textAlign: 'right',
+                stretch: 'horizontal'
+            })
+        ],
+        ui.Panel.Layout.flow('horizontal'),
+
+        //    labelPanel.add(ui.Label(obj.units))
+        {
+            width: '230px',
+            position: 'top-center'
+        }
+    );
+
+    var unitlabel = (ui.Label(obj.units))
+    var barTitle = (ui.Label({
+        value: obj.layer.name,
+        style: fonts.LegendTitle
+    }))
+
+    var barPanel = ui.Panel({
+        widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel],
+        style: {
+            position: 'top-left',
+            padding: '12px'
+        }
+    })
+
+    return barPanel
+}
+function ColorBar(palette) {
+    return ui.Thumbnail({
+        image: ee.Image.pixelLonLat().select(0),
+        params: {
+            bbox: [0, 0, 1, 0.1],
+            dimensions: '200x20',
+            format: 'png',
+            min: 0,
+            max: 1,
+            palette: palette,
+        },
+        style: {
+            stretch: 'horizontal',
+            margin: '0px 12px'
+        },
+    });
+}
+print(layerProperties)
+Map.layers().add(layerProperties.Precipitation.layer)
+var legend = barLegend(layerProperties.Precipitation) 
+Map.add(legend) 
+Map.setOptions('Dark', Style.mapStyles)
+    Map.setControlVisibility({
+        all: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        layerList: true,
+        fullscreenControl: true
+    });
+    
+    //---------------- set the initial view
+var mapCenterLon = -122.423145;
+var mapCenterLat = 47.612410;
+mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
