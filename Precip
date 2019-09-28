@@ -44,9 +44,9 @@ var barLegend = function (obj) {
         value: obj.layer.name,
         style: fonts.LegendTitle
     }))
-
+  var source= ui.Label({value:obj.sourceName, targetUrl: obj.sourceUrl})
     var barPanel = ui.Panel({
-        widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel],
+        widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel, source],
         style: {
             position: 'top-left',
             padding: '12px'
@@ -88,4 +88,4 @@ Map.setOptions('Dark', Style.mapStyles)
     //---------------- set the initial view
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
-mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
+Map.setCenter(mapCenterLon, mapCenterLat, 7)
