@@ -101,8 +101,8 @@ var tncLC = ee.Image(
 var water=  tncLC.neq(5)
 var imp = tncLC.eq(6).or(tncLC.eq(7))
 var imp = imp.updateMask(water)
-var soils = ee.Image("users/stormwaterheatmap/soils");
-exports.soils = ee.Image("users/stormwaterheatmap/soils");
+var soils = ee.Image("users/stormwaterheatmap/soilSatSmooth2m");
+
 //Generate slopes from USGS DEM 
 var thresholds = ee.Image([5.0, 15, 100]);
 var slopeZone = ee.Terrain.slope(NED).gt(thresholds).reduce('sum');
@@ -247,18 +247,18 @@ var rasters = {
                 eeObject: ee.Image("users/stormwaterheatmap/soils"),
                 name: 'Hydrologic Soils Groups',
                 visParams: {
-                    palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
-                        '#05668D'
+                    palette: ['#69995D', '#564138', '#F06543'
+                        
                     ],
                     min: 0,
-                    max: 4,
+                    max: 2,
                     opacity: 0.6 
                 }
             },
             discrete: true,
-            values: [0, 1, 2, 3, 4],
+            values: [0, 1, 2],
             units: null,
-            labels: ['A/B', 'C', 'D', 'water', 'Water'],
+            labels: ['Till', 'Outwash', 'Saturated'],
             vizType: 'pieChart'
         },
         'Slope': {
