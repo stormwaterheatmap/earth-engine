@@ -48,7 +48,7 @@ var mean_annual_runoff = ee.Image(
 var dCuLoad = mean_annual_runoff.multiply(dissolvedCopperConcentration)
 .multiply(1e-3).select('p50_mean') 
 
-Map.addLayer(dCuLoad)
+
 var palettes = require('users/gena/packages:palettes');
 /*
 Images 
