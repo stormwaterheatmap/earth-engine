@@ -32,6 +32,7 @@ var NED = ee.Image("USGS/NED"),
 //For a copy of the GNU General Public License 
 //  see <https://www.gnu.org/licenses/>.
 */ //---------------------------
+var loads = require('users/stormwaterheatmap/apps:Modules/loads'); 
 
 /*
 Image Collections 
@@ -43,7 +44,9 @@ var population = populationDataset.select('population_count').first();
 var lithology = ee.Image('CSP/ERGo/1_0/US/lithology').select('b1');
 var mean_annual_runoff = ee.Image(
     "users/cnilsen/Runoff1980s5m");
-var DissolvedCopper = ee.Image('users/cnilsen/DcuCon').multiply(mean_annual_runoff); 
+var DissolvedCopper = loads.dissolvedCopper.img.select('p50_mean')
+print(DissolvedCopper)
+Map.addLayer(DissolvedCopper)
 var palettes = require('users/gena/packages:palettes');
 /*
 Images 
@@ -598,4 +601,4 @@ Map.remove(lay)*/
     }
     
     */
-    
+  
