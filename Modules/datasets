@@ -12,7 +12,8 @@ var NED = ee.Image("USGS/NED"),
     GLCF_trees = ee.ImageCollection("GLCF/GLS_TCC"),
     imageCollection = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Density"),
     image6 = ee.Image("users/stormwaterheatmap/CigP2500"),
-    table5 = ee.FeatureCollection("users/stormwaterheatmap/MS4_bounds");
+    table5 = ee.FeatureCollection("users/stormwaterheatmap/MS4_bounds"),
+    dissolvedCopperConcentration = ee.Image("users/cnilsen/disCopper5m");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 // Author: Christian Nilsen, Geosyntec Consultants 
@@ -43,7 +44,7 @@ var mean_annual_runoff = ee.Image(
     "users/cnilsen/Runoff1980s5m");
     
 //------pollutant loads     
-var dissolvedCopperConcentration = ee.Image("users/cnilsen/disCopper5m");
+
 var dCuLoad = mean_annual_runoff.multiply(dissolvedCopperConcentration)
 .multiply(1e-3).select('p50_mean') 
 
