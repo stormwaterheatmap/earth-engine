@@ -45,7 +45,7 @@ var mean_annual_runoff = ee.Image(
 //------pollutant loads     
 var dissolvedCopperConcentration = ee.Image("users/cnilsen/disCopper5m");
 var dCuLoad = mean_annual_runoff.multiply(dissolvedCopperConcentration)
-.multiply(1e-9).select('p50_mean') 
+.multiply(1e-3).select('p50_mean') 
 
 Map.addLayer(dCuLoad)
 var palettes = require('users/gena/packages:palettes');
@@ -511,13 +511,13 @@ var rasters = {
                     ["#352a87", "#056ede", "#089bce", "#33b7a0", 
                     "#a3bd6a", "#f9bd3f", "#f9fb0e"],
                     min: 0,
-                    max: 2000,
+                    max: 5,
                     opacity: 0.6 
                 }
             },
             discrete: false,
             values: null,
-            units: 'kg/sq.m',
+            units: 'mg/sq.m',
             labels: null, //['Pervious', 'Impervious'],
             vizType: 'histogram'
         } 
