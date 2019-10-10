@@ -30,7 +30,6 @@ var NED = ee.Image("USGS/NED"),
 //For a copy of the GNU General Public License 
 //  see <https://www.gnu.org/licenses/>.
 */ //---------------------------
-var loads = require('users/stormwaterheatmap/apps:Modules/loads'); 
 
 /*
 Image Collections 
@@ -47,6 +46,8 @@ var mean_annual_runoff = ee.Image(
 var dissolvedCopperConcentration = ee.Image("users/cnilsen/disCopper5m");
 var dCuLoad = mean_annual_runoff.multiply(dissolvedCopperConcentration)
 .multiply(1e-9) 
+
+Map.addLayer(dCuLoad)
 var palettes = require('users/gena/packages:palettes');
 /*
 Images 
