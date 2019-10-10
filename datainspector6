@@ -5,6 +5,7 @@ var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var loads = require('users/stormwaterheatmap/apps:Modules/loads'); 
 var fonts = Style.fonts
 var layerProperties = data.rasters
 var vectors = data.vectors
@@ -113,7 +114,7 @@ function handle_map_click(location) {
     print('ok....')
     //infoTab.setOptions({orientation: 'vertical'})
     //print(infoTab)
-    buttonPanel.add(ui.Button({
+    /*buttonPanel.add(ui.Button({
         label: 'Show Watershed Information Table',
         onClick: function () {
             mapPanel.add(infoTab)
@@ -122,14 +123,15 @@ function handle_map_click(location) {
             })
         }
     }))
-
+*/ 
     return clicked_basin
     return clicked_basin_geom
 }
-print(107)
+print(107) 
 
 function handle_inspect_click() {
     print('inspector Activated')
+    //analyzePanel.add(ui.Label('If everything looks good, click "Accept"')); 
     mapPanel.style().set({
         cursor: 'crosshair'
     })
@@ -896,7 +898,8 @@ var makeReports = function () {
     luchart.setOptions(Style.charts.imageBar)
     var lcchart = charts.pieChart(clicked_basin_geom, layerProperties.landCover, mapPanel.getScale()).setChartType('BarChart')
     lcchart.setOptions(Style.charts.imageBar)
-    var luCard = cards('Land Use', [subtitle('Imperviousness'), impNum, impChart, layerButton(layerProperties.Imperviousness),
+    var luCard = cards('Land Use', [subtitle('Imperviousness'), impNum, //impChart, 
+    layerButton(layerProperties.Imperviousness),
         hline(), subtitle('Land Use Classifications'), luchart,
         layerButton(layerProperties.landUse),
         hline(), 
@@ -915,11 +918,12 @@ var makeReports = function () {
     var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
     soilsChart.setChartType('BarChart');
     soilsChart.setOptions(Style.charts.imageBar)
-    var lithChart = charts.pieChart(clicked_basin_geom, layerProperties.Lithology, mapPanel.getScale()) //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
-    lithChart.setChartType('BarChart');
-    lithChart.setOptions(Style.charts.imageBar)
+    //var lithChart = charts.pieChart(clicked_basin_geom, layerProperties.Lithology, mapPanel.getScale()) //soils and lithology   //var soilsCard = resultCard('Soils and Lithology'); 
+    //lithChart.setChartType('BarChart');
+    //lithChart.setOptions(Style.charts.imageBar)
     var soilsCard = cards('Soils and Lithology', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(), 
-    subtitle('Lithology'), lithChart, layerButton(layerProperties.Lithology)])
+    //subtitle('Lithology'), lithChart, layerButton(layerProperties.Lithology)
+    ])
     analyzePanel.add(soilsCard)
 
     //Make a panel for topography 
@@ -941,10 +945,12 @@ MeanQ.setOptions({
   }); 
     var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties.Runoff_in)]) 
     analyzePanel.add(qCard)
-    //Make a panel for pollutants 
+   //Make a panel for pollutants---------------------------------------
+   var dissolvedCopperChart = 
     //copper 
     //ToDo
-
+var dissolvedCopperCard = cards('Dissolved Copper', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties.SlopeCont), hline(), 
+    subtitle('Slope Categories'), topoCats, layerButton(layerProperties.Slope)])
 }
 
 //cards function 
@@ -979,6 +985,7 @@ var accept = ui.Button({
     // label: 'Accept Selected Watershed',
     label: 'Accept Selected Watershed ',
     onClick: function () {
+      mapPanel.unlisten()
         mainPanel.style().set({
             shown: true,
             height: '85%',
@@ -1024,7 +1031,7 @@ var watershedSelect = ui.Select({
         mapPanel.layers().reset()
         print(selected)
         var WS = vectors[selected]
-        mapPanel.addLayer(WS)
+        mapPanel.addLayer(WS.style(featureStyle)) //oct
         analyzePanel.add((buttonPanel))
 
     }
@@ -1247,13 +1254,13 @@ var analyzePanel = ui.Panel({
     style: {
         shown: false
     }
-}).add(ui.Label('analyzePanel'))
+})//.add(ui.Label('analyzePanel'))
 
 var prioritizePanel = ui.Panel({
     style: {
         shown: false
     }
-}).add(ui.Label('prioritizePanel'))
+}).add(ui.Label('Select a watershed dataset for display. When you are ready to select a watershed, activate the inspector')) //.add(ui.Label('prioritizePanel'))
 
 mainSubPanel.add(infoPanel)
 mainSubPanel.add(analyzePanel)
@@ -1268,7 +1275,7 @@ ui.root.setLayout(ui.Panel.Layout.flow(
     'vertical'))
 blankPanel.add(ui.Label('blankPanel'))
 mainPanel.add(mainSubPanel)
-mainSubPanel.add(ui.Label('mainSubPanel'))
+//mainSubPanel.add(ui.Label('mainSubPanel'))
 ui.root.add(
     /*ui.SplitPanel(
         ui.Panel({
