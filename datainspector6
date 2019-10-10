@@ -772,12 +772,12 @@ var reportsPanel = ui.Panel({
 print(596)
 var prioritizePanel = ui.Panel({
     style: { // position: 'top-right',
-        width: '75%',
+        //width: '75%',
         //   height: '25%',
         padding: '12 px',
         backgroundColor: colors.transparent,
-        stretch: 'horizontal',
-        position: 'bottom-right',
+        //stretch: 'horizontal',
+        //position: 'bottom-right',
         shown: false
     },
     layout: ui.Panel.Layout.flow('horizontal')
@@ -1268,7 +1268,7 @@ var prioritizePanel = ui.Panel({
     style: {
         shown: false
     }
-}) //.add(ui.Label('Select a watershed dataset for display. When you are ready to select a watershed, activate the inspector')) //.add(ui.Label('prioritizePanel'))
+}).add(ui.Label('prioritizePanel'))
 
 mainSubPanel.add(infoPanel)
 mainSubPanel.add(analyzePanel)
