@@ -6,7 +6,7 @@ var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var layerProperties = data.rasters
 
 var dCuLoad = layerProperties.Runoff.layer.eeObject.multiply(dissolvedCopperConcentration)
-.multiply(1e-9) //mm/year*ug/L = ug/m2/year// kg/m2/year
+ //mm/year*ug/L = ug/m2/year// 
 exports.dissolvedCopper = {img: dCuLoad,
-                      units: 'kg/m2/year'}
+                      units: 'μg/m2/year'}
 
