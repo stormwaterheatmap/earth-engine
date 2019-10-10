@@ -1,5 +1,5 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var imageVisParam = {"opacity":0.81,"bands":["first"],"min":5845.408857739145,"max":8458888.910842622,"palette":["1a9641","a6d96a","ffffbf","fdae61","d7191c"]};
+var imageVisParam = {"opacity":0.81,"bands":["first"],"max":5000,"palette":["1a9641","a6d96a","ffffbf","fdae61","d7191c"]};
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /*Load modules 
 ---------------------------------------------------------------------------------------------------- 
