@@ -536,8 +536,8 @@ exports.vectors = {
                 //  PugetSound),
               //HUC06: ee.FeatureCollection("USGS/WBD/2017/HUC06").filterBounds(
               //    PugetSound),
-             // NHDPlus: ee.FeatureCollection(
-             //     'users/cnilsen/PugetSoundNHDPlusWatersheds'),
+              NHDPlus: ee.FeatureCollection(
+                  'users/cnilsen/PugetSoundNHDPlusWatersheds'),
           PS_AU: ee.FeatureCollection('users/cnilsen/PS_AU'),
           PugetSound: PugetSound, 
             WRIA: ee.FeatureCollection(
