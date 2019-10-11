@@ -1085,7 +1085,7 @@ var prioritizeAccept = ui.Button({
         //option 3: use automatic clustering 
         //add a select box 
         //bring up options 
-        mainPanel.add(boundarySelect)
+        prioritizePanel.add(boundarySelect)
 
         boundarySelect.onChange(function () {
             var select = boundarySelect.getValue()
@@ -1306,7 +1306,7 @@ mapPanel.add(mainPanel);
 //mainPanel.add(prioritizeButton) 
 //mainPanel.add(titleLabel); 
 analyzePanel.add(watershedSelect)
-prioritizePanel.add(boundarySelect)
+prioritizePanel.add(prioritizeAccept)
 ui.root.add(footer)
 //---------------- set the initial view
 var mapCenterLon = -122.423145;
