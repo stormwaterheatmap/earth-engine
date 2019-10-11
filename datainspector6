@@ -1105,7 +1105,7 @@ var prioritizeAccept = ui.Button({
             }
             //begin prioritizing...todo 
             mapPanel.addLayer(bounds.style(featureStyle))
-            mainPanel.add(parameterSelect)
+            prioritizePanel.add(parameterSelect)
         })
     }
 });
@@ -1306,6 +1306,7 @@ mapPanel.add(mainPanel);
 //mainPanel.add(prioritizeButton) 
 //mainPanel.add(titleLabel); 
 analyzePanel.add(watershedSelect)
+prioritizePanel.add(boundarySelect)
 ui.root.add(footer)
 //---------------- set the initial view
 var mapCenterLon = -122.423145;
