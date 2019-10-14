@@ -307,7 +307,7 @@ var deactiv_button = ui.Button({
     label: 'Reset Map',
     //onClick: mapReset,//also clear side panel 
 });
-var boundarySelect = ui.Select({items: ['HUC 12 Boundaries', 'NHDPlus Boundaries', 'Use automatic clustering'] })
+var boundarySelect = ui.Select({items: ['HUC 12 Boundaries', 'NHDPlus Boundaries', 'Generate Grid', 'Use automatic clustering'] })
 
 
 
