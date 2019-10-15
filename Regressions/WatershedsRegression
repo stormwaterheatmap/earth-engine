@@ -14,25 +14,25 @@ var dataset = ee.ImageCollection('NOAA/DMSP-OLS/CALIBRATED_LIGHTS_V4')
 var nighttimeLights = dataset.select('avg_vis').median();
  
 var generalizedLU = data.rasters.landUse.layer.eeObject 
-Map.addLayer(generalizedLU) 
+//Map.addLayer(generalizedLU) 
 
 
 //Map.addLayer(studyArea,{},'studyArea'); 
 var COM = studyArea.neq(1).blend(generalizedLU.eq(4))//
-Map.addLayer(COM,{},'COMIND',false); 
+//Map.addLayer(COM,{},'COMIND',false); 
  
 var WSSize = 200;  // Radius of a ws, in meters.
 //var circleKernel = ee.Kernel.circle(farmSize, 'meters');
 var squareKernel = ee.Kernel.circle(WSSize, 'meters', true);
 var WS = COM.convolve(squareKernel).clamp(0,1);
-Map.addLayer(WS,{},'ws',false)
+//Map.addLayer(WS,{},'ws',false)
 var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
-Map.addLayer(tncLC,{},'tncLC',0)
+//Map.addLayer(tncLC,{},'tncLC',0)
 //Normalize other layers 
 //var pm25 = pm25.subtract(3).divide(4)//clamp to min and max used in regression
 var lights = nighttimeLights.divide(300).clamp(0.087,0.89)
 var imp = tncLC.eq(7).or(tncLC.eq(6))
-Map.addLayer(imp,{},'imp',false); 
+//Map.addLayer(imp,{},'imp',false); 
 
 //NDVI
 // Load Sentinel-2 TOA reflectance data.
@@ -53,7 +53,7 @@ var B2 = -5.1560
 
 //var B3 =  7.3191
 var impWS = imp.convolve(squareKernel)//.clamp(0.064,0.886);
-Map.addLayer(impWS,{},'impws')
+//Map.addLayer(impWS,{},'impws')
 
 //Map.addLayer(COMINDmean, {max: 1}, 'forest cover at MODIS scale');
 //var Zinc = (ee.Image(B0).add(ee.Image(B1).multiply(WS)).add(ee.Image(B2).multiply(S2ndvi))).exp()//S2ndvi
@@ -136,7 +136,7 @@ var regressionList = {
 var Dissolved_Copper = (ee.Image(regressionList.Total_Copper.B0)
   .add(ee.Image(regressionList.Total_Copper.B0).multiply(impWS))).exp()
 
-var Total_Suspended_Solids  =  
+//var Total_Suspended_Solids  =  
   
-  Map.addLayer(Dissolved_Copper) 
+  //Map.addLayer(Dissolved_Copper) 
 
