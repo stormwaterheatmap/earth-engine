@@ -385,9 +385,12 @@ var reduceParameter = function(key) {
   print('reduced', reduced) // this is a feature layer 
   //normalize the feature 
  //get min, max, diff vals
- var min = reduced.aggregate_min('mean') 
- var max = reduced.aggregate_max('mean')
+ var min = reduced.aggregate_min('sum') 
+ var max = reduced.aggregate_max('sum')
+ print(min) 
+ print(max) 
  var diff = ee.Number(max).subtract(ee.Number(min))
+ print(diff) 
 
 var scoreCalc = function(feature) {
   var score =  (ee.Number.parse(feature.get('mean')).subtract(ee.Number(min))).divide(ee.Number(diff))
