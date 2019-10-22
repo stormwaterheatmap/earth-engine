@@ -382,6 +382,7 @@ var reduceParameter = function(key) {
     reducer: ee.Reducer.sum(), 
     scale: 100,
   }); 
+  mapPanel.addLayer(reduced) 
   print('reduced', reduced) // this is a feature layer 
   //normalize the feature 
  //get min, max, diff vals
@@ -405,7 +406,7 @@ var score = reduced.map(scoreCalc);
 var scoreimg = score.reduceToImage({
     properties: ['score'],
     reducer: ee.Reducer.first()})
-mapPanel.addLayer(scoreimg,{},'scoreimg')     
+//mapPanel.addLayer(scoreimg,{},'scoreimg')     
  // mapPanel.layers().reset() 
   
 /*  var reducedParmImage = reduced.reduceToImage({
