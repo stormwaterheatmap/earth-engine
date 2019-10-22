@@ -402,7 +402,10 @@ var scoreCalc = function(feature) {
 };
 
 var score = reduced.map(scoreCalc); 
-  
+var scoreimg = score.reduceToImage({
+    properties: ['score'],
+    reducer: ee.Reducer.first()})
+mapPanel.addLayer(scoreimg,{},'scoreimg')     
  // mapPanel.layers().reset() 
   
 /*  var reducedParmImage = reduced.reduceToImage({
