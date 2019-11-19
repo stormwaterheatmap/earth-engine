@@ -107,7 +107,7 @@ var tncLC = ee.Image(
 var water=  tncLC.neq(5)
 var imp = tncLC.eq(6).or(tncLC.eq(7))
 var imp = imp.updateMask(water)
-var soils = ee.Image("/users/cnilsen/soils_2m");
+var soils = ee.Image("/users/users/stormwaterheatmap/soils2m");
 
 //Generate slopes from USGS DEM 
 var thresholds = ee.Image([5.0, 15, 100]);
