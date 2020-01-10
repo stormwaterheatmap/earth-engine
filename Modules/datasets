@@ -342,7 +342,7 @@ var rasters = {
                 5
             ],
             units: null,
-            labels: ['Forest/Trees', 'Pasture', 'Grass', 'Unknown', 'Water', 'Impervious - Roofs', 'Impervious' ],
+            labels: ['Forest/Trees', 'Pasture', 'Grass', 'Water', 'Impervious - Roofs', 'Impervious' ],
             vizType: 'pieChart', 
             sourceName: 'Robertson et al, 20XX',
             sourceUrl: []
