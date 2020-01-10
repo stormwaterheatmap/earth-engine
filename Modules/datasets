@@ -326,6 +326,28 @@ var rasters = {
             sourceUrl: []
 
         },
+        'hspfLandCover': {
+            layer: {
+                eeObject: ee.Image("users/stormwaterheatmap/landcover_2m"),
+                name: 'Land Cover',
+                visParams: {
+                    palette:['55775e','dacd7f','7e9e87','b3caff','844c8b','ead1ff'],
+                    min: 0,
+                    max: 5,
+                    opacity: 0.6 
+                }
+            },
+            discrete: true,
+            values: [0, 1, 2, 3, 4,
+                5
+            ],
+            units: null,
+            labels: ['Forest/Trees', 'Pasture', 'Grass', 'Unknown', 'Water', 'Impervious - Roofs', 'Impervious' ],
+            vizType: 'pieChart', 
+            sourceName: 'Robertson et al, 20XX',
+            sourceUrl: []
+
+        },
         'DevAge': {
             layer: {
                 eeObject: age_of_development, //var visParams = {
