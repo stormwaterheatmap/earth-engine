@@ -47,7 +47,7 @@ Map.addLayer(watermask)
 //kernel for convolution 
 var kern1 = ee.Kernel.circle({radius:500,units:'meters'}) 
 var kern2 = ee.Kernel.gaussian({radius:500,sigma:250,units:'meters'}) 
-var pred = lc_predictors2.select(['traffic_1']).convolve(kern1).focal_mean({kernel:kern2}) 
+var pred = lc_predictors2.select(['roofs']).convolve(kern1).focal_mean({kernel:kern2}) 
 
 Map.addLayer(pred)
 //To do 
