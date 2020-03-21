@@ -1,5 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var image = ee.Image("JRC/GSW1_1/GlobalSurfaceWater");
+var image = ee.Image("JRC/GSW1_1/GlobalSurfaceWater"),
+    image2 = ee.Image("users/cnilsen/monthlyEto");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //center and scale the image 
 function centerScale(image,key) {
@@ -9,7 +10,6 @@ function centerScale(image,key) {
   //center image 
   return(image.clamp(mins[key],maxs[key]).subtract(means[key]).divide(stds[key]) )
 }
-
 var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs")
 var imp = tncLC.eq(6).or(tncLC.eq(7)).rename('impervious')
 var roofs = tncLC.eq(7).rename('roofs')
@@ -17,16 +17,14 @@ var no2 = ee.Image("users/cnilsen/SURFACE_NO2_010x010_2010")
 var pm25 = ee.Image("users/cnilsen/pm25clipped").rename('pm25')
 var precip = ee.Image("users/cnilsen/precip/PRISM800meter").rename('annual_precip')
 var nlcd = ee.Image('USGS/NLCD/NLCD2011').select(['percent_tree_cover'])
-
 //#nighttimeLights
 var nighttimeLights = ee.ImageCollection(
     'NOAA/DMSP-OLS/CALIBRATED_LIGHTS_V4').filter(
         ee.Filter.date('2009-01-01', '2013-12-31')).select('avg_vis').mean()
-
 //#onroad CO2
 var CO2 = ee.Image("users/stormwaterheatmap/CO2_onroad_2010")
-
-//#traffic
+//#traffi
+print(no2)
 var trafficReduced = ee.Image("users/cnilsen/trafficExport").reduceRegions(
     ee.FeatureCollection("TIGER/2016/Roads"), ee.Reducer.max(), 10)
 //#convert back to image
@@ -34,38 +32,17 @@ var traffic = trafficReduced.reduceToImage(['max'], ee.Reducer.mean()).rename(
     'traffic')  //.select(['mean'],['avg_AADT'])
 var roadDensity = ee.Image(0).blend(traffic.gt(0))
 var logtraffic = traffic.log()
-
 //#Population
 var population = ee.Image("WorldPop/GP/100m/pop/USA_2010")
-
 //#air deposition  
-
 var dep_splusn = ee.Image("users/cnilsen/dep_splusn_2010").select(0).rename('depSplusN')
 var watermask = tncLC.neq(5)
-
-var lc_predictors2 = ee.Image(0).blend(ee.Image.cat( imp, pm25, roofs, traffic,
-                             roadDensity.rename('roadDensity'), CO2.rename('road_CO2'),
-                             logtraffic,nighttimeLights.rename('nighttime_lights'),
-                            population,no2.rename('no2'),dep_splusn).mask(watermask))  
-                            
-Map.addLayer(lc_predictors2,{},'traffic',0)
-//Water mask 
 Map.addLayer(watermask)
-
-
 //kernel for convolution 
 var kern1 = ee.Kernel.circle({radius:500,units:'meters'}) 
 var kern2 = ee.Kernel.gaussian({radius:500,sigma:250,units:'meters'}) 
-var pred = lc_predictors2.select(['roofs']).convolve(kern1).focal_mean({kernel:kern2}) 
-
-Map.addLayer(pred)
-//To do 
-//scale and center each layer 
-//different scales for each predictor (CO2 - larger scale than rest). 
-//blend in zero data 
-//mask water 
-
-
+//r pred = lc_predictors2.select(['roofs']).convolve(kern1).focal_mean({kernel:kern2}) 
+//To do/scale and center each layer //different scales for each predictor (CO2 - larger scale than rest). /blend in zero data mask water 
 var means =  
   {
     "annual_precip": 1048.7141138625,
@@ -168,7 +145,9 @@ var means =
     "traffic": 997.7789315,
     "log_rd_CO2": 12.0493537
   }
-
-var pop = pm25
-pop = centerScale(pop,'pm25')
-Map.addLayer(pop)
+var pm25 = centerScale(((pm25)).resample(),'pm25')
+Map.addLayer(pm25)
+var blnk = image2.select(0).divide(9999)
+var no2 = centerScale(
+  no2,'no2')
+Map.addLayer(no2)
