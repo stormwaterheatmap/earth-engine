@@ -169,6 +169,6 @@ var means =
     "log_rd_CO2": 12.0493537
   }
 
-var pop = no2
-pop = centerScale(pop,'no2')
+var pop = pm25
+pop = centerScale(pop,'pm25')
 Map.addLayer(pop)
