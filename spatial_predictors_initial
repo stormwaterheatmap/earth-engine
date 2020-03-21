@@ -1,6 +1,15 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image = ee.Image("JRC/GSW1_1/GlobalSurfaceWater");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+//center and scale the image 
+function centerScale(image,key) {
+  //convolve image 
+  //var kernel = ee.Kernel.circle({radius:500,units:'meters',normalize:true})
+  //image = image.convolve(kernel)
+  //center image 
+  return(image.clamp(mins[key],maxs[key]).subtract(means[key]).divide(stds[key]) )
+}
+
 var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs")
 var imp = tncLC.eq(6).or(tncLC.eq(7)).rename('impervious')
 var roofs = tncLC.eq(7).rename('roofs')
@@ -57,4 +66,109 @@ Map.addLayer(pred)
 //mask water 
 
 
+var means =  
+  {
+    "annual_precip": 1048.7141138625,
+    "depCa": 0.423218639,
+    "depCl": 3.043647607625,
+    "depHplus": 0.068647269875,
+    "depK": 0.1949140794375,
+    "depMg": 0.2008280074375,
+    "depNO3": 2.7859250045,
+    "depNa": 1.69106168575,
+    "depSO4": 2.2570400266875,
+    "depSplusN": 119.037517460625,
+    "impervious": 0.5043549801875,
+    "nighttime_lights": 122.313109666875,
+    "no2": 3.733018344125,
+    "percent_tree_cover": 17.7331473358125,
+    "pm25": 5.56317530475,
+    "population": 12.4923855516875,
+    "roadDensity": 0.2781387974375,
+    "road_CO2": 6823328.91024375,
+    "roofs": 0.1544929720625,
+    "slope": 3.0458176255625,
+    "totalN": 1.0124676819375,
+    "traffic": 20522.2831523437,
+    "log_rd_CO2": 14.560961014375
+  }
+  var stds = {
+    "name": "std",
+    "annual_precip": 112.553601491534,
+    "depCa": 0.0646624369794463,
+    "depCl": 0.526401594372025,
+    "depHplus": 0.00990111988449995,
+    "depK": 0.0328011236665151,
+    "depMg": 0.0344241237276948,
+    "depNO3": 0.401525291416816,
+    "depNa": 0.291837508517613,
+    "depSO4": 0.355015392932603,
+    "depSplusN": 17.7608465855819,
+    "impervious": 0.239478902114435,
+    "nighttime_lights": 85.5872296565071,
+    "no2": 0.772658969370209,
+    "percent_tree_cover": 14.8272419362608,
+    "pm25": 0.761471443705179,
+    "population": 15.5979471868387,
+    "roadDensity": 0.18967999964244,
+    "road_CO2": 9151848.36448933,
+    "roofs": 0.0926704577688642,
+    "slope": 2.38450833868254,
+    "totalN": 0.147360442767131,
+    "traffic": 20163.3114421153,
+    "log_rd_CO2": 1.7804315659011
+  }
+ var maxs = {
+    "annual_precip": 1256.36,
+    "depCa": 0.548076396,
+    "depCl": 3.903286116,
+    "depHplus": 0.087665209,
+    "depK": 0.244241243,
+    "depMg": 0.257596306,
+    "depNO3": 3.581201534,
+    "depNa": 2.169426095,
+    "depSO4": 2.889407839,
+    "depSplusN": 154.0066266,
+    "impervious": 0.813087976,
+    "nighttime_lights": 283.8128393,
+    "no2": 5.159999847,
+    "percent_tree_cover": 64.01425302,
+    "pm25": 6.700224919,
+    "population": 60.6934408,
+    "roadDensity": 0.742757345,
+    "road_CO2": 28613514.59,
+    "roofs": 0.390228849,
+    "slope": 9.2762444,
+    "totalN": 1.323578984,
+    "traffic": 58707.40908,
+    "log_rd_CO2": 17.1693897
+  }
+  var mins = {
+    "annual_precip": 895.3954378,
+    "depCa": 0.330535114,
+    "depCl": 2.199774265,
+    "depHplus": 0.054730568,
+    "depK": 0.141758487,
+    "depMg": 0.145882696,
+    "depNO3": 2.234814167,
+    "depNa": 1.223892093,
+    "depSO4": 1.717829943,
+    "depSplusN": 94.14917755,
+    "impervious": 0.052688769,
+    "nighttime_lights": 21.63331985,
+    "no2": 2.339999914,
+    "percent_tree_cover": 2.393665297,
+    "pm25": 4.637970068,
+    "population": 0.062139588,
+    "roadDensity": 0.041606901,
+    "road_CO2": 170988.8625,
+    "roofs": 0.025604568,
+    "slope": 0.288971463,
+    "totalN": 0.825684905,
+    "traffic": 997.7789315,
+    "log_rd_CO2": 12.0493537
+  }
 
+var pop = no2
+pop = centerScale(pop,'no2')
+Map.addLayer(pop)
