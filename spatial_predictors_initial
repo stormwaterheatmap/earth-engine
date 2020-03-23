@@ -1,22 +1,26 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image = ee.Image("JRC/GSW1_1/GlobalSurfaceWater"),
     image2 = ee.Image("users/cnilsen/monthlyEto"),
-    PugetSound = ee.Image("users/cnilsen/PugetSound"),
     image3 = ee.Image("users/cnilsen/PSRaster_no_mask");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+var PugetSound = ee.FeatureCollection("users/stormwaterheatmap/PugetSound");
+var blnk = ee.Image(0).clip(PugetSound)
 //center and scale the image 
+function focalMean(image,r){ 
+  return(//blnk.blend
+  //(image).focal_mean({radius:r, units:'meters'}))
+  
+image.reduceNeighborhood({reducer: ee.Reducer.mean(), kernel:ee.Kernel.square({radius:r, units:'meters'}),
+optimization:'window'}))}
 function centerScale(image,key) {
-  //convolve image 
-  //var kernel = ee.Kernel.circle({radius:500,units:'meters',normalize:true})
-  //image = image.convolve(kernel)
-  //center image 
-  return(image.clamp(mins[key],maxs[key]).subtract(means[key]).divide(stds[key]) )
+  var kernel = ee.Kernel.gaussian({radius:500,sigma:100,units:'meters',normalize:true})
+  image = image.convolve(kernel)
+  return(  (image).clamp(mins[key],maxs[key])
+  .subtract(means[key]).divide(stds[key])
+  .clip(PugetSound).rename(key))
 }
-var PugetSound = ee.Feature("users/stormwaterheatmap/PugetSound")
-//r pred = lc_predictors2.select(['roofs']).convolve(kern1).focal_mean({kernel:kern2}) 
-//To do/scale and center each layer //different scales for each predictor (CO2 - larger scale than rest). /blend in zero data mask water 
-var means =  
-  {
+
+var means= {
     "annual_precip": 1048.7141138625,
     "depCa": 0.423218639,
     "depCl": 3.043647607625,
@@ -39,10 +43,11 @@ var means =
     "slope": 3.0458176255625,
     "totalN": 1.0124676819375,
     "traffic": 20522.2831523437,
-    "log_rd_CO2": 14.560961014375
+    "log_rd_CO2": 14.560961014375,
+    "logPopulation": 1.8026578817683,
+    "logTraffic": 9.19774544665657
   }
-  var stds = {
-    "name": "std",
+var stds = {
     "annual_precip": 112.553601491534,
     "depCa": 0.0646624369794463,
     "depCl": 0.526401594372025,
@@ -65,9 +70,11 @@ var means =
     "slope": 2.38450833868254,
     "totalN": 0.147360442767131,
     "traffic": 20163.3114421153,
-    "log_rd_CO2": 1.7804315659011
+    "log_rd_CO2": 1.7804315659011,
+    "logPopulation": 1.55601769869747,
+    "logTraffic": 1.45665455832315
   }
- var maxs = {
+var maxs = {
     "annual_precip": 1256.36,
     "depCa": 0.548076396,
     "depCl": 3.903286116,
@@ -90,9 +97,11 @@ var means =
     "slope": 9.2762444,
     "totalN": 1.323578984,
     "traffic": 58707.40908,
-    "log_rd_CO2": 17.1693897
+    "log_rd_CO2": 17.1693897,
+    "logPopulation": 4.10583563291855,
+    "logTraffic": 10.980321217272
   }
-  var mins = {
+var mins = {
     "annual_precip": 895.3954378,
     "depCa": 0.330535114,
     "depCl": 2.199774265,
@@ -115,45 +124,61 @@ var means =
     "slope": 0.288971463,
     "totalN": 0.825684905,
     "traffic": 997.7789315,
-    "log_rd_CO2": 12.0493537
+    "log_rd_CO2": 12.0493537,
+    "logPopulation": -2.77837200522911,
+    "logTraffic": 6.90553174025112
   }
+
 //  
-var blank = 
-Map.addLayer(image3,{},'')
 var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs")
 var imp = tncLC.eq(6).or(tncLC.eq(7)).rename('impervious')
-var roofs = tncLC.eq(7).rename('roofs')
-var no2 = ee.Image("users/cnilsen/SURFACE_NO2_010x010_2010")
-var pm25 = ee.Image("users/cnilsen/pm25clipped").rename('pm25')
-var precip = ee.Image("users/cnilsen/precip/PRISM800meter").rename('annual_precip')
-var nlcd = ee.Image('USGS/NLCD/NLCD2011').select(['percent_tree_cover'])
-//#nighttimeLights
+    imp = centerScale(imp,'impervious')
+var roofs = centerScale(tncLC.eq(7).rename('roofs'),'roofs')
+var no2 = centerScale(ee.Image("users/cnilsen/SURFACE_NO2_010x010_2010"),'no2')
+
+var pm25 = (ee.Image("users/cnilsen/pm25clipped").rename('pm25'))
+pm25 = focalMean(pm25,750) 
+pm25 = centerScale(pm25,'pm25')
+
 var nighttimeLights = ee.ImageCollection(
     'NOAA/DMSP-OLS/CALIBRATED_LIGHTS_V4').filter(
         ee.Filter.date('2009-01-01', '2013-12-31')).select('avg_vis').mean()
+nighttimeLights = centerScale(nighttimeLights,'nighttime_lights')
 //#onroad CO2
-var CO2 = ee.Image("users/stormwaterheatmap/CO2_onroad_2010")
+//var CO2 = ee.Image("users/stormwaterheatmap/CO2_onroad_2010")
 //#traffi
-print(no2)
+//print(no2)
 var trafficReduced = ee.Image("users/cnilsen/trafficExport").reduceRegions(
     ee.FeatureCollection("TIGER/2016/Roads"), ee.Reducer.max(), 10)
 //#convert back to image
 var traffic = trafficReduced.reduceToImage(['max'], ee.Reducer.mean()).rename(
     'traffic')  //.select(['mean'],['avg_AADT'])
+var logTraffic = traffic.log()
+
+traffic = centerScale(traffic,'traffic')
+logTraffic = centerScale(logTraffic,'logTraffic')
 var roadDensity = ee.Image(0).blend(traffic.gt(0))
-var logtraffic = traffic.log()
+roadDensity = centerScale(roadDensity,'roadDensity')
+
 //#Population
-var population = ee.Image("WorldPop/GP/100m/pop/USA_2010")
+//Map.addLayer(ee.Image("WorldPop/GP/100m/pop/USA_2010").resample(),{},'pop')
+var population = (ee.Image("WorldPop/GP/100m/pop/USA_2010"))
+var logPopulation = population.log()
+
+population = centerScale(population,'population')
+logPopulation = centerScale(logPopulation,'logPopulation')
 //#air deposition  
 var dep_splusn = ee.Image("users/cnilsen/dep_splusn_2010").select(0).rename('depSplusN')
+dep_splusn = focalMean(dep_splusn,2000)
+dep_splusn =  centerScale(dep_splusn,'depSplusN')
 var watermask = tncLC.neq(5)
-Map.addLayer(watermask)
+//Map.addLayer(watermask)
 //kernel for convolution 
-var kern1 = ee.Kernel.circle({radius:500,units:'meters'}) 
-var kern2 = ee.Kernel.gaussian({radius:500,sigma:250,units:'meters'}) 
-var pm25 = centerScale(((pm25)).resample(),'pm25')
-Map.addLayer(pm25)
-var blnk = image2.select(0).divide(9999)
-var no2 = centerScale(
-  no2,'no2')
-Map.addLayer(no2)
+var allPredictors = ee.Image.cat(dep_splusn,population,roadDensity,
+traffic,nighttimeLights,pm25,imp,logPopulation,logTraffic
+
+)
+Map.addLayer((allPredictors),{},'all')
+//todo add logs to initial layers for center/scale
+//export all predictors 
+Export.image.toAsset({image:allPredictors,region:PugetSound,maxPixels:1e12,scale:30})
