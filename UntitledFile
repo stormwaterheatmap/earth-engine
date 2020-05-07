@@ -1,0 +1,177 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs"),
+    NED = ee.Image("USGS/NED"),
+    soil = ee.Image("users/stormwaterheatmap/soils_out_10m_unmask"),
+    gap = ee.Image("USGS/GAP/CONUS/2011"),
+    PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//var soils = data.rasters.Soils.layer.eeObject
+
+/* Generate slopes from USGS DEM 
+*/ 
+
+var thresholds = ee.Image([5.0, 15, 100]);
+var slope = ee.Terrain.slope(NED)
+    .gt(thresholds)
+    .reduce('sum');
+
+//reclass soils 
+var soil = soil.remap([1,2,3],[0,1,2])
+    
+//reclass TNC landcover to hspf cats
+//Import TNC heatmap landcover 
+var landcover = ee.Image(
+    "users/jrobertson2000/psLandCover_1m_finPS_roofs")
+
+/* remap to hspf categories 
+"original": 1=herbaceous, 2=shrub, 3=tree, 4=ground(dirt), 
+  5=water, 6=impervious, 7=roofs
+  remap to available hrus 0=forest, 1=pasture 2=lawn, 5=impervious, 4 = roofs, 3 = water/null
+  */
+var tncTrees = landcover.eq(3)
+landcover = landcover.remap([0, 1, 2, 3, 4, 5, 6, 7], [3, 2, 2, 0, 2, 3, 5, 4])
+
+//use the USGS GAP Conus dataset to classify perlnds 
+var hspfLC_forest = gap.gte(57).and(gap.lte(276)).or(gap.eq(565))
+var hspfLC_pasture = gap.gte(308).and(gap.lte(381))
+    .or(gap.gte(440).and(gap.lte(508)))
+    .or(gap.eq(431))
+    .or(gap.gte(513).and(gap.lte(558)))
+    .or(gap.gte(567).and(gap.lte(573)))
+Map.addLayer(hspfLC_pasture, {}, 'hspf hspfLC_pasture', 0)
+var hspfLC_grass = gap.eq(581).or(gap.eq(582))
+var hspfLC_pastureSat = gap.eq(397).or(gap.eq(430))
+    .or(gap.eq(432)).or(gap.eq(433))
+var forest10 = ee.Image(10).multiply(hspfLC_forest) //temporarily move forest to 10 
+var perlndsHerb = landcover.eq(2)
+var perlndsReclass = perlndsHerb.where(hspfLC_pasture,1).where(hspfLC_pastureSat,1).where(hspfLC_grass,2)
+
+//var LC = lc2.blend(landcover) //.blend(lc2)//.blend(lc3).select('remapped') 
+//LC = LC.where(psLC.eq(4), landcover)
+var vis2 = {
+    "palette": [
+        "#26532b", //0
+        "a3c58e", //1
+        "44aa66", //2
+        "26532b", //3
+        "a39171", //4
+        "#c8cad6", //5
+        "adacb5", //6#
+        "d8d5db", //7
+        "ffffff", //8
+        "476b9d"
+    ],
+    //9],
+
+
+
+    min: 0,
+    max: 9,
+}
+
+var visParams = {
+    palette: ["ffffff", "3ead63", "c9fbff", "26532b", "a39171", "476b9d",
+        "adacb5", "d8d5db"
+    ],
+    min: 0,
+    max: 9,
+
+}
+
+
+//Map.addLayer(LC, vis2, 'LC_fin')
+var lcfin = landcover.eq(2).selfMask().where(hspfLC_pasture,1).where(hspfLC_pastureSat,1).where(hspfLC_grass,2)
+var landcover = landcover.blend(lcfin).select([0],['landcover'])
+Map.addLayer(landcover.eq(5))
+Map.addLayer(lcfin)
+var t = ee.String("hru151")
+print(t)
+var vv = (ee.Number.parse(ee.String(t).slice(4,5)))
+Map.addLayer(landcover.eq(vv),{},'testinglc')
+//make a list of all hru names 
+var hruNames = ee.List([
+    "hru001",
+    "hru000",
+    "hru002",
+    "hru010",
+    "hru011",
+    "hru012",
+    "hru020",
+    "hru021",
+    "hru022",
+    "hru050",
+    "hru051",
+    "hru052",
+    "hru100",
+    "hru101",
+    "hru102",
+    "hru110",
+    "hru111",
+    "hru112",
+    "hru120",
+    "hru121",
+    "hru122",
+    "hru150",
+    "hru151",
+    "hru152",
+    "hru200",
+    "hru201",
+    "hru202",
+    "hru210",
+    "hru211",
+    "hru212",
+    "hru220",
+    "hru221",
+    "hru222",
+    "hru250",
+    "hru251",
+    "hru252"])
+//add Flow index 
+var table = ee.FeatureCollection("users/stormwaterheatmap/tables/flowIndex")
+//initialize img and hruID counter 
+var img = ee.Image(0)
+var img2 = ee.Image(0)
+var hruID = 0
+var last = hruNames.length().subtract(1).getInfo() 
+
+// Loop through the names, adding a band for each hru 
+for (var id= hruID; id <= last; id = id + 1) {
+  var hru = hruNames.get(id)
+  var soilVal = (ee.Number.parse(ee.String(hru).slice(3,4))).getInfo()
+  var slopeVal = (ee.Number.parse(ee.String(hru).slice(4,5))).getInfo()
+  var lcVal = (ee.Number.parse(ee.String(hru).slice(5,6))).getInfo()
+  //hrus
+  img = img.addBands(
+    soil.eq(soilVal).and(landcover.eq(lcVal)).and(slope.eq(slopeVal))
+    .rename([hru]))
+  //flow index
+  img2 = img2.addBands(table.reduceToImage([hru], 'first').rename([hru]))
+}
+print(img)
+print(img2)
+var comb = img.multiply(img2)
+  
+
+// 
+
+//initialize img and hruID counter 
+var img2 = ee.Image(0)
+var hruID = 0
+var last = hruNames.length().subtract(1).getInfo() 
+print(table)
+// Loop through the names, adding a band for each hru 
+for (var yr= hruID; yr <= last; yr = yr + 1) {
+  var hru = hruNames.get(yr)
+  img2 = img2.addBands(table.reduceToImage([hru], 'first').rename([hru]))
+}
+//get rid of constant layer 
+var flowIndex = img2.select(hruNames).toArray()
+var hruBands = img.select(hruNames).toArray()
+Map.addLayer(ee.Image.cat(soil,landcover,slope),{},'categories')
+Map.addLayer(flowIndex)
+Map.addLayer(hruBands)
+var flowInd = flowIndex.arrayDotProduct(hruBands)
+Map.addLayer(flowInd)
+
+
+
