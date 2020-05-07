@@ -147,23 +147,7 @@ for (var id= hruID; id <= last; id = id + 1) {
   //flow index
   img2 = img2.addBands(table.reduceToImage([hru], 'first').rename([hru]))
 }
-print(img)
-print(img2)
-var comb = img.multiply(img2)
-  
 
-// 
-
-//initialize img and hruID counter 
-var img2 = ee.Image(0)
-var hruID = 0
-var last = hruNames.length().subtract(1).getInfo() 
-print(table)
-// Loop through the names, adding a band for each hru 
-for (var yr= hruID; yr <= last; yr = yr + 1) {
-  var hru = hruNames.get(yr)
-  img2 = img2.addBands(table.reduceToImage([hru], 'first').rename([hru]))
-}
 //get rid of constant layer 
 var flowIndex = img2.select(hruNames).toArray()
 var hruBands = img.select(hruNames).toArray()
