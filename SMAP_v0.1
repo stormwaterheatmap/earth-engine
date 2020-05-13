@@ -133,5 +133,14 @@ var citySelect = ui.Select({items: cities.sort(),placeholder:
 onChange: handleCitySelect})
 
 Map.add(citySelect)
+///Select how to prioritize 
 
-
+var cocCheckbox = 
+ui.Checkbox({label: "Imperviousness"})
+var Metals = 
+ui.Checkbox({label: "Stormwater Metals Load"})
+var flow = 
+ui.Checkbox({label: "Flow Control Index"})
+var checkPanel = ui.Panel([ui.Label("Select Parameters to use for Prioritizaiton"), 
+cocCheckbox,Metals,flow,ui.Button("OK"),ui.Button("reset")])
+Map.add(checkPanel)
