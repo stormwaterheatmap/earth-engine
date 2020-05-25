@@ -16,7 +16,7 @@ var datasets = require(
      'users/stormwaterheatmap/apps:Modules/datasets');
  var rasters = datasets.rasters
  print(rasters)
-
+var watersheds = datasets.vectors.PS_AU
 // var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 // var charts = require('users/stormwaterheatmap/apps:Modules/chart')
@@ -25,6 +25,23 @@ var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
 var infoPanel = ui.Panel()
 ///----------------------------------------------------------------------
 ///---functions
+function handleMapClick(location) {
+  selectedPoints.push([location.lon, location.lat]);
+  updateOverlay();
+  updateChart();
+}
+function getSelectedwatershed() {
+  return watershed.filterBounds(ee.Geometry.MultiPoint(selectedPoints));
+}
+function updateOverlay() {
+  var overlay = getSelectedwatershed().style(HIGHLIGHT_STYLE);
+  Map.layers().set(2, ui.Map.Layer(overlay));
+}
+function updateChart() {
+  var chartBuilder = chartTypeToggleButton.value;
+  var chart = chartBuilder(getSelectedwatershed());
+  resultsPanel.clear().add(chart).add(buttonPanel);
+}
 function ColorBar(palette) {
     return ui.Thumbnail({
         image: ee.Image.pixelLonLat().select(0),
@@ -109,7 +126,7 @@ var panel = ui.Panel({
     })
 panel.add(ui.Label("Puget Sound Stormwater Heatmap"))
 
-var map = ui.Map() 
+var map = ui.Map({onClick:ins}) 
 map.setCenter(-122,48,8)
 var ins = map.onClick(function(coords) {
   // Show the loading label.
@@ -121,7 +138,8 @@ var ins = map.onClick(function(coords) {
   }));
   var click_point = ee.Geometry.Point(coords.lon, coords.lat);
   print(click_point)
-  var selLay = ui.data.ActiveList()[0]
+  var lays = (Map.layers())
+  var selLay = map.layers().get[0]
   print(selLay)
   // compute value, a long running operation
   // var computedValue = selLay.reduceRegion({
@@ -143,7 +161,7 @@ ui.root.add(panel).add(map);
 print(ui.root.getLayout())
 ///PanelFunction 
 // Create a panel and add it to the map.
-var inspector = ui.Panel([ui.Label('Click on the point')]);
+var inspector = ui.Panel({widgets:[ui.Label('Click on the point')],style:{position:'bottom-left'}});
 
 
 
@@ -151,6 +169,12 @@ var inspector = ui.Panel([ui.Label('Click on the point')]);
 //var layerList = ee.Object.keys(rasters)
 var layerdict = ee.Dictionary(rasters)
 var Runoff = layerdict.get('Runoff')
+
+
+
+
+
+
 var layersToShow =({
   "Landcover": "landCover",
   "Hydrology - Mean annual runoff": "Runoff_in",
@@ -165,6 +189,8 @@ print(lc,'lc')
 print(lc.labels,'units')
 //print(select_vals)
 //print(select_items,'selectitems')
+
+
 var imageSelect = ui.Select({
   items: select_items,
   onChange: function(value) {
@@ -183,12 +209,50 @@ var imageSelect = ui.Select({
     } else {
          legend = (barLegend(layerObject))}
     map.add(legend) 
-    map.add(inspector)
+
     //add the info
     infoPanel.clear()
     var infoLabel = ui.Label({value:layerObject.layer.name.concat(
       layerObject.sourceName), style:fonts.b1})
     infoPanel.add(infoLabel)
+    //MapOnclick property
+    map.add(inspector)
+
+// Set the default map's cursor to a "crosshair".
+  map.style().set('cursor', 'crosshair');
+
+// Register a callback on the map to be invoked when the map is clicked.
+  map.onClick(function(coords) {
+  // Clear the panel and show a loading message.
+  inspector.clear();
+  inspector.style().set('shown', true);
+  inspector.add(ui.Label('Loading...', {color: 'gray'}));
+
+  // Compute the mean NDVI; a potentially long-running server operation.
+  var point = ee.Geometry.Point(coords.lon, coords.lat);
+  var temporalMean = (layer.eeObject).reduce(ee.Reducer.mean());
+  var sampledPoint = temporalMean.reduceRegion(ee.Reducer.first(), point, 30);
+  var computedValue = sampledPoint.get('mean');
+  
+  // Request the value from the server and use the results in a function.
+  computedValue.evaluate(function(result) {
+    inspector.clear();
+
+    // Add a label with the results from the server.
+    inspector.add(ui.Label({
+      value: 'Value: ' + result.toFixed(2),
+      style: {stretch: 'vertical'}
+    }));
+
+    // Add a button to hide the Panel.
+    inspector.add(ui.Button({
+      label: 'Close',
+      onClick: function() {
+        inspector.style().set('shown', false);
+      }
+    }));
+  });
+});
   }
 });
 
