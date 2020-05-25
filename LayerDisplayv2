@@ -161,7 +161,7 @@ ui.root.add(panel).add(map);
 print(ui.root.getLayout())
 ///PanelFunction 
 // Create a panel and add it to the map.
-var inspector = ui.Panel({widgets:[ui.Label('Click on the point')],style:{position:'bottom-left'}});
+var inspector = ui.Panel({widgets:[ui.Label('Click on the point')],style:{position:'top-left'}});
 
 
 
@@ -177,6 +177,9 @@ var Runoff = layerdict.get('Runoff')
 
 var layersToShow =({
   "Landcover": "landCover",
+  "Slope Classes":"Slope",
+  "Slope": "SlopeCont",
+  "Soils": "Soils", 
   "Hydrology - Mean annual runoff": "Runoff_in",
   "Hydrology - Flow Duration Index": "Runoff_in", 
 "Pollutant Loading - Total Copper concentration": "Lithology",
