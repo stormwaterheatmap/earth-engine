@@ -1,0 +1,109 @@
+/* /Map with clickable heatmap layers showing: 
+1. Landcover 
+2. Hydrology 
+   a. Mean annual runoff 
+   b. Flow Duration Index 
+   c. HRUs 
+    - soils 
+    - slopes
+    - HSPF Landcover  
+3. Water Quality 
+  a. Predictors 
+  b. One constituent. 
+*/ 
+//Load Datasets from the dataset module 
+var datasets = require(
+     'users/stormwaterheatmap/apps:Modules/datasets');
+ var rasters = datasets.rasters
+ print(rasters)
+
+// var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+// var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+// var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+// var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+///----------------------------------------------------------------------
+///---functions
+// var makeLegend = function (layerObject) {
+//     //make a ui.Layer for display 
+
+//     // make a legend for that layer 
+//     var legend
+//     if (layerObject.discrete) {
+//         print('true! ')
+//         legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
+//         // call the histogram function print('histogram')
+//     } else {
+//         legend = (barLegend(layerObject))
+//     } //add reports  
+//     //add legend 
+//     legendPanel.clear()
+//     legendPanel.add(legend)
+// }
+// Set up the overall structure of the app, with a control panel on top
+// of a full-screen map.
+ui.root.clear();
+ui.root.setLayout(ui.Panel.Layout.Flow("vertical"))
+var panel = ui.Panel({
+        style: {
+             width:'100%', //the golden ratio!
+            backgroundColor: 'whitesmoke',
+            //  border: '1px solid silver',
+            //margin:'0',
+            padding: '12px',
+            shown: true,
+            stretch: 'horizontal'
+        }
+    })
+panel.add(ui.Label("Puget Sound Stormwater Heatmap"))
+
+var map = ui.Map();
+ui.root.add(panel).add(map);
+map.setCenter(-122.1685, 48,8);
+map.style().set('cursor', 'crosshair');
+print(ui.root.getLayout())
+///PanelFunction 
+
+//Map a selector with the layers
+//var layerList = ee.Object.keys(rasters)
+var layerdict = ee.Dictionary(rasters)
+var Runoff = layerdict.get('Runoff')
+
+var layersToShow = {
+  "Landcover": rasters.landCover,
+  "Hydrology - Mean annual runoff": rasters.Runoff_in,
+  "Hydrology - Flow Duration Index":rasters.Runoff_in, 
+"Pollutant Loading - Total Copper concentration": rasters.Lithology,
+"Pollutant Loading - Total Copper Load":rasters.Slope}
+
+
+
+
+var layerSelect = ui.Select({
+  items:Object.keys(layersToShow),
+  placeholder:'Select a layer',disabled: false,
+onChange: function(){
+  print(layerSelect.getValue())
+}
+  
+})
+panel.add(layerSelect)
+
+var features = sat_scene_dict.getInfo()['features'];
+var select_items = []
+for (var i = 0; i < features.length; i++) {
+  select_items.push({
+    label: features[i]['properties']['label'],
+    value: features[i]['properties']['value']
+  })
+}
+
+var imageSelect = ui.Select({
+  items: select_items,
+  onChange: function(value) {
+    var selected_scene = 
+        landsatCollection.filter(ee.Filter.eq('system:index', value));
+    Map.addLayer(selected_scene, {bands: ['B3', 'B2', 'B1']}, 'Selected scene');
+  }
+});
+
+
