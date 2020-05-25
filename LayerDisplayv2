@@ -38,7 +38,8 @@ function ColorBar(palette) {
         },
         style: {
             stretch: 'horizontal',
-            margin: '0px 12px'
+            margin: '0px 12px',
+            position: 'bottom-left'
         },
     });
 }
@@ -85,31 +86,14 @@ var barLegend = function (obj) {
     var barPanel = ui.Panel({
         widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel],
         style: {
-            position: 'top-left',
+            position: 'bottom-left',
             padding: '12px'
         }
     })
 
     return barPanel
 }
-// var makeLegend = function (layerObject) {
-//     //make a ui.Layer for display 
 
-//     // make a legend for that layer 
-//     var legend
-//     if (layerObject.discrete) {
-//         print('true! ')
-//         legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
-//         // call the histogram function print('histogram')
-//     } else {
-//         legend = (barLegend(layerObject))
-//     } //add reports  
-//     //add legend 
-//     legendPanel.clear()
-//     legendPanel.add(legend)
-// }
-// Set up the overall structure of the app, with a control panel on top
-// of a full-screen map.
 ui.root.clear();
 //ui.root.setLayout(ui.Panel.Layout.Flow("horizontal"))
 var panel = ui.Panel({
@@ -126,6 +110,7 @@ var panel = ui.Panel({
 panel.add(ui.Label("Puget Sound Stormwater Heatmap"))
 
 var map = ui.Map();
+
 ui.root.add(panel).add(map);
 map.setCenter(-122.1685, 48,8);
 map.style().set('cursor', 'crosshair');
@@ -167,15 +152,15 @@ var imageSelect = ui.Select({
         var legend = (legends.discreteLegend(layerObject))
     } else {
          legend = (barLegend(layerObject))}
-    map.add(legend)    
+    map.add(legend)  
     //add the info
     infoPanel.clear()
     var infoLabel = ui.Label({value:layerObject.layer.name.concat(
       layerObject.sourceName), style:fonts.b1})
     infoPanel.add(infoLabel)
-    panel.add(infoPanel)
   }
 });
 
 panel.add(imageSelect)
+panel.add(infoPanel)
 
