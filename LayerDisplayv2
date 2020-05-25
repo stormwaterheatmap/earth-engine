@@ -111,7 +111,7 @@ panel.add(ui.Label("Puget Sound Stormwater Heatmap"))
 
 var map = ui.Map() 
 map.setCenter(-122,48,8)
-map.onClick(function(coords) {
+var ins = map.onClick(function(coords) {
   // Show the loading label.
   print('mapClicked!')
   print(coords)
