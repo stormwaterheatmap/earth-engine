@@ -1,0 +1,173 @@
+/* /Map with clickable heatmap layers showing: 
+1. Landcover 
+2. Hydrology 
+   a. Mean annual runoff 
+   b. Flow Duration Index 
+   c. HRUs 
+    - soils 
+    - slopes
+    - HSPF Landcover  
+3. Water Quality 
+  a. Predictors 
+  b. One constituent. 
+*/ 
+//Load Datasets from the dataset module 
+var datasets = require(
+     'users/stormwaterheatmap/apps:Modules/datasets');
+ var rasters = datasets.rasters
+ print(rasters)
+
+// var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+// var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
+///----------------------------------------------------------------------
+///---functions
+function ColorBar(palette) {
+    return ui.Thumbnail({
+        image: ee.Image.pixelLonLat().select(0),
+        params: {
+            bbox: [0, 0, 1, 0.1],
+            dimensions: '200x20',
+            format: 'png',
+            min: 0,
+            max: 1,
+            palette: palette,
+        },
+        style: {
+            stretch: 'horizontal',
+            margin: '0px 12px'
+        },
+    });
+}
+var barLegend = function (obj) {
+    //  var labelPanel = ui.Panel(
+
+    var palette = obj.layer.visParams.palette
+    var low = obj.layer.visParams.min
+    var high = obj.layer.visParams.max
+    var mid = (low + high) / 2
+    var labelPanel = ui.Panel(
+        [
+            ui.Label(low, {
+                margin: '4px 8px',
+                textAlign: 'left',
+                stretch: 'horizontal'
+            }),
+            ui.Label(mid, {
+                margin: '4px 8px',
+                textAlign: 'center',
+                stretch: 'horizontal'
+            }),
+            ui.Label(high, {
+                margin: '4px 8px',
+                textAlign: 'right',
+                stretch: 'horizontal'
+            })
+        ],
+        ui.Panel.Layout.flow('horizontal'),
+
+        //    labelPanel.add(ui.Label(obj.units))
+        {
+            width: '230px',
+            position: 'top-center'
+        }
+    );
+
+    var unitlabel = (ui.Label(obj.units))
+    var barTitle = (ui.Label({
+        value: obj.layer.name,
+        style: fonts.LegendTitle
+    }))
+
+    var barPanel = ui.Panel({
+        widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel],
+        style: {
+            position: 'top-left',
+            padding: '12px'
+        }
+    })
+
+    return barPanel
+}
+// var makeLegend = function (layerObject) {
+//     //make a ui.Layer for display 
+
+//     // make a legend for that layer 
+//     var legend
+//     if (layerObject.discrete) {
+//         print('true! ')
+//         legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
+//         // call the histogram function print('histogram')
+//     } else {
+//         legend = (barLegend(layerObject))
+//     } //add reports  
+//     //add legend 
+//     legendPanel.clear()
+//     legendPanel.add(legend)
+// }
+// Set up the overall structure of the app, with a control panel on top
+// of a full-screen map.
+ui.root.clear();
+ui.root.setLayout(ui.Panel.Layout.Flow("vertical"))
+var panel = ui.Panel({
+        style: {
+             width:'100%', //the golden ratio!
+            backgroundColor: 'whitesmoke',
+            //  border: '1px solid silver',
+            //margin:'0',
+            padding: '12px',
+            shown: true,
+            stretch: 'horizontal'
+        }
+    })
+panel.add(ui.Label("Puget Sound Stormwater Heatmap"))
+
+var map = ui.Map();
+ui.root.add(panel).add(map);
+map.setCenter(-122.1685, 48,8);
+map.style().set('cursor', 'crosshair');
+print(ui.root.getLayout())
+///PanelFunction 
+
+//Map a selector with the layers
+//var layerList = ee.Object.keys(rasters)
+var layerdict = ee.Dictionary(rasters)
+var Runoff = layerdict.get('Runoff')
+var layersToShow =({
+  "Landcover": "landCover",
+  "Hydrology - Mean annual runoff": "Runoff_in",
+  "Hydrology - Flow Duration Index": "Runoff_in", 
+"Pollutant Loading - Total Copper concentration": "Lithology",
+"Pollutant Loading - Total Copper Load": "Slope"})
+var select_items = Object.keys(layersToShow)
+//var select_vals = Object.values(layersToShow)
+print(layersToShow,'layerstoshow')
+var lc = (rasters["landCover"])
+print(lc,'lc')
+print(lc.labels,'units')
+//print(select_vals)
+//print(select_items,'selectitems')
+var imageSelect = ui.Select({
+  items: select_items,
+  onChange: function(value) {
+    //add the layer 
+    var key = (layersToShow[value])
+    var layerObject = rasters[key]
+    var layer = layerObject.layer
+    map.addLayer(layer.eeObject,layer.visParams,layer.name)
+    //add the legend
+      //what type of legend 
+      if (layerObject.discrete) {
+        print('true! ')
+        var legend = (legends.discreteLegend(layerObject))
+    } else {
+         legend = (barLegend(layerObject))}
+    map.add(legend)    
+    //add the info
+  }
+});
+
+panel.add(imageSelect)
+
