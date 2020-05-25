@@ -5,7 +5,6 @@ var NED = ee.Image("USGS/NED"),
     image3 = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1"),
     table = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
     table2 = ee.FeatureCollection("TIGER/2018/Counties"),
-    table3 = ee.FeatureCollection("users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"),
     table4 = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
     NEXDCP = ee.ImageCollection("NASA/NEX-DCP30"),
     image5 = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip"),
@@ -15,7 +14,8 @@ var NED = ee.Image("USGS/NED"),
     table5 = ee.FeatureCollection("users/stormwaterheatmap/MS4_bounds"),
     dissolvedCopperConcentration = ee.Image("users/cnilsen/disCopper5m"),
     image2 = ee.Image("users/stormwaterheatmap/soils2m"),
-    soils = ee.Image("users/stormwaterheatmap/soils2m");
+    soils = ee.Image("users/stormwaterheatmap/soils2m"),
+    PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 // Author: Christian Nilsen, Geosyntec Consultants 
@@ -166,10 +166,7 @@ exports.precip = precip.select('b1')
 exports.PS_AU = ee.FeatureCollection(
     'users/cnilsen/PS_AU')
 //exports.PS_AU = PS_AU*/
-var PugetSound = (ee.FeatureCollection(
-        "USGS/WBD/2017/HUC04"))
-    .filter(ee.Filter
-        .eq('huc4', '1711'));
+
 //Map.addLayer(PugetSound)
 var counties = ee.FeatureCollection(
         "TIGER/2018/Counties")
