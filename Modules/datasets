@@ -130,7 +130,7 @@ var water = tncLC.neq(5)
 var imp = tncLC.eq(6)
     .or(tncLC.eq(7))
 var imp = imp.updateMask(water)
-var soils = ee.Image("users/stormwaterheatmap/soils_out_10m_unmask");
+var soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
 //Generate slopes from USGS DEM 
 var thresholds = ee.Image([5.0, 15,
     100]);
@@ -299,18 +299,19 @@ var rasters = {
             {
                 palette: ['#69995D',
                     '#564138',
-                    '#F06543'
+                    '#F06543',
+                    '#b3caff'
                 ],
                 min: 1,
-                max: 3,
+                max: 4,
                 opacity: 0.6
             }
         },
         discrete: true,
         values: [1, 2, 3],
         units: null,
-        labels: ['Till', 'Outwash',
-            'Saturated'
+        labels: ['Outwash', 'Till',
+            'Saturated','Water'
         ],
         vizType: 'pieChart'
     },
