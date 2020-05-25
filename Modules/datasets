@@ -308,7 +308,7 @@ var rasters = {
             }
         },
         discrete: true,
-        values: [1, 2, 3],
+        values: [1, 2, 3, 4],
         units: null,
         labels: ['Outwash', 'Till',
             'Saturated','Water'
