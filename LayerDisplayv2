@@ -109,13 +109,43 @@ var panel = ui.Panel({
     })
 panel.add(ui.Label("Puget Sound Stormwater Heatmap"))
 
-var map = ui.Map();
+var map = ui.Map() 
+map.setCenter(-122,48,8)
+map.onClick(function(coords) {
+  // Show the loading label.
+  print('mapClicked!')
+  print(coords)
+  inspector.widgets().set(0, ui.Label({
+    value: 'Loading...',
+    style: {color: 'gray'}
+  }));
+  var click_point = ee.Geometry.Point(coords.lon, coords.lat);
+  print(click_point)
+  var selLay = ui.data.ActiveList()[0]
+  print(selLay)
+  // compute value, a long running operation
+  // var computedValue = selLay.reduceRegion({
+  //   reducer:ee.Reducer.first(), 
+  //   geometry:click_point, scale:10,
+  //   bestEffort:true})
+  
+  // computedValue.evaluate(function(result) {
+  //       inspector.widgets().set(0, ui.Label({
+  //       value: result})
+  //       )
+  //   }
+ // );
+})
 
 ui.root.add(panel).add(map);
-map.setCenter(-122.1685, 48,8);
-map.style().set('cursor', 'crosshair');
+
+
 print(ui.root.getLayout())
 ///PanelFunction 
+// Create a panel and add it to the map.
+var inspector = ui.Panel([ui.Label('Click on the point')]);
+
+
 
 //Map a selector with the layers
 //var layerList = ee.Object.keys(rasters)
@@ -152,7 +182,8 @@ var imageSelect = ui.Select({
         var legend = (legends.discreteLegend(layerObject))
     } else {
          legend = (barLegend(layerObject))}
-    map.add(legend)  
+    map.add(legend) 
+    map.add(inspector)
     //add the info
     infoPanel.clear()
     var infoLabel = ui.Label({value:layerObject.layer.name.concat(
