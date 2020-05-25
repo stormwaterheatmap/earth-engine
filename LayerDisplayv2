@@ -152,6 +152,8 @@ print(lc.labels,'units')
 var imageSelect = ui.Select({
   items: select_items,
   onChange: function(value) {
+    //clear layers 
+    map.clear()
     //add the layer 
     var key = (layersToShow[value])
     var layerObject = rasters[key]
@@ -166,6 +168,10 @@ var imageSelect = ui.Select({
          legend = (barLegend(layerObject))}
     map.add(legend)    
     //add the info
+    var infoLabel = ui.Label({value:layerObject.layer.name.concat(
+      layerObject.sourceName), style:fonts.H2})
+    var infoPanel = ui.Panel({widgets:infoLabel})
+    map.add(infoPanel)
   }
 });
 
