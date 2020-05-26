@@ -714,7 +714,7 @@ function makeMainPanel() { //function that makes the main control panel
 
     head.add(infoButton)
     head.add(analyzeButton)
-    head.add(prioritizeButton)
+    //head.add(prioritizeButton)
     head.add(ui.Panel({
         style: bBack
     }))
@@ -755,7 +755,7 @@ var titleLabel = ui.Label({
 })
 
 var watershedSelectLabel = ui.Label({
-    value: 'Select a watershed dataset:',
+    value: 'Select a watershed dataset to aggregate data:',
 });
 print(584)
 var reportsPanel = ui.Panel({
@@ -1032,7 +1032,7 @@ var step3 = ui.Label('3) Select a category to view results', fonts.Body1)
 //Selectors 
 
 var watershedSelect = ui.Select({
-    items: Object.keys(vectors),
+    items: ['HUC12','PS_AU','MS4'],
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: function (selected) {
@@ -1306,6 +1306,7 @@ mapPanel.add(mainPanel);
 //mainPanel.add(prioritizePanel)
 //mainPanel.add(prioritizeButton) 
 //mainPanel.add(titleLabel); 
+analyzePanel.add(watershedSelectLabel)
 analyzePanel.add(watershedSelect)
 prioritizePanel.add(prioritizeAccept)
 ui.root.add(footer)
