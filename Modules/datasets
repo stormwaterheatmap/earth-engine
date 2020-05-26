@@ -236,7 +236,7 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
 ---------------------------
 */ //updated 5/26/2020
 var imperviousAge = ee.Image(2019).subtract((ee.Image("Tsinghua/FROM-GLC/GAIA/v10"))
-.rename("change_year_index")).focal_mean(2).clip(PugetSound)//.mask(soils.neq(4))
+.rename("change_year_index")).focal_mean(2).short().clip(PugetSound)//.mask(soils.neq(4))
 
 
 
