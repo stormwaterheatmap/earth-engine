@@ -214,6 +214,7 @@ var Runoff = layerdict.get('Runoff')
 var layersToShow =({
   "Landcover": "landCover",
   "Land Use": "landUse",
+  "Imperviousness": "Imperviousness",
   "Slope Categories":"Slope",
   "Slope": "SlopeCont",
   "Soils": "Soils", 
