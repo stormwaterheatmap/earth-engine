@@ -215,7 +215,8 @@ var layersToShow =({
   "Soils": "Soils", 
   "Hydrology - Mean annual runoff": "Runoff_in",
   "Hydrology - Flow Duration Index": "Flow Duration Index", 
-  "Age of Imperviousness": "imperviousAge"
+  "Age of Imperviousness": "Age of Imperviousness", 
+  "Mean Annual Preciptation":"Mean Annual Preciptation"
 //"Pollutant Loading - Total Copper concentration": "Lithology",
 //"Pollutant Loading - Total Copper Load": "Slope"
 })
