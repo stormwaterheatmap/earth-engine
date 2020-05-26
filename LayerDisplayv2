@@ -155,7 +155,7 @@ map.setOptions('Dark', Style.mapStyles)
         mapTypeControl: true,
         layerList: true,
         fullscreenControl: true})
-map.setCenter(-122,48,8)
+map.setCenter(-122,48,9)
 var ins = map.onClick(function(coords) {
   // Show the loading label.
   print('mapClicked!')
