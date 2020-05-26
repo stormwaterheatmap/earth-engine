@@ -337,16 +337,17 @@ var rasters = {
             name: 'Mean Annual Preciptation',
             visParams:
             {
-                palette: ['#00007f',
-                    '#002aff',
-                    '#00d4ff',
-                    '#7fff7f',
-                    '#ffd400',
-                    '#ff2a00',
-                    '#7f0000'
-                ],
+                palette: [
+    "781c81",
+    "3f60ae",
+    "539eb6",
+    "6db388",
+    "cab843",
+    "e78532",
+    "d92120"
+  ],
                 min: 20,
-                max: 100,
+                max: 120,
                 opacity: 0.6
             }
         },
