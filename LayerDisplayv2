@@ -215,8 +215,10 @@ var layersToShow =({
   "Soils": "Soils", 
   "Hydrology - Mean annual runoff": "Runoff_in",
   "Hydrology - Flow Duration Index": "Flow Duration Index", 
-"Pollutant Loading - Total Copper concentration": "Lithology",
-"Pollutant Loading - Total Copper Load": "Slope"})
+  "Age of Imperviousness": "imperviousAge"
+//"Pollutant Loading - Total Copper concentration": "Lithology",
+//"Pollutant Loading - Total Copper Load": "Slope"
+})
 var select_items = Object.keys(layersToShow)
 //var select_vals = Object.values(layersToShow)
 print(layersToShow,'layerstoshow')
