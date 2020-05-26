@@ -242,7 +242,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: traffic.log,
+            eeObject: traffic.log(),
             name: 'Traffic',
             visParams:
             {
