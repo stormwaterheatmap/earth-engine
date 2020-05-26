@@ -273,7 +273,8 @@ var imageSelect = ui.Select({
     var desc = ui.Label("Layer Dictionary")
     var lab = ee.List(layerObject.labels)
     var vals = ee.List(layerObject.values)
-    var tab = ui.Chart.array.values(vals,0,lab).setChartType('Table')
+    var tab = ui.Chart.array.values(vals,0,lab).setChartType('Table').setOptions(
+      {title:layerObject.layer.name})
     //dataPanel.add((desc))
     dataPanel.add(tab)}
     //MapOnclick property
@@ -300,8 +301,9 @@ var imageSelect = ui.Select({
     inspector.clear();
 
     // Add a label with the results from the server.
+    inspector.add(ui.Label(layer.name))
     inspector.add(ui.Label({
-      value: 'Value: ' + result.toFixed(2),
+      value: 'Value: ' + result.toFixed(1),
       style: {stretch: 'vertical',fontFamily: "monospace"}
     }));
 
