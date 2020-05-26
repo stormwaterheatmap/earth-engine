@@ -52,7 +52,7 @@ var lithology = ee.Image(
 var hspfLayers = require(
     'users/stormwaterheatmap/source_data:hspfLayers');
 var mean_annual_runoff = hspfLayers.mean_annual_runoff
-
+var fdr = hspfLayers.fdr 
 //------pollutant loads     
 
 
@@ -288,6 +288,35 @@ var rasters = {
         vizType: 'bigNumberMean',
         sourceName: 'Salathé, EP, AF Hamlet, CF Mass M Stumbaugh, S-Y Lee, R Steed: Estimates of 21st Century Flood Risk in the Pacific Northwest Based on Regional Scale Climate Model Simulations.',
         sourceUrl: 'https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/'
+    },
+    'Flow Duration Index':
+    {
+        layer:
+        {
+            eeObject: fdr,
+            name: 'Flow Duration Index',
+            visParams:
+            {
+                palette: ['#00007f',
+                    '#002aff',
+                    '#00d4ff',
+                    '#7fff7f',
+                    '#ffd400',
+                    '#ff2a00',
+                    '#7f0000'
+                ],
+                min: 1,
+                max: 10,
+                opacity: 0.6
+            }
+        },
+        discrete: false,
+        values: null,
+        units: null,
+        labels: null,
+        vizType: 'bigNumberMean',
+        sourceName: null,//'Salathé, EP, AF Hamlet, CF Mass M Stumbaugh, S-Y Lee, R Steed: Estimates of 21st Century Flood Risk in the Pacific Northwest Based on Regional Scale Climate Model Simulations.',
+        sourceUrl: null//'https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/'
     },
     'Soils':
     {
