@@ -206,11 +206,6 @@ dataPanel.add(inspector)
 var layerdict = ee.Dictionary(rasters)
 var Runoff = layerdict.get('Runoff')
 
-
-
-
-
-
 var layersToShow =({
   "Landcover": "landCover",
   "Land Use": "landUse",
