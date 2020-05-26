@@ -312,8 +312,7 @@ var rasters = {
             name: 'Imperviousness',
             visParams:
             {
-                palette: ['#115e10',
-                    '#cbd4c2'
+                palette: ['#10371c,#f24020'
                 ],
                 min: 0,
                 max: 1,
