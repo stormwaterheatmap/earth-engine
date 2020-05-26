@@ -51,8 +51,8 @@ var lithology = ee.Image(
     .select('b1');
 var hspfLayers = require(
     'users/stormwaterheatmap/source_data:hspfLayers');
-var mean_annual_runoff = hspfLayers.mean_annual_runoff
-var fdr = hspfLayers.fdr 
+var mean_annual_runoff = hspfLayers.mean_annual_runoff.focal_mean()
+var fdr = hspfLayers.fdr.focal_mean() 
 //------pollutant loads     
 
 
