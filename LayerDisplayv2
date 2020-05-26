@@ -219,7 +219,7 @@ var layersToShow =({
   "Hydrology - Mean annual runoff": "Runoff_in",
   "Hydrology - Flow Duration Index": "Flow Duration Index", 
   "Age of Imperviousness": "Age of Imperviousness", 
-  "Mean Annual Preciptation":"Preciptation",
+  "Mean Annual Preciptation":"Precipitation",
   "Traffic":"Traffic"
 //"Pollutant Loading - Total Copper concentration": "Lithology",
 //"Pollutant Loading - Total Copper Load": "Slope"
