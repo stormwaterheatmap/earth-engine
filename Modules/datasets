@@ -299,8 +299,8 @@ var rasters = {
         units: 'years',
         labels: null,
         vizType: 'bigNumberPercent',
-        sourceName: 'Gong, P., Li, X., Wang, J., Bai, Y., Chen, B., Hu, T., ... & Zhou, Y. (2020). Annual maps of global artificial impervious area (GAIA) between 1985 and 2018. Remote Sensing of Environment, 236, 111510.',
-        sourceUrl: []
+        sourceName: 'Gong et al 2020',
+        sourceUrl: 'http://doi.org/10.1016/j.rse.2019.111510%5D'
     },
     'Imperviousness':
     {
