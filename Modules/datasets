@@ -729,14 +729,15 @@ var rasters = {
             visParams:
             {
                 palette: [
-                    '440154',
-                    '433982',
-                    '30678d',
-                    '218f8b',
-                    '36b677',
-                    '8ed542',
-                    'fde725'
-                ], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
+                    
+    "352a87",
+    "056ede",
+    "089bce",
+    "33b7a0",
+    "a3bd6a",
+    "f9bd3f",
+    "f9fb0e"
+                  ], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
                 min: 0,
                 max: 30,
                 opacity: 0.7
@@ -806,4 +807,4 @@ exports.rasters = rasters
 //testing
 //Map.addLayer(image6)
 print(rasters)
-Map.addLayer(rasters.landCover.layer)
+//Map.addLayer(rasters.landCover.layer)
