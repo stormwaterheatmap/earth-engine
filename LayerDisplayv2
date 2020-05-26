@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var DEM = ee.Image("WWF/HydroSHEDS/15ACC");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* /Map with clickable heatmap layers showing: 
 1. Landcover 
 2. Hydrology 
@@ -12,6 +15,9 @@
   b. One constituent. 
 */ 
 //Load Datasets from the dataset module 
+
+
+
 var datasets = require(
      'users/stormwaterheatmap/apps:Modules/datasets');
  var rasters = datasets.rasters
@@ -234,7 +240,9 @@ var imageSelect = ui.Select({
     var key = (layersToShow[value])
     var layerObject = rasters[key]
     var layer = layerObject.layer
-    map.addLayer(layer.eeObject,layer.visParams,layer.name)
+    
+    var layerImg = layer.eeObject
+    map.addLayer(layerImg,layer.visParams,layer.name)
     //add the legend
       //what type of legend 
       if (layerObject.discrete) {
