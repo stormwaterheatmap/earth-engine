@@ -139,7 +139,7 @@ var thresholds = ee.Image([5.0, 15,
     100]);
 var slopeZone = ee.Terrain.slope(NED)
     .gt(thresholds)
-    .reduce('sum');
+    .reduce('sum').clip(PugetSound);
 exports.slope = slopeZone;
 /*var imp = landcover.eq(6).or(landcover.eq(7)).multiply(ee
     .Image(100))
