@@ -213,11 +213,13 @@ var Runoff = layerdict.get('Runoff')
 
 var layersToShow =({
   "Landcover": "landCover",
+  "Land Use": "landUse",
   "Slope Categories":"Slope",
   "Slope": "SlopeCont",
   "Soils": "Soils", 
   "Hydrology - Mean annual runoff": "Runoff_in",
   "Hydrology - Flow Duration Index": "Flow Duration Index", 
+  "Hydrology - HSPF land cover classes": "hspfLandCover",
   "Age of Imperviousness": "Age of Imperviousness", 
   "Mean Annual Preciptation":"Precipitation",
   "Traffic":"Traffic"
