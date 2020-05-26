@@ -260,6 +260,14 @@ var imageSelect = ui.Select({
     var infoLabel = ui.Label({value:layerObject.layer.name, 
     style:fonts.b2})
     infoPanel.add(infoLabel)
+    //add description table 
+    if (layerObject.discrete) {
+    var desc = ui.Label("Layer Dictionary")
+    var lab = ee.List(layerObject.labels)
+    var vals = ee.List(layerObject.values)
+    var tab = ui.Chart.array.values(vals,0,lab).setChartType('Table')
+    infoPanel.add((desc))
+    infoPanel.add(tab)}
     //MapOnclick property
     map.add(dataPanel)
 
