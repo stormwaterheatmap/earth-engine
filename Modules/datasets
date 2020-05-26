@@ -53,7 +53,7 @@ var lithology = ee.Image(
     .select('b1');
 var hspfLayers = require(
     'users/stormwaterheatmap/source_data:hspfLayers');
-var mean_annual_runoff = hspfLayers.mean_annual_runoff.focal_mean()
+var mean_annual_runoff = hspfLayers.mean_annual_runoff.focal_mean(2)
 var fdr = hspfLayers.fdr.focal_mean() 
 //------pollutant loads     
 
@@ -297,7 +297,7 @@ var rasters = {
         },
         discrete: false,
         values: null,
-        units: 'years',
+        units: 'year of most recent change',
         labels: null,
         vizType: 'bigNumberPercent',
         sourceName: 'Gong et al 2020',
