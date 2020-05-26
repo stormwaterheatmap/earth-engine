@@ -32,6 +32,9 @@ var infoPanel = ui.Panel()
 var colors = Style.colors
 ///----------------------------------------------------------------------
 ///---functions
+// Apply a non-linear stretch to the population data for visualization.
+
+
 function handleMapClick(location) {
   selectedPoints.push([location.lon, location.lat]);
   updateOverlay();
