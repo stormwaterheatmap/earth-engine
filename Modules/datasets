@@ -234,8 +234,8 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
             },
 ---------------------------
 */ //updated 5/26/2020
-var imperviousAge = (ee.Image("Tsinghua/FROM-GLC/GAIA/v10"))
-.rename("change_year_index").clip(PugetSound)//.mask(soils.neq(4))
+var imperviousAge = ee.Image(2019).subtract((ee.Image("Tsinghua/FROM-GLC/GAIA/v10"))
+.rename("change_year_index")).focal_mean(2).clip(PugetSound)//.mask(soils.neq(4))
 
 
 
@@ -281,17 +281,17 @@ var rasters = {
             visParams:
             {
                 palette: [
-    "e9f6ab",
-    "d3c671",
-    "bf9747",
-    "a1703b",
-    "795338",
-    "4d392d",
-    "221f1b"
+  "d53e4f",
+  "fc8d59",
+  "fee08b",
+  "ffffbf",
+  "e6f598",
+  "99d594",
+  "3288bd"
 
                 ],
-                min: 0,
-                max: 34,
+                min: 1985,
+                max: 2018,
                 opacity: 0.6,
             }
         },
