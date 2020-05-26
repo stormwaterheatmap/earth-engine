@@ -105,14 +105,14 @@ var barLegend = function (obj) {
     );
 
     var unitlabel = (ui.Label(obj.units))
+    var sourceName = (ui.Label({value:obj.sourceName,style:fonts.Caption3,targetUrl:obj.sourceUrl}))
     var barTitle = (ui.Label({
-        
         value: obj.layer.name,
         style: fonts.LegendTitle
     }))
 
     var barPanel = ui.Panel({
-        widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel],
+        widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel,sourceName],
         style: {
             position: 'bottom-left',
             padding: '12px'
