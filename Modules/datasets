@@ -53,7 +53,7 @@ var lithology = ee.Image(
     .select('b1');
 var hspfLayers = require(
     'users/stormwaterheatmap/source_data:hspfLayers');
-var mean_annual_runoff = hspfLayers.mean_annual_runoff.focal_mean(2)
+
 var fdr = hspfLayers.fdr.focal_mean() 
 //------pollutant loads     
 
@@ -135,6 +135,7 @@ var water = tncLC.neq(5)
 var imp = tncLC.eq(6)
     .or(tncLC.eq(7))
 var imp = imp.updateMask(water)
+var mean_annual_runoff = hspfLayers.mean_annual_runoff.focal_mean(2).mask(tncLC.neq(0))
 var soils = ee.Image("users/stormwaterheatmap/soilsunmask5m").clip(PugetSound)
 //Generate slopes from USGS DEM 
 var thresholds = ee.Image([5.0, 15,
