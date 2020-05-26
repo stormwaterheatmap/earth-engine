@@ -231,8 +231,43 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
           vizType: 'pieChart'
             },
 ---------------------------
-*/ //updated 8/22/2019
+*/ //updated 5/26/2020
+var imperviousAge = ee.Image(0).blend(ee.Image("Tsinghua/FROM-GLC/GAIA/v10")).rename("change_year_index")
+
+
+
 var rasters = {
+  'Age of Imperviousness':
+    {
+        layer:
+        {
+            eeObject: imperviousAge,
+            name: 'Age of Imperviousness',
+            visParams:
+            {
+                palette: [
+    "e9f6ab",
+    "d3c671",
+    "bf9747",
+    "a1703b",
+    "795338",
+    "4d392d",
+    "221f1b"
+
+                ],
+                min: 1,
+                max: 34,
+                opacity: 0.6,
+            }
+        },
+        discrete: false,
+        values: null,
+        units: [],
+        labels: null,
+        vizType: 'bigNumberPercent',
+        sourceName: 'Gong, P., Li, X., Wang, J., Bai, Y., Chen, B., Hu, T., ... & Zhou, Y. (2020). Annual maps of global artificial impervious area (GAIA) between 1985 and 2018. Remote Sensing of Environment, 236, 111510.',
+        sourceUrl: []
+    },
     'Imperviousness':
     {
         layer:
