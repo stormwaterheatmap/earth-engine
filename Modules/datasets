@@ -36,6 +36,7 @@ var NED = ee.Image("USGS/NED"),
 /*
 Load Image Collections 
 */
+var traffic = ee.Image("users/cnilsen/trafficExport").focal_mean()
 //Population
 var populationDataset = ee
     .ImageCollection(
@@ -237,6 +238,38 @@ var imperviousAge = ee.Image(0).blend(ee.Image("Tsinghua/FROM-GLC/GAIA/v10")).re
 
 
 var rasters = {
+  'Traffic':
+    {
+        layer:
+        {
+            eeObject: traffic.log,
+            name: 'Traffic',
+            visParams:
+            {
+                palette: [
+
+  "#000004",
+  "#320A5A",
+  "#781B6C",
+  "#BB3654",
+  "#EC6824",
+  "#FBB41A",
+  "#FCFFA4"
+
+                ],
+                min: 0,
+                max: 8,
+                opacity: 0.6,
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'Average Annual Daily Trips (log)',
+        labels: null,
+        vizType: 'bigNumberPercent',
+        sourceName: null
+    },
+  
   'Age of Imperviousness':
     {
         layer:
