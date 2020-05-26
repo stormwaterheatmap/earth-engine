@@ -764,16 +764,14 @@ var rasters = {
             name: 'Mean Annual Runoff',
             visParams:
             {
-                palette: [
-                    
-    "352a87",
-    "056ede",
-    "089bce",
-    "33b7a0",
-    "a3bd6a",
-    //"f9bd3f",
-    "f9fb0e"
-                  ], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
+                palette:  ['#00007f',
+                    '#002aff',
+                    '#00d4ff',
+                    '#7fff7f',
+                    '#ffd400',
+                    '#ff2a00',
+                    '#7f0000'
+                ], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
                 min: 5,
                 max: 30,
                 opacity: 0.7
