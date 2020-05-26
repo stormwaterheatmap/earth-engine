@@ -247,7 +247,7 @@ var imageSelect = ui.Select({
     //add the info
     
     var infoLabel = ui.Label({value:layerObject.layer.name, 
-    style:fonts.b1})
+    style:fonts.b2})
     infoPanel.add(infoLabel)
     //MapOnclick property
     map.add(dataPanel)
@@ -275,7 +275,7 @@ var imageSelect = ui.Select({
     // Add a label with the results from the server.
     inspector.add(ui.Label({
       value: 'Value: ' + result.toFixed(2),
-      style: {stretch: 'vertical'}
+      style: {stretch: 'vertical',fontFamily: "monospace"}
     }));
 
     // Add a button to hide the Panel.
