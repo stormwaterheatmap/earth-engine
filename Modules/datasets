@@ -356,7 +356,7 @@ var rasters = {
         units: 'in/year',
         labels: null,
         vizType: 'bigNumberMean',
-        sourceName: 'Salathé, EP, AF Hamlet, CF Mass M Stumbaugh, S-Y Lee, R Steed: Estimates of 21st Century Flood Risk in the Pacific Northwest Based on Regional Scale Climate Model Simulations.',
+        sourceName: 'Salathé et al 2019',
         sourceUrl: 'https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/'
     },
     'Flow Duration Index':
