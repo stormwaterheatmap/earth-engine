@@ -37,7 +37,7 @@ var NED = ee.Image("USGS/NED"),
 Load Image Collections 
 */
 var traffic = (ee.Image(0).blend(
-  ee.Image("users/cnilsen/trafficExport").log()).focal_mean())
+  ee.Image("users/cnilsen/trafficExport").log()).focal_mean(2))
 //Population
 var populationDataset = ee
     .ImageCollection(
