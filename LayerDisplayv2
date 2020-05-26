@@ -23,6 +23,7 @@ var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
 var infoPanel = ui.Panel()
+var colors = Style.colors
 ///----------------------------------------------------------------------
 ///---functions
 function handleMapClick(location) {
@@ -115,7 +116,7 @@ ui.root.clear();
 //ui.root.setLayout(ui.Panel.Layout.Flow("horizontal"))
 var panel = ui.Panel({
         style: {
-             width:'30%', //the golden ratio!
+             width:'300px', 
             backgroundColor: 'whitesmoke',
             //  border: '1px solid silver',
             //margin:'0',
@@ -124,9 +125,26 @@ var panel = ui.Panel({
             //stretch: 'horizontal'
         }
     })
-panel.add(ui.Label("Puget Sound Stormwater Heatmap"))
+var title = ui.Label({value:"Puget Sound Stormwater Heatmap",style:fonts.H1})
+title.style().set({backgroundColor: 'whitesmoke'})
+var instructions = ui.Label({value:"This map is intended for Science Panel review. Selected data layers are provided below",style:fonts.b1})
+var dropTitle = ui.Label({value:"Choose a layer:"})
+instructions.style().set({fontWeight:"400",backgroundColor: colors.transparent})
+dropTitle.style().set({fontWeight:"600",backgroundColor: colors.transparent})
+
+panel.add(title)
+panel.add(instructions)
+panel.add(dropTitle)
+
 
 var map = ui.Map({onClick:ins}) 
+map.setOptions('Dark', Style.mapStyles)
+    map.setControlVisibility({
+        all: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        layerList: true,
+        fullscreenControl: true})
 map.setCenter(-122,48,8)
 var ins = map.onClick(function(coords) {
   // Show the loading label.
@@ -161,8 +179,11 @@ ui.root.add(panel).add(map);
 print(ui.root.getLayout())
 ///PanelFunction 
 // Create a panel and add it to the map.
-var inspector = ui.Panel({widgets:[ui.Label('Click on the point')],style:{position:'top-left'}});
-
+var dataPanel = ui.Panel( ui.Label({value: 'Data Inspector',style:fonts.H3}))
+dataPanel.style().set({position:'top-left'})
+var inspector = ui.Panel({widgets:[
+  ui.Label('Click on the point')],style:{position:'top-left'}});
+dataPanel.add(inspector)
 
 
 //Map a selector with the layers
@@ -198,7 +219,15 @@ var imageSelect = ui.Select({
   items: select_items,
   onChange: function(value) {
     //clear layers 
-    map.clear()
+    inspector.style().set('shown', false)
+    infoPanel.clear()
+    map.clear().setOptions('Dark', Style.mapStyles)
+    map.setControlVisibility({
+        all: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        layerList: true,
+        fullscreenControl: true})
     //add the layer 
     var key = (layersToShow[value])
     var layerObject = rasters[key]
@@ -214,12 +243,12 @@ var imageSelect = ui.Select({
     map.add(legend) 
 
     //add the info
-    infoPanel.clear()
-    var infoLabel = ui.Label({value:layerObject.layer.name.concat(
-      layerObject.sourceName), style:fonts.b1})
+    
+    var infoLabel = ui.Label({value:layerObject.layer.name, 
+    style:fonts.b1})
     infoPanel.add(infoLabel)
     //MapOnclick property
-    map.add(inspector)
+    map.add(dataPanel)
 
 // Set the default map's cursor to a "crosshair".
   map.style().set('cursor', 'crosshair');
