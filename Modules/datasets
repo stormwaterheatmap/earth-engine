@@ -735,10 +735,10 @@ var rasters = {
     "089bce",
     "33b7a0",
     "a3bd6a",
-    "f9bd3f",
+    //"f9bd3f",
     "f9fb0e"
                   ], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
-                min: 0,
+                min: 5,
                 max: 30,
                 opacity: 0.7
             }
