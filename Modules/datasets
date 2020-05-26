@@ -511,9 +511,8 @@ var rasters = {
     {
         layer:
         {
-            eeObject: ee.Image(
-                "users/stormwaterheatmap/landcover_2m"
-                ),
+            eeObject: hspfLayers.hspf_landcover
+                ,
             name: 'Land Cover',
             visParams:
             {
