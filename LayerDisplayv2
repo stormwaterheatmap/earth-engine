@@ -138,12 +138,15 @@ var panel = ui.Panel({
 var title = ui.Label({value:"Puget Sound Stormwater Heatmap",style:fonts.H1})
 title.style().set({backgroundColor: 'whitesmoke'})
 var instructions = ui.Label({value:"This map is intended for Science Panel review. Selected data layers are provided below",style:fonts.b1})
+var instructions2 = ui.Label({value: "See the Technical Reference for more information",style: fonts.Caption2,targetUrl: 'https://stormwaterheatmap.github.io/docs/reference/'})
 var dropTitle = ui.Label({value:"Choose a layer to view:"})
 instructions.style().set({fontWeight:"400",backgroundColor: colors.transparent})
+instructions2.style().set({backgroundColor: colors.transparent})
 dropTitle.style().set({fontWeight:"600",backgroundColor: colors.transparent})
 
 panel.add(title)
 panel.add(instructions)
+
 panel.add(dropTitle)
 
 
@@ -216,7 +219,8 @@ var layersToShow =({
   "Hydrology - Mean annual runoff": "Runoff_in",
   "Hydrology - Flow Duration Index": "Flow Duration Index", 
   "Age of Imperviousness": "Age of Imperviousness", 
-  "Mean Annual Preciptation":"Mean Annual Preciptation"
+  "Mean Annual Preciptation":"Preciptation",
+  "Traffic":"Traffic"
 //"Pollutant Loading - Total Copper concentration": "Lithology",
 //"Pollutant Loading - Total Copper Load": "Slope"
 })
@@ -315,4 +319,4 @@ var imageSelect = ui.Select({
 
 panel.add(imageSelect)
 panel.add(infoPanel)
-
+panel.add(instructions2)
