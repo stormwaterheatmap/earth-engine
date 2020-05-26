@@ -106,6 +106,7 @@ var barLegend = function (obj) {
 
     var unitlabel = (ui.Label(obj.units))
     var barTitle = (ui.Label({
+        
         value: obj.layer.name,
         style: fonts.LegendTitle
     }))
@@ -259,15 +260,15 @@ var imageSelect = ui.Select({
     
     var infoLabel = ui.Label({value:layerObject.layer.name, 
     style:fonts.b2})
-    infoPanel.add(infoLabel)
+    //infoPanel.add(infoLabel)
     //add description table 
     if (layerObject.discrete) {
     var desc = ui.Label("Layer Dictionary")
     var lab = ee.List(layerObject.labels)
     var vals = ee.List(layerObject.values)
     var tab = ui.Chart.array.values(vals,0,lab).setChartType('Table')
-    infoPanel.add((desc))
-    infoPanel.add(tab)}
+    //dataPanel.add((desc))
+    dataPanel.add(tab)}
     //MapOnclick property
     map.add(dataPanel)
 
