@@ -234,7 +234,8 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
             },
 ---------------------------
 */ //updated 5/26/2020
-var imperviousAge = ee.Image(0).blend(ee.Image("Tsinghua/FROM-GLC/GAIA/v10")).rename("change_year_index")
+var imperviousAge = ee.Image(0).blend(ee.Image("Tsinghua/FROM-GLC/GAIA/v10"))
+.rename("change_year_index").clip(PugetSound)
 
 
 
