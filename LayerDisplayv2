@@ -128,7 +128,7 @@ var panel = ui.Panel({
 var title = ui.Label({value:"Puget Sound Stormwater Heatmap",style:fonts.H1})
 title.style().set({backgroundColor: 'whitesmoke'})
 var instructions = ui.Label({value:"This map is intended for Science Panel review. Selected data layers are provided below",style:fonts.b1})
-var dropTitle = ui.Label({value:"Choose a layer:"})
+var dropTitle = ui.Label({value:"Choose a layer to view:"})
 instructions.style().set({fontWeight:"400",backgroundColor: colors.transparent})
 dropTitle.style().set({fontWeight:"600",backgroundColor: colors.transparent})
 
@@ -180,7 +180,9 @@ print(ui.root.getLayout())
 ///PanelFunction 
 // Create a panel and add it to the map.
 var dataPanel = ui.Panel( ui.Label({value: 'Data Inspector',style:fonts.H3}))
-dataPanel.style().set({position:'top-left'})
+dataPanel.style().set({position:'bottom-right',width:"300px",height:"80%"})
+var placeholderText = ui.Label('Click on a point to display data')
+dataPanel.add(placeholderText)
 var inspector = ui.Panel({widgets:[
   ui.Label('Click on the point')],style:{position:'top-left'}});
 dataPanel.add(inspector)
@@ -198,7 +200,7 @@ var Runoff = layerdict.get('Runoff')
 
 var layersToShow =({
   "Landcover": "landCover",
-  "Slope Classes":"Slope",
+  "Slope Categories":"Slope",
   "Slope": "SlopeCont",
   "Soils": "Soils", 
   "Hydrology - Mean annual runoff": "Runoff_in",
@@ -278,7 +280,7 @@ var imageSelect = ui.Select({
 
     // Add a button to hide the Panel.
     inspector.add(ui.Button({
-      label: 'Close',
+      label: 'Clear',
       onClick: function() {
         inspector.style().set('shown', false);
       }
