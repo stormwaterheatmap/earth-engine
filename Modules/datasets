@@ -292,7 +292,7 @@ var rasters = {
 
                 ],
                 min: 1985,
-                max: 2019,
+                max: 2017,
                 opacity: 0.6,
             }
         },
