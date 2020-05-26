@@ -443,7 +443,7 @@ var rasters = {
         layer:
         {
             eeObject: ee.Terrain
-                .slope(NED),
+                .slope(NED).clip(PugetSound),
             name: 'Slope',
             visParams:
             {
