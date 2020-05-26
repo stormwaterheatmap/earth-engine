@@ -49,9 +49,10 @@ var population = populationDataset
 var lithology = ee.Image(
         'CSP/ERGo/1_0/US/lithology')
     .select('b1');
-var mean_annual_runoff = ee.Image(
-    "users/cnilsen/Runoff1980s5m");
+var mean_annual_runoff = hspfLayers.mean_annual_runoff
 //------pollutant loads     
+var hspfLayers = require(
+    'users/stormwaterheatmap/source_data:hspflayers');
 
 //var palettes = require(
 //    'users/gena/packages:palettes');
