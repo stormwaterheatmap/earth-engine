@@ -494,7 +494,7 @@ var rasters = {
             5, 6, 7
         ],
         units: null,
-        labels: ['No data', 'Grass',
+        labels: ['No data', 'Grass/Low Vegetation',
             'Shrub/Medium Vegetation',
             'Trees/Forest',
             'Bare soil',
