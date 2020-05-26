@@ -180,7 +180,7 @@ print(ui.root.getLayout())
 ///PanelFunction 
 // Create a panel and add it to the map.
 var dataPanel = ui.Panel( ui.Label({value: 'Data Inspector',style:fonts.H3}))
-dataPanel.style().set({position:'bottom-right',width:"300px",height:"80%"})
+dataPanel.style().set({position:'bottom-right',width:"300px"})
 var placeholderText = ui.Label('Click on a point to display data')
 dataPanel.add(placeholderText)
 var inspector = ui.Panel({widgets:[
@@ -204,7 +204,7 @@ var layersToShow =({
   "Slope": "SlopeCont",
   "Soils": "Soils", 
   "Hydrology - Mean annual runoff": "Runoff_in",
-  "Hydrology - Flow Duration Index": "Runoff_in", 
+  "Hydrology - Flow Duration Index": "Flow Duration Index", 
 "Pollutant Loading - Total Copper concentration": "Lithology",
 "Pollutant Loading - Total Copper Load": "Slope"})
 var select_items = Object.keys(layersToShow)
