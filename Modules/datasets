@@ -792,16 +792,10 @@ var rasters = {
             name: 'Total Copper concentration',
             visParams:
             {
-                palette: ['#00007f',
-                    '#002aff',
-                    '#00d4ff',
-                    '#7fff7f',
-                    '#ffd400',
-                    '#ff2a00',
-                    '#7f0000'
+                palette: ['#00204c','#a59c74','#d3c064','#ffe945'
                 ],
                 min: 0,
-                max: 300,
+                max: 200,
                 opacity: 0.6
             }
         },
