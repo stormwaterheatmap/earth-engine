@@ -218,7 +218,8 @@ var layersToShow =({
   "Hydrology - HSPF land cover classes": "hspfLandCover",
   "Age of Imperviousness": "Age of Imperviousness", 
   "Mean Annual Preciptation":"Precipitation",
-  "Traffic":"Traffic"
+  "Traffic":"Traffic", 
+  "Pollutant Concentration -  Total Copper":"Total Copper"
 //"Pollutant Loading - Total Copper concentration": "Lithology",
 //"Pollutant Loading - Total Copper Load": "Slope"
 })
