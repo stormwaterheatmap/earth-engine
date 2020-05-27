@@ -814,9 +814,9 @@ var rasters = {
             name: 'Total Copper Load',
             visParams:
             {
-                palette: ['#00204c','#a59c74','#d3c064','#ffe945'],
-                min: 100,
-                max: 1000,
+                palette: ['#00204c','#a59c74','#d3c064','#ffe945','#ffffff'],
+                min: 0,
+                max: 200,
                 opacity: 0.6
             }
         },
