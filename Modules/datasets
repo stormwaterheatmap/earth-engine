@@ -810,7 +810,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: mean_annual_runoff.multiply(wq.select(["Total Copper"]).divide(1000000000)),
+            eeObject: mean_annual_runoff.multiply(wq.select(["Total Copper"]).divide(1000)),
             name: 'Total Copper Load',
             visParams:
             {
@@ -822,7 +822,7 @@ var rasters = {
         },
         discrete: false,
         values: null,
-        units: 'kg/m² per year',
+        units: 'mg/m² per year',
         labels: null, //['Pervious', 'Impervious'],
         vizType: 'histogram'
         //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
