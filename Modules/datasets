@@ -53,6 +53,7 @@ var lithology = ee.Image(
     .select('b1');
 var hspfLayers = require(
     'users/stormwaterheatmap/source_data:hspfLayers');
+var wq = require('users/stormwaterheatmap/source_data:WQ2').concentrations
 
 var fdr = hspfLayers.fdr.focal_mean() 
 //------pollutant loads     
@@ -779,6 +780,34 @@ var rasters = {
         discrete: false,
         values: null,
         units: 'in/year',
+        labels: null, //['Pervious', 'Impervious'],
+        vizType: 'histogram'
+        //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
+    },
+    'Total Copper':
+    {
+        layer:
+        {
+            eeObject: wq.select["Total Copper"],
+            name: 'Total Copper concentration',
+            visParams:
+            {
+                palette: ['#00007f',
+                    '#002aff',
+                    '#00d4ff',
+                    '#7fff7f',
+                    '#ffd400',
+                    '#ff2a00',
+                    '#7f0000'
+                ],
+                min: 0,
+                max: 300,
+                opacity: 0.6
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'µg',
         labels: null, //['Pervious', 'Impervious'],
         vizType: 'histogram'
         //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
