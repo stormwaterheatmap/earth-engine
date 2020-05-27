@@ -219,7 +219,8 @@ var layersToShow =({
   "Age of Imperviousness": "Age of Imperviousness", 
   "Mean Annual Preciptation":"Precipitation",
   "Traffic":"Traffic", 
-  "Pollutant Concentration -  Total Copper":"Total Copper"
+  "Pollutant Concentration -  Total Copper":"Total Copper",
+  "Pollutant Load -  Total Copper": "Total Copper Load"
 //"Pollutant Loading - Total Copper concentration": "Lithology",
 //"Pollutant Loading - Total Copper Load": "Slope"
 })
