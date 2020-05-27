@@ -806,6 +806,27 @@ var rasters = {
         vizType: 'histogram'
         //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
     },
+    'Total Copper Load':
+    {
+        layer:
+        {
+            eeObject: mean_annual_runoff.multiply(wq.select(["Total Copper"]).divide(1000000000)),
+            name: 'Total Copper Load',
+            visParams:
+            {
+                palette: ['#00204c','#a59c74','#d3c064','#ffe945'],
+                min: 100,
+                max: 1000,
+                opacity: 0.6
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'kg/m² per year',
+        labels: null, //['Pervious', 'Impervious'],
+        vizType: 'histogram'
+        //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
+    },
     // 'DissolvedCopper':
     // {
     //     layer:
