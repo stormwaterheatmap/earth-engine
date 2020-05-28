@@ -220,11 +220,12 @@ var layersToShow =({
   "Mean Annual Preciptation":"Precipitation",
   "Traffic":"Traffic", 
   "Pollutant Concentration -  Total Copper":"Total Copper",
-  "Pollutant Load -  Total Copper": "Total Copper Load"
+  "Pollutant Load -  Total Copper": "Total Copper Load",
+  "Population Count": "Population"
 //"Pollutant Loading - Total Copper concentration": "Lithology",
 //"Pollutant Loading - Total Copper Load": "Slope"
-})
-var select_items = Object.keys(layersToShow)
+}) //sort alphabetically 
+var select_items = Object.keys(layersToShow).sort()
 //var select_vals = Object.values(layersToShow)
 print(layersToShow,'layerstoshow')
 var lc = (rasters["landCover"])
@@ -290,11 +291,11 @@ var imageSelect = ui.Select({
   inspector.style().set('shown', true);
   inspector.add(ui.Label('Loading...', {color: 'gray'}));
 
-  // Compute the mean NDVI; a potentially long-running server operation.
+
   var point = ee.Geometry.Point(coords.lon, coords.lat);
-  var temporalMean = (layer.eeObject).reduce(ee.Reducer.mean());
+  var temporalMean = (layer.eeObject).reduce(ee.Reducer.mode());
   var sampledPoint = temporalMean.reduceRegion(ee.Reducer.first(), point, 30);
-  var computedValue = sampledPoint.get('mean');
+  var computedValue = sampledPoint.get('mode');
   
   // Request the value from the server and use the results in a function.
   computedValue.evaluate(function(result) {
