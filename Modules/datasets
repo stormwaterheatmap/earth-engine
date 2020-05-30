@@ -65,6 +65,7 @@ var fdr = hspfLayers.fdr.focal_mean()
 Images 
 */
 var gap = require("users/stormwaterheatmap/source_data:HSPF_LCUpdate").gapRemap
+Map.addLayer(gap)
 //Precipitation
 var precip = ee.Image(
     "users/stormwaterheatmap/CigP2500"
