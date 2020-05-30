@@ -821,8 +821,8 @@ var rasters = {
             visParams:
             {
                 //palette:  ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
-                min: 0,
-                max:576,
+                //min: 0,
+                //max:576,
                 opacity: 0.7
             }
         },
