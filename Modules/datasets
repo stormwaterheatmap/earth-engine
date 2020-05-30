@@ -64,8 +64,11 @@ var fdr = hspfLayers.fdr.focal_mean()
 /*
 Images 
 */
-var gap = require("users/stormwaterheatmap/source_data:HSPF_LCUpdate").gapRemap
-Map.addLayer(gap)
+var gapRemap = require("users/stormwaterheatmap/source_data:HSPF_LCUpdate").gapRemap
+Map.addLayer(gapRemap)
+var gap = ee.Image("USGS/GAP/CONUS/2011")
+
+
 //Precipitation
 var precip = ee.Image(
     "users/stormwaterheatmap/CigP2500"
@@ -789,7 +792,7 @@ var rasters = {
     'GAP_remap':  {
         layer:
         {
-            eeObject: gap,
+            eeObject: gapRemap,
             name: 'USGS GAP CONUS 2011',
             visParams:
             {
