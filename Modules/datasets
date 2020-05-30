@@ -1409,7 +1409,8 @@ var rasters = {
 ], //['Pervious', 'Impervious'],
         vizType: 'histogram',
         sourceName: gap.get('title'),
-        sourceUrl: gap.get('provider_url'),
+        sourceUrl: gap.get('provider_url')
+        },
     'Total Copper':
     {
         layer:
