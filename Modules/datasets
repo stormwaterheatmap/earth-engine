@@ -15,7 +15,8 @@ var NED = ee.Image("USGS/NED"),
     dissolvedCopperConcentration = ee.Image("users/cnilsen/disCopper5m"),
     image2 = ee.Image("users/stormwaterheatmap/soils2m"),
     soils = ee.Image("users/stormwaterheatmap/soils2m"),
-    PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound");
+    PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound"),
+    imageVisParam = {"opacity":1,"bands":["constant"],"min":11,"palette":["f0e992","ca7014","69d25f"]};
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 // Author: Christian Nilsen, Geosyntec Consultants 
@@ -796,24 +797,20 @@ var rasters = {
             name: 'USGS GAP CONUS 2011',
             visParams:
             {
-                palette:  ['#00007f',
-                    '#002aff',
-                    '#00d4ff',
-                    '#7fff7f',
-                    '#ffd400',
-                    '#ff2a00',
-                    '#7f0000'
+                palette:  ['f0e992','ca7014','69d25f'
                 ], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
-                min: 1,
-                max: 584,
+                min: 11,
+                max: 13,
                 opacity: 0.7
             }
         },
-        discrete: false,
-        values: null,
-        units: 'in/year',
+        discrete: true,
+        values: ['Pasture','Saturated Pasture','Grass'],
+        units: null,
         labels: null, //['Pervious', 'Impervious'],
-        vizType: 'histogram'
+        vizType: 'histogram',
+        sourceName: gap.get('title'),
+        sourceUrl: gap.get('provider_url')
         //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
     },
     'Total Copper':
