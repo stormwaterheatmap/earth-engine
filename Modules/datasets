@@ -820,7 +820,7 @@ var rasters = {
             name: 'USGS GAP Land Cover Data',
             visParams:
             {
-                palette: gap.get['landcover_class_palette'], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
+                palette: gap.get('landcover_class_palette'), // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
                 min: gap.get('visualization_0_max'),
                 max: gap.get('visualization_0_min'),
                 opacity: 0.7
