@@ -805,9 +805,9 @@ var rasters = {
             }
         },
         discrete: true,
-        values: ['Pasture','Saturated Pasture','Grass'],
+        values: null,
         units: null,
-        labels: null, //['Pervious', 'Impervious'],
+        labels: ['Pasture','Saturated Pasture','Grass'], //['Pervious', 'Impervious'],
         vizType: 'histogram',
         sourceName: gap.get('title'),
         sourceUrl: gap.get('provider_url')
