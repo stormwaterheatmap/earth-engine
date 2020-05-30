@@ -794,7 +794,7 @@ var rasters = {
         layer:
         {
             eeObject: gapRemap,
-            name: 'Remapped Pervious from USGS GAP Landcover',
+            name: 'Remapped Pervious Landcover from USGS GAP Data',
             visParams:
             {
                 palette:  ['f0e992','ca7014','69d25f'
