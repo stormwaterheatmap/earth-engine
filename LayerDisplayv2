@@ -207,6 +207,8 @@ var layerdict = ee.Dictionary(rasters)
 var Runoff = layerdict.get('Runoff')
 
 var layersToShow =({
+  "USGS GAP Landcover":"GAP",
+  "Hydrology - GAP Data used for pasture and grass":"GAP_remap",
   "Landcover": "landCover",
   "Land Use": "landUse",
   "Imperviousness": "Imperviousness",
