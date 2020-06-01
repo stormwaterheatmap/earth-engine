@@ -44,4 +44,4 @@ var title = ui.Label({value:
 style:{position:"bottom-left"}})
 Map.addLayer(s8_watersheds)
 Map.add(title)
-
+Map.centerObject(s8_watersheds.first(),12)
