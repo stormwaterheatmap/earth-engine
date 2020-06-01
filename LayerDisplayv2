@@ -7,7 +7,7 @@ var DEM = ee.Image("WWF/HydroSHEDS/15ACC");
    a. Mean annual runoff 
    b. Flow Duration Index 
    c. HRUs 
-    - soils 
+    - soils
     - slopes
     - HSPF Landcover  
 3. Water Quality 
