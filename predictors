@@ -1,0 +1,47 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("users/stormwaterheatmap/predictors_convolved"),
+    imageVisParam = {"opacity":1,"bands":["population","logTraffic","impervious"],"min":-0.07505082716607447,"max":0.7109705969535312,"gamma":1};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+var predImage = ee.Image("users/cnilsen/predictors_not_scaled_30")
+var s8_watersheds = ee.FeatureCollection("users/cnilsen/s8_watersheds").select(
+    ['Location_N'], ['Location']
+    ).filter(ee.Filter.neq('Location_N','POSOUTFALL_60'))
+
+var s8List = {TFWFD1: {Lon:-122.4304751, Lat: 47.20415024},
+SEAI1S8D_OUT: {Lon:-122.2776301, Lat: 47.51420579},
+TAC001S8D_OF2: {Lon:-122.4395764, Lat: 47.24577693},
+TAC003S8D_OF2: {Lon:-122.4204566, Lat: 47.23909413},
+PIEHIRES_OUT: {Lon:-122.3175927, Lat: 47.13009025},
+PIELORES_OUT: {Lon:-122.6395466, Lat: 47.32489753},
+SNO_COM: {Lon:-122.2439709, Lat: 47.88238628},
+SNO_LDR: {Lon:-122.1014385, Lat: 47.8640767},
+SEAC1S8D_OUT: {Lon:-122.3151072, Lat: 47.66188192},
+POSOUTFALL_60: {Lon:-122.4053428, Lat: 47.68067917},
+SEAR1S8D_OUT: {Lon:-122.3564698, Lat: 47.71886038},
+POT564S8D_OUT: {Lon:-122.4139554, Lat: 47.26940901},
+PIECOMM_OUT: {Lon:-122.3566406, Lat: 47.15435407},
+SNO_HDR: {Lon:-122.1915391, Lat: 47.84740081},
+KICCOMS8D_OUT: {Lon:-121.8890867, Lat: 47.56576596},
+KICLDRS8D_OUT: {Lon:-122.1430769, Lat: 47.51101808},
+KICHDRS8D_OUT: {Lon:-121.8940183, Lat: 47.56450102}}
+print(Object.keys(s8List))
+
+var sel = ui.Select({items:
+  Object.keys(s8List),
+    //zoom to layer 
+  onChange: function(key) {
+    print(s8List[key])
+   var lat = ee.Number(s8List[key]["Lat"])
+   var long = ee.Number(s8List[key]["Lon"])
+    Map.setCenter(s8List[key]["Lon"], s8List[key]["Lat"],12);
+  }
+  })
+Map.add(ui.Panel({widgets:[ui.Label('Select a watershed'), sel],style:{position:'top-left'}}))
+Map.addLayer(predImage,imageVisParam,"predictors image")
+var title = ui.Label({value:
+'Predictor image: Red band - population, \n Blue band: logTraffic, Green band: impervious',
+style:{position:"bottom-left"}})
+Map.addLayer(s8_watersheds)
+Map.add(title)
+
