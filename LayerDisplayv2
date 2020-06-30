@@ -228,8 +228,10 @@ var layersToShow =({
 //"Pollutant Loading - Total Copper Load": "Slope"
 }) //sort alphabetically 
 var select_items = Object.keys(layersToShow).sort()
+
 //var select_vals = Object.values(layersToShow)
 print(layersToShow,'layerstoshow')
+print(select_items)
 var lc = (rasters["landCover"])
 print(lc,'lc')
 print(lc.labels,'units')
