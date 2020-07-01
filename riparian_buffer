@@ -1,0 +1,222 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("RESOLVE/ECOREGIONS/2017"),
+    image = ee.Image("users/cnilsen/studyArea2"),
+    roads = ee.FeatureCollection("TIGER/2016/Roads"),
+    imageCollection = ee.ImageCollection("USDA/NAIP/DOQQ"),
+    geometry = /* color: #d63000 */ee.Geometry.Polygon(
+        [[[-122.3849912463254, 47.56157232377808],
+          [-122.49415145665705, 47.51242906839043],
+          [-122.51270731077852, 47.459536871863975],
+          [-122.49279459105196, 47.25300644692031],
+          [-121.95995767698946, 47.23715772925121],
+          [-121.6818662463254, 47.218972478714974],
+          [-121.67362650023165, 47.295867439286894],
+          [-121.83086832152071, 47.39682598260455],
+          [-122.18517740355196, 47.48460030804412],
+          [-122.25727518187227, 47.50594121485023],
+          [-122.34585245238009, 47.595385712556954]]]),
+    imageVisParam = {"opacity":0.76,"bands":["nd"],"palette":["ffffff","008000"]},
+    imageVisParam2 = {"opacity":0.76,"bands":["nd"],"palette":["e44616","008000"]},
+    image2 = ee.Image("users/cnilsen/Sammamish/dtm1"),
+    streams = ee.FeatureCollection("users/cnilsen/OGD_Assets/selected_watercourses"),
+    image3 = ee.Image("users/cnilsen/kcDSM_51Projected");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+//Start with Tiger Roads - use cummulative cost map fuzz the edges  
+var sources = ee.Image().toByte().paint(roads, 20);
+var cost = ee.Image(1)
+    .clip(geometry); 
+//inverse the cost function 
+var cumulativeCost = cost.cumulativeCost(
+{
+    source: sources,
+    maxDistance: 30 
+});
+var cumulativeCost = ee.Image(1)
+    .divide(cumulativeCost)
+//Map.addLayer(cumulativeCost,{}, 'cost', 0);
+
+//import NAIP this takes all images collected in the last four years
+var bands = ["R", "G", "B", "N"]; 
+var img = imageCollection
+    .filterDate('2017-01-01', '2019-01-01')
+    .filterBounds(geometry);
+
+//Map NDVI over the image collection 
+var withNDVI = img.map(
+    function (image)
+    {
+        var ndvi = image.normalizedDifference(['N', 'R'])
+            .rename('NDVI');
+        return image.addBands(ndvi);
+    }
+);
+//Map.addLayer(withNDVI,{}, 'withNDVI', 0);
+
+//take the maximum NDVI value 
+var maxNDVI = withNDVI.select('NDVI')
+    .max();
+//Map.addLayer(maxNDVI,{}, 'maxNDVI', 0);
+
+//add NAIP 
+//Map.addLayer(img,
+// {
+//     gamma: 0.8
+// }, "RGBN", false)
+var img = img.mean(); //mean of two years in each band
+img = ee.Image(img)
+    .divide(255)
+    .select(bands); //normalizes NAIP
+// //Map.addLayer(img,
+// {}, 'mean', false);
+// Apply a softening.
+var kernel = ee.Kernel.gaussian(3)
+img = img.convolve(kernel)
+// //Map.addLayer(img,
+// {
+//     gamma: 0.8
+// }, "RGBN blur", false)
+
+// Compute spectralGradients.
+var gradient3 = ee.Image.cat(
+    img.spectralGradient('sam'),
+    img.spectralGradient('sid'),
+    img.spectralGradient('sed'))
+// //Map.addLayer(gradient3,
+// {
+//     min: [0.1, 0.1, 0.01],
+//     max: [0.3, 0.3, 0.1]
+// }, "gradient3", false)
+var gradient = img.spectralErosion()
+    .spectralGradient('emd')
+// //Map.addLayer(gradient,
+// {
+//     min: 0,
+//     max: 0.3
+// }, "emd", false)
+// var img = img.clip(geometry); 
+//--------begin segmentation 
+// define seeds 
+var seeds = ee.Algorithms.Image.Segmentation.seedGrid(24, 'square');
+//var ndvi = img.normalizedDifference(["N", "R"])
+var ndvi = maxNDVI;
+var ndviGradient = ndvi.gradient()
+    .pow(2)
+    .reduce('sum')
+    .sqrt()
+// //Map.addLayer(ndviGradient,
+// {}, 'grad', 0);
+// var img = ee.Image.cat(img, ndviGradient)
+//     .clip(geometry); //.addBands(gradient3)
+
+
+var snic = ee.Algorithms.Image.Segmentation.SNIC(
+    {
+        image: img,
+        size: 24,
+        compactness: 0,
+        connectivity: 8,
+        neighborhoodSize: 48,
+        seeds: seeds
+    })
+    .select(
+  ["R_mean", "G_mean", "B_mean", "N_mean", "clusters"],
+  ["R", "G", "B", "N", "clusters"]);
+//var snic = snic.clip(geometry); 
+//var snic = snic.clip(PugetSound)
+var clusters = snic.select("clusters")
+// //Map.addLayer(snic,
+// {}, 'snic', 0);
+
+// //Map.addLayer(clusters.randomVisualizer(),
+// {}, "clusters", 0)
+// //Map.addLayer(snic,
+// {
+//     bands: ["R", "G", "B"],
+//     min: 0,
+//     max: 1,
+//     gamma: 0.8
+// }, "means")
+var snicNDVI = snic.normalizedDifference(["N", "R"]);
+//Map.addLayer(snicNDVI,{},'snicNDVI'); 
+
+
+//calculate histogram for thresholding
+var histogram = snicNDVI.reduceRegion(
+{
+    reducer: ee.Reducer.histogram(255)
+        .combine('mean', null, true)
+        .combine('variance', null, true),
+    geometry: geometry,
+    scale: 10,
+    bestEffort: true
+});
+//print(Chart.image.histogram(snicNDVI, 30));
+
+//implement otsu thresholding  
+var otsu = function(histogram) {
+  var counts = ee.Array(ee.Dictionary(histogram).get('histogram'));
+  var means = ee.Array(ee.Dictionary(histogram).get('bucketMeans'));
+  var size = means.length().get([0]);
+  var total = counts.reduce(ee.Reducer.sum(), [0]).get([0]);
+  var sum = means.multiply(counts).reduce(ee.Reducer.sum(), [0]).get([0]);
+  var mean = sum.divide(total);
+  
+  var indices = ee.List.sequence(1, size);
+  
+  // Compute between sum of squares, where each mean partitions the data.
+  var bss = indices.map(function(i) {
+    var aCounts = counts.slice(0, 0, i);
+    var aCount = aCounts.reduce(ee.Reducer.sum(), [0]).get([0]);
+    var aMeans = means.slice(0, 0, i);
+    var aMean = aMeans.multiply(aCounts)
+        .reduce(ee.Reducer.sum(), [0]).get([0])
+        .divide(aCount);
+    var bCount = total.subtract(aCount);
+    var bMean = sum.subtract(aCount.multiply(aMean)).divide(bCount);
+    return aCount.multiply(aMean.subtract(mean).pow(2)).add(
+           bCount.multiply(bMean.subtract(mean).pow(2)));
+  });
+  
+  //print(ui.Chart.array.values(ee.Array(bss), 0, means));
+  
+  // Return the mean value corresponding to the maximum BSS.
+  return means.sort(bss).get([-1]);
+};
+
+//var hist = snicNDVI.reduceRegion(ee.Reducer.histogram(),geometry); 
+
+//print(histogram); 
+var threshold = otsu(histogram.get('nd_histogram')).max(0);
+print(threshold); 
+
+//classify veg/non veg
+Map.centerObject(geometry,10)
+var nonveg = snicNDVI.lte(threshold);
+var veg = snicNDVI.gt(threshold);
+//Map.addLayer(veg.mask(veg),{palette:'green',min:0,max:1},'veg'); 
+//Map.addLayer(streams,{},'streams',0)
+//var buffer = streams.buffer(91.4);
+
+var cost = ee.Image(1).clipToBoundsAndScale({
+geometry: geometry,  
+  scale: 100
+  }); 
+
+// Classes 60, 80, 110, 140 have cost 1.
+// Classes 40, 90, 120, 130, 170 have cost 2.
+// Classes 50, 70, 150, 160 have cost 3.
+
+var sources = ee.Image().toByte().paint(streams, 1);
+ 
+// Compute the cumulative cost to traverse the land cover.
+var cumulativeCost = cost.cumulativeCost({
+  source: sources,
+  maxDistance: 33 // 300 ft
+}).clip(geometry);
+
+//Map.addLayer(cumulativeCost,{},'cost buffer')
+var vegBuffer = veg.mask(cumulativeCost); 
+Map.addLayer(vegBuffer,imageVisParam2,'vegBuffer',0)
+//Map.addLayer(image2,{},'dtm1');
+exports.vegBuffer = vegBuffer
