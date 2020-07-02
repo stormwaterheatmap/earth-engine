@@ -659,10 +659,10 @@ var imgToFc = function (
 exports.imgToFc = imgToFc
 //testing 
 
-var data = require('users/stormwaterheatmap/apps:Modules/datasets')
-var layerProperties = data.rasters
-var layerObject = layerProperties.landUse;
-var fctest = imgToFc(geometry, layerObject, 200)
+// var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+// var layerProperties = data.rasters
+// var layerObject = layerProperties.landUse;
+// var fctest = imgToFc(geometry, layerObject, 200)
 //print(fctest)
 //print(ui.Chart.feature.byFeature(fctest,'Class','Area').setChartType(
 //  'BarChart'))
