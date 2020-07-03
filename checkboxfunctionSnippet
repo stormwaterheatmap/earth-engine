@@ -177,117 +177,13 @@ var palette= obj.layer.visParams.palette
 //ayerProperties.Slope.legend = barLegend //function() {
 //  barLegend
 //}
-Map.add(barLegend(layerProperties.Precipitation))
-print(Object.keys(layerProperties))
-Map.add(checkbox(layerProperties.Precipitation, 1))
-Map.add(checkbox(layerProperties.Imperviousness, 0))
+var userPanel = ui.Panel(ui.Label('Add to Report'))
 
-/*
-//function to build checkbox panel 
-var checkPanel = function(){
- var widList = [
-    ui.Label('Legend'), 
-    ui.Label('Precipitation'), 
-    checkbox(1),
-    checkbox(0), 
-    checkbox(4), 
-    checkbox(9)
-        ]
-  var panel = ui.Panel(widList)
-  Map.add(panel)
-}
-
-var selectItems = Object.keys(layerProperties)
-print(selectItems)
-addBaseLayer(selectItems[0]);
-checkPanel()
+userPanel.add(checkbox(layerProperties.Precipitation, 1))
+userPanel.add(checkbox(layerProperties.Imperviousness, 0))
+Map.add(userPanel)
 
 
-/*var t3 = selectItems[0]
-print(t3)
-print()
-
-//var addlayer = function(keyvalue)
-//get the legend from a layer 
-
-var brute = layerProperties.Loss.visParams.palette
-print(brute)
-var layer1 = layerProperties[t3]
-print(layer1)
-var palGet = layer1.visParams.palette
-print(palGet)*/
-
-
-
-/*addBaseLayer(layerProperties.DevAge)
-addBaseLayer(layerProperties.GAP)
-//addBaseLayer(layerProperties.HRUs)
-addBaseLayer(layerProperties.Imperviousness)
-//addBaseLayer(layerProperties.Population)
-addBaseLayer(layerProperties.Precipitation)
-//addBaseLayer(layerProperties.Slopes)
-//addBaseLayer(layerProperties.Soils)
-//addBaseLayer(layerProperties.landUse)
-addBaseLayer(layerProperties.landcover)
-var testPanel = ui.Panel({
-  style: {
-    width: '280px', //height: '80%', 
-    position: 'bottom-right', 
-    padding: '4px',
-    margin: 0,
-    fontSize: '10px'
-  }
-})
-//check boxes ui.Checkbox(label, value, onChange, disabled, style)
-var checkbox = function (name, index) {
-  var cb = ui.Checkbox({
-    label: name, 
-    value: 0, 
-    style:{
-     margin: '0px',
-      padding: '4px',
-      fontSize: '10px'
-    }
-  })
-  cb.style().set(style.fonts.Body3)
-  cb.onChange(function(checked) {
-  // Shows or hides the first map layer based on the checkbox's value.
-  Map.layers().get(index).setShown(checked);
-});
-      return cb
-}
-var headingLabel = ui.Label({
-  value: 'Precipitation and Hydrology', style: {
-  margin: 0, 
-  padding: 0
-}}); 
-headingLabel.style().set(style.fonts.H4)
-var headingLabel2 = ui.Label({
-  value: 'Land use and Land cover',
-  style: {
-  margin: 0, 
-  padding: 0,
-    fontSize: '10px'
-  }
-})
-var cb0 = checkbox(layerProperties.DevAge.layerName, 0)
-var cb1 = checkbox(layerProperties.GAP.layerName, 1)
-var cb2 = checkbox(layerProperties.HRUs.layerName, 2)
-var cb3 = checkbox(layerProperties.Imperviousness.layerName, 3)
-var cb4 = checkbox(layerProperties.Population.layerName, 4)
-var cb5 = checkbox(layerProperties.Precipitation.layerName, 5)
-var cb6 = checkbox(layerProperties.Slopes.layerName, 6)
-var cb7 = checkbox(layerProperties.Soils.layerName, 7)
-var cb8 = checkbox(layerProperties.landUse.layerName, 8)
-var cb9 = checkbox(layerProperties.landcover.layerName, 9 )
-testPanel.add(headingLabel)
-hline(testPanel)
-testPanel.add(cb0).add(cb1).add(cb2).add(cb3).
-add(headingLabel2)
-hline(testPanel)
-testPanel.add(cb4).add(cb5).add(cb6).add(cb7).add(cb8).add(cb9)
-Map.add(testPanel)
-*/
 
 
 
