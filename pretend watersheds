@@ -206,15 +206,22 @@ var trees = snicNDVI.gt(threshold);
 Map.addLayer(roofs.mask(roofs),imageVisParam3,'roofs'); 
 Map.addLayer(trees.mask(trees),imageVisParam2,'trees'); 
 
+var aspect=ee.Algorithms.Terrain(ee.Image("CGIAR/SRTM90_V4").focal_mean()).select('aspect').divide(2)
+var NHD = ee.FeatureCollection(
+    'users/cnilsen/PugetSoundNHDPlusWatersheds');
+print(NHD.first())
+var NHD = NHD.reduceToImage(['GRIDCODE'],ee.Reducer.first())//.subtract(505191).divide(17767)
 
 var vizParam =  {"opacity":1,"bands":["b1"],"min":10,"max":100,"gamma":1};
 Map.addLayer(diff.mask(trees).mask(diff.gt(10)),vizParam,'diff mask')
 //make idea watersheds 
+var built = ghsl.select('built').subtract(1).divide(5)
 // combine year of development, ndvi, and delineated ws 
-var compImg = ee.Image.cat(//impYear.focal_max().focal_min(),
-ws_bounds,ghsl.select('built'),
-slopeGradient)//,NLCD.resample().focal_mean())
+var compImg = ee.Image.cat(//ndvi,//aspect.focal_mean(),
+NHD,built)
+Map.addLayer(compImg,{},'compImg')
+//slopeGradient)//,NLCD.resample().focal_mean())
 //var wsSeeds = ee.Algorithims.seeds
-var snicWS =ee.Algorithms.Image.Segmentation.SNIC({image:compImg, size:100, compactness:128})
+var snicWS =ee.Algorithms.Image.Segmentation.SNIC({image:compImg, size:100, compactness:256})
 Map.addLayer(snicWS.select('clusters').randomVisualizer())
-Map.addLayer(snicWS.select('clusters').randomVisualizer().mask(snicWS.select('built_mean').gt(2)))
+print(compImg.reduceRegion(ee.Reducer.minMax(), geometry, 30))//, crs, crsTransform, bestEffort, maxPixels, tileScale)
