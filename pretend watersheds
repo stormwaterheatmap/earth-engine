@@ -218,7 +218,7 @@ Map.addLayer(diff.mask(trees).mask(diff.gt(10)),vizParam,'diff mask')
 var built = ghsl.select('built').subtract(1).divide(5)
 // combine year of development, ndvi, and delineated ws 
 var compImg = ee.Image.cat(//ndvi,//aspect.focal_mean(),
-NHD,built)
+NHD,built,NLCD)
 Map.addLayer(compImg,{},'compImg')
 //slopeGradient)//,NLCD.resample().focal_mean())
 //var wsSeeds = ee.Algorithims.seeds
