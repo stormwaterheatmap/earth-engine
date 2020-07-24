@@ -206,6 +206,9 @@ var trees = snicNDVI.gt(threshold);
 Map.addLayer(roofs.mask(roofs),imageVisParam3,'roofs'); 
 Map.addLayer(trees.mask(trees),imageVisParam2,'trees'); 
 
+var treeCover = ee.Image('UMD/hansen/global_forest_change_2019_v1_7').select('treecover2000')
+//Map.addLayer(dataset, treeCoverVisParam, 'tree cover');
+
 var aspect=ee.Algorithms.Terrain(ee.Image("CGIAR/SRTM90_V4").focal_mean()).select('aspect').divide(2)
 var NHD = ee.FeatureCollection(
     'users/cnilsen/PugetSoundNHDPlusWatersheds');
@@ -217,8 +220,8 @@ Map.addLayer(diff.mask(trees).mask(diff.gt(10)),vizParam,'diff mask')
 //make idea watersheds 
 var built = ghsl.select('built').subtract(1).divide(5)
 // combine year of development, ndvi, and delineated ws 
-var compImg = ee.Image.cat(//ndvi,//aspect.focal_mean(),
-NHD,built,NLCD)
+var compImg = ee.Image.cat(treeCover,//ndvi,//aspect.focal_mean(),
+NHD,built,NLCD.divide(50))
 Map.addLayer(compImg,{},'compImg')
 //slopeGradient)//,NLCD.resample().focal_mean())
 //var wsSeeds = ee.Algorithims.seeds
