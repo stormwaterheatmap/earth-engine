@@ -10,17 +10,19 @@ var NHDminMax = NHD.filterBounds(PugetSound).reduceColumns(ee.Reducer.minMax(), 
 //var vals = NHD.reduceRegion(ee.Reducer.minMax(),PugetSound.geometry())//
 var nlcd = ee.Image("USGS/NLCD/NLCD2016").select('landcover')
 ///output from above
+
 var minMax = {
   "max": 522961,
   "min": 314885
 }
+
 var wsImage = NHD.reduceToImage(['GRIDCODE'],ee.Reducer.first())//.unitScale(NHDminMax.get('min'),NHDminMax.get('max'))
 Map.addLayer(wsImage)
 var built = GHSL.select('built')//.unitScale(1,6)
 var seeds = ee.Algorithms.Image.Segmentation.seedGrid(32, 'hex')
 
 var snic = ee.Algorithms.Image.Segmentation.SNIC({
-  image: ee.Image.cat(wsImage), 
+  image: ee.Image.cat(wsImage,built), 
   size: 32,
   compactness: 16,
   //connectivity: 8,
@@ -29,5 +31,9 @@ var snic = ee.Algorithms.Image.Segmentation.SNIC({
 })//.select(["R_mean", "G_mean", "B_mean", "N_mean", "clusters"], ["R", "G", "B", "N", "clusters"])
 var clusters = snic.select("clusters")
 Map.addLayer(clusters.randomVisualizer(), {}, "clusters",1)
-Map.addLayer(snic)
-print(Map.getScale())
+//Reduce predictors to snic clusters 
+var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs")
+var impervious = tncLC.eq(6).or(tncLC.eq(7)).rename('impervious')
+    //imp = centerScale(imp,'impervious')
+Export.image.toAsset({image:clusters,
+region:PugetSound, scale:5, maxPixels:1e12})
