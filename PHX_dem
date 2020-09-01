@@ -3,31 +3,36 @@ var image = ee.Image("users/stormwaterheatmap/PHX_DEM_Clip"),
     table = ee.FeatureCollection("users/stormwaterheatmap/PHXmains"),
     junctions = ee.FeatureCollection("users/stormwaterheatmap/PHX_networkJunction"),
     table2 = ee.FeatureCollection("users/stormwaterheatmap/Phoenix_LID_studyArea_roofs"),
-    image2 = ee.Image("USGS/NED");
+    image2 = ee.Image("USGS/NED"),
+    table3 = ee.FeatureCollection("users/stormwaterheatmap/mains_w_elevation");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var ftprnt = ee.Geometry(image.get('system:footprint'))
-//Map.addLayer(ftprnt)
-Map.addLayer(table2)
-print(table2.first())
-//convertVals to numbers 
+//Setup 
+var ftprnt = ee.Geometry(image.get('system:footprint'))//dem footprint
 var roofs = table2.reduceToImage(['FID'],ee.Reducer.first()).gt(0).unmask()
-var image = image.add(roofs.multiply(100))
-Map.addLayer(roofs)
-var mainsVect = table//filter(ee.Filter.gte('Pipe_Diam',240))
-var testFeat = table.first()
-print(mainsVect)
-print(ee.Feature(testFeat).get('Pipe_Diame'))
-var mains = mainsVect
-.reduceToImage(['SubType'],ee.Reducer.first())
-//Map.addLayer(mainsVect)
-//Map.addLayer(table)
-//image = image.subtract(ee.Image(0).blend(mains.add(1000)))
-var image = image.reduceResolution(ee.Reducer.mean(),true).reproject({crs:'EPSG:2223',scale:5})
+//blend roofs with dem 
 
+
+print(mains)
+var mains = table3
+.reduceToImage(['_Bottom_El'],ee.Reducer.first()).subtract(1000).unmask()//pipes with elevation info are at 1000 below actual 
+//pipes with no elevation info are at 50 
+print(table)
+var mains_no_z = table.reduceToImage(['Shape_Leng'],ee.Reducer.first()).neq(0).unmask()
+var mains_no_z = image.subtract(mains_no_z.multiply(100))//pipes with no elevation are at 100 ft below 
+var comb = mains_no_z.where(mains,mains)
+var comb = comb.add(roofs.multiply(100))
+Map.addLayer(comb,{},'comb')
+
+//reduce resolution of image 
+var imageReduced = comb.focal_min(2,'square')
+  .focal_max(2,'square')
+  .reduceResolution(ee.Reducer.mean(),true)
+  .reproject({crs:'EPSG:2223',scale:10})
+var imageReduced = imageReduced
 ////Map.addLayer(ee.Terrain.hillshade(image))
-Map.addLayer(image)
+Map.addLayer(imageReduced,{min:1080,max:1100},'imgRed')
 print(table.first())
 
 //Map.addLayer(table)
-Export.image.toAsset({image:image, 
+Export.image.toAsset({image:imageReduced, 
 region:ftprnt , scale:5});//, crs, crsTransform, maxPixels)
