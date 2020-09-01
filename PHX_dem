@@ -1,0 +1,33 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("users/stormwaterheatmap/PHX_DEM_Clip"),
+    table = ee.FeatureCollection("users/stormwaterheatmap/PHXmains"),
+    junctions = ee.FeatureCollection("users/stormwaterheatmap/PHX_networkJunction"),
+    table2 = ee.FeatureCollection("users/stormwaterheatmap/Phoenix_LID_studyArea_roofs"),
+    image2 = ee.Image("USGS/NED");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var ftprnt = ee.Geometry(image.get('system:footprint'))
+//Map.addLayer(ftprnt)
+Map.addLayer(table2)
+print(table2.first())
+//convertVals to numbers 
+var roofs = table2.reduceToImage(['FID'],ee.Reducer.first()).gt(0).unmask()
+var image = image.add(roofs.multiply(100))
+Map.addLayer(roofs)
+var mainsVect = table//filter(ee.Filter.gte('Pipe_Diam',240))
+var testFeat = table.first()
+print(mainsVect)
+print(ee.Feature(testFeat).get('Pipe_Diame'))
+var mains = mainsVect
+.reduceToImage(['SubType'],ee.Reducer.first())
+//Map.addLayer(mainsVect)
+//Map.addLayer(table)
+//image = image.subtract(ee.Image(0).blend(mains.add(1000)))
+var image = image.reduceResolution(ee.Reducer.mean(),true).reproject({crs:'EPSG:2223',scale:5})
+
+////Map.addLayer(ee.Terrain.hillshade(image))
+Map.addLayer(image)
+print(table.first())
+
+//Map.addLayer(table)
+Export.image.toAsset({image:image, 
+region:ftprnt , scale:5});//, crs, crsTransform, maxPixels)
