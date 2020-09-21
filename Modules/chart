@@ -231,7 +231,7 @@ var makePieChart = function (
     //.evaluate(function(result) {
     // When the server returns the value, show it.
 
-    return transition_fc
+    return roi_stats//transition_fc
     
     /*transition_summary_chart.setOptions({
         pieHole: holeSize,
