@@ -1,24 +1,35 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = 
-    /* color: #00ff00 */
-    /* shown: false */
-    ee.Geometry.Polygon(
-        [[[-121.1181432124434, 46.08461817081443],
-          [-122.3046666499434, 42.500406547453565],
-          [-111.5380650874434, 43.49672202039406],
-          [-114.4824010249434, 45.748316309281165]]]);
+var geometry = /* color: #0b4a8b */ee.Geometry.Polygon(
+        [[[-113.03729580037604, 46.556094634416795],
+          [-113.75140712850104, 45.51122746594867],
+          [-110.91693447225104, 44.81406235477011],
+          [-109.97211025350104, 46.00943043639442],
+          [-110.98285244100104, 46.65421665255321]]]);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-
-//add a starter image 
-
 var img = ee.Image("USGS/NED")
-Map.addLayer(img)
+var drawingTools = Map.drawingTools();
+var downloadLabel = ui.Label('Download',{shown:false})
+var clearButton = (ui.Button({
+  label: 'Clear Drawing', 
+  onClick: clearDrawings
+  }))
+var panel = ui.Panel([clearButton,downloadLabel])
+//add a starter image 
+function map_init() {
+ // Map.addLayer(img)
+  Map.layers().reset()
+  Map.widgets().reset([panel])
+  downloadLabel.style().set({shown:false})
+  Map.addLayer(img)
+  print(Map.layers())
+drawingTools.setDrawModes(['point','polygon']);
+  
+
+}
 // Starter script: https://code.earthengine.google.com/?scriptPath=Examples:Demos/Classification
 
 
-var drawingTools = Map.drawingTools();
 // Only allow drawing points.
-drawingTools.setDrawModes(['point','polygon']);
 
 // Get the layers list.
 var layers = drawingTools.layers();
@@ -31,23 +42,37 @@ drawingTools.onEdit(ui.util.debounce(downloadImg, 500));
 drawingTools.onDraw(ui.util.debounce(downloadImg, 500));
 drawingTools.onSelect(ui.util.debounce(downloadImg, 500));
 
+
+
 function downloadImg() {
   (Map.layers().reset())
   //get the current geometry 
   var boundary = drawingTools.layers().get(0).getEeObject()
-  print(boundary)
-  Map.addLayer(img.clip(boundary))
-Map.add(ui.Label('Download'))  
+  var clipedImg = img.clip(boundary)
+  Map.addLayer(clipedImg)
+  Map.centerObject(clipedImg)
+  var url = clipedImg.getDownloadURL(
+    {
+    name: 'ee_image',
+    scale: 300
+ }
+    
+    );
+
+  downloadLabel.style().set({shown:true})
+  downloadLabel.setUrl(url
+    )
 }
 
+
+
+
 function clearDrawings() {
+  map_init()
 drawingTools.layers().reset()
 print(layers)
   
 }
 
+map_init() 
 
-Map.add(ui.Button({
-  label: 'Clear Drawing', 
-  onClick: clearDrawings
-  }))
