@@ -1,11 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #0b4a8b */ee.Geometry.Polygon(
-        [[[-113.03729580037604, 46.556094634416795],
-          [-113.75140712850104, 45.51122746594867],
-          [-110.91693447225104, 44.81406235477011],
-          [-109.97211025350104, 46.00943043639442],
-          [-110.98285244100104, 46.65421665255321]]]);
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var img = ee.Image("USGS/NED")
 var drawingTools = Map.drawingTools();
 var downloadLabel = ui.Label('Download',{shown:false})
