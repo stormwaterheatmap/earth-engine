@@ -5,7 +5,11 @@ var clearButton = (ui.Button({
   label: 'Clear Drawing', 
   onClick: clearDrawings
   }))
-var panel = ui.Panel([clearButton,downloadLabel])
+var title = ui.Label("Title Here",{fontWeight: "bold"})
+var panel = ui.Panel({widgets: [title,clearButton,downloadLabel], 
+  style: {position: 'bottom-left'}
+})
+
 //add a starter image 
 function map_init() {
  // Map.addLayer(img)
