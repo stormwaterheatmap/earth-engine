@@ -1,0 +1,53 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #00ff00 */
+    /* shown: false */
+    ee.Geometry.Polygon(
+        [[[-121.1181432124434, 46.08461817081443],
+          [-122.3046666499434, 42.500406547453565],
+          [-111.5380650874434, 43.49672202039406],
+          [-114.4824010249434, 45.748316309281165]]]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+//add a starter image 
+
+var img = ee.Image("USGS/NED")
+Map.addLayer(img)
+// Starter script: https://code.earthengine.google.com/?scriptPath=Examples:Demos/Classification
+
+
+var drawingTools = Map.drawingTools();
+// Only allow drawing points.
+drawingTools.setDrawModes(['point','polygon']);
+
+// Get the layers list.
+var layers = drawingTools.layers();
+
+
+//print(urbanfc)
+
+// Use debounce to call the function at most every 100 milliseconds.
+drawingTools.onEdit(ui.util.debounce(downloadImg, 500));
+drawingTools.onDraw(ui.util.debounce(downloadImg, 500));
+drawingTools.onSelect(ui.util.debounce(downloadImg, 500));
+
+function downloadImg() {
+  (Map.layers().reset())
+  //get the current geometry 
+  var boundary = drawingTools.layers().get(0).getEeObject()
+  print(boundary)
+  Map.addLayer(img.clip(boundary))
+Map.add(ui.Label('Download'))  
+}
+
+function clearDrawings() {
+drawingTools.layers().reset()
+print(layers)
+  
+}
+
+
+Map.add(ui.Button({
+  label: 'Clear Drawing', 
+  onClick: clearDrawings
+  }))
