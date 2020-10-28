@@ -37,11 +37,12 @@ var sel = ui.Select({items:
     Map.setCenter(s8List[key]["Lon"], s8List[key]["Lat"],12);
   }
   })
-Map.add(ui.Panel({widgets:[ui.Label('Select a watershed'), sel],style:{position:'top-left'}}))
-Map.addLayer(predImage,imageVisParam,"predictors image")
-var title = ui.Label({value:
-'Predictor image: Red band - population, \n Green band: logTraffic, Blue band: impervious',
-style:{position:"bottom-left"}})
+var title = ui.Label('S8 Monitored Watersheds',{fontWeight:'bold'})
+Map.add(ui.Panel({widgets:[title, ui.Label('Select a watershed to Zoom to Location'), sel],style:{position:'top-left'}}))
+//Map.addLayer(predImage,imageVisParam,"predictors image")
+//var title = ui.Label({value:
+//'Predictor image: Red band - population, \n Green band: logTraffic, Blue band: impervious',
+//style:{position:"bottom-left"}})
 Map.addLayer(s8_watersheds)
-Map.add(title)
+//Map.add(title)
 Map.centerObject(s8_watersheds.first(),12)
