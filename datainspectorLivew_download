@@ -882,12 +882,11 @@ var makeReports = function () {
     //pchart2.setOptions()
     var laybut = layerButton(layerProperties.Precipitation)
     var precip_url = make_download_link(
-       layerProperties.Precipitation.clip(clicked_basin_geom),
+       ee.Image(layerProperties.Precipitation.layer.eeObject).clip(clicked_basin_geom),
        'Precipitation', 
-       ['b1']
-       
+       'b1'
       )
-    var precipCard = cards('Precipitation', [pchart, pchart2, laybut])
+    var precipCard = cards('Precipitation', [pchart, pchart2, laybut,precip_url])
     analyzePanel.add(precipCard)
 
     //make a landuse card //geometry, properties, holeSize
