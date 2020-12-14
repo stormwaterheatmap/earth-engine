@@ -252,7 +252,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: traffic,
+            eeObject: traffic.rename('traffic_AADT'),
             name: 'Traffic',
             visParams:
             {
@@ -284,7 +284,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: imperviousAge,
+            eeObject: imperviousAge.rename('age_of_impervious_surface'),
             name: 'Age of Imperviousness',
             visParams:
             {
@@ -315,7 +315,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: imp,
+            eeObject: imp.rename('imperviousness'),
             name: 'Imperviousness',
             visParams:
             {
@@ -371,7 +371,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: fdr,
+            eeObject: fdr.rename('flow_duration_index'),
             name: 'Flow Duration Index',
             visParams:
             {
@@ -400,7 +400,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: soils,
+            eeObject: soils.rename('soils'),
             name: 'Hydrologic Soils Groups',
             visParams:
             {
@@ -426,7 +426,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: slopeZone,
+            eeObject: slopeZone.rename('slope_categories'),
             name: 'Slope Categories',
             visParams:
             {
@@ -452,7 +452,7 @@ var rasters = {
         layer:
         {
             eeObject: ee.Terrain
-                .slope(NED).clip(PugetSound),
+                .slope(NED).clip(PugetSound).rename('slope'),
             name: 'Slope',
             visParams:
             {
@@ -478,7 +478,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: tncLC,
+            eeObject: tncLC.rename('landcover'),
             name: 'Land Cover',
             visParams:
             {
@@ -517,7 +517,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: hspfLayers.hspf_landcover
+            eeObject: hspfLayers.hspf_landcover.rename('hspf_landcover_categories')
                 ,
             name: 'Land Cover',
             visParams:
@@ -553,7 +553,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: age_of_development, //var visParams = {
+            eeObject: age_of_development.rename('age_of_development'), //var visParams = {
             name: 'Age of Development',
             visParams:
             {
@@ -584,7 +584,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: lithology, //var visParams = {
+            eeObject: lithology.rename('lithology'), //var visParams = {
             name: 'Lithology',
             visParams:
             {
@@ -669,7 +669,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: population,
+            eeObject: population.rename('population_count'),
             name: 'Population Count',
             visParams:
             {
@@ -696,7 +696,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: generalizedLU,
+            eeObject: generalizedLU.rename('land_use'),
             name: 'Land Use',
             visParams:
             {
@@ -736,7 +736,7 @@ var rasters = {
     {
         layer:
         {
-            eeObject: mean_annual_runoff,
+            eeObject: mean_annual_runoff.rename('mean_annual_runoff_mm'),
             name: 'Mean Annual Runoff',
             visParams:
             {
@@ -766,7 +766,7 @@ var rasters = {
         {
             eeObject: mean_annual_runoff
                 .divide(ee.Image(
-                    25.4)),
+                    25.4)).rename('mean_annual_runoff_inches'),
             name: 'Mean Annual Runoff',
             visParams:
             {
