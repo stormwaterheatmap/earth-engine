@@ -231,9 +231,7 @@ var makePieChart = function (
     //.evaluate(function(result) {
     // When the server returns the value, show it.
 
-    return roi_stats//transition_fc
-    
-    /*transition_summary_chart.setOptions({
+    return transition_summary_chart.setOptions({
         pieHole: holeSize,
         is3D: true,
         //   legend: {
@@ -248,10 +246,8 @@ var makePieChart = function (
         //  pieStartAngle: 100,
         slices: createPieChartSliceDictionary(transition_fc).evaluate,
         sliceVisibilityThreshold: 0.05
-    */
-      
-    };
-//};
+    });
+};
 
 //
 exports.pieChart = makePieChart
