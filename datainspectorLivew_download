@@ -883,7 +883,7 @@ var makeReports = function () {
     var laybut = layerButton(layerProperties.Precipitation)
     var precip_url = make_download_link(
        ee.Image(layerProperties.Precipitation.layer.eeObject).clip(clicked_basin_geom),
-       'Precipitation', 
+       'mean_annual_preciptation_inches', 
        'b1'
       )
     var precipCard = cards('Precipitation', [pchart, pchart2, laybut,precip_url])
@@ -906,6 +906,14 @@ var makeReports = function () {
     luchart.setOptions(Style.charts.imageBar)
     var lcchart = charts.pieChart(clicked_basin_geom, layerProperties.landCover, mapPanel.getScale()).setChartType('BarChart')
     lcchart.setOptions(Style.charts.imageBar)
+    
+    var imperv_url = make_download_link(
+       ee.Image(layerProperties.Imperviousness.layer.eeObject).clip(clicked_basin_geom),
+       'Precipitation', 
+       'precipitation'
+      )
+    
+    
     var luCard = cards('Land Use', [subtitle('Imperviousness'), impNum, //impChart, 
         layerButton(layerProperties.Imperviousness),
         hline(), subtitle('Land Use Classifications'), luchart,
@@ -1074,7 +1082,9 @@ Prioritizer functions and vars
 ----------------------------------------------------------------------------------------------------
 */
 //this function makes a download button 
-var make_download_link = function(image, val, bands) {
+var make_download_link = function(image, val) {
+    
+    var bands = image.bandNames()
     var url_value = image.getDownloadURL({
         params: {
             val: val, //,
