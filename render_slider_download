@@ -1,0 +1,71 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("USGS/NED"),
+    geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-122.9734375, 48.15487159137164],
+          [-122.9734375, 47.05867046426873],
+          [-121.380419921875, 47.05867046426873],
+          [-121.380419921875, 48.15487159137164]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var downloadPanel = ui.Panel({layout: 'flow', 
+style: {width: '250px',shown:false}
+})
+var download_trigger = ui.Button('Download this image',downloadPanel.style().set({shown:true
+  
+}))
+
+
+var make_download_link = function(image, scale_val) {
+    try { //try to get the download url 
+       // 
+        var url_value = image.getDownloadURL({
+            params: {
+                scale: scale_val 
+            }
+        })
+        var label_value =  '✔ Download Layer'+' @ '+scale_val+' m/pixel '
+        
+    } catch (err) {//if error, return a label
+        var label_value = ('✖ Download is too large')
+            //targetUrl: url_value
+        
+    }
+    var label_unit =  ui.Label({value: label_value, targetUrl: url_value})
+    return(label_unit)//returns ui element
+}
+
+var image_onMap = (image.clip(geometry))
+
+var scale_drop_down = ui.Slider({min:10, max:200, value:30, step:10, style: {width: "90%"},onChange:function(value) {
+    //get a new button 
+    var new_link = make_download_link(image_onMap,value)
+    download_link.setValue((new_link).getValue())
+    download_link.setUrl(((new_link).getUrl()))
+   
+    
+  } }) 
+
+
+var download_link = make_download_link(image_onMap,scale_drop_down.getValue())
+
+downloadPanel.add(ui.Panel({widgets:[
+  ui.Label('Choose scale to download layer:',{fontWeight:'bold'}),
+ui.Label('m/pixel'), 
+scale_drop_down,
+download_link]}))//.style().set({shown:false})
+
+
+
+
+Map.add(downloadPanel)
+Map.add(download_trigger)
+/*var auto_download_link =function() {
+ return make_download_link(image.clip(geometry),scale_drop_down.getValue())
+}*/
+
