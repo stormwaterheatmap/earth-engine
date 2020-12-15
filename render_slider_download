@@ -8,116 +8,141 @@ var image = ee.Image("USGS/NED"),
       }
     ] */
     ee.Geometry.Polygon(
-        [[[-122.1219970703125, 47.12598775359289],
-          [-122.1219970703125, 47.03434053072596],
-          [-121.87205810546875, 47.03434053072596],
-          [-121.87205810546875, 47.12598775359289]]], null, false),
+        [[[-122.40283508300782, 47.12598775359289],
+          [-122.40283508300782, 46.18601873590031],
+          [-119.78877563476563, 46.18601873590031],
+          [-119.78877563476563, 47.12598775359289]]], null, false),
     image2 = ee.Image("CSP/ERGo/1_0/US/CHILI");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var downloadPanel = ui.Panel({style:{shown:false}})
-var download_link 
-Map.add(downloadPanel)
-Map.addLayer(image)
-Map.addLayer(image2)
-var scale_drop_down = ui.Slider({
-    min: 10,
-    max: 200,
-    value: 30,
-    step: 10,
-    style: {
-        //width: "90%"
-    }, 
-  
-  onChange: function(value){
-  print(value)
+var mapPanel = ui.Map()
+ui.root.clear()
+ui.root.add(mapPanel)
+var downloadPanel = ui.Panel({widgets: ui.Label('dl_panel'),
+        style: {
+            shown: false
+        }
+    })
+var download_link
     
-  }
-  
-  
-}) 
-var update_button = ui.Button('Update Scale',function(){
-  var image_on_map = ((Map.layers().get(0).getEeObject())).clip(geometry)
-  downloadPanel.clear().add(downloadPanel_widgets)
-  var download_link = make_download_link(image_on_map,scale_drop_down.getValue())
-  //downloadPanel_widgets.clear(download_link)
-  downloadPanel.add(download_link)
-})
-var slider_panel = ui.Panel([scale_drop_down,update_button]).setLayout(ui.Panel.Layout.flow('horizontal'))
 
-var downloadPanel_widgets
+var add_download_button = function(geometry, image) {
+    
+    
+    var disable_button = function() {
+        download_trigger.setDisabled(true)
+        mapPanel.remove(download_trigger)
+    }
+    //Button to trigger download
+    var download_trigger = ui.Button({
+      label: 'Download this image', 
+      disabled: false, 
+      onClick: function() {
+        downloadPanel.style().set({
+            shown: true
+        })
+        disable_button()
+    }})
+    mapPanel.add(download_trigger)
+    mapPanel.add(downloadPanel)
 
-downloadPanel_widgets = ui.Panel({
+    var scale_drop_down = ui.Slider({
+        min: 10,
+        max: 200,
+        value: 30,
+        step: 10,
+        style: {
+            //width: "90%"
+        },
+
+        onChange: function(value) {
+            print(value)
+
+        }
+
+
+    })
+    var update_button = ui.Button('Update Scale', function() {
+        var image_on_map = ee.Image(image).clip(geometry) //((mapPanel.layers().get(0).getEeObject())).clip(geometry)
+        downloadPanel.clear().add(downloadPanel_widgets)
+        print('clear')
+        var download_link = make_download_link(image_on_map, scale_drop_down.getValue())
+        print(scale_drop_down.getValue())
+        mapPanel.addLayer(image_on_map)
+        //downloadPanel_widgets.clear(download_link)
+        downloadPanel.add(download_link)
+    })
+    var slider_panel = ui.Panel([scale_drop_down, update_button]).setLayout(ui.Panel.Layout.flow('horizontal'))
+
+    var downloadPanel_widgets
+
+    downloadPanel_widgets = ui.Panel({
         widgets: [
-            ui.Label('Choose scale to download layer:', {fontWeight: 'bold'}), 
+            ui.Label('Choose scale to download layer:', {
+                fontWeight: 'bold'
+            }),
             ui.Label('m/pixel'),
             slider_panel
         ]
     })
-downloadPanel.add(downloadPanel_widgets)
-    
+    downloadPanel.add(downloadPanel_widgets)
 
 
-//Button to trigger download
-var download_trigger = ui.Button('Download this image', function() {
-  downloadPanel.style().set({shown:true})
-  disable_button()
-})
-
-var disable_button = function() {
-  download_trigger.setDisabled(true)
-}
-/*var update_downloadPanel = function(image,scale,geometry){
-  var image_onMap = (image.clip(geometry))
-  var download_link = make_download_link(image_onMap)
-  var scale_drop_down = ui.Slider({
-    min: 10,
-    max: 200,
-    value: 30,
-    step: 10,
-    style: {
-        width: "90%"
-    },
-    onChange: function(value) {
-        //update download link and value displayed
-        var new_link = make_download_link(image_onMap, value)
-        download_link.setValue((new_link).getValue())
-        download_link.setUrl(((new_link).getUrl()))
 
 
-    }
-})
-  
-}
-*/
-var make_download_link = function(image, scale_val) {
-    try { //try to get the download url 
-        // 
-        var url_value = image.getDownloadURL({
-            params: {
-                scale: scale_val
-            }
-        })
-        var label_value = '✔ Download Layer' + ' @ ' + scale_val + ' m/pixel '
+    /*var update_downloadPanel = function(image,scale,geometry){
+      var image_onmapPanel = (image.clip(geometry))
+      var download_link = make_download_link(image_onmapPanel)
+      var scale_drop_down = ui.Slider({
+        min: 10,
+        max: 200,
+        value: 30,
+        step: 10,
+        style: {
+            width: "90%"
+        },
+        onChange: function(value) {
+            //update download link and value displayed
+            var new_link = make_download_link(image_onmapPanel, value)
+            download_link.setValue((new_link).getValue())
+            download_link.setUrl(((new_link).getUrl()))
 
-    } catch (err) { //if error, return a label
-        var label_value = ('✖ Download is too large')
-        //targetUrl: url_value
 
-    }
-    var label_unit = ui.Label({
-        value: label_value,
-        targetUrl: url_value
+        }
     })
-    return (label_unit) //returns ui element
+      
+    }
+    */
+    var make_download_link = function(image, scale_val) {
+        try { //try to get the download url 
+            // 
+            var url_value = image.getDownloadURL({
+                params: {
+                    scale: scale_val
+                }
+            })
+            var label_value = '✔ Download Layer' + ' @ ' + scale_val + ' m/pixel '
+
+        } catch (err) { //if error, return a label
+            var label_value = ('✖ Download is too large')
+            //targetUrl: url_value
+
+        }
+        var label_unit = ui.Label({
+            value: label_value,
+            targetUrl: url_value
+        })
+        return (label_unit) //returns ui element
+    }
+
+
+
+
+    //mapPanel.add(downloadPanel)
+
+    /*var auto_download_link =function() {
+     return make_download_link(image.clip(geometry),scale_drop_down.getValue())
+    }*/
 }
-
-
-
-
-
-
-//Map.add(downloadPanel)
-Map.add(download_trigger)
-/*var auto_download_link =function() {
- return make_download_link(image.clip(geometry),scale_drop_down.getValue())
-}*/
+var trigger = ui.Button('Trigger', 
+add_download_button(geometry, image))
+mapPanel.add(trigger)
