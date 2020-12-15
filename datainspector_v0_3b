@@ -74,6 +74,8 @@ var add_download_button = function (geometry, image) {
       disable_button()
     }
   })
+  mapPanel.remove(download_trigger)
+  mapPanel.remove(downloadPanel)
   mapPanel.add(download_trigger)
   mapPanel.add(downloadPanel)
 
