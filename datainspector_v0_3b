@@ -272,6 +272,8 @@ function handle_map_click(location) {
 print(107)
 
 function handle_inspect_click() {
+  //make accept button enabled 
+  accept.setDisabled(false)
   print('inspector Activated')
   //analyzePanel.add(ui.Label('If everything looks good, click "Accept"')); 
   mapPanel.style().set({
@@ -575,6 +577,18 @@ var pieCard = function (layerObject) {
 
 //**function for buttons to display layers on map
 print(409)
+
+
+var inspect_instructions = ui.Label({
+  value: 'Click to choose a watershed to analyze:',
+  style: fonts.Caption2
+})
+
+var accept_instructions = ui.Label({
+  value: 'Click to accept watershed for analysis:',
+  style: fonts.Caption2
+})
+
 var layerButton = function (layerObject) {
 
   return ui.Panel([
@@ -904,6 +918,16 @@ var titleLabel = ui.Label({
 var watershedSelectLabel = ui.Label({
   value: 'Select a watershed dataset to aggregate data:',
 });
+
+var boundary_instructions = ui.Label({
+    value: "Available boundary datasets are:"
+    +"MS4 (Municipal Stormwater Permit Boundaries)"
+    +"HUC 12 (USGS Watershed Boundaries, and AU_ID"
+    +"(Puget Sound Watershed Characterization Units)", 
+    style: fonts.Caption2
+}) 
+
+boundary_instructions.style().set({width:'400px'})
 print(584)
 var reportsPanel = ui.Panel({
   style: { // position: 'top-right',
@@ -1150,6 +1174,7 @@ var deactiv_button = ui.Button({
 var accept = ui.Button({
   // label: 'Accept Selected Watershed',
   label: 'Accept Selected Watershed ',
+  disabled: true, 
   onClick: function () {
     mapPanel.unlisten()
     mainPanel.style().set({
@@ -1174,7 +1199,7 @@ var inspect_button = ui.Button({
 });
 //function to add user layer to the map
 var buttonPanel = ui.Panel({
-  widgets: [inspect_button, accept],
+  widgets: [inspect_instructions, inspect_button, accept_instructions, accept],
   layout: ui.Panel.Layout.flow('vertical'),
   style: {
     // backgroundColor: 'whitesmoke',
@@ -1439,7 +1464,7 @@ function makeInfoPanel() {
 
 
 var analyzePanel = ui.Panel({
-  style: {
+  style: {//width: '300px', 
     shown: false
   }
 }) //.add(ui.Label('analyzePanel'))
@@ -1485,6 +1510,7 @@ mapPanel.add(mainPanel);
 //mainPanel.add(prioritizePanel)
 //mainPanel.add(prioritizeButton) 
 //mainPanel.add(titleLabel); 
+analyzePanel.add(boundary_instructions)
 analyzePanel.add(watershedSelectLabel)
 analyzePanel.add(watershedSelect)
 prioritizePanel.add(prioritizeAccept)
