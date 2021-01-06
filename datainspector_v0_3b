@@ -1192,7 +1192,7 @@ var step3 = ui.Label('3) Select a category to view results', fonts.Body1)
 //Selectors 
 
 var watershedSelect = ui.Select({
-  items: ['HUC12', 'PS_AU', 'MS4'],
+  items: ['HUC12', 'PS_AU', 'MS4','counties','WRIA'],
   placeholder: 'Select a value',
   //value: 'HUC 12'
   onChange: function (selected) {
