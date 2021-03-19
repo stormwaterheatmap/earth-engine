@@ -1189,14 +1189,21 @@ var step2 = ui.Label('2) Select a watershed on the map to analyze', fonts.Body1)
 var step3 = ui.Label('3) Select a category to view results', fonts.Body1)
 //Selectors 
 
+var selectors = {
+  'HUC-12 Watersheds': 'HUC12',
+  'Puget Sound Assessment Units': 'PS_AU',
+  'MS4 Boundaries': "MS4"
+};
+
+
 var watershedSelect = ui.Select({
-    items: ['HUC12','PS_AU','MS4'],
+    items: Object.keys(selectors), 
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: function (selected) {
         mapPanel.layers().reset()
-        print(selected)
-        var WS = vectors[selected]
+        var boundary_set = (selectors[selected]) //lookup the name of the layer 
+        var WS = vectors[boundary_set]
         mapPanel.addLayer(WS.style(featureStyle)) //oct
         analyzePanel.add((buttonPanel))
 
