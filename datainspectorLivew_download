@@ -277,7 +277,7 @@ function handle_inspect_click() {
     mapPanel.style().set({
         cursor: 'crosshair'
     })
-    var WSname = watershedSelect.getValue();
+    var WSname = selectors[watershedSelect.getValue()];
     //print(selected_WS)
     WS = vectors[WSname];
     //print(WS)
@@ -1032,7 +1032,7 @@ var makeReports = function () {
        ee.Image(layerProperties.Precipitation.layer.eeObject).clip(clicked_basin_geom),
       30
       )
-    var precipCard = cards('Precipitation', [pchart, pchart2, laybut,precip_url])
+    var precipCard = cards('Precipitation', [pchart, pchart2, laybut])//precip_url
     analyzePanel.add(precipCard)
 
     //make a landuse card //geometry, properties, holeSize
@@ -1060,7 +1060,7 @@ var makeReports = function () {
     
     
     var luCard = cards('Land Use', [subtitle('Imperviousness'), impNum, //impChart, 
-        layerButton(layerProperties.Imperviousness),imperv_url, 
+        layerButton(layerProperties.Imperviousness),//imperv_url, 
         hline(), subtitle('Land Use Classifications'), luchart,
         layerButton(layerProperties.landUse),
         hline(),
@@ -1179,7 +1179,8 @@ var buttonPanel = ui.Panel({
     style: {
         // backgroundColor: 'whitesmoke',
         position: 'top-left',
-        stretch: 'both'
+        stretch: 'both', 
+        shown:false
     }
 });
 
@@ -1205,7 +1206,9 @@ var watershedSelect = ui.Select({
         var boundary_set = (selectors[selected]) //lookup the name of the layer 
         var WS = vectors[boundary_set]
         mapPanel.addLayer(WS.style(featureStyle)) //oct
-        analyzePanel.add((buttonPanel))
+        buttonPanel.style().set({
+                shown: true
+            })
 
     }
 });
@@ -1494,6 +1497,7 @@ mapPanel.add(mainPanel);
 //mainPanel.add(titleLabel); 
 analyzePanel.add(watershedSelectLabel)
 analyzePanel.add(watershedSelect)
+analyzePanel.add(buttonPanel)
 prioritizePanel.add(prioritizeAccept)
 ui.root.add(footer)
 //---------------- set the initial view
