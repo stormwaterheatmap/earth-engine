@@ -1,0 +1,29 @@
+//ui.root.clear();
+ui.root.setLayout(ui.Panel.Layout.absolute());
+
+var layer_types = ["Threat Layers","Hydrology","Input Data Layers"]
+var display_layer_names = (["Total Suspended Solids","Total Zinc","Dissolved Zinc"])
+print(display_layer_names)
+var select_display_layer =  ui.Select({
+  items: display_layer_names,
+  placeholder: "Select Display Layer", 
+  value: "Total Suspended Solids"
+})
+
+var select_layer_type = ui.Select({
+  items: layer_types,
+  placeholder: "Select Layer Type", 
+  value: "Threat Layers"
+})
+
+var panel_label = ui.Label({value:"Select Layer Type",style:{fontWeight:"bold"}})
+var layer_label = ui.Label({value:"Display Layer:",style:{fontWeight:"bold"}})
+
+
+var panel_widgets = [panel_label,select_layer_type,layer_label,select_display_layer]
+var panel_layout = ui.Panel.Layout.absolute("bottom-right")
+var panel_style = {position: 'middle-right',width:'300px', height:"80%"}
+
+
+var panel_1 = ui.Panel({widgets:panel_widgets,style:panel_style})//, layout:panel_layout})//, })
+Map.add(panel_1)
