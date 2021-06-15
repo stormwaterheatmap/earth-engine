@@ -30,24 +30,24 @@ print(Object.keys(img_layers))
 // ]
  
 
-print(Object.keys(data.rasters))
+
 /* ----------------------------
 WIDGETS 
 */
 /* Select */ 
 
 var select_layer_type = ui.Select({
-  items: layer_types,
+  items: Object.keys(img_layers),
   placeholder: "Select Layer Type", 
-  value: "Threat Layers"
+  value: Object.keys(img_layers)[0]
 })
 
 
 
 var select_display_layer =  ui.Select({
-  items: display_layer_names,
-  placeholder: "Select Display Layer", 
-  value: "Total Suspended Solids"
+  items:  Object.keys(img_layers),
+  placeholder: "Select Display Layer"
+  //value: "Total Suspended Solids"
 })
 
 /* Label */ 
