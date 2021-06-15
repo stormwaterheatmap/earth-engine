@@ -122,8 +122,7 @@ exports.charts = charts;
 var fonts = {
     H1: {
         fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
-            'Dejavu Sans', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+            'Noto Sans', 'sans-serif'
         ],
         fontSize: '25px',
         fontWeight: 700,
@@ -133,7 +132,7 @@ var fonts = {
     H2: {
         fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             //'Dejavu Sans', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+            'Noto Sans', 'sans-serif'
         ],
         fontSize: '22px',
         fontWeight: 200,
@@ -144,7 +143,7 @@ var fonts = {
     H3: {
         fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             //'Dejavu Sans', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+            'Noto Sans', 'sans-serif'
         ],
         fontSize: '17px',
         fontWeight: 500, 
@@ -153,7 +152,7 @@ var fonts = {
     H4: {
         fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             // 'Dejavu Sans', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+           'Noto Sans', 'sans-serif'
         ],
         fontSize: '13',
         fontWeight: 500,
@@ -163,7 +162,7 @@ var fonts = {
     Body1: {
         fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             // 'Dejavu Sans', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+            'Noto Sans', 'sans-serif'
         ],
         fontSize: '17px',
         fontWeight: 400, 
@@ -171,47 +170,46 @@ var fonts = {
     },
     Body2: {
         fontFamily: ['Roboto', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+            'Noto Sans', 'sans-serif'
         ],
         fontSize: '15px',
         fontWeight: 400, 
         color: colors.text
     },
     Body3: {
-        fontFamily: ['Roboto', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+        fontFamily: [
+           'Noto Sans', 'sans-serif'
         ],
         fontSize: '13px',
         fontWeight: 400, 
         color: colors.text
     },
     Caption1: {
-        fontFamily:  ['Roboto', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+        fontFamily:  [
+            'Noto Sans', 'sans-serif'
         ],
         fontSize: '15px',
         fontWeight: 300, 
         color: colors.sText
     },
     Caption2: {
-        fontFamily: ['Roboto', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+        fontFamily: [
+            'Noto Sans', 'sans-serif'
         ],
         fontSize: '13px',
         fontWeight: 300, 
         color: colors.sText
     },
     Caption3: {
-        fontFamily:  ['Roboto', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+        fontFamily:  [
+            'Noto Sans', 'sans-serif'
         ],
         fontSize: '11px',
         fontWeight: 300, 
         color: colors.sText
     },
     LegendTitle: {
-        fontFamily: ['Roboto', 'Helvetica Neue',
-            'Arial', 'sans-serif'
+        fontFamily: ['Noto Sans', 'sans-serif'
         ],
         fontWeight: 'bold',
         fontSize: '18px',
