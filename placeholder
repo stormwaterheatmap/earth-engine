@@ -1,0 +1,18 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var seattle = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Point([-122.36682791754872, 47.62674576286321]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var label = ui.Label("This is a Placeholder Page")
+Map.add(label)
+
+var datasets = require(
+     'users/stormwaterheatmap/apps:Modules/datasets');
+     
+print(datasets)
+
+var img = datasets.rasters["Age of Imperviousness"]
+print(img)
+Map.addLayer(img.layer)
+Map.centerObject(seattle,8)
