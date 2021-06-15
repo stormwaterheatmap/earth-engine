@@ -1,9 +1,20 @@
 //ui.root.clear();
 ui.root.setLayout(ui.Panel.Layout.absolute());
 
+// data 
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+
+var fonts = Style.fonts 
+
 var layer_types = ["Threat Layers","Hydrology","Input Data Layers"]
 var display_layer_names = (["Total Suspended Solids","Total Zinc","Dissolved Zinc"])
-print(display_layer_names)
+
+
+/* ----------------------------
+WIDGETS 
+*/
+/* Select */ 
 var select_display_layer =  ui.Select({
   items: display_layer_names,
   placeholder: "Select Display Layer", 
@@ -16,14 +27,22 @@ var select_layer_type = ui.Select({
   value: "Threat Layers"
 })
 
-var panel_label = ui.Label({value:"Select Layer Type",style:{fontWeight:"bold"}})
-var layer_label = ui.Label({value:"Display Layer:",style:{fontWeight:"bold"}})
-
-
+/* Label */ 
+print(fonts)
+var panel_label = ui.Label({value:"Select Layer Type:",style:{fontFamily: [//'Open Sans', 
+'Noto Sans', 'serif', 'sans-serif'
+        ],
+        fontSize: '18px'
+        }})
+        
+var layer_label = ui.Label({value:"Display Layer:",style:fonts.H3})
 var panel_widgets = [panel_label,select_layer_type,layer_label,select_display_layer]
-var panel_layout = ui.Panel.Layout.absolute("bottom-right")
-var panel_style = {position: 'middle-right',width:'300px', height:"80%"}
+var panel_layout = ui.Panel.Layout.absolute("bottom-left")
+
+/* Style */ 
+var panel_style = {position: 'bottom-left',width:'300px', height:"80%"}
 
 
+/* Panel */ 
 var panel_1 = ui.Panel({widgets:panel_widgets,style:panel_style})//, layout:panel_layout})//, })
 Map.add(panel_1)
