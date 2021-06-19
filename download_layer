@@ -123,7 +123,7 @@ var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 
 var ws = data.vectors.PS_AU.filterBounds(geometry).union()
-//Map.addLayer(ws)
+//Mapyer(ws)
 Map.setOptions('Dark', {'Dark': Style.mapStyles.Dark})
 
 
@@ -156,3 +156,16 @@ Map.add(ui.Panel(
   barLegend(min,mid,max,palette)]
   ))
 Map.centerObject(geometry,12)
+
+
+var image = imp_age
+var scale_val = 5
+
+//Export.image.toCloudStorage({image:imp_age,region:ws,scale:5})
+//print(data.vectors)
+var ws2 = data.vectors.NHDPlus.filterBounds(ws)
+Map.addLayer(ws2)
+var reduced_image = imp_age.reduceRegions(ws2,ee.Reducer.mode(),5)
+Map.addLayer(reduced_image,{},'image')
+Export.table.toCloudStorage(reduced_image)
+
