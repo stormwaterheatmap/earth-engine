@@ -1,0 +1,158 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry({
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Point",
+          "coordinates": [
+            -122.19916231081318,
+            47.97702566228782
+          ]
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            -122.23624116823505,
+            47.95886589587746
+          ]
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.32444620785101,
+                47.96860351676321
+              ],
+              [
+                -122.36015177425726,
+                47.85308108324539
+              ],
+              [
+                -122.20016337093695,
+                47.83234262652128
+              ],
+              [
+                -122.2029099529682,
+                47.921689249463455
+              ],
+              [
+                -122.15278483089789,
+                47.93641203487868
+              ],
+              [
+                -122.11295939144476,
+                47.96814377964345
+              ],
+              [
+                -122.12806559261664,
+                48.00674743229461
+              ],
+              [
+                -122.13081217464789,
+                48.03246716055786
+              ],
+              [
+                -122.1809372967182,
+                48.04486315930774
+              ],
+              [
+                -122.25509501156195,
+                48.01731244489207
+              ]
+            ]
+          ],
+          "geodesic": true,
+          "evenOdd": true
+        },
+        {
+          "type": "Point",
+          "coordinates": [
+            -122.33543253597601,
+            47.84340416851606
+          ]
+        }
+      ],
+      "coordinates": []
+    }),
+    table = ee.FeatureCollection("USGS/WBD/2017/HUC10"),
+    table2 = ee.FeatureCollection("USGS/WBD/2017/HUC08"),
+    image = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1"),
+    image2 = ee.Image("Tsinghua/FROM-GLC/GAIA/v10");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+function ColorBar(palette) {
+  return ui.Thumbnail({
+    image: ee.Image.pixelLonLat().select(0),
+    params: {
+      bbox: [0, 0, 1, 0.1],
+      dimensions: '200x20',
+      format: 'png',
+      min: 0,
+      max: 1,
+      palette: palette,
+    },
+    style: {stretch: 'horizontal', margin: '0px 8px'},
+  });
+}
+
+var barLegend = function (low, mid, high, palette) {
+  var titlePanel = ui.Panel(
+    [ui.Label()]
+    )
+  var labelPanel = ui.Panel(
+      [
+        ui.Label(low, {margin: '4px 8px',textAlign: 'left',stretch: 'horizontal'}),
+        ui.Label(mid, {margin: '4px 8px', textAlign: 'center',stretch: 'horizontal'}),
+        ui.Label(high, {margin: '4px 8px',textAlign: 'right',stretch: 'horizontal'})
+      ],
+      ui.Panel.Layout.flow('horizontal')
+      //{width: '230px', position: 'top-center'}
+      );
+  return ui.Panel([ColorBar(palette), labelPanel])
+}
+var palettes = require('users/gena/packages:palettes');
+var palette = palettes.colorbrewer.RdYlGn[9].reverse()
+
+//tnc download 
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+
+var ws = data.vectors.PS_AU.filterBounds(geometry).union()
+//Map.addLayer(ws)
+Map.setOptions('Dark', {'Dark': Style.mapStyles.Dark})
+
+
+var dataset = ee.Image(2019).subtract(image2.mask(image2.neq(1)))//(image3.select(0)).mask(image3.select(0).gt(2))//.resample()//
+var clusters = ee.Image("users/cnilsen/snic1m") 
+//Map.addLayer(clusters)
+//Map.addLayer(dataset)
+var tncLC = ee.Image(
+    "users/jrobertson2000/psLandCover_1m_finPS_roofs"
+    );
+var water = tncLC.neq(5)
+var imp = tncLC.eq(6)
+    .or(tncLC.eq(7))//.focal_mean(2)
+//Map.setCenter(-37.62, 25.8, 2);
+var nhood = ee.Image.cat(dataset,clusters).reduceConnectedComponents(ee.Reducer.mode(), "clusters",256).select(['constant']).rename(['change year'])//,'cnfd']) //, maxSize)
+//Map.addLayer(nhood.multiply(imp).selfMask(), {}, "Change year index");
+//Export.image.toAsset({image:nhood, assetId:"1m_cluster_age", 
+//region:PugetSound, scale:10, maxPixels:1e12})
+//var nhood2 = dataset//.reduceNeighborhood(ee.Reducer.mode(), ee.Kernel.diamond({radius:20,units:'meters'}),'kernel',true).subtract(ee.Image(2))
+//var nhood2 = ee.Image(0).blend(dataset).focal_max({iterations:2,kernel:ee.Kernel.manhattan(5)})//.focal_min({radius:2,iterations:2})
+//Map.addLayer((nhood))
+var imp_age = (nhood.multiply(imp).selfMask().add(imp))
+var min = 1985
+var max = 2018
+var mid = 2001
+Map.addLayer(imp_age.clip(ws),{min: min, max:max,palette:palette})
+print(legends)
+Map.add(ui.Panel(
+  [ui.Label('Age of Imperviousness, (year of first change)'),
+  barLegend(min,mid,max,palette)]
+  ))
+Map.centerObject(geometry,12)
