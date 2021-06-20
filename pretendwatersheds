@@ -1,34 +1,54 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var GHSL = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1");
+var GHSL = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1"),
+    image = ee.Image("users/stormwaterheatmap/public/land_use_5m"),
+    image2 = ee.Image("users/stormwaterheatmap/TempImpervAge"),
+    image3 = ee.Image("users/stormwaterheatmap/landcover_2m"),
+    image4 = ee.Image("users/stormwaterheatmap/SuperPixels4"),
+    image5 = ee.Image("users/stormwaterheatmap/Superpix3"),
+    image6 = ee.Image("users/stormwaterheatmap/gen_landuse"),
+    image7 = ee.Image("users/stormwaterheatmap/OGD/devAge_parcels"),
+    table = ee.FeatureCollection("TIGER/2010/Blocks"),
+    table2 = ee.FeatureCollection("TIGER/2016/Roads");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var NHD = ee.FeatureCollection(
     'users/cnilsen/PugetSoundNHDPlusWatersheds');
-print(NHD.first())
+print(table.first())
+
 var PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound")
-var NHDminMax = NHD.filterBounds(PugetSound).reduceColumns(ee.Reducer.minMax(), ['GRIDCODE'])
-//.reduceToImage(['GRIDCODE'],ee.Reducer.first())//.subtract(505191).divide(17767)
+//var NHDminMax = 
+var c= table.//merge(table2).
+randomColumn()
+var r=table2.randomColumn()
+print(c.first())
+var cen = c.filterBounds(PugetSound).
+//reduceColumns(ee.Reducer.minMax(), ['blockid10'])
+reduceToImage(['random'],ee.Reducer.first())//.subtract(505191).divide(17767)
 //var vals = NHD.reduceRegion(ee.Reducer.minMax(),PugetSound.geometry())//
+var rds= r.reduceToImage(['random'],ee.Reducer.first()).unmask()
 var nlcd = ee.Image("USGS/NLCD/NLCD2016").select('landcover')
 ///output from above
-
+//Map.addLayer(nlcd)
+var img=ee.Image.cat(cen)//select(['random'])// ee.Image(0).blend(image7)
 var minMax = {
   "max": 522961,
   "min": 314885
 }
-
 var wsImage = NHD.reduceToImage(['GRIDCODE'],ee.Reducer.first())//.unitScale(NHDminMax.get('min'),NHDminMax.get('max'))
-Map.addLayer(wsImage)
+Map.addLayer(img)
 var built = GHSL.select('built')//.unitScale(1,6)
-var seeds = ee.Algorithms.Image.Segmentation.seedGrid(32, 'hex')
-
-var snic = ee.Algorithms.Image.Segmentation.SNIC({
-  image: ee.Image.cat(wsImage,built), 
-  size: 32,
-  compactness: 16,
+var seeds = ee.Algorithms.
+Image.Segmentation.seedGrid(64)// 'hex')
+print(Map.getScale())
+var snic = ee.Algorithms.
+Image.Segmentation.SNIC({
+  image:ee.Image.cat(img), 
+  //size: 60,
+ // compactness: 164,
   //connectivity: 8,
   neighborhoodSize:256,
   seeds: seeds
 })//.select(["R_mean", "G_mean", "B_mean", "N_mean", "clusters"], ["R", "G", "B", "N", "clusters"])
+Map.addLayer(snic)
 var clusters = snic.select("clusters")
 Map.addLayer(clusters.randomVisualizer(), {}, "clusters",1)
 //Reduce predictors to snic clusters 
