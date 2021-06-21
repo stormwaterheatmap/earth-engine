@@ -1,0 +1,60 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("users/stormwaterheatmap/Censuscluster5m"),
+    built_up_grid = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1"),
+    clusters = ee.Image("users/stormwaterheatmap/Cenclusters5m32"),
+    image4 = ee.Image("users/stormwaterheatmap/censusclusters"),
+    imageVisParam = {"opacity":1,"bands":["built"],"min":3,"max":6,"palette":["e41a1c","377eb8","4daf4a","984ea3"]},
+    imageVisParam2 = {"opacity":1,"bands":["built"],"min":3,"max":6,"palette":["e41a1c","377eb8","4daf4a","984ea3"]},
+    imageVisParam3 = {"opacity":1,"bands":["built"],"min":2,"max":6,"palette":["e41a1c","377eb8","4daf4a","984ea3","ff7f00"]};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound")
+
+var census_blocks = ee.FeatureCollection("TIGER/2010/Blocks")
+var census_blocks= census_blocks.randomColumn().filterBounds(PugetSound)
+
+var census_block_image = census_blocks.reduceToImage(['random'],ee.Reducer.first())
+
+
+var nlcd = ee.Image("USGS/NLCD/NLCD2016").select('landcover')
+
+
+var GHSL = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1")
+var built = GHSL.select('built')
+var seeds = ee.Algorithms.Image.Segmentation.seedGrid(12, 'square')
+print(Map.getScale())
+var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs")
+var impervious = tncLC.eq(6).or(tncLC.eq(7)).rename('impervious')
+var clusters = ee.Algorithms.
+Image.Segmentation.SNIC({
+  image:ee.Image.cat(census_block_image,impervious), 
+  //size: 60,
+ compactness: 64,
+  //connectivity: 8,
+  //neighborhoodSize:256,
+  seeds: seeds
+}).select('clusters'); //.select(["R_mean", "G_mean", "B_mean", "N_mean", "clusters"], ["R", "G", "B", "N", "clusters"])
+
+Map.addLayer(clusters.randomVisualizer(), {}, "clusters",1)
+//Reduce predictors to snic clusters 
+    //imp = centerScale(imp,'impervious')
+Export.image.toAsset({image:clusters,
+region:PugetSound, scale:5, maxPixels:1e12})
+
+
+//palette for visualization 
+var pal = ["e41a1c","377eb8","4daf4a","984ea3","ff7f00"]
+//import Built-up grid and view 
+var built = built_up_grid.select('built');
+Map.addLayer(built,{min: 2, max: 6, palette: pal})
+
+//get Census clusters and add built up grid as a band; get the median epoch per cluster 
+var clustered = ee.Image.cat(clusters,built).reduceConnectedComponents(ee.Reducer.median())
+
+Map.addLayer(clusters,pal)
+
+//multiply by imperviousness 
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var imp_year = data.rasters.landCover.layer.eeObject.gte(6)
+
+Map.addLayer(clustered.multiply(imp_year).selfMask(),{min: 2, max: 6, palette: pal})
+Map.addLayer(built.multiply(imp_year).selfMask(),{min: 2, max: 6, palette: pal})
