@@ -1,0 +1,38 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("users/stormwaterheatmap/superPixels2"),
+    image2 = ee.Image("users/stormwaterheatmap/watershedClusters"),
+    image3 = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1"),
+    imageVisParam = {"opacity":1,"bands":["built"],"min":2,"max":6,"palette":["3d5941","778868","edbb8a","de8a5a","ca562c"]},
+    PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound"),
+    imageVisParam2 = {"opacity":1,"bands":["built_max"],"min":3,"max":6,"gamma":1};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var dataset = ee.Image(2019).subtract(ee.Image("Tsinghua/FROM-GLC/GAIA/v10"))///))//.gt(20).selfMask()//.subtract(2018);
+var dataset = image3.select('built').mask(image3.select('built').gte(3))
+var dataset2 = //ee.Image(0).blend
+(dataset).reduceNeighborhood(ee.Reducer.max(), ee.Kernel.diamond(16,'meters'), "kernel", true)// optimization)
+var clusters = ee.Image("users/cnilsen/snic1m")//.select('clusters') 
+Map.addLayer(dataset)
+Map.addLayer(dataset2)
+var census_blocks = ee.FeatureCollection("TIGER/2010/Blocks")
+var census_blocks= census_blocks.randomColumn().filterBounds(PugetSound)
+
+var census_block_image = census_blocks.reduceToImage(['random'],ee.Reducer.first())
+var testimg = ee.Image.cat(dataset,clusters).reduceConnectedComponents(ee.Reducer.mode(),'clusters')
+Map.addLayer(testimg)
+
+var tncLC = ee.Image(
+    "users/jrobertson2000/psLandCover_1m_finPS_roofs"
+    );
+    
+var water = tncLC.neq(5)
+var imp = tncLC.eq(6)
+    .or(tncLC.eq(7))//.focal_mean(2)
+    
+//Map.setCenter(-37.62, 25.8, 2);
+var nhood = dataset2.multiply(imp).selfMask()// ee.Image.cat(dataset,clusters).reduceConnectedComponents(ee.Reducer.mode(), "clusters",512).select(['built','cnfd']) //, maxSize)
+
+// Map.addLayer(nhood.multiply(imp).selfMask(), {}, "Change year index");
+
+Export.image.toAsset({image:nhood, assetId:"1m_cluster_age", 
+region:PugetSound, scale:1, maxPixels:1e12})
+Map.addLayer(nhood)//.focal_mode())
