@@ -278,9 +278,7 @@ var rasters = {
         vizType: 'bigNumberPercent',
         sourceName: null
     },
-  
-
-  
+ 
   'Age of Imperviousness':
     {
         layer:
@@ -308,7 +306,7 @@ var rasters = {
         sourceName: null,
         sourceUrl: null 
     },
-    {
+    "Impervviousness": {
         layer:
         {
             eeObject: imp.rename('imperviousness'),
