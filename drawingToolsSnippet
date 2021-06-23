@@ -1,13 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = 
-    /* color: #ff00ff */
-    /* shown: false */
-    ee.Geometry.Polygon(
-        [[[-122.3937822083093, 47.69550230496012],
-          [-122.3890615204431, 47.6961377723045],
-          [-122.39094979558958, 47.69826075477501],
-          [-122.39790208135618, 47.696412176263586]]]);
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 //import datasets 
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var layer_object = data.rasters["Age of Imperviousness"]
