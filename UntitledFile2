@@ -112,49 +112,26 @@ var barLegend = function (low, mid, high, palette) {
       );
   return ui.Panel([ColorBar(palette), labelPanel])
 }
-var palettes = require('users/gena/packages:palettes');
-var palette = palettes.colorbrewer.RdYlGn[9]//.reverse()
-//tnc download 
+
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var ws = data.vectors.PS_AU.filterBounds(geometry).union()
-//Mapyer(ws)
+
+
 Map.setOptions('Dark', {'Dark': Style.mapStyles.Dark})
-var dataset = ee.Image(2019).subtract(
-  image2.mask(image2.gte(2)))//
-var dataset =(image)
-  //mask(image.select(0).gt(2))//.resample()//
-var clusters = ee.Image("users/cnilsen/snic1m") 
-//Map.addLayer(clusters)
-//Map.addLayer(dataset)
-var tncLC = ee.Image(
-    "users/jrobertson2000/psLandCover_1m_finPS_roofs"
-    )
-var imp = tncLC.eq(6)
-    .or(tncLC.eq(7))//.focal_mean(2)
-//Map.setCenter(-37.62, 25.8, 2);
-var nhood =dataset//.focal_median(15,'circle','meters')
-// ee.Image.cat(dataset,clusters).uceConnectedComponents(ee.Reducer.mean(), "clusters",256).select(['constant']).rename(['change year'])//,'cnfd']) //, maxSize)
-//Map.addLayer(nhood.multiply(imp).selfMask(), {}, "Change year index");
-//Export.image.toAsset({image:nhood, assetId:"1m_cluster_age", 
-//region:PugetSound, scale:10, maxPixels:1e12})
-//var nhood2 = dataset//.reduceNeighborhood(ee.Reducer.mode(), ee.Kernel.diamond({radius:20,units:'meters'}),'kernel',true).subtract(ee.Image(2))
-//var nhood2 = ee.Image(0).blend(dataset).focal_max({iterations:2,kernel:ee.Kernel.manhattan(5)})//.focal_min({radius:2,iterations:2})
-//Map.addLayer((nhood))
-var imp_age =
-(nhood.multiply(imp).selfMask())
-var min = 4
-var max = 7
-var mid = 5.5
-Map.addLayer(imp_age)//min: min, max:max,palette:palette})
-print(legends)
+var dataset = data.rasters["Age of Imperviousness"]
+var img = dataset.layer.eeObject 
+var layer = dataset.layer 
+var palette = dataset.layer.visParams.palette 
+print(palette)
+Map.addLayer(layer)
+
 Map.add(ui.Panel(
-  [ui.Label('Age of Imperviousness, (year of first change)'),
-  barLegend(min,mid,max,palette)]
+  [
+  legends.discreteLegend(dataset)]
   ))
 Map.centerObject(geometry,12)
-var image = imp_age
+
 var scale_val = 5
-Export.image.toCloudStorage({image:imp_age,region:ws,scale:5})
