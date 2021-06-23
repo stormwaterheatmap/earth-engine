@@ -288,7 +288,7 @@ var rasters = {
             visParams:
             {
                 palette: [
-  '#542788','#998ec3','#d8daeb','#f1a340'
+  '#ffffd4','#fed98e','#fe9929','#cc4c02'
 
                 ],
                 min: 3,
