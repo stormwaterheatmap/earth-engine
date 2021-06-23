@@ -1,3 +1,11 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = /* color: #0000ff */ee.Geometry.Polygon(
+        [[[-122.38379928359981, 47.69542040997674],
+          [-122.3845717597961, 47.6861763585031],
+          [-122.35950919876095, 47.68686971920031],
+          [-122.3607966590881, 47.69836660700783]]]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var accept_button = ui.Button({label: 'Accept Drawing',style:{shown:false}})
 
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 var drawButton = ui.Button({label: 'Draw a region',
@@ -16,8 +24,12 @@ var clearButton = (ui.Button({
   label: 'Clear Drawing', 
   onClick: clearDrawings
   }))
+  
+accept_button.onClick(downloadImg)  
+
+
 var title = ui.Label("Title Here",{fontWeight: "bold"})
-var panel = ui.Panel({widgets: [title,drawButton,clearButton,downloadLabel], 
+var panel = ui.Panel({widgets: [title,accept_button, drawButton,clearButton,downloadLabel], 
   style: {position: 'bottom-left'}
 })
 
@@ -48,10 +60,19 @@ var layers = drawingTools.layers();
 
 
 // Use debounce to call the function at most every 100 milliseconds.
-drawingTools.onEdit(ui.util.debounce(downloadImg, 500));
-drawingTools.onDraw(ui.util.debounce(downloadImg, 500));
-drawingTools.onSelect(ui.util.debounce(downloadImg, 500));
+drawingTools.onEdit(ui.util.debounce(acceptDrawing, 500));
+drawingTools.onDraw(ui.util.debounce(acceptDrawing, 500));
+drawingTools.onSelect(ui.util.debounce(acceptDrawing, 500));
 
+var toggle = false; 
+
+
+
+function acceptDrawing () {
+  //Show accept button 
+  accept_button.style().set({shown:true})
+  //On accept button, download img 
+}
 
 
 function downloadImg() {
