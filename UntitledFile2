@@ -118,6 +118,7 @@ var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var ws = data.vectors.PS_AU.filterBounds(geometry).union()
+var basins = data.vectors.PS_AU.filterBounds(geometry)
 
 
 Map.setOptions('Dark', {'Dark': Style.mapStyles.Dark})
@@ -125,13 +126,27 @@ var dataset = data.rasters["Age of Imperviousness"]
 var img = dataset.layer.eeObject 
 var layer = dataset.layer 
 var palette = dataset.layer.visParams.palette 
-print(palette)
+print(img)
 Map.addLayer(layer)
-
-Map.add(ui.Panel(
+Map.add(ui.Panel({widgets: 
   [
   legends.discreteLegend(dataset)]
-  ))
+,  style: {position: "bottom-right"}})
+  )
 Map.centerObject(geometry,12)
 
-var scale_val = 5
+
+var vectors = img.reduceRegions(basins,ee.Reducer.mode())
+//Map.addLayer(vectors)
+
+var empty = ee.Image().byte();
+// Paint the interior of the polygons with different colors.
+var fills = empty.paint({
+  featureCollection: vectors,
+  color: 'mode',
+});
+Map.addLayer(fills, {min:3, max: 6, palette: palette}, 'colored fills',0);
+{}Map.addLayer(basins.style({color:'white', fillColor:"00000000"}),{},'outlines')
+
+
+
