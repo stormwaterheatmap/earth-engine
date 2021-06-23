@@ -1,12 +1,23 @@
-var img = ee.Image("USGS/NED")
+
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var drawButton = ui.Button({label: 'Draw a region',
+  onClick: getDrawingTools})
+var scaleSelect = ui.Slider(10,100,30,10)  
+
+var layer_object = data.rasters["Age of Imperviousness"]
+var img = layer_object.layer.eeObject
 var drawingTools = Map.drawingTools();
+
+drawingTools.setDrawModes(['point','polygon'])
+
 var downloadLabel = ui.Label('Download',{shown:false})
+
 var clearButton = (ui.Button({
   label: 'Clear Drawing', 
   onClick: clearDrawings
   }))
 var title = ui.Label("Title Here",{fontWeight: "bold"})
-var panel = ui.Panel({widgets: [title,clearButton,downloadLabel], 
+var panel = ui.Panel({widgets: [title,drawButton,clearButton,downloadLabel], 
   style: {position: 'bottom-left'}
 })
 
@@ -16,13 +27,18 @@ function map_init() {
   Map.layers().reset()
   Map.widgets().reset([panel])
   downloadLabel.style().set({shown:false})
-  Map.addLayer(img)
+  Map.addLayer(img,layer_object.layer.visParams)
   print(Map.layers())
-drawingTools.setDrawModes(['point','polygon']);
-  
 
 }
 // Starter script: https://code.earthengine.google.com/?scriptPath=Examples:Demos/Classification
+
+var getDrawingTools = function(){
+  //activate drawing tools
+  drawingTools.layers().reset()
+  drawingTools.setShown(true).setDrawModes(['polygon','rectangle'])
+  drawingTools.draw()
+  }
 
 
 // Only allow drawing points.
@@ -30,8 +46,6 @@ drawingTools.setDrawModes(['point','polygon']);
 // Get the layers list.
 var layers = drawingTools.layers();
 
-
-//print(urbanfc)
 
 // Use debounce to call the function at most every 100 milliseconds.
 drawingTools.onEdit(ui.util.debounce(downloadImg, 500));
