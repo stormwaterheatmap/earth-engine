@@ -1,13 +1,42 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #0000ff */ee.Geometry.MultiPolygon(
-        [[[[-122.38379928359981, 47.69542040997674],
-           [-122.3845717597961, 47.6861763585031],
-           [-122.35950919876095, 47.68686971920031],
-           [-122.3607966590881, 47.69836660700783]]],
-         [[[-122.38517257461544, 47.698020009169966],
-           [-122.37135383377071, 47.69859767918138],
-           [-122.381310193634, 47.7026989522215]]]]);
+var geometry = /* color: #00ff00 */ee.Geometry.Polygon(
+        [[[-122.39754766646391, 47.69754517276864],
+          [-122.3975288910008, 47.69797662459269],
+          [-122.39888877097135, 47.69790080486545]]]);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+//import datasets 
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var layer_object = data.rasters["Age of Imperviousness"]
+var img = layer_object.layer.eeObject
+var drawingTools = Map.drawingTools();
+
+Map.setControlVisibility({drawingToolsControl:false} )
+//--------------------------
+// UI Elements 
+//-----------------------
+
+//make drawing button
+// button resets drawingtools layeers
+// sets draw modes 
+// initiates user drawing 
+var drawButton = ui.Button({
+  label: 'Draw a region',
+  onClick: function(){
+  //activate drawing tools
+  drawingTools.layers().reset()
+  drawingTools.setShown(true).setDrawModes(['polygon', 'rectangle'])
+  drawingTools.draw()
+}
+})
+
+var clearButton = (ui.Button({
+  label: 'Clear Drawing',
+  onClick: clearDrawings
+}))
+//slider to control download sacel 
+var scaleSelect = ui.Slider(10, 100, 30, 10)
+
+//accept user drawing 
 var accept_button = ui.Button({
   label: 'Accept Drawing',
   style: {
@@ -15,34 +44,17 @@ var accept_button = ui.Button({
   }
 })
 
-var data = require('users/stormwaterheatmap/apps:Modules/datasets')
-var drawButton = ui.Button({
-  label: 'Draw a region',
-  onClick: getDrawingTools
+var title = ui.Label("Title Here", {
+  fontWeight: "bold"
 })
-var scaleSelect = ui.Slider(10, 100, 30, 10)
 
-var layer_object = data.rasters["Age of Imperviousness"]
-var img = layer_object.layer.eeObject
-var drawingTools = Map.drawingTools();
 
-drawingTools.setDrawModes(['point', 'polygon'])
+//drawingTools.setDrawModes(['point', 'polygon'])
 
 var downloadLabel = ui.Label('Download', {
   shown: false
 })
 
-var clearButton = (ui.Button({
-  label: 'Clear Drawing',
-  onClick: clearDrawings
-}))
-
-accept_button.onClick(downloadImg)
-
-
-var title = ui.Label("Title Here", {
-  fontWeight: "bold"
-})
 var panel = ui.Panel({
   widgets: [title, accept_button, drawButton, clearButton, downloadLabel],
   style: {
@@ -50,7 +62,9 @@ var panel = ui.Panel({
   }
 })
 
-//add a starter image 
+
+//functions 
+
 function map_init() {
   // Map.addLayer(img)
   Map.layers().reset()
@@ -62,7 +76,6 @@ function map_init() {
   print(Map.layers())
 
 }
-// Starter script: https://code.earthengine.google.com/?scriptPath=Examples:Demos/Classification
 
 var getDrawingTools = function () {
   //activate drawing tools
@@ -71,35 +84,14 @@ var getDrawingTools = function () {
   drawingTools.draw()
 }
 
-
-// Only allow drawing points.
-
-// Get the layers list.
-var layers = drawingTools.layers();
-
-
-// Use debounce to call the function at most every 100 milliseconds.
-drawingTools.onEdit(ui.util.debounce(acceptDrawing, 500));
-drawingTools.onDraw(ui.util.debounce(acceptDrawing, 500));
-drawingTools.onSelect(ui.util.debounce(acceptDrawing, 500));
-
-var toggle = false;
-
-
-
-function acceptDrawing() {
-  //Show accept button 
-  accept_button.style().set({
-    shown: true
-  })
-  //On accept button, download img 
-}
-
-
 function downloadImg() {
   (Map.layers().reset())
   //get the current geometry 
   var boundary = drawingTools.layers().get(0).getEeObject()
+  Map.setControlVisibility({drawingToolsControl:false})
+  Map.drawingTools().clear()
+  ui.Map.DrawingTools().clear()
+  (ui.Map.GeometryLayer().geometries().reset())//setShown(false))//.setShown(false)
   var clipedImg = img.clip(boundary)
   Map.addLayer(clipedImg)
   Map.centerObject(clipedImg)
@@ -115,6 +107,32 @@ function downloadImg() {
   })
   downloadLabel.setUrl(url)
 }
+accept_button.onClick(downloadImg)
+
+
+
+
+// Get the layers list.
+var layers = drawingTools.layers();
+
+
+// Use debounce to call the function at most every 100 milliseconds.
+drawingTools.onEdit(ui.util.debounce(acceptDrawing, 500));
+drawingTools.onDraw(ui.util.debounce(acceptDrawing, 500));
+drawingTools.onSelect(ui.util.debounce(acceptDrawing, 500));
+
+
+
+
+
+function acceptDrawing() {
+  //Show accept button 
+  accept_button.style().set({
+    shown: true
+  })
+  //On accept button, download img 
+}
+
 
 
 
