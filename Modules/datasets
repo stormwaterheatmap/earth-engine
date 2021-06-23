@@ -241,9 +241,8 @@ palettes.kovesi.linear_gow_65_90_c35[7]}
           vizType: 'pieChart'
             },
 ---------------------------
-*/ //updated 5/26/2020
-var imperviousAge = ee.Image(2019).subtract((ee.Image("Tsinghua/FROM-GLC/GAIA/v10"))
-.rename("change_year_index")).focal_mean(2).short().clip(PugetSound)//.mask(soils.neq(4))
+*/ //updated 6/22/2021
+var imperviousAge = ee.Image("users/stormwaterheatmap/1m_cluster_age_v2")
 
 
 
@@ -280,6 +279,17 @@ var rasters = {
         sourceName: null
     },
   
+
+3	
+#448564	Built-up from 2000 to 2014 epochs
+4	
+#70daa4	Built-up from 1990 to 2000 epochs
+5	
+#83ffbf	Built-up from 1975 to 1990 epochs
+6	
+#ffffff	built-up up to 1975 epoch
+  
+  
   'Age of Imperviousness':
     {
         layer:
@@ -298,18 +308,20 @@ var rasters = {
   "3288bd"
 
                 ],
-                min: 1985,
-                max: 2017,
+                min: 3,
+                max: 6,
                 opacity: 0.8,
             }
         },
-        discrete: false,
-        values: null,
-        units: 'year of most recent change',
-        labels: null,
-        vizType: 'bigNumberPercent',
-        sourceName: 'Gong et al 2020',
-        sourceUrl: 'http://doi.org/10.1016/j.rse.2019.111510%5D'
+        discrete: true,
+        values: [0, 1],
+        units: [],
+        labels: ['Pervious',
+            'Impervious'
+        ],
+        vizType: 'discrete',
+        sourceName: null,
+        sourceUrl: null 
     },
     'Imperviousness':
     {
