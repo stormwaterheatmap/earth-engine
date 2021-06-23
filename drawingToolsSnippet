@@ -1,56 +1,75 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #0000ff */ee.Geometry.Polygon(
-        [[[-122.38379928359981, 47.69542040997674],
-          [-122.3845717597961, 47.6861763585031],
-          [-122.35950919876095, 47.68686971920031],
-          [-122.3607966590881, 47.69836660700783]]]);
+var geometry = /* color: #0000ff */ee.Geometry.MultiPolygon(
+        [[[[-122.38379928359981, 47.69542040997674],
+           [-122.3845717597961, 47.6861763585031],
+           [-122.35950919876095, 47.68686971920031],
+           [-122.3607966590881, 47.69836660700783]]],
+         [[[-122.38517257461544, 47.698020009169966],
+           [-122.37135383377071, 47.69859767918138],
+           [-122.381310193634, 47.7026989522215]]]]);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var accept_button = ui.Button({label: 'Accept Drawing',style:{shown:false}})
+var accept_button = ui.Button({
+  label: 'Accept Drawing',
+  style: {
+    shown: false
+  }
+})
 
 var data = require('users/stormwaterheatmap/apps:Modules/datasets')
-var drawButton = ui.Button({label: 'Draw a region',
-  onClick: getDrawingTools})
-var scaleSelect = ui.Slider(10,100,30,10)  
+var drawButton = ui.Button({
+  label: 'Draw a region',
+  onClick: getDrawingTools
+})
+var scaleSelect = ui.Slider(10, 100, 30, 10)
 
 var layer_object = data.rasters["Age of Imperviousness"]
 var img = layer_object.layer.eeObject
 var drawingTools = Map.drawingTools();
 
-drawingTools.setDrawModes(['point','polygon'])
+drawingTools.setDrawModes(['point', 'polygon'])
 
-var downloadLabel = ui.Label('Download',{shown:false})
+var downloadLabel = ui.Label('Download', {
+  shown: false
+})
 
 var clearButton = (ui.Button({
-  label: 'Clear Drawing', 
+  label: 'Clear Drawing',
   onClick: clearDrawings
-  }))
-  
-accept_button.onClick(downloadImg)  
+}))
+
+accept_button.onClick(downloadImg)
 
 
-var title = ui.Label("Title Here",{fontWeight: "bold"})
-var panel = ui.Panel({widgets: [title,accept_button, drawButton,clearButton,downloadLabel], 
-  style: {position: 'bottom-left'}
+var title = ui.Label("Title Here", {
+  fontWeight: "bold"
+})
+var panel = ui.Panel({
+  widgets: [title, accept_button, drawButton, clearButton, downloadLabel],
+  style: {
+    position: 'bottom-left'
+  }
 })
 
 //add a starter image 
 function map_init() {
- // Map.addLayer(img)
+  // Map.addLayer(img)
   Map.layers().reset()
   Map.widgets().reset([panel])
-  downloadLabel.style().set({shown:false})
-  Map.addLayer(img,layer_object.layer.visParams)
+  downloadLabel.style().set({
+    shown: false
+  })
+  Map.addLayer(img, layer_object.layer.visParams)
   print(Map.layers())
 
 }
 // Starter script: https://code.earthengine.google.com/?scriptPath=Examples:Demos/Classification
 
-var getDrawingTools = function(){
+var getDrawingTools = function () {
   //activate drawing tools
   drawingTools.layers().reset()
-  drawingTools.setShown(true).setDrawModes(['polygon','rectangle'])
+  drawingTools.setShown(true).setDrawModes(['polygon', 'rectangle'])
   drawingTools.draw()
-  }
+}
 
 
 // Only allow drawing points.
@@ -64,13 +83,15 @@ drawingTools.onEdit(ui.util.debounce(acceptDrawing, 500));
 drawingTools.onDraw(ui.util.debounce(acceptDrawing, 500));
 drawingTools.onSelect(ui.util.debounce(acceptDrawing, 500));
 
-var toggle = false; 
+var toggle = false;
 
 
 
-function acceptDrawing () {
+function acceptDrawing() {
   //Show accept button 
-  accept_button.style().set({shown:true})
+  accept_button.style().set({
+    shown: true
+  })
   //On accept button, download img 
 }
 
@@ -82,17 +103,17 @@ function downloadImg() {
   var clipedImg = img.clip(boundary)
   Map.addLayer(clipedImg)
   Map.centerObject(clipedImg)
-  var url = clipedImg.getDownloadURL(
-    {
-    name: 'ee_image',
-    scale: 300
- }
-    
-    );
+  var url = clipedImg.getDownloadURL({
+      name: 'ee_image',
+      scale: 300
+    }
 
-  downloadLabel.style().set({shown:true})
-  downloadLabel.setUrl(url
-    )
+  );
+
+  downloadLabel.style().set({
+    shown: true
+  })
+  downloadLabel.setUrl(url)
 }
 
 
@@ -100,10 +121,9 @@ function downloadImg() {
 
 function clearDrawings() {
   map_init()
-drawingTools.layers().reset()
-print(layers)
-  
+  drawingTools.layers().reset()
+  print(layers)
+
 }
 
-map_init() 
-
+map_init()
