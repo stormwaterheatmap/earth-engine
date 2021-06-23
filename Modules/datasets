@@ -290,13 +290,7 @@ var rasters = {
             visParams:
             {
                 palette: [
-  "d53e4f",
-  "fc8d59",
-  "fee08b",
-  "ffffbf",
-  "e6f598",
-  "99d594",
-  "3288bd"
+  '#e41a1c','#377eb8','#4daf4a','#984ea3'
 
                 ],
                 min: 3,
@@ -307,14 +301,13 @@ var rasters = {
         discrete: true,
         values: [3, 4, 5, 6],
         units: ['epoch'],
-        labels: ['2000–2014','1990–2000','1975–1990', 'Before 1975']
+        labels: ['2000–2014','1990–2000','1975–1990', 'Before 1975'
             
         ],
         vizType: 'discrete',
         sourceName: null,
         sourceUrl: null 
     },
-    'Imperviousness':
     {
         layer:
         {
