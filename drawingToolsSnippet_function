@@ -1,10 +1,13 @@
 
 function drawing_tools_function(layer_object, map){
 //import datasets 
-var drawingTools = map.drawingTools();
+
+//map.drawingTools({shape:'polygon'})//, selected, shown, linked))
+var drawingTools = map.drawingTools({shape:'polygon'});
 
 var img = layer_object.layer.eeObject
 print(img)
+drawingTools.setDrawModes(['polygon', 'rectangle'])
 map.setControlVisibility({drawingToolsControl:false} )
 //--------------------------
 // UI Elements 
@@ -19,13 +22,15 @@ var drawButton = ui.Button({
   onClick: function(){
   //activate drawing tools
   drawingTools.layers().reset()
-  drawingTools.setShown(true).setDrawModes(['polygon', 'rectangle'])
+  drawingTools.setShown(true)
+  drawingTools.setShape('polygon')
+  //drawingTools.setDrawModes(['polygon', 'rectangle'])
   drawingTools.draw()
 }
 })
 
 var clearButton = (ui.Button({
-  label: 'Clear Drawing',
+  label: 'Clear Geometry',
   onClick: clearDrawings
 }))
 //slider to control download sacel 
@@ -33,18 +38,18 @@ var scaleSelect = ui.Slider(10, 100, 30, 10)
 
 //accept user drawing 
 var accept_button = ui.Button({
-  label: 'Accept Drawing',
+  label: 'Accept Geometry',
   style: {
     shown: false
   }
 })
 
-var title = ui.Label("Title Here", {
+var title = ui.Label("Draw Area of Interest", {
   fontWeight: "bold"
 })
 
 
-//drawingTools.setDrawModes(['point', 'polygon'])
+
 
 var downloadLabel = ui.Label('Download', {
   shown: false
@@ -137,7 +142,7 @@ function acceptDrawing() {
 function clearDrawings() {
   map_init()
   drawingTools.layers().reset()
-  print(layers)
+  accept_button.style().set({shown:false})
 
 }
 
@@ -148,3 +153,11 @@ return(map)
 
 exports.display_drawing_tools = drawing_tools_function 
 
+var data = require(
+  'users/stormwaterheatmap/apps:Modules/datasets'
+  ).rasters
+
+var exmap = drawing_tools_function(data["Age of Imperviousness"],ui.Map())
+
+ui.root.clear()
+ui.root.add(exmap)
