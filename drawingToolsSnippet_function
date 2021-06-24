@@ -5,8 +5,13 @@ var Style = require(
   'users/stormwaterheatmap/apps:Modules/Style'
   )
 //map.drawingTools({shape:'polygon'})//, selected, shown, linked))
-var drawingTools = map.drawingTools({shape:'polygon'});
+var drawingTools = map.drawingTools({shape:'rectangle'});
+var scale_ok = ui.Slider()
 
+// ui.Button({label:'OK', 
+//   onClick:function(){
+//     scale_drop_down.insert(1, ui.Label("OK"))
+//   }})
 var img = layer_object.layer.eeObject
 print(img)
 drawingTools.setDrawModes(['polygon', 'rectangle'])
@@ -20,12 +25,12 @@ map.setControlVisibility({drawingToolsControl:false} )
 // sets draw modes 
 // initiates user drawing 
 var drawButton = ui.Button({
-  label: 'Draw a region',
+  label: 'Draw a geometry',
   onClick: function(){
   //activate drawing tools
   drawingTools.layers().reset()
   drawingTools.setShown(true)
-  drawingTools.setShape('polygon')
+  drawingTools.setShape('rectangle')
   //drawingTools.setDrawModes(['polygon', 'rectangle'])
   drawingTools.draw()
 }
@@ -50,20 +55,98 @@ var title = ui.Label("Draw Area of Interest", {
   fontWeight: "bold"
 })
 print(Style.fonts.Caption1)
-var subtitle = ui.Label("Select 'draw a geometry' to begin drawing").style().set(Style.fonts.Caption1)
+var subtitle = ui.Label("Select 'draw a geometry' to begin drawing")
 
+subtitle.style().set(Style.fonts.Caption2)
+
+var accept_subtitle = ui.Label("Click 'Accept Geometry' to clip image for downloading")
+
+accept_subtitle.style().set(Style.fonts.Caption2).set({shown:false})
 
 var downloadLabel = ui.Label('Download', {
-  shown: false
+  shown: true
 })
 
 var panel = ui.Panel({
-  widgets: [title,subtitle, accept_button, drawButton, clearButton, downloadLabel],
+  widgets: [title,subtitle, scale_ok,
+    ui.Panel({widgets: [drawButton, clearButton], 
+        layout:ui.Panel.Layout.flow('horizontal'), 
+          style: ({stretch:'vertical'})}), 
+  
+  accept_subtitle, accept_button],
   style: {
     position: 'bottom-left'
   }
 })
+// var update_button = ui.Button('Check for download', function() {
+//         //var image_on_map = ee.Image(image).clip(geometry) //((mapPanel.layers().get(0).getEeObject())).clip(geometry)
+//         //downloadPanel.clear().add(downloadPanel_widgets)
+//         //print('clear')
+//         //var download_link = make_download_link(image_on_map, scale_drop_down.getValue())
+//         print(scale_drop_down.getValue())
+//         //mapPanel.addLayer(image_on_map)
+//         //downloadPanel_widgets.clear(download_link)
+//         downloadPanel.add(download_link)
+//     })
+//     var slider_panel = ui.Panel([scale_drop_down, update_button]).setLayout(ui.Panel.Layout.flow('horizontal'))
 
+//makes a link for download image. if error displays message 
+var make_download_link = function(image, scale_val) {
+        try { //try to get the download url 
+            // 
+            var url_value = image.getDownloadURL({
+                params: {
+                    scale: scale_val
+                }
+            })
+            var label_value = '✔ Download Layer' + ' @ ' + scale_val + ' m/pixel '
+
+        } catch (err) { //if error, return a label
+            var label_value = ('✖ Download is too large')
+            //targetUrl: url_value
+
+        }
+        var label_unit = ui.Label({
+            value: label_value,
+            targetUrl: url_value
+        })
+        return (label_unit) //returns ui element
+    }
+
+var scale_input = ui.Textbox({
+   value:30})
+
+  
+var scale_drop_down =ui.Panel({
+  widgets:
+  [
+  ui.Label("Enter a number for scale"),
+ui.Panel({
+  widgets: [scale_input
+  ],
+  layout:ui.Panel.Layout.flow('horizontal')})
+  ], 
+  style:{position: "middle-left"}
+})
+  
+        // min: 2,
+        // max: 200,
+        // value: 20,
+        // step: 2,
+        // disabled:false,
+        // style: {
+        //     width: "90%"
+        // },
+        // onChange: function(value) {
+        //     print(value)
+
+        // }
+  
+// })
+        
+var download_panel = ui.Panel({widgets: [ downloadLabel], style:{shown:false, width: 600, minWidth:300}})
+ 
+map.add(scale_drop_down)
 
 //functions 
 
@@ -99,6 +182,10 @@ function downloadImg() {
   var clipedImg = img.clip(boundary)
   map.addLayer(clipedImg,layer_object.layer.visParams)
   map.centerObject(clipedImg)
+  var numWidgets = panel.widgets()
+  panel.add(download_panel)
+  download_panel.style().set({shown:true})
+ 
   var url = clipedImg.getDownloadURL({
       name: 'ee_image',
       scale: 300
@@ -130,6 +217,10 @@ drawingTools.onSelect(ui.util.debounce(acceptDrawing, 500));
 
 
 function acceptDrawing() {
+  //show accept instructions 
+  accept_subtitle.style().set({
+    shown:true
+  })
   //Show accept button 
   accept_button.style().set({
     shown: true
@@ -145,6 +236,8 @@ function clearDrawings() {
   map_init()
   drawingTools.layers().reset()
   accept_button.style().set({shown:false})
+  accept_subtitle.style().set({shown:false})
+  download_panel.style().set({shown:false})
 
 }
 
