@@ -1,0 +1,145 @@
+//Drawingtoowls function 
+
+//import datasets 
+var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var layer_object = data.rasters["Age of Imperviousness"]
+var img = layer_object.layer.eeObject
+var drawingTools = Map.drawingTools();
+
+Map.setControlVisibility({drawingToolsControl:false} )
+//--------------------------
+// UI Elements 
+//-----------------------
+
+//make drawing button
+// button resets drawingtools layeers
+// sets draw modes 
+// initiates user drawing 
+var drawButton = ui.Button({
+  label: 'Draw a region',
+  onClick: function(){
+  //activate drawing tools
+  drawingTools.layers().reset()
+  drawingTools.setShown(true).setDrawModes(['polygon', 'rectangle'])
+  drawingTools.draw()
+}
+})
+
+var clearButton = (ui.Button({
+  label: 'Clear Drawing',
+  onClick: clearDrawings
+}))
+//slider to control download sacel 
+var scaleSelect = ui.Slider(10, 100, 30, 10)
+
+//accept user drawing 
+var accept_button = ui.Button({
+  label: 'Accept Drawing',
+  style: {
+    shown: false
+  }
+})
+
+var title = ui.Label("Title Here", {
+  fontWeight: "bold"
+})
+
+
+//drawingTools.setDrawModes(['point', 'polygon'])
+
+var downloadLabel = ui.Label('Download', {
+  shown: false
+})
+
+var panel = ui.Panel({
+  widgets: [title, accept_button, drawButton, clearButton, downloadLabel],
+  style: {
+    position: 'bottom-left'
+  }
+})
+
+
+//functions 
+
+function map_init() {
+  // Map.addLayer(img)
+  Map.layers().reset()
+  Map.widgets().reset([panel])
+  downloadLabel.style().set({
+    shown: false
+  })
+  Map.addLayer(img, layer_object.layer.visParams)
+  print(Map.layers())
+
+}
+
+var getDrawingTools = function () {
+  //activate drawing tools
+  drawingTools.layers().reset()
+  drawingTools.setShown(true).setDrawModes(['polygon', 'rectangle'])
+  drawingTools.draw()
+}
+
+function downloadImg() {
+  (Map.layers().reset())
+  //get the current geometry 
+  var boundary = drawingTools.layers().get(0).getEeObject()
+  Map.setControlVisibility({drawingToolsControl:false})
+  //Map.drawingTools().clear()
+  //ui.Map.DrawingTools().clear()
+ drawingTools.layers().get(0).setShown(false)
+ 
+ // (ui.Map.GeometryLayer().geometries().reset())//setShown(false))//.setShown(false)
+  var clipedImg = img.clip(boundary)
+  Map.addLayer(clipedImg,layer_object.layer.visParams)
+  Map.centerObject(clipedImg)
+  var url = clipedImg.getDownloadURL({
+      name: 'ee_image',
+      scale: 300
+    }
+
+  );
+
+  downloadLabel.style().set({
+    shown: true
+  })
+  downloadLabel.setUrl(url)
+}
+accept_button.onClick(downloadImg)
+
+
+
+
+// Get the layers list.
+var layers = drawingTools.layers();
+
+
+// Use debounce to call the function at most every 100 milliseconds.
+drawingTools.onEdit(ui.util.debounce(acceptDrawing, 500));
+drawingTools.onDraw(ui.util.debounce(acceptDrawing, 500));
+drawingTools.onSelect(ui.util.debounce(acceptDrawing, 500));
+
+
+
+
+
+function acceptDrawing() {
+  //Show accept button 
+  accept_button.style().set({
+    shown: true
+  })
+  //On accept button, download img 
+}
+
+
+
+
+
+function clearDrawings() {
+  map_init()
+  drawingTools.layers().reset()
+  print(layers)
+
+}
+
+map_init()
