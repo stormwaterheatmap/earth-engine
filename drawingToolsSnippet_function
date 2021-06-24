@@ -6,7 +6,7 @@ var Style = require(
   )
 //map.drawingTools({shape:'polygon'})//, selected, shown, linked))
 var drawingTools = map.drawingTools({shape:'rectangle'});
-var scale_ok = ui.Slider()
+
 
 // ui.Button({label:'OK', 
 //   onClick:function(){
@@ -67,8 +67,10 @@ var downloadLabel = ui.Label('Download', {
   shown: true
 })
 
+
+
 var panel = ui.Panel({
-  widgets: [title,subtitle, scale_ok,
+  widgets: [title,subtitle, 
     ui.Panel({widgets: [drawButton, clearButton], 
         layout:ui.Panel.Layout.flow('horizontal'), 
           style: ({stretch:'vertical'})}), 
@@ -78,19 +80,7 @@ var panel = ui.Panel({
     position: 'bottom-left'
   }
 })
-// var update_button = ui.Button('Check for download', function() {
-//         //var image_on_map = ee.Image(image).clip(geometry) //((mapPanel.layers().get(0).getEeObject())).clip(geometry)
-//         //downloadPanel.clear().add(downloadPanel_widgets)
-//         //print('clear')
-//         //var download_link = make_download_link(image_on_map, scale_drop_down.getValue())
-//         print(scale_drop_down.getValue())
-//         //mapPanel.addLayer(image_on_map)
-//         //downloadPanel_widgets.clear(download_link)
-//         downloadPanel.add(download_link)
-//     })
-//     var slider_panel = ui.Panel([scale_drop_down, update_button]).setLayout(ui.Panel.Layout.flow('horizontal'))
 
-//makes a link for download image. if error displays message 
 var make_download_link = function(image, scale_val) {
         try { //try to get the download url 
             // 
@@ -113,21 +103,10 @@ var make_download_link = function(image, scale_val) {
         return (label_unit) //returns ui element
     }
 
-var scale_input = ui.Textbox({
-   value:30})
+
 
   
-var scale_drop_down =ui.Panel({
-  widgets:
-  [
-  ui.Label("Enter a number for scale"),
-ui.Panel({
-  widgets: [scale_input
-  ],
-  layout:ui.Panel.Layout.flow('horizontal')})
-  ], 
-  style:{position: "middle-left"}
-})
+
   
         // min: 2,
         // max: 200,
@@ -143,10 +122,13 @@ ui.Panel({
         // }
   
 // })
-        
-var download_panel = ui.Panel({widgets: [ downloadLabel], style:{shown:false, width: 600, minWidth:300}})
+var line = ui.Panel({style: {border:
+  '1px solid whitesmoke'
+}})
+var download_title = ui.Label({value:"Download Imagery", style:{fontWeight:"bold"}}) ///, targetUrl)
+var download_panel = ui.Panel({widgets: [line,download_title,scaleSelect], style:{shown:false, width: 600, minWidth:300}})
  
-map.add(scale_drop_down)
+
 
 //functions 
 
@@ -182,21 +164,27 @@ function downloadImg() {
   var clipedImg = img.clip(boundary)
   map.addLayer(clipedImg,layer_object.layer.visParams)
   map.centerObject(clipedImg)
-  var numWidgets = panel.widgets()
+  
+  //var download_link = make_download_link(clipedImg,scaleSelect.getValue())
+  download_panel.add(
+    make_download_link(clipedImg,scaleSelect.getValue())
+    )
+  
+  
   panel.add(download_panel)
   download_panel.style().set({shown:true})
  
-  var url = clipedImg.getDownloadURL({
-      name: 'ee_image',
-      scale: 300
-    }
+  // var url = clipedImg.getDownloadURL({
+  //     name: 'ee_image',
+  //     scale: 300
+  //   }
 
-  );
+  // );
 
-  downloadLabel.style().set({
-    shown: true
-  })
-  downloadLabel.setUrl(url)
+  // downloadLabel.style().set({
+  //   shown: true
+  // })
+  // downloadLabel.setUrl(url)
 }
 accept_button.onClick(downloadImg)
 
@@ -233,7 +221,10 @@ function acceptDrawing() {
 
 
 function clearDrawings() {
+ // panel.clear()
   map_init()
+  download_panel.widgets().reset()
+  panel.remove(download_panel)
   drawingTools.layers().reset()
   accept_button.style().set({shown:false})
   accept_subtitle.style().set({shown:false})
