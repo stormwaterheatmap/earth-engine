@@ -1,6 +1,4 @@
-//Drawingtoowls function 
-var data = require('users/stormwaterheatmap/apps:Modules/datasets')
-var layer_object = data.rasters["Age of Imperviousness"]
+
 function drawing_tools_function(layer_object, map){
 //import datasets 
 var drawingTools = map.drawingTools();
@@ -148,4 +146,5 @@ map_init()
 return(map)
 }
 
-exports.drawing_tools_function = drawing_tools_function
+exports.display_drawing_tools = drawing_tools_function 
+
