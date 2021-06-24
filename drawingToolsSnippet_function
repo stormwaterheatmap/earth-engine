@@ -1,4 +1,9 @@
-
+/**
+ * adds drawing tools to a map to download a given image .
+ *
+ * @param {layer_object} dictionary a stormwaterheatmap layer dictionary 
+ * @param {map} a ee ui.Map() object 
+ */
 function drawing_tools_function(layer_object, map){
 //import datasets 
 var Style = require(
@@ -58,7 +63,7 @@ print(Style.fonts.Caption1)
 var subtitle = ui.Label("Select 'draw a geometry' to begin drawing")
 
 subtitle.style().set(Style.fonts.Caption2)
-
+var accept_title = ui.Label({value: "Accept Geometry",style:{fontWeight:'bold',shown:false}})
 var accept_subtitle = ui.Label("Click 'Accept Geometry' to clip image for downloading")
 
 accept_subtitle.style().set(Style.fonts.Caption2).set({shown:false})
@@ -75,58 +80,80 @@ var panel = ui.Panel({
         layout:ui.Panel.Layout.flow('horizontal'), 
           style: ({stretch:'vertical'})}), 
   
-  accept_subtitle, accept_button],
+ accept_title, accept_subtitle, accept_button],
   style: {
-    position: 'bottom-left'
+    position: 'bottom-left', width:"300px"
   }
 })
 
-var make_download_link = function(image, scale_val) {
+ var check_image_size = function (image, scale_val) {
+        var label_value
+        var url_value
         try { //try to get the download url 
-            // 
-            var url_value = image.getDownloadURL({
-                params: {
-                    scale: scale_val
-                }
-            })
-            var label_value = '✔ Download Layer' + ' @ ' + scale_val + ' m/pixel '
-
-        } catch (err) { //if error, return a label
-            var label_value = ('✖ Download is too large')
-            //targetUrl: url_value
-
-        }
-        var label_unit = ui.Label({
-            value: label_value,
-            targetUrl: url_value
+             url_value = image.getDownloadURL({
+            params: {
+                scale: scale_val
+            }
         })
-        return (label_unit) //returns ui element
+        //if no error, render this into the label: 
+        label_value = {value:
+                '✔ Download Layer' + ' @ ' +
+                scale_val + ' m/pixel ', 
+                targetUrl: url_value}
+        } catch (
+            err) { 
+          //if error, return a label
+            label_value = ({value: 
+                '✖ Download image is too large. Please select a coarser scale.',
+              style:{color:'red'}
+            })
+            
+        }
+        var label_unit = ui.Label(label_value)//targetUrl: url_value
+        
+        return (
+            label_unit) //returns ui element
     }
 
-
-
-  
-
-  
-        // min: 2,
-        // max: 200,
-        // value: 20,
-        // step: 2,
-        // disabled:false,
-        // style: {
-        //     width: "90%"
-        // },
-        // onChange: function(value) {
-        //     print(value)
-
-        // }
-  
-// })
 var line = ui.Panel({style: {border:
   '1px solid whitesmoke'
 }})
 var download_title = ui.Label({value:"Download Imagery", style:{fontWeight:"bold"}}) ///, targetUrl)
-var download_panel = ui.Panel({widgets: [line,download_title,scaleSelect], style:{shown:false, width: 600, minWidth:300}})
+
+var scale_drop_down = ui.Slider({
+        min: 2,
+        max: 200,
+        value: 30,
+        step: 2,
+        style: {
+            //width: "90%"
+        },
+
+        onChange: function(value) {
+            print(value)
+
+        }
+
+
+    })
+
+
+
+
+//list of widgets for donwload panel 
+// var downloadPanel_widgets
+
+// downloadPanel_widgets = ui.Panel({
+//         widgets: [line, 
+//             ui.Label('Choose scale to download layer:', {
+//                 fontWeight: 'bold'
+//             })
+            
+//         ]
+//     })
+
+
+// var download_panel = ui.Panel({widgets: [line,downloadPanel_widgets], style:{shown:false, width: 600, minWidth:300}})
  
 
 
@@ -150,7 +177,12 @@ var getDrawingTools = function () {
   drawingTools.setShown(true).setDrawModes(['polygon', 'rectangle'])
   drawingTools.draw()
 }
-
+var download_panel = ui.Panel({widgets: [line, 
+  ui.Label({value: "Download Image", style:{fontWeight:"bold"}})
+  ], 
+  layout: ui.Panel.Layout.flow({wrap:true}),
+  style: {width:"100%"}}
+  )
 function downloadImg() {
   (map.layers().reset())
   //get the current geometry 
@@ -165,26 +197,42 @@ function downloadImg() {
   map.addLayer(clipedImg,layer_object.layer.visParams)
   map.centerObject(clipedImg)
   
-  //var download_link = make_download_link(clipedImg,scaleSelect.getValue())
-  download_panel.add(
-    make_download_link(clipedImg,scaleSelect.getValue())
-    )
+  /*var update_button = ui.Button('Check for download', function() {
+        //var image_on_map = ee.Image(image).clip(geometry) //((mapPanel.layers().get(0).getEeObject())).clip(geometry)
+        //downloadPanel.clear().add(downloadPanel_widgets)
+        //print('clear')
+        var download_link = make_download_link(clipedImg, scale_drop_down.getValue())
+        print(scale_drop_down.getValue())
+        //mapPanel.addLayer(image_on_map)
+        //downloadPanel_widgets.clear(download_link)
+        download_panel.add(download_link)
+    })
+*/
+
+var slider = ui.Slider(1,100)
+var download_panel2 = ui.Panel([
+  ui.Label({value: ["Images are limited to 1000x1000 pixels.",
+  " Adjust the scale below and 'check image download to generate a download link."],
+  style:Style.fonts.Caption2})])
+    
+//Map.add(download_panel2)
+download_panel2.add(slider)
+var scale_val = (slider.getValue())
+
+var temp_panel = ui.Panel()
+download_panel2.add(temp_panel)
+var ok_button = ui.Button({label:"Check image download", 
+onClick: function() {
+  temp_panel.clear()
+  var label = check_image_size(clipedImg,Math.round(slider.getValue()))
+  temp_panel.add(label)
   
-  
+}})
+
+download_panel2.add(ok_button)
+download_panel.add(download_panel2)
   panel.add(download_panel)
   download_panel.style().set({shown:true})
- 
-  // var url = clipedImg.getDownloadURL({
-  //     name: 'ee_image',
-  //     scale: 300
-  //   }
-
-  // );
-
-  // downloadLabel.style().set({
-  //   shown: true
-  // })
-  // downloadLabel.setUrl(url)
 }
 accept_button.onClick(downloadImg)
 
@@ -206,6 +254,7 @@ drawingTools.onSelect(ui.util.debounce(acceptDrawing, 500));
 
 function acceptDrawing() {
   //show accept instructions 
+  accept_title.style().set({shown:true})
   accept_subtitle.style().set({
     shown:true
   })
@@ -227,6 +276,7 @@ function clearDrawings() {
   panel.remove(download_panel)
   drawingTools.layers().reset()
   accept_button.style().set({shown:false})
+  accept_title.style().set({shown:false})
   accept_subtitle.style().set({shown:false})
   download_panel.style().set({shown:false})
 
