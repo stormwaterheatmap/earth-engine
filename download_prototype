@@ -124,3 +124,5 @@ map.add(ui.Panel({
     position: 'bottom-right'
   }
 }))
+
+map.widgets().insert(0,ui.Label('testing'))
