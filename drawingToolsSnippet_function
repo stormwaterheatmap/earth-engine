@@ -1,7 +1,9 @@
 
 function drawing_tools_function(layer_object, map){
 //import datasets 
-
+var Style = require(
+  'users/stormwaterheatmap/apps:Modules/Style'
+  )
 //map.drawingTools({shape:'polygon'})//, selected, shown, linked))
 var drawingTools = map.drawingTools({shape:'polygon'});
 
@@ -47,8 +49,8 @@ var accept_button = ui.Button({
 var title = ui.Label("Draw Area of Interest", {
   fontWeight: "bold"
 })
-
-
+print(Style.fonts.Caption1)
+var subtitle = ui.Label("Select 'draw a geometry' to begin drawing").style().set(Style.fonts.Caption1)
 
 
 var downloadLabel = ui.Label('Download', {
@@ -56,7 +58,7 @@ var downloadLabel = ui.Label('Download', {
 })
 
 var panel = ui.Panel({
-  widgets: [title, accept_button, drawButton, clearButton, downloadLabel],
+  widgets: [title,subtitle, accept_button, drawButton, clearButton, downloadLabel],
   style: {
     position: 'bottom-left'
   }
