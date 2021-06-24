@@ -148,6 +148,4 @@ map_init()
 return(map)
 }
 
-var map_to_render = drawing_tools_function(layer_object,ui.Map())
-ui.root.clear();
-ui.root.add(map_to_render);
+exports.drawing_tools_function = drawing_tools_function
