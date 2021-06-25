@@ -103,13 +103,34 @@ var map = drawing_tools_function
     ui.Map())
 ui.root.clear();
 ui.root.add(map);
+
+//drop down of layers 
+var layer_dropdown = ui.Select({items: Object.keys(data.rasters), placeholder:'Select a layer', 
+style:{position: 'top-left'},
+  onChange: function(value){
+    map = drawing_tools_function
+  .display_drawing_tools(data.rasters[value],
+    ui.Map())
+ui.root.clear();
+ui.root.add(map);
+    print("Widgets", map.widgets())
+    map.layers().reset()
+    map.addLayer(data.rasters[value].layer)
+    
+  }
+  
+  
+}) 
+map.add(layer_dropdown)
+
+var legend = legends.discreteLegend(
+  layer_object)
 map.centerObject(geometry)
-map.add
+
 var ws = data.vectors.PS_AU
   .filterBounds(geometry)
   .union()
-var legend = legends.discreteLegend(
-  layer_object)
+
 //Mapyer(ws)
 map.setOptions('Dark', {
   'Dark': Style.mapStyles.Dark
