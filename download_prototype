@@ -125,4 +125,18 @@ map.add(ui.Panel({
   }
 }))
 
-map.widgets().insert(0,ui.Label('testing'))
+
+var alertPanel = ui.Panel({
+  widgets:[ui.Label(
+    {value: 'Stormwater Heatmap Download Tool', 
+    style:{backgroundColor: '#00000000', color:"#856404",fontWeight:"bold",margin:"0px",fontSize:"1.1rem"}
+  }), 
+  ui.Label(
+     {value: 'version 0.1a - Demonsration Only', 
+    style:{backgroundColor: '#00000000', color:"#856404",fontWeight:"200",fontSize:"1rem"}
+  }) 
+    ], 
+style:{backgroundColor: "#FFF3CD"}
+})
+  
+map.widgets().insert(0,alertPanel)
