@@ -306,7 +306,7 @@ var rasters = {
         sourceName: null,
         sourceUrl: null 
     },
-    "Impervviousness": {
+    "Imperviousness": {
         layer:
         {
             eeObject: imp.rename('imperviousness'),
