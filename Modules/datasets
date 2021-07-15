@@ -398,20 +398,21 @@ var rasters = {
             name: 'Hydrologic Soils Groups',
             visParams:
             {
-                palette: ['#69995D',
+                palette: ['#000000',
+                '#69995D',
                     '#564138',
                     '#F06543',
                     '#b3caff'
                 ],
-                min: 1,
+                min: 0,
                 max: 4,
                 opacity: 0.8
             }
         },
         discrete: true,
-        values: [1, 2, 3, 4],
+        values: [0, 1, 2, 3, 4],
         units: null,
-        labels: ['Outwash', 'Till',
+        labels: ['No data','Outwash', 'Till',
             'Saturated','Water'
         ],
         vizType: 'pieChart'
@@ -1503,6 +1504,6 @@ exports.vectors = {
 exports.rasters = rasters
 
 //testing
-//Map.addLayer(image6)
-print(rasters)
+Map.addLayer(soils)
+// print(rasters)
 //Map.addLayer(rasters.landCover.layer)
