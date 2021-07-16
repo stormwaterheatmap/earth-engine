@@ -1,0 +1,1501 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var NED = ee.Image("USGS/NED"),
+    precip = ee.Image("users/stormwaterheatmap/meanAnnual_precip"),
+    image = ee.Image("users/stormwaterheatmap/soils"),
+    image3 = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1"),
+    table = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
+    table2 = ee.FeatureCollection("TIGER/2018/Counties"),
+    table4 = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
+    NEXDCP = ee.ImageCollection("NASA/NEX-DCP30"),
+    image5 = ee.Image("users/stormwaterheatmap/nasaMeanAnnPrecip"),
+    GLCF_trees = ee.ImageCollection("GLCF/GLS_TCC"),
+    imageCollection = ee.ImageCollection("CIESIN/GPWv411/GPW_Population_Density"),
+    image6 = ee.Image("users/stormwaterheatmap/CigP2500"),
+    table5 = ee.FeatureCollection("users/stormwaterheatmap/MS4_bounds"),
+    dissolvedCopperConcentration = ee.Image("users/cnilsen/disCopper5m"),
+    image2 = ee.Image("users/stormwaterheatmap/soils2m"),
+    soils = ee.Image("users/stormwaterheatmap/soils2m"),
+    PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound"),
+    imageVisParam = {"opacity":1,"bands":["constant"],"min":11,"palette":["f0e992","ca7014","69d25f"]};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+/* ---------------------------
+// Author: Christian Nilsen, Geosyntec Consultants 
+// Email: cnilsen@geosyntec.com
+// Date Created: 2019-07-19
+// ---------------------------
+//This program is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, version 3.0 
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//For a copy of the GNU General Public License 
+//  see <https://www.gnu.org/licenses/>.
+*/ //---------------------------
+/*
+Load Image Collections 
+*/
+var traffic = ee.Image(0)
+  .blend(ee.Image(
+      "users/cnilsen/trafficExport")
+    .log())
+
+var populationDataset = ee
+  .ImageCollection(
+    'JRC/GHSL/P2016/POP_GPW_GLOBE_V1')
+  .filter(ee.Filter.date('2015-01-01',
+    '2015-12-31'));
+
+var population = populationDataset
+  .select('population_count')
+  .first();
+var lithology = ee.Image(
+    'CSP/ERGo/1_0/US/lithology')
+  .select('b1');
+var hspfLayers = require(
+  'users/stormwaterheatmap/source_data:hspfLayers'
+  );
+// var wq = require(
+//     'users/stormwaterheatmap/source_data:WQ2'
+//     )
+//   .concentrations
+var fdr = hspfLayers.fdr.focal_mean()
+Map.addLayer(fdr)
+
+//var palettes = require(
+//    'users/gena/packages:palettes');
+/*
+Images 
+*/
+
+
+//Precipitation
+var precip = ee.Image(
+    "users/stormwaterheatmap/CigP2500"
+    );
+//
+// var lu = ee.Image(
+//     "users/cnilsen/lu_5m_pyramid"
+//     ); //remap these categories to the following: 
+// /*
+// ['SF Residential',
+// 'MF Residential',
+// 'LD Residential',
+// 'Retail',
+// 'Resmisc',
+// 'Industrial',
+// 'TransRelated',
+// 'Road',
+// 'Commercial',
+// 'Public/Recreation',
+// 'Agriculture',
+// 'Timber-ResourceExtraction',
+// 'Undeveloped',
+// 'Water',
+// 'Open Space'
+// */
+// var generalizedLU = lu.remap(
+//     [11, 12, 15, 18,
+//         19, //Residential
+//         21, 22, 23, 24, 25, 26, 27,
+//         28, 29, 30, 31, 32, 33, 34,
+//         35,
+//         39, //Industrial
+//         41, 42, 43, 44, 45, 46, 47,
+//         48, 49, //Transportation 
+//         13, 14, 16, 17, 51, 52, 53,
+//         54, 55, 56, 57, 58, 59, 61,
+//         62, 63, 64,
+//         65, 66, 67, 68,
+//         69, //Commercial
+//         81, 82, 83, //Agricultural 
+//         84, 85, 87, 88,
+//         89, //Timber and Resource Extraction
+//         93, //water
+//         71, 72, 74, 75, 76, 91, 92,
+//         94, 95
+//     ], //open space 
+//     [1, 1, 1, 1, 1, //Residential
+//         2, 2, 2, 2, 2, 2, 2, 2, 2,
+//         2, 2, 2, 2, 2, 2,
+//         2, //Industrial
+//         3, 3, 3, 3, 3, 3, 3, 3,
+//         3, //Transportation 
+//         4, 4, 4, 4, 4, 4, 4, 4, 4,
+//         4, 4, 4, 4, 4, 4, 4, 4, 4,
+//         4, 4, 4,
+//         4, //Commercial
+//         5, 5, 5, //Agricultural 
+//         6, 6, 6, 6,
+//         6, //Timber and Resource Extraction
+//         7, //water
+//         8, 8, 8, 8, 8, 8, 8, 8, 8
+//     ] //open space
+// );
+// //
+// exports.landuse = generalizedLU;
+var tncLC = ee.Image(
+    "users/jrobertson2000/psLandCover_1m_finPS_roofs"
+    );
+
+var imp = tncLC.eq(6)
+    .or(tncLC.eq(7)).focal_mean(2)
+var imp = imp.updateMask(water)
+
+var mean_annual_runoff = hspfLayers.mean_annual_runoff.mask(tncLC.neq(0))
+var soils = ee.Image("users/stormwaterheatmap/soilsunmask5m").clip(PugetSound)
+//Generate slopes from USGS DEM 
+var thresholds = ee.Image([5.0, 15,
+    100]);
+var slopeZone = ee.Terrain.slope(NED)
+    .gt(thresholds)
+    .reduce('sum').clip(PugetSound);
+exports.slope = slopeZone;
+
+var age_of_development = ee.Image(
+        'JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1'
+        )
+    .select(
+        'built')
+age_of_development = age_of_development
+    .mask(age_of_development.neq(1))
+
+
+
+exports.precip = precip.select('b1')
+    .divide(
+        25.4); //exports precip as in 
+//Vectors 
+//Ecology Watershed Assessment Units 
+exports.PS_AU = ee.FeatureCollection(
+    'users/cnilsen/PS_AU')
+//exports.PS_AU = PS_AU*/
+
+//Map.addLayer(PugetSound)
+var counties = ee.FeatureCollection(
+        "TIGER/2018/Counties")
+    .filterBounds(
+        PugetSound);
+/*
+//Map.addLayer(counties)
+exports.WRIA = ee.FeatureCollection(
+        "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA")
+    .filterBounds(PugetSound);
+//Map.addLayer(WRIA)
+exports.HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12").filterBounds(
+    PugetSound);
+exports.NHDPlus = ee.FeatureCollection(
+    'users/cnilsen/PugetSoundNHDPlusWatersheds');
+//Map.addLayer(precip.select('b1').resample().divide(25.4))
+/*var LUpal = [
+  '#D45A51', 
+  '#CD770C', 
+  '#949989',
+  '#2E7BAF',
+  '#C3931E', 
+  '#4BA891', 
+  '#466b9f', 
+  '#256C61' 
+  ]
+  
+Map.addLayer(generalizedLU,{palette: LUpal})*/
+//Residential
+//Industrial
+//Transportation 
+//Agricultural 
+//Timber and Resource Extraction
+//water
+//open space 
+//Industrial
+//Transportation 
+//Commercial
+//Agricultural 
+//Timber and Resource Extraction
+//water
+//open space
+/*
+var pop = population
+  .filter(ee.Filter.date('2019-01-01', '2021-12-31')).first()
+Map.addLayer(pop,{palette: //palettes.kovesi.linear_kryw_5_100_c64[7]}
+palettes.kovesi.linear_gow_65_90_c35[7]}
+,'pop')*/
+//new layerlist with ee Objects listed 
+/* Use this as example: 
+    'Soils': {
+        layer: datasets.soils,
+        layerName: ['Hydrologic Soils Group'], 
+          palette: ['#69995D', '#564138', '#F06543', '#7FFF7F', '#05668D'],
+          discrete: true, 
+          minMax: [0,4],
+          values: [0, 1, 2, 3, 4], 
+          labels: ['A/B', 'C', 'D', 'water', 'Water'],
+          vizType: 'pieChart'
+            },
+---------------------------
+*/ //updated 6/22/2021
+var imperviousAge = ee.Image("users/stormwaterheatmap/1m_cluster_age_v2")
+
+
+
+var rasters = {
+  'Traffic':
+    {
+        layer:
+        {
+            eeObject: traffic.rename('traffic_AADT'),
+            name: 'Traffic',
+            visParams:
+            {
+                palette: [
+
+  "#000004",
+  "#320A5A",
+  "#781B6C",
+  "#BB3654",
+  "#EC6824",
+  "#FBB41A",
+  "#FCFFA4"
+
+                ],
+                min: 0,
+                max: 8,
+                opacity: 0.8,
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'Average Annual Daily Trips (log)',
+        labels: null,
+        vizType: 'bigNumberPercent',
+        sourceName: null
+    },
+ 
+  'Age of Imperviousness':
+    {
+        layer:
+        {
+            eeObject: imperviousAge.rename('age_of_impervious_surface'),
+            name: 'Age of Imperviousness',
+            visParams:
+            {
+                palette: [
+  '#ffffd4','#fed98e','#fe9929','#cc4c02'
+
+                ],
+                min: 3,
+                max: 6,
+                opacity: 0.8,
+            }
+        },
+        discrete: true,
+        values: [3, 4, 5, 6],
+        units: ['epoch'],
+        labels: ['2000–2014','1990–2000','1975–1990', 'Before 1975'
+            
+        ],
+        vizType: 'discrete',
+        sourceName: null,
+        sourceUrl: null 
+    },
+    "Impervviousness": {
+        layer:
+        {
+            eeObject: imp.rename('imperviousness'),
+            name: 'Imperviousness',
+            visParams:
+            {
+                palette: ['10371c','f2298f'
+                ],
+                min: 0,
+                max: 1,
+                opacity: 0.8,
+            }
+        },
+        discrete: true,
+        values: [0, 1],
+        units: [],
+        labels: ['Pervious',
+            'Impervious'
+        ],
+        vizType: 'bigNumberPercent',
+        sourceName: 'Robertson et al, 20XX',
+        sourceUrl: []
+    },
+    'Precipitation':
+    {
+        layer:
+        {
+            eeObject: precip.divide(
+                ee.Image(25.4)),
+            name: 'Mean Annual Preciptation',
+            visParams:
+            {
+                palette: [
+    "781c81",
+    "3f60ae",
+    "539eb6",
+    "6db388",
+    "cab843",
+    "e78532",
+    "d92120"
+  ],
+                min: 20,
+                max: 120,
+                opacity: 0.8
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'in/year',
+        labels: null,
+        vizType: 'bigNumberMean',
+        sourceName: 'Salathé et al 2019',
+        sourceUrl: 'https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/'
+    },
+    'Flow Duration Index':
+    {
+        layer:
+        {
+            eeObject: fdr.rename('flow_duration_index'),
+            name: 'Flow Duration Index',
+            visParams:
+            {
+                palette: ['#00007f',
+                    '#002aff',
+                    '#00d4ff',
+                    '#7fff7f',
+                    '#ffd400',
+                    '#ff2a00',
+                    '#7f0000'
+                ],
+                min: 1,
+                max: 10,
+                opacity: 0.8
+            }
+        },
+        discrete: false,
+        values: null,
+        units: null,
+        labels: null,
+        vizType: 'bigNumberMean',
+        sourceName: null,//'Salathé, EP, AF Hamlet, CF Mass M Stumbaugh, S-Y Lee, R Steed: Estimates of 21st Century Flood Risk in the Pacific Northwest Based on Regional Scale Climate Model Simulations.',
+        sourceUrl: null//'https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/'
+    },
+    'Soils':
+    {
+        layer:
+        {
+            eeObject: soils.rename('soils'),
+            name: 'Hydrologic Soils Groups',
+            visParams:
+            {
+                palette: ['#69995D',
+                    '#564138',
+                    '#F06543',
+                    '#b3caff'
+                ],
+                min: 1,
+                max: 4,
+                opacity: 0.8
+            }
+        },
+        discrete: true,
+        values: [1, 2, 3, 4],
+        units: null,
+        labels: ['Outwash', 'Till',
+            'Saturated','Water'
+        ],
+        vizType: 'pieChart'
+    },
+    'Slope':
+    {
+        layer:
+        {
+            eeObject: slopeZone.rename('slope_categories'),
+            name: 'Slope Categories',
+            visParams:
+            {
+                palette: ['#009B9E',
+                    '#F1F1F1',
+                    '#C75DAB'
+                ],
+                min: 0,
+                max: 2,
+                opacity: 0.8
+            }
+        },
+        discrete: true,
+        values: [0, 1, 2],
+        units: null,
+        labels: ['Flat', 'Moderate',
+            'Steep'
+        ],
+        vizType: 'pieChart'
+    },
+    'SlopeCont':
+    {
+        layer:
+        {
+            eeObject: ee.Terrain
+                .slope(NED).clip(PugetSound).rename('slope'),
+            name: 'Slope',
+            visParams:
+            {
+                palette: ['3f60ae',
+                    '539eb6',
+                    '6db388',
+                    'cab843',
+                    'e78532',
+                    'd92120'
+                ],
+                min: 0,
+                max: 25,
+                opacity: 0.8
+            }
+        },
+        discrete: false,
+        //values: [0, 1],
+        units: '%',
+        labels: null,
+        vizType: 'hist'
+    },
+    'landCover':
+    {
+        layer:
+        {
+            eeObject: tncLC.rename('landcover'),
+            name: 'Land Cover',
+            visParams:
+            {
+                palette: ["ffffff",
+                    "3ead63",
+                    "96ca6e",
+                    "26532b",
+                    "a39171",
+                    "476b9d",
+                    "adacb5",
+                    "d8d5db"
+                ],
+                min: 0,
+                max: 7,
+                opacity: 0.8
+            }
+        },
+        discrete: true,
+        values: [0, 1, 2, 3, 4,
+            5, 6, 7
+        ],
+        units: null,
+        labels: ['No data', 'Grass/Low Vegetation',
+            'Shrub/Medium Vegetation',
+            'Trees/Forest',
+            'Bare soil',
+            'Water',
+            'Impervious',
+            'Impervious - Roofs'
+        ],
+        vizType: 'pieChart',
+        sourceName: 'Robertson et al, 20XX',
+        sourceUrl: []
+    },
+    'hspfLandCover':
+    {
+        layer:
+        {
+            eeObject: hspfLayers.hspf_landcover.rename('hspf_landcover_categories')
+                ,
+            name: 'Land Cover',
+            visParams:
+            {
+                palette: ['55775e',
+                    'dacd7f',
+                    '7e9e87',
+                    'b3caff',
+                    '844c8b',
+                    'ead1ff'
+                ],
+                min: 0,
+                max: 5,
+                opacity: 0.8
+            }
+        },
+        discrete: true,
+        values: [0, 1, 2, 3, 4,
+            5
+        ],
+        units: null,
+        labels: ['Forest/Trees',
+            'Pasture', 'Grass',
+            'Water',
+            'Impervious - Roofs',
+            'Impervious'
+        ],
+        vizType: 'pieChart',
+        sourceName: 'Robertson et al, 20XX',
+        sourceUrl: []
+    },
+    'DevAge':
+    {
+        layer:
+        {
+            eeObject: age_of_development.rename('age_of_development'), //var visParams = {
+            name: 'Age of Development',
+            visParams:
+            {
+                palette: ['000000',
+                    '448564',
+                    '70daa4',
+                    '83ffbf',
+                    'ffffff'
+                ],
+                min: 2,
+                max: 6,
+                opacity: 0.8
+            }
+        },
+        discrete: true,
+        values: [2, 3, 4, 5, 6],
+        units: null,
+        labels: ['Not developed',
+            '2000 to 2014',
+            '1990 to 2000',
+            '1975 to 1990',
+            'Prior to 1975 '
+        ],
+        vizType: 'histogram'
+    },
+    //
+    'Lithology':
+    {
+        layer:
+        {
+            eeObject: lithology.rename('lithology'), //var visParams = {
+            name: 'Lithology',
+            visParams:
+            {
+                palette: [
+                    '356EFF',
+                    'ACB6DA',
+                    'white',
+                    'D6B879',
+                    '313131',
+                    'EDA800',
+                    'white',
+                    '616161',
+                    'D6D6D6',
+                    'D0DDAE',
+                    'B8D279',
+                    'D5D378',
+                    'white',
+                    '141414',
+                    '6DB155',
+                    '9B6D55',
+                    'FEEEC9',
+                    'D6B879',
+                    '00B7EC',
+                    'FFDA90',
+                    'F8B28C'
+                ],
+                min: 0,
+                max: 20,
+                opacity: 0.8
+            }
+        },
+        discrete: true,
+        values: [0, 1, 2, 3, 4, 5,
+            6, 7, 8, 9, 10, 11,
+            12, 13, 14, 15, 16,
+            17, 18, 19, 20
+        ],
+        units: null,
+        labels: ['Water',
+            'Carbonate',
+            'NA',
+            'Non-carbonate',
+            'Alkaline intrusive',
+            'Silicic residual',
+            'NA',
+            'Extrusive volcanic',
+            'Colluvial sediment',
+            'Glacial till clay',
+            'Glacial till loam',
+            'Glacial till coarse',
+            'NA',
+            'Glacial lake sediment fine',
+            'Glacial outwash coarse',
+            'Hydric',
+            'Eolian sediment coarse',
+            'Eolian sediment fine',
+            'Saline lake sediment',
+            'Alluvium and coastal sediment fine',
+            'Coastal sediment coarse'
+        ],
+        vizType: 'pieChart'
+    },
+    /* 'HRUs': {
+         layer: {
+             eeObject: hruBands,
+             name: 'Hydrologic Response Units',
+             visParams: {
+                 palette: ['#69995D', '#564138', '#F06543', '#7FFF7F',
+                     '#05668D'
+                 ],
+                 min: 0,
+                 max: 255
+             }
+         },
+         discrete: true,
+         values: [0, 1],
+         units: null,
+         labels: null, //['Pervious', 'Impervious'],
+         vizType: 'pieChart'
+     }, */
+    'Population':
+    {
+        layer:
+        {
+            eeObject: population.rename('population_count'),
+            name: 'Population Count',
+            visParams:
+            {
+                palette: ['#2f0f3e',
+                    '#66185c',
+                    '#9f2462',
+                    '#ce4356',
+                    '#eb7858',
+                    '#f7b37c',
+                    '#feedb0'
+                ],
+                min: 0,
+                max: 300,
+                opacity: 0.8
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'Total Population',
+        labels: null, //['Pervious', 'Impervious'],
+        vizType: 'bigNumberSum'
+    },
+    'landUse':
+    {
+        layer:
+        {
+            eeObject: generalizedLU.rename('land_use'),
+            name: 'Land Use',
+            visParams:
+            {
+                palette: [
+                    '#eb3121', //res
+                    '#6203ae', //ind
+                    '#845609', //trans
+                    '#ae39f3', //com
+                    '#efcb09', //ag
+                    '#a0c29b', //timber
+                    '#476b9d', // water
+                    '#4c6c0a', //open space 
+                    //'#256C61' //
+                ],
+                min: 1,
+                max: 8,
+                opacity: 0.8
+            }
+        },
+        discrete: true,
+        values: [1, 2, 3, 4, 5, 6,
+            7, 8
+        ],
+        units: null,
+        labels: ['Residential',
+            'Industrial',
+            'Transportation ',
+            'Commercial',
+            'Agricultural',
+            'Timber and Resource Extraction',
+            'Water',
+            'open space'
+        ],
+        vizType: 'pieChart'
+    },
+    'Runoff':
+    {
+        layer:
+        {
+            eeObject: mean_annual_runoff.rename('mean_annual_runoff_mm'),
+            name: 'Mean Annual Runoff',
+            visParams:
+            {
+                palette: ['#00007f',
+                    '#002aff',
+                    '#00d4ff',
+                    '#7fff7f',
+                    '#ffd400',
+                    '#ff2a00',
+                    '#7f0000'
+                ],
+                min: 100,
+                max: 1000,
+                opacity: 0.8
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'mm/year',
+        labels: null, //['Pervious', 'Impervious'],
+        vizType: 'histogram'
+        //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
+    },
+    'Runoff_in':
+    {
+        layer:
+        {
+            eeObject: mean_annual_runoff
+                .divide(ee.Image(
+                    25.4)).rename('mean_annual_runoff_inches'),
+            name: 'Mean Annual Runoff',
+            visParams:
+            {
+                palette:  ['#00007f',
+                    '#002aff',
+                    '#00d4ff',
+                    '#7fff7f',
+                    '#ffd400',
+                    '#ff2a00',
+                    '#7f0000'
+                ], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
+                min: 5,
+                max: 30,
+                opacity: 0.7
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'in/year',
+        labels: null, //['Pervious', 'Impervious'],
+        vizType: 'histogram'
+        //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
+    },
+    'GAP_remap':  {
+        layer:
+        {
+            eeObject: gapRemap,
+            name: 'Remapped Pervious Landcover \n from USGS GAP Data',
+            visParams:
+            {
+                palette:  ['f0e992','ca7014','69d25f'
+                ], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
+                min: 11,
+                max: 13,
+                opacity: 0.7
+            }
+        },
+        discrete: true,
+        values: null,
+        units: null,
+        labels: ['Pasture','Saturated Pasture','Grass'], //['Pervious', 'Impervious'],
+        vizType: 'histogram',
+        sourceName: gap.get('title'),
+        sourceUrl: gap.get('provider_url')
+        //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
+    },
+    'GAP':  {
+        layer:
+        {
+            eeObject: gap.randomVisualizer(),
+            name: 'USGS GAP Land Cover Data',
+            visParams:
+            {
+                //palette:  ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
+                //min: 0,
+                //max:576,
+                opacity: 0.7
+            }
+        },
+        discrete: true,
+        values: gap.get('landcover_class_values'),
+        units: null,
+        labels: ['ClassName',
+'South Florida Bayhead Swamp',
+'South Florida Cypress Dome',
+'South Florida Dwarf Cypress Savanna',
+'South Florida Mangrove Swamp',
+'South Florida Hardwood Hammock',
+'Southeast Florida Coastal Strand and Maritime Hammock',
+'Southwest Florida Coastal Strand and Maritime Hammock',
+'South Florida Pine Rockland',
+'Atlantic Coastal Plain Fall-line Sandhills Longleaf Pine Woodland - Open Understory Modifier',
+'Atlantic Coastal Plain Fall-line Sandhills Longleaf Pine Woodland - Scrub/Shrub Understory Modifier',
+'Atlantic Coastal Plain Upland Longleaf Pine Woodland',
+'Atlantic Coastal Plain Xeric River Dune',
+'East Gulf Coastal Plain Interior Upland Longleaf Pine Woodland - Open Understory Modifier',
+'East Gulf Coastal Plain Interior Upland Longleaf Pine Woodland - Scrub/Shrub Modifier',
+'Florida Longleaf Pine Sandhill - Scrub/Shrub Understory Modifier',
+'Florida Longleaf Pine Sandhill- Open Understory Modifier',
+'West Gulf Coastal Plain Upland Longleaf Pine Forest and Woodland',
+'Atlantic Coastal Plain Central Maritime Forest',
+'Atlantic Coastal Plain Southern Maritime Forest',
+'Central and South Texas Coastal Fringe Forest and Woodland',
+'East Gulf Coastal Plain Limestone Forest',
+'East Gulf Coastal Plain Maritime Forest',
+'East Gulf Coastal Plain Southern Loess Bluff Forest',
+'East Gulf Coastal Plain Southern Mesic Slope Forest',
+'Mississippi Delta Maritime Forest',
+'Southern Coastal Plain Dry Upland Hardwood Forest',
+'Southern Coastal Plain Oak Dome and Hammock',
+'West Gulf Coastal Plain Chenier and Upper Texas Coastal Fringe Forest and Woodland',
+'West Gulf Coastal Plain Mesic Hardwood Forest',
+'East-Central Texas Plains Pine Forest and Woodland',
+'West Gulf Coastal Plain Pine-Hardwood Forest',
+'West Gulf Coastal Plain Sandhill Oak and Shortleaf Pine Forest and Woodland',
+'Atlantic Coastal Plain Fall-Line Sandhills Longleaf Pine Woodland - Loblolly Modifier',
+'Deciduous Plantations',
+'East Gulf Coastal Plain Interior Upland Longleaf Pine Woodland - Loblolly Modifier',
+'East Gulf Coastal Plain Interior Upland Longleaf Pine Woodland - Offsite Hardwood Modifier',
+'East Gulf Coastal Plain Near-Coast Pine Flatwoods - Offsite Hardwood Modifier',
+'Evergreen Plantations or Managed Pine',
+'California Central Valley Mixed Oak Savanna',
+'California Coastal Closed-Cone Conifer Forest and Woodland',
+'California Coastal Live Oak Woodland and Savanna',
+'California Lower Montane Blue Oak-Foothill Pine Woodland and Savanna',
+'Central and Southern California Mixed Evergreen Woodland',
+'Mediterranean California Lower Montane Black Oak-Conifer Forest and Woodland',
+'Southern California Oak Woodland and Savanna',
+'Madrean Encinal',
+'Madrean Pinyon-Juniper Woodland',
+'Madrean Pine-Oak Forest and Woodland',
+'Madrean Upper Montane Conifer-Oak Forest and Woodland',
+'Edwards Plateau Dry-Mesic Slope Forest and Woodland',
+'Edwards Plateau Limestone Savanna and Woodland',
+'Edwards Plateau Mesic Canyon',
+'Llano Uplift Acidic Forest, Woodland and Glade',
+'East Cascades Oak-Ponderosa Pine Forest and Woodland',
+'Mediterranean California Mixed Evergreen Forest',
+'Mediterranean California Mixed Oak Woodland',
+'North Pacific Dry Douglas-fir-(Madrone) Forest and Woodland',
+'North Pacific Oak Woodland',
+'Edwards Plateau Limestone Shrubland',
+'Allegheny-Cumberland Dry Oak Forest and Woodland - Hardwood',
+'Allegheny-Cumberland Dry Oak Forest and Woodland - Pine Modifier',
+'Central and Southern Appalachian Montane Oak Forest',
+'Central and Southern Appalachian Northern Hardwood Forest',
+'Central Appalachian Oak and Pine Forest',
+'Crosstimbers Oak Forest and Woodland',
+'East Gulf Coastal Plain Black Belt Calcareous Prairie and Woodland - Woodland Modifier',
+'East Gulf Coastal Plain Northern Dry Upland Hardwood Forest',
+'East Gulf Coastal Plain Northern Loess Plain Oak-Hickory Upland - Hardwood Modifier',
+'East Gulf Coastal Plain Northern Loess Plain Oak-Hickory Upland - Juniper Modifier',
+'East-Central Texas Plains Post Oak Savanna and Woodland',
+'Lower Mississippi River Dune Woodland and Forest',
+'Mississippi River Alluvial Plain Dry-Mesic Loess Slope Forest',
+'North-Central Interior Dry Oak Forest and Woodland',
+'North-Central Interior Dry-Mesic Oak Forest and Woodland',
+'Northeastern Interior Dry Oak Forest - Mixed Modifier',
+'Northeastern Interior Dry Oak Forest - Virginia/Pitch Pine Modifier',
+'Northeastern Interior Dry Oak Forest-Hardwood Modifier',
+'Northeastern Interior Dry-Mesic Oak Forest',
+'Northern Atlantic Coastal Plain Dry Hardwood Forest',
+'Northern Crowleys Ridge Sand Forest',
+'Ouachita Montane Oak Forest',
+'Ozark-Ouachita Dry Oak Woodland',
+'Ozark-Ouachita Dry-Mesic Oak Forest',
+'Southern and Central Appalachian Oak Forest',
+'Southern and Central Appalachian Oak Forest - Xeric',
+'Southern Interior Low Plateau Dry-Mesic Oak Forest',
+'Southern Ridge and Valley Dry Calcareous Forest',
+'Southern Ridge and Valley Dry Calcareous Forest - Pine modifier',
+'East Gulf Coastal Plain Northern Dry Upland Hardwood Forest - Offsite Pine Modifier',
+'Managed Tree Plantation',
+'Ruderal Wetland',
+'Southern Piedmont Dry Oak-(Pine) Forest - Loblolly Pine Modifier',
+'Acadian Low-Elevation Spruce-Fir-Hardwood Forest',
+'Acadian-Appalachian Montane Spruce-Fir Forest',
+'Appalachian Hemlock-Hardwood Forest',
+'Central and Southern Appalachian Spruce-Fir Forest',
+'Laurentian Jack Pine-Red Pine Forest',
+'Laurentian-Acadian Northern Hardwoods Forest',
+'Laurentian-Acadian Northern Pine-(Oak) Forest',
+'Laurentian-Acadian Pine-Hemlock-Hardwood Forest',
+'Paleozoic Plateau Bluff and Talus',
+'Southern Appalachian Northern Hardwood Forest',
+'Atlantic Coastal Plain Dry and Dry-Mesic Oak Forest',
+'Atlantic Coastal Plain Fall-line Sandhills Longleaf Pine Woodland - Offsite Hardwood Modifier',
+'East Gulf Coastal Plain Interior Shortleaf Pine-Oak Forest - Hardwood Modifier',
+'East Gulf Coastal Plain Interior Shortleaf Pine-Oak Forest - Mixed Modifier',
+'Ozark-Ouachita Shortleaf Pine-Bluestem Woodland',
+'Ozark-Ouachita Shortleaf Pine-Oak Forest and Woodland',
+'Southeastern Interior Longleaf Pine Woodland',
+'Southern Appalachian Low Mountain Pine Forest',
+'Southern Piedmont Dry Oak-(Pine) Forest',
+'Southern Piedmont Dry Oak-(Pine) Forest - Hardwood Modifier',
+'Southern Piedmont Dry Oak-(Pine) Forest - Mixed Modifier',
+'Southern Piedmont Dry Oak-Heath Forest - Mixed Modifier',
+'Eastern Great Plains Tallgrass Aspen Parkland',
+'Northwestern Great Plains Aspen Forest and Parkland',
+'Northwestern Great Plains Shrubland',
+'Western Great Plains Dry Bur Oak Forest and Woodland',
+'Western Great Plains Wooded Draw and Ravine',
+'Atlantic Coastal Plain Mesic Hardwood and Mixed Forest',
+'East Gulf Coastal Plain Northern Loess Bluff Forest',
+'East Gulf Coastal Plain Northern Mesic Hardwood Forest',
+'North-Central Interior Beech-Maple Forest',
+'North-Central Interior Maple-Basswood Forest',
+'Ozark-Ouachita Mesic Hardwood Forest',
+'South-Central Interior Mesophytic Forest',
+'Southern and Central Appalachian Cove Forest',
+'Southern Crowleys Ridge Mesic Loess Slope Forest',
+'Southern Piedmont Mesic Forest',
+'Appalachian Shale Barrens',
+'Atlantic Coastal Plain Northern Maritime Forest',
+'Laurentian Pine-Oak Barrens',
+'Northeastern Interior Pine Barrens',
+'Northern Atlantic Coastal Plain Pitch Pine Barrens',
+'Southern Appalachian Montane Pine Forest and Woodland',
+'East Cascades Mesic Montane Mixed-Conifer Forest and Woodland',
+'Middle Rocky Mountain Montane Douglas-fir Forest and Woodland',
+'Northern Rocky Mountain Dry-Mesic Montane Mixed Conifer Forest',
+'Northern Rocky Mountain Foothill Conifer Wooded Steppe',
+'Northern Rocky Mountain Mesic Montane Mixed Conifer Forest',
+'Northern Rocky Mountain Ponderosa Pine Woodland and Savanna',
+'Northern Rocky Mountain Western Larch Savanna',
+'Northwestern Great Plains - Black Hills Ponderosa Pine Woodland and Savanna',
+'Rocky Mountain Foothill Limber Pine-Juniper Woodland',
+'Inter-Mountain Basins Aspen-Mixed Conifer Forest and Woodland',
+'Inter-Mountain Basins Subalpine Limber-Bristlecone Pine Woodland',
+'Northern Rocky Mountain Subalpine Woodland and Parkland',
+'Rocky Mountain Aspen Forest and Woodland',
+'Rocky Mountain Lodgepole Pine Forest',
+'Rocky Mountain Poor-Site Lodgepole Pine Forest',
+'Rocky Mountain Subalpine Dry-Mesic Spruce-Fir Forest and Woodland',
+'Rocky Mountain Subalpine Mesic Spruce-Fir Forest and Woodland',
+'Rocky Mountain Subalpine-Montane Limber-Bristlecone Pine Woodland',
+'Rocky Mountain Bigtooth Maple Ravine Woodland',
+'Southern Rocky Mountain Dry-Mesic Montane Mixed Conifer Forest and Woodland',
+'Southern Rocky Mountain Mesic Montane Mixed Conifer Forest and Woodland',
+'Southern Rocky Mountain Ponderosa Pine Savanna',
+'Southern Rocky Mountain Ponderosa Pine Woodland',
+'California Montane Jeffrey Pine-(Ponderosa Pine) Woodland',
+'Klamath-Siskiyou Lower Montane Serpentine Mixed Conifer Woodland',
+'Klamath-Siskiyou Upper Montane Serpentine Mixed Conifer Woodland',
+'Mediterranean California Dry-Mesic Mixed Conifer Forest and Woodland',
+'Mediterranean California Mesic Mixed Conifer Forest and Woodland',
+'Sierran-Intermontane Desert Western White Pine-White Fir Woodland',
+'California Coastal Redwood Forest',
+'North Pacific Broadleaf Landslide Forest and Shrubland',
+'North Pacific Dry-Mesic Silver Fir-Western Hemlock-Douglas-fir Forest',
+'North Pacific Hypermaritime Sitka Spruce Forest',
+'North Pacific Hypermaritime Western Red-cedar-Western Hemlock Forest',
+'North Pacific Lowland Mixed Hardwood-Conifer Forest and Woodland',
+'North Pacific Maritime Dry-Mesic Douglas-fir-Western Hemlock Forest',
+'North Pacific Maritime Mesic-Wet Douglas-fir-Western Hemlock Forest',
+'North Pacific Mesic Western Hemlock-Silver Fir Forest',
+'North Pacific Wooded Volcanic Flowage',
+'Mediterranean California Red Fir Forest',
+'Mediterranean California Subalpine Woodland',
+'North Pacific Maritime Mesic Subalpine Parkland',
+'North Pacific Mountain Hemlock Forest',
+'Northern California Mesic Subalpine Woodland',
+'Northern Pacific Mesic Subalpine Woodland',
+'Sierra Nevada Subalpine Lodgepole Pine Forest and Woodland',
+'Columbia Plateau Western Juniper Woodland and Savanna',
+'Great Basin Pinyon-Juniper Woodland',
+'Inter-Mountain Basins Curl-leaf Mountain Mahogany Woodland and Shrubland',
+'Inter-Mountain Basins Juniper Savanna',
+'Colorado Plateau Pinyon-Juniper Shrubland',
+'Colorado Plateau Pinyon-Juniper Woodland',
+'Southern Rocky Mountain Juniper Woodland and Savanna',
+'Southern Rocky Mountain Pinyon-Juniper Woodland',
+'Northwestern Great Plains Floodplain',
+'Northwestern Great Plains Riparian',
+'Western Great Plains Floodplain',
+'Western Great Plains Floodplain Systems',
+'Western Great Plains Riparian Woodland and Shrubland',
+'Central Appalachian Floodplain - Forest Modifier',
+'Central Appalachian Riparian - Forest Modifier',
+'Central Interior and Appalachian Floodplain Systems',
+'Central Interior and Appalachian Riparian Systems',
+'Laurentian-Acadian Floodplain Systems',
+'Ozark-Ouachita Riparian',
+'South-Central Interior Large Floodplain',
+'South-Central Interior Large Floodplain - Forest Modifier',
+'South-Central Interior Small Stream and Riparian',
+'Central Interior and Appalachian Swamp Systems',
+'Laurentian-Acadian Alkaline Conifer-Hardwood Swamp',
+'Laurentian-Acadian Swamp Systems',
+'North-Central Interior Wet Flatwoods',
+'South-Central Interior / Upper Coastal Plain Wet Flatwoods',
+'Southern Piedmont/Ridge and Valley Upland Depression Swamp',
+'Atlantic Coastal Plain Blackwater Stream Floodplain Forest - Forest Modifier',
+'Atlantic Coastal Plain Brownwater Stream Floodplain Forest',
+'Atlantic Coastal Plain Northern Tidal Wooded Swamp',
+'Atlantic Coastal Plain Small Blackwater River Floodplain Forest',
+'Atlantic Coastal Plain Southern Tidal Wooded Swamp',
+'East Gulf Coastal Plain Large River Floodplain Forest - Forest Modifier',
+'East Gulf Coastal Plain Small Stream and River Floodplain Forest',
+'East Gulf Coastal Plain Tidal Wooded Swamp',
+'East-Central Texas Plains Floodplain Forest',
+'East-Central Texas Plains Riparian Forest',
+'Eastern Great Plains Floodplain Systems',
+'Mississippi River Bottomland Depression',
+'Mississippi River Floodplain and Riparian Forest',
+'Mississippi River Low Floodplain (Bottomland) Forest',
+'Mississippi River Riparian Forest',
+'Red River Large Floodplain Forest',
+'Southern Coastal Plain Blackwater River Floodplain Forest',
+'Southern Piedmont Large Floodplain Forest - Forest Modifier',
+'Southern Piedmont Small Floodplain and Riparian Forest',
+'West Gulf Coastal Plain Large River Floodplain Forest',
+'West Gulf Coastal Plain Near-Coast Large River Swamp',
+'West Gulf Coastal Plain Small Stream and River Forest',
+'Atlantic Coastal Plain Streamhead Seepage Swamp - Pocosin - and Baygall',
+'Gulf and Atlantic Coastal Plain Swamp Systems',
+'Southern Coastal Plain Hydric Hammock',
+'Southern Coastal Plain Seepage Swamp and Baygall',
+'West Gulf Coastal Plain Seepage Swamp and Baygall',
+'Atlantic Coastal Plain Nonriverine Swamp and Wet Hardwood Forest - Taxodium/Nyssa Modifier',
+'Atlantic Coastal Plain Nonriverine Swamp and Wet Hardwood Forest - Oak Dominated Modifier',
+'East Gulf Coastal Plain Southern Loblolly-Hardwood Flatwoods',
+'Lower Mississippi River Bottomland Depressions - Forest Modifier',
+'Lower Mississippi River Flatwoods',
+'Northern Atlantic Coastal Plain Basin Swamp and Wet Hardwood Forest',
+'Southern Coastal Plain Nonriverine Basin Swamp',
+'Southern Coastal Plain Nonriverine Basin Swamp - Okefenokee Bay/Gum Modifier',
+'Southern Coastal Plain Nonriverine Basin Swamp - Okefenokee Pine Modifier',
+'Southern Coastal Plain Nonriverine Basin Swamp - Okefenokee Taxodium Modifier',
+'West Gulf Coastal Plain Nonriverine Wet Hardwood Flatwoods',
+'West Gulf Coastal Plain Pine-Hardwood Flatwoods',
+'Edwards Plateau Riparian',
+'Atlantic Coastal Plain Clay-Based Carolina Bay Forested Wetland',
+'Atlantic Coastal Plain Clay-Based Carolina Bay Herbaceous Wetland',
+'Atlantic Coastal Plain Southern Wet Pine Savanna and Flatwoods',
+'Central Atlantic Coastal Plain Wet Longleaf Pine Savanna and Flatwoods',
+'Central Florida Pine Flatwoods',
+'East Gulf Coastal Plain Near-Coast Pine Flatwoods',
+'East Gulf Coastal Plain Near-Coast Pine Flatwoods - Open Understory Modifier',
+'East Gulf Coastal Plain Near-Coast Pine Flatwoods - Scrub/Shrub Understory Modifier',
+'South Florida Pine Flatwoods',
+'Southern Coastal Plain Nonriverine Cypress Dome',
+'West Gulf Coastal Plain Wet Longleaf Pine Savanna and Flatwoods',
+'Columbia Basin Foothill Riparian Woodland and Shrubland',
+'Great Basin Foothill and Lower Montane Riparian Woodland and Shrubland',
+'Inter-Mountain Basins Montane Riparian Systems',
+'Northern Rocky Mountain Conifer Swamp',
+'Northern Rocky Mountain Lower Montane Riparian Woodland and Shrubland',
+'Rocky Mountain Lower Montane Riparian Woodland and Shrubland',
+'Rocky Mountain Montane Riparian Systems',
+'Rocky Mountain Subalpine-Montane Riparian Woodland',
+'North Pacific Hardwood-Conifer Swamp',
+'North Pacific Lowland Riparian Forest and Shrubland',
+'North Pacific Montane Riparian Woodland and Shrubland',
+'North Pacific Shrub Swamp',
+'California Central Valley Riparian Woodland and Shrubland',
+'Mediterranean California Foothill and Lower Montane Riparian Woodland',
+'Mediterranean California Serpentine Foothill and Lower Montane Riparian Woodland and Seep',
+'North American Warm Desert Lower Montane Riparian Woodland and Shrubland',
+'North American Warm Desert Riparian Systems',
+'North American Warm Desert Riparian Woodland and Shrubland',
+'Tamaulipan Floodplain',
+'Tamaulipan Riparian Systems',
+'Boreal Aspen-Birch Forest',
+'Boreal Jack Pine-Black Spruce Forest',
+'Boreal White Spruce-Fir-Hardwood Forest',
+'Boreal Acidic Peatland Systems',
+'Eastern Boreal Floodplain',
+'South Florida Shell Hash Beach',
+'Southeast Florida Beach',
+'Southwest Florida Beach',
+'South Florida Everglades Sawgrass Marsh',
+'South Florida Freshwater Slough and Gator Hole',
+'South Florida Wet Marl Prairie',
+'California Maritime Chaparral',
+'California Mesic Chaparral',
+'California Xeric Serpentine Chaparral',
+'Klamath-Siskiyou Xeromorphic Serpentine Savanna and Chaparral',
+'Mediterranean California Mesic Serpentine Woodland and Chaparral',
+'Northern and Central California Dry-Mesic Chaparral',
+'Southern California Dry-Mesic Chaparral',
+'Southern California Coastal Scrub',
+'California Central Valley and Southern Coastal Grassland',
+'California Mesic Serpentine Grassland',
+'Columbia Basin Foothill and Canyon Dry Grassland',
+'Columbia Basin Palouse Prairie',
+'North Pacific Alpine and Subalpine Dry Grassland',
+'North Pacific Montane Grassland',
+'North Pacific Montane Shrubland',
+'Northern Rocky Mountain Lower Montane, Foothill and Valley Grassland',
+'Northern Rocky Mountain Montane-Foothill Deciduous Shrubland',
+'Northern Rocky Mountain Subalpine Deciduous Shrubland',
+'Northern Rocky Mountain Subalpine-Upper Montane Grassland',
+'Southern Rocky Mountain Montane-Subalpine Grassland',
+'Rocky Mountain Gambel Oak-Mixed Montane Shrubland',
+'Rocky Mountain Lower Montane-Foothill Shrubland',
+'California Northern Coastal Grassland',
+'North Pacific Herbaceous Bald and Bluff',
+'North Pacific Hypermaritime Shrub and Herbaceous Headland',
+'Willamette Valley Upland Prairie and Savanna',
+'Mediterranean California Subalpine Meadow',
+'Rocky Mountain Subalpine-Montane Mesic Meadow',
+'Central Mixedgrass Prairie',
+'Northwestern Great Plains Mixedgrass Prairie',
+'Western Great Plains Foothill and Piedmont Grassland',
+'Western Great Plains Tallgrass Prairie',
+'Western Great Plains Sand Prairie',
+'Western Great Plains Sandhill Steppe',
+'Western Great Plains Mesquite Woodland and Shrubland',
+'Western Great Plains Shortgrass Prairie',
+'Arkansas Valley Prairie and Woodland',
+'Central Tallgrass Prairie',
+'North-Central Interior Oak Savanna',
+'North-Central Interior Sand and Gravel Tallgrass Prairie',
+'North-Central Oak Barrens',
+'Northern Tallgrass Prairie',
+'Southeastern Great Plains Tallgrass Prairie',
+'Southern Blackland Tallgrass Prairie',
+'Texas-Louisiana Coastal Prairie',
+'Central Appalachian Pine-Oak Rocky Woodland',
+'Southern Appalachian Grass and Shrub Bald',
+'Southern Appalachian Grass and Shrub Bald - Herbaceous Modifier',
+'Southern Appalachian Grass and Shrub Bald - Shrub Modifier',
+'Central Appalachian Alkaline Glade and Woodland',
+'Central Interior Highlands Calcareous Glade and Barrens',
+'Central Interior Highlands Dry Acidic Glade and Barrens',
+'Cumberland Sandstone Glade and Barrens',
+'Great Lakes Alvar',
+'Nashville Basin Limestone Glade',
+'Ridge and Valley Calcareous Valley Bottom Glade and Woodland',
+'Southern Piedmont Glade and Barrens',
+'East Gulf Coastal Plain Black Belt Calcareous Prairie and Woodland - Herbaceous Modifier',
+'East Gulf Coastal Plain Jackson Prairie and Woodland',
+'Eastern Highland Rim Prairie and Barrens - Dry Modifier',
+'Coahuilan Chaparral',
+'Madrean Oriental Chaparral',
+'Mogollon Chaparral',
+'Sonora-Mojave Semi-Desert Chaparral',
+'California Montane Woodland and Chaparral',
+'Great Basin Semi-Desert Chaparral',
+'Florida Dry Prairie',
+'Florida Peninsula Inland Scrub',
+'West Gulf Coastal Plain Catahoula Barrens',
+'West Gulf Coastal Plain Nepheline Syenite Glade',
+'East Gulf Coastal Plain Jackson Plain Dry Flatwoods - Open Understory Modifier',
+'West Gulf Coastal Plain Northern Calcareous Prairie',
+'West Gulf Coastal Plain Southern Calcareous Prairie',
+'Acadian-Appalachian Subalpine Woodland and Heath-Krummholz',
+'Atlantic and Gulf Coastal Plain Interdunal Wetland',
+'Atlantic Coastal Plain Southern Dune and Maritime Grassland',
+'Central and Upper Texas Coast Dune and Coastal Grassland',
+'East Gulf Coastal Plain Dune and Coastal Grassland',
+'Great Lakes Dune',
+'Northern Atlantic Coastal Plain Dune and Swale',
+'Northern Atlantic Coastal Plain Heathland and Grassland',
+'South Texas Dune and Coastal Grassland',
+'South Texas Sand Sheet Grassland',
+'Southwest Florida Dune and Coastal Grassland',
+'North Pacific Coastal Cliff and Bluff',
+'North Pacific Maritime Coastal Sand Dune and Strand',
+'Northern California Coastal Scrub',
+'Mediterranean California Coastal Bluff',
+'Mediterranean California Northern Coastal Dune',
+'Mediterranean California Southern Coastal Dune',
+'Atlantic Coastal Plain Northern Sandy Beach',
+'Atlantic Coastal Plain Sea Island Beach',
+'Atlantic Coastal Plain Southern Beach',
+'Florida Panhandle Beach Vegetation',
+'Louisiana Beach',
+'Northern Atlantic Coastal Plain Sandy Beach',
+'Texas Coastal Bend Beach',
+'Upper Texas Coast Beach',
+'Mediterranean California Serpentine Fen',
+'Mediterranean California Subalpine-Montane Fen',
+'North Pacific Bog and Fen',
+'Rocky Mountain Subalpine-Montane Fen',
+'Atlantic Coastal Plain Peatland Pocosin',
+'Southern and Central Appalachian Bog and Fen',
+'Atlantic Coastal Plain Central Fresh-Oligohaline Tidal Marsh',
+'Atlantic Coastal Plain Embayed Region Tidal Freshwater Marsh',
+'Atlantic Coastal Plain Northern Fresh and Oligohaline Tidal Marsh',
+'Florida Big Bend Fresh-Oligohaline Tidal Marsh',
+'Atlantic Coastal Plain Depression Pondshore',
+'Atlantic Coastal Plain Large Natural Lakeshore',
+'Central Florida Herbaceous Pondshore',
+'Central Florida Herbaceous Seep',
+'East Gulf Coastal Plain Savanna and Wet Prairie',
+'East Gulf Coastal Plain Southern Depression Pondshore',
+'Floridian Highlands Freshwater Marsh',
+'Southern Coastal Plain Herbaceous Seepage Bog',
+'Southern Coastal Plain Nonriverine Basin Swamp - Okefenokee Clethra Modifier',
+'Southern Coastal Plain Nonriverine Basin Swamp - Okefenokee Nupea Modifier',
+'Texas-Louisiana Coastal Prairie Slough',
+'Central Interior and Appalachian Shrub-Herbaceous Wetland Systems',
+'Great Lakes Coastal Marsh Systems',
+'Laurentian-Acadian Freshwater Marsh',
+'Laurentian-Acadian Shrub-Herbaceous Wetland Systems',
+'Northern Great Lakes Coastal Marsh',
+'Eastern Great Plains Wet Meadow, Prairie, and Marsh',
+'Great Lakes Wet-Mesic Lakeplain Prairie',
+'Great Plains Prairie Pothole',
+'Western Great Plains Closed Depression Wetland',
+'Western Great Plains Depressional Wetland Systems',
+'Western Great Plains Open Freshwater Depression Wetland',
+'Cumberland Riverscour',
+'Inter-Mountain Basins Interdunal Swale Wetland',
+'North Pacific Avalanche Chute Shrubland',
+'North Pacific Intertidal Freshwater Wetland',
+'Temperate Pacific Freshwater Emergent Marsh',
+'Temperate Pacific Freshwater Mudflat',
+'Columbia Plateau Vernal Pool',
+'Northern California Claypan Vernal Pool',
+'Northern Rocky Mountain Wooded Vernal Pool',
+'Columbia Plateau Silver Sagebrush Seasonally Flooded Shrub-Steppe',
+'Rocky Mountain Alpine-Montane Wet Meadow',
+'Rocky Mountain Subalpine-Montane Riparian Shrubland',
+'Temperate Pacific Montane Wet Meadow',
+'Willamette Valley Wet Prairie',
+'Chihuahuan-Sonoran Desert Bottomland and Swale Grassland',
+'North American Arid West Emergent Marsh',
+'North American Warm Desert Riparian Mesquite Bosque',
+'Western Great Plains Saline Depression Wetland',
+'Acadian Salt Marsh and Estuary Systems',
+'Atlantic Coastal Plain Central Salt and Brackish Tidal Marsh',
+'Atlantic Coastal Plain Embayed Region Tidal Salt and Brackish Marsh',
+'Atlantic Coastal Plain Indian River Lagoon Tidal Marsh',
+'Atlantic Coastal Plain Northern Tidal Salt Marsh',
+'Florida Big Bend Salt-Brackish Tidal Marsh',
+'Gulf and Atlantic Coastal Plain Tidal Marsh Systems',
+'Mississippi Sound Salt and Brackish Tidal Marsh',
+'Texas Saline Coastal Prairie',
+'Temperate Pacific Tidal Salt and Brackish Marsh',
+'Inter-Mountain Basins Alkaline Closed Depression',
+'Inter-Mountain Basins Greasewood Flat',
+'Inter-Mountain Basins Playa',
+'North American Warm Desert Playa',
+'Apacherian-Chihuahuan Mesquite Upland Scrub',
+'Apacherian-Chihuahuan Semi-Desert Grassland and Steppe',
+'Chihuahuan Creosotebush, Mixed Desert and Thorn Scrub',
+'Chihuahuan Gypsophilous Grassland and Steppe',
+'Chihuahuan Loamy Plains Desert Grassland',
+'Chihuahuan Mixed Desert and Thorn Scrub',
+'Chihuahuan Sandy Plains Semi-Desert Grassland',
+'Chihuahuan Stabilized Coppice Dune and Sand Flat Scrub',
+'Chihuahuan Succulent Desert Scrub',
+'Madrean Juniper Savanna',
+'Mojave Mid-Elevation Mixed Desert Scrub',
+'North American Warm Desert Active and Stabilized Dune',
+'Sonora-Mojave Creosotebush-White Bursage Desert Scrub',
+'Sonoran Mid-Elevation Desert Scrub',
+'Sonoran Paloverde-Mixed Cacti Desert Scrub',
+'Chihuahuan Mixed Salt Desert Scrub',
+'Sonora-Mojave Mixed Salt Desert Scrub',
+'North American Warm Desert Wash',
+'South Texas Lomas',
+'Tamaulipan Calcareous Thornscrub',
+'Tamaulipan Clay Grassland',
+'Tamaulipan Mesquite Upland Scrub',
+'Tamaulipan Mixed Deciduous Thornscrub',
+'Tamaulipan Savanna Grassland',
+'Inter-Mountain Basins Mat Saltbush Shrubland',
+'Inter-Mountain Basins Mixed Salt Desert Scrub',
+'Inter-Mountain Basins Wash',
+'Columbia Plateau Steppe and Grassland',
+'Great Basin Xeric Mixed Sagebrush Shrubland',
+'Inter-Mountain Basins Big Sagebrush Shrubland',
+'Inter-Mountain Basins Big Sagebrush Steppe',
+'Inter-Mountain Basins Montane Sagebrush Steppe',
+'Colorado Plateau Mixed Low Sagebrush Shrubland',
+'Columbia Plateau Low Sagebrush Steppe',
+'Columbia Plateau Scabland Shrubland',
+'Wyoming Basins Dwarf Sagebrush Shrubland and Steppe',
+'Colorado Plateau Blackbrush-Mormon-tea Shrubland',
+'Inter-Mountain Basins Semi-Desert Grassland',
+'Inter-Mountain Basins Semi-Desert Shrub Steppe',
+'Southern Colorado Plateau Sand Shrubland',
+'Acadian-Appalachian Alpine Tundra',
+'Rocky Mountain Alpine Dwarf-Shrubland',
+'Rocky Mountain Alpine Fell-Field',
+'Rocky Mountain Alpine Turf',
+'Mediterranean California Alpine Dry Tundra',
+'Mediterranean California Alpine Fell-Field',
+'North Pacific Dry and Mesic Alpine Dwarf-Shrubland, Fell-field and Meadow',
+'Rocky Mountain Alpine Tundra/Fell-field/Dwarf-shrub Map Unit',
+'Temperate Pacific Intertidal Mudflat',
+'Mediterranean California Eelgrass Bed',
+'North Pacific Maritime Eelgrass Bed',
+'South-Central Interior Large Floodplain - Herbaceous Modifier',
+'East Gulf Coastal Plain Large River Floodplain Forest - Herbaceous Modifier',
+'Temperate Pacific Freshwater Aquatic Bed',
+'Central California Coast Ranges Cliff and Canyon',
+'Mediterranean California Serpentine Barrens',
+'Southern California Coast Ranges Cliff and Canyon',
+'Central Interior Acidic Cliff and Talus',
+'Central Interior Calcareous Cliff and Talus',
+'East Gulf Coastal Plain Dry Chalk Bluff',
+'North-Central Appalachian Acidic Cliff and Talus',
+'North-Central Appalachian Circumneutral Cliff and Talus',
+'Southern Appalachian Montane Cliff',
+'Southern Interior Acid Cliff',
+'Southern Interior Calcareous Cliff',
+'Southern Piedmont Cliff',
+'Southern Appalachian Granitic Dome',
+'Southern Appalachian Rocky Summit',
+'Southern Piedmont Granite Flatrock',
+'Rocky Mountain Cliff, Canyon and Massive Bedrock',
+'Klamath-Siskiyou Cliff and Outcrop',
+'North Pacific Montane Massive Bedrock, Cliff and Talus',
+'North Pacific Serpentine Barren',
+'North Pacific Volcanic Rock and Cinder Land',
+'Sierra Nevada Cliff and Canyon',
+'Western Great Plains Badland',
+'Southwestern Great Plains Canyon',
+'Western Great Plains Cliff and Outcrop',
+'North American Warm Desert Badland',
+'North American Warm Desert Bedrock Cliff and Outcrop',
+'North American Warm Desert Pavement',
+'North American Warm Desert Volcanic Rockland',
+'Colorado Plateau Mixed Bedrock Canyon and Tableland',
+'Columbia Plateau Ash and Tuff Badland',
+'Geysers and Hot Springs',
+'Inter-Mountain Basins Active and Stabilized Dune',
+'Inter-Mountain Basins Cliff and Canyon',
+'Inter-Mountain Basins Shale Badland',
+'Inter-Mountain Basins Volcanic Rock and Cinder Land',
+'Rocky Mountain Alpine Bedrock and Scree',
+'Mediterranean California Alpine Bedrock and Scree',
+'North Pacific Alpine and Subalpine Bedrock and Scree',
+'Unconsolidated Shore',
+'Undifferentiated Barren Land',
+'North American Glacier and Ice Field',
+'Orchards Vineyards and Other High Structure Agriculture',
+'Cultivated Cropland',
+'Pasture/Hay',
+'Introduced Upland Vegetation - Annual Grassland',
+'Introduced Upland Vegetation - Perennial Grassland and Forbland',
+'Modified/Managed Southern Tall Grassland',
+'Introduced Upland Vegetation - Shrub',
+'Introduced Riparian and Wetland Vegetation',
+'Introduced Upland Vegetation - Treed',
+'Disturbed, Non-specific',
+'Recently Logged Areas',
+'Harvested Forest - Grass/Forb Regeneration',
+'Harvested Forest - Shrub Regeneration',
+'Harvested Forest - Northwestern Conifer Regeneration',
+'Recently Burned',
+'Recently Burned Grassland',
+'Recently Burned Shrubland',
+'Recently Burned Forest',
+'Disturbed/Successional - Grass/Forb Regeneration',
+'Disturbed/Successional - Shrub Regeneration',
+'Recently Chained Pinyon-Juniper Areas',
+'Open Water (Aquaculture)',
+'Open Water (Brackish/Salt)',
+'Open Water (Fresh)',
+'Quarries, Mines, Gravel Pits and Oil Wells',
+'Developed, Open Space',
+'Developed, Low Intensity',
+'Developed, Medium Intensity'
+], //['Pervious', 'Impervious'],
+        vizType: 'histogram',
+        sourceName: gap.get('title'),
+        sourceUrl: gap.get('provider_url')
+        },
+    'Total Copper':
+    {
+        layer:
+        {
+            eeObject: wq.select(["Total Copper"]),
+            name: 'Total Copper concentration',
+            visParams:
+            {
+                palette: ['#00204c','#a59c74','#d3c064','#ffe945'
+                ],
+                min: 0,
+                max: 200,
+                opacity: 0.8
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'µg/L',
+        labels: null, //['Pervious', 'Impervious'],
+        vizType: 'histogram'
+        //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
+    },
+    'Total Copper Load':
+    {
+        layer:
+        {
+            eeObject: mean_annual_runoff.multiply(wq.select(["Total Copper"]).divide(1000)),
+            name: 'Total Copper Load',
+            visParams:
+            {
+                palette: ['#00204c','#a59c74','#d3c064','#ffe945','#ffffff'],
+                min: 0,
+                max: 200,
+                opacity: 0.8
+            }
+        },
+        discrete: false,
+        values: null,
+        units: 'mg/m² per year',
+        labels: null, //['Pervious', 'Impervious'],
+        vizType: 'histogram'
+        //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
+    },
+    // 'DissolvedCopper':
+    // {
+    //     layer:
+    //     {
+    //         eeObject: dCuLoad,
+    //         name: 'Dissolved Copper Load',
+    //         visParams:
+    //         {
+    //             palette: ["#352a87",
+    //                 "#056ede",
+    //                 "#089bce",
+    //                 "#33b7a0",
+    //                 "#a3bd6a",
+    //                 "#f9bd3f",
+    //                 "#f9fb0e"
+    //             ],
+    //             min: 0,
+    //             max: 5,
+    //             opacity: 0.8
+    //         }
+    //     },
+    //     discrete: false,
+    //     values: null,
+    //     units: 'mg/sq.m',
+    //     labels: null, //['Pervious', 'Impervious'],
+    //     vizType: 'histogram'
+    // }
+}
+exports.vectors = {
+    counties: ee.FeatureCollection(
+            "TIGER/2018/Counties")
+        .filterBounds(
+            PugetSound),
+    HUC12: ee.FeatureCollection(
+            "USGS/WBD/2017/HUC12")
+        .filterBounds(
+            PugetSound),
+    NHDPlus: ee.FeatureCollection(
+        'users/cnilsen/PugetSoundNHDPlusWatersheds'
+        ),
+    PS_AU: ee.FeatureCollection(
+        'users/cnilsen/PS_AU'),
+    PugetSound: PugetSound,
+    WRIA: ee.FeatureCollection(
+            "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
+        )
+        .filterBounds(PugetSound),
+    MS4: ee.FeatureCollection(
+            "users/stormwaterheatmap/MS4_bounds"
+            )
+        .filterBounds(PugetSound),
+}
+exports.rasters = rasters
+
+//testing
+//Map.addLayer(image6)
+print(rasters)
+//Map.addLayer(rasters.landCover.layer)
