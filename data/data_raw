@@ -1,128 +1,139 @@
 /* ---------------------------
 * Author: Christian Nilsen, Geosyntec Consultants 
 * Email: cnilsen@geosyntec.com
-* Date Created: 2019-07-19
+* Date Created: 2021-07-16
 *---------------------------
 
 /*---------------------------
 Vectors
 */
-var PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound");
 
-var counties =  ee.FeatureCollection(
-            "TIGER/2018/Counties")
-        .filterBounds(
-            PugetSound)
-var HUC12= ee.FeatureCollection(
-            "USGS/WBD/2017/HUC12")
-        .filterBounds(
-            PugetSound);
-var  NHDPlus= ee.FeatureCollection(
-        'users/cnilsen/PugetSoundNHDPlusWatersheds'
-        );
-var    PS_AU= ee.FeatureCollection(
-        'users/cnilsen/PS_AU');
+var PugetSound = ee.FeatureCollection(
+  "users/stormwaterheatmap/tables/PugetSound");
 
-var WRIA= ee.FeatureCollection("users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
-        )
-        .filterBounds(PugetSound); 
+exports.PugetSound = PugetSound
 
-var  MS4= ee.FeatureCollection(
-            "users/stormwaterheatmap/MS4_bounds"
-            )
-        .filterBounds(PugetSound)
+exports.counties = ee.FeatureCollection(
+    "TIGER/2018/Counties")
+  .filterBounds(
+    PugetSound)
+exports.HUC12 = ee.FeatureCollection(
+    "USGS/WBD/2017/HUC12")
+  .filterBounds(
+    PugetSound);
+exports.HUC10 = ee.FeatureCollection(
+    "USGS/WBD/2017/HUC10")
+  .filterBounds(
+    PugetSound);
 
+exports.HUC08 = ee.FeatureCollection(
+    "USGS/WBD/2017/HUC08")
+  .filterBounds(
+    PugetSound);
+
+exports.NHDPlus = ee.FeatureCollection(
+  'users/cnilsen/PugetSoundNHDPlusWatersheds'
+);
+
+exports.PS_AU = ee.FeatureCollection(
+  'users/cnilsen/PS_AU');
+
+exports.WRIA = ee.FeatureCollection(
+    "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
+  )
+  .filterBounds(PugetSound);
+
+exports.MS4 = ee.FeatureCollection(
+    "users/stormwaterheatmap/MS4_bounds"
+  )
+  .filterBounds(PugetSound)
 
 /*---------------------------
 Earth Engine Catalog Data 
-*/  
-var NED = ee.Image("USGS/NED"); 
+*/
+var NED = ee.Image("USGS/NED");
 
 //Slope
 //Slope Categories: 
 var thresholds = ee.Image([5.0, 15,
-    100]);
+  100
+]);
 var slopeZone = ee.Terrain.slope(NED)
-    .gt(thresholds)
-    .reduce('sum').clip(PugetSound);
+  .gt(thresholds)
+  .reduce('sum')
+  .clip(PugetSound);
+
 exports.slope = slopeZone;
 
 //Slope continuous 
-var slope_cont = ee.Terrain
-                .slope(NED).rename('slope')
-
-
-
+exports.slope_cont = ee.Terrain
+  .slope(NED)
+  .rename('slope')
 
 /*---------------------------
 Stormwaterheatmap Vector Assets 
-*/ 
-var counties = ee.FeatureCollection(
-        "TIGER/2018/Counties")
-    .filterBounds(
-        PugetSound);
-var landuse = ee.FeatureCollection("users/stormwaterheatmap/psrc_landuse") 
+*/
+exports.counties = ee.FeatureCollection(
+    "TIGER/2018/Counties")
+  .filterBounds(
+    PugetSound);
+var landuse = ee.FeatureCollection("users/stormwaterheatmap/psrc_landuse")
 
-var traffic = ee.Image(0)
+exports.traffic = ee.Image(0)
   .blend(ee.Image(
       "users/cnilsen/trafficExport")
     .log())
 
 //Watersheds     
-var PS_AU = ee.FeatureCollection(
-    'users/cnilsen/PS_AU')    
+exports.PS_AU = ee.FeatureCollection(
+  'users/cnilsen/PS_AU')
 
 /*---------------------------
 Stormwaterheatmap Image Assets 
 */
-var landuse_img = landuse.reduceToImage(['Master_num'],ee.Reducer.first()).rename("land_use_code")
+exports.landuse_img = landuse.reduceToImage(['Master_num'], ee.Reducer.first())
+  .rename("land_use_code")
 
 // Export.image.toAsset({image: landuse_img, assetId:"psrc_landuse_img", region: PugetSound, scale:1, 
 // maxPixels:1e12})
 
 //Soils 
-var soils = ee.Image("users/stormwaterheatmap/soilsunmask5m").clip(PugetSound)
+exports.soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
+  .clip(PugetSound)
 
 //imperviousnessation
-var imperviousnessation_per_ha =  ee.Image("users/stormwaterheatmap/imperviousnessation_per_ha");
+exports.imperviousnessation_per_ha = ee.Image(
+  "users/stormwaterheatmap/imperviousnessation_per_ha");
 
 //Precipitation 
-var precip = ee.Image("users/stormwaterheatmap/CigP2500");
+exports.precip = ee.Image("users/stormwaterheatmap/CigP2500");
 
 //Landcover 
-var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs"    );
+exports.tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
 
 //Imperviousness
-var imperviousness = tncLC.eq(6)
-    .or(tncLC.eq(7)).focal_mean(2)
+exports.imperviousness = tncLC.eq(6)
+  .or(tncLC.eq(7))
+  .focal_mean(2)
+
 var water = tncLC.eq(0)
-var imperviousness = imperviousness.updateMask(water)
+exports.imperviousness = imperviousness.updateMask(water)
 
 //age of development 
-var age_of_development = ee.Image("users/stormwaterheatmap/GHS_BUILT_LDSMT_GLOBE_R2018A_3857_30_V2_0_4_7").rename('built');
+exports.age_of_development = ee.Image(
+    "users/stormwaterheatmap/GHS_BUILT_LDSMT_GLOBE_R2018A_3857_30_V2_0_4_7")
+  .rename('built');
 
 /*---------------------------
 // Import HSPF Layers 
-*/ 
+*/
 var hspfLayers = require('users/stormwaterheatmap/source_data:hspfLayers');
 
 //runoff 
-var mean_annual_runoff = hspfLayers.mean_annual_runoff.mask(tncLC.neq(0))
+exports.mean_annual_runoff = hspfLayers.mean_annual_runoff.mask(tncLC.neq(0))
 
 //Flow Duration Index 
-var fdr = hspfLayers.fdr
+exports.fdr = hspfLayers.fdr
 
-var hspf_landcover =  hspfLayers.hspf_landcover.rename('hspf_landcover_categories')
-
-
-
-
-
-
-
-
-
-
-//testing
-//Map.addLayer(image6)
-//Map.addLayer(rasters.landCover.layer)
+exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
+  'hspf_landcover_categories')
