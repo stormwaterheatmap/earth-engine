@@ -8,7 +8,7 @@
 Load Data 
 */
 var data = require('users/stormwaterheatmap/apps:data/data_raw')
-print(data)
+
 
 //Begin Data Dictionary 
 //---------------------------
@@ -481,8 +481,3 @@ exports.vectors = {
     MS4: data.MS4
 }
 exports.rasters = rasters
-
-//testing
-//Map.addLayer(image6)
-print(rasters)
-//Map.addLayer(rasters.landCover.layer)
