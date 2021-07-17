@@ -109,12 +109,12 @@ exports.imperviousnessation_per_ha = ee.Image(
 exports.precip = ee.Image("users/stormwaterheatmap/CigP2500");
 
 //Landcover 
-exports.tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
+var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
 
 //Imperviousness
-exports.imperviousness = tncLC.eq(6)
+var imperviousness = tncLC.eq(6)
   .or(tncLC.eq(7))
-  .focal_mean(2)
+exports.imperviousness = imperviousness  
 
 var water = tncLC.eq(0)
 exports.imperviousness = imperviousness.updateMask(water)
