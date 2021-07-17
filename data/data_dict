@@ -184,7 +184,7 @@ var rasters = {
         ],
         vizType: 'pieChart'
     },
-    'Slope':
+    'Slope Categories':
     {
         layer:
         {
@@ -209,7 +209,7 @@ var rasters = {
         ],
         vizType: 'pieChart'
     },
-    'SlopeCont':
+    'Slope':
     {
         layer:
         {
@@ -235,7 +235,7 @@ var rasters = {
         labels: null,
         vizType: 'hist'
     },
-    'landCover':
+    'Land Cover':
     {
         layer:
         {
@@ -274,7 +274,7 @@ var rasters = {
         sourceName: 'Robertson et al, 20XX',
         sourceUrl: []
     },
-    'hspfLandCover':
+    'HSPF Land Cover Type':
     {
         layer:
         {
@@ -310,7 +310,7 @@ var rasters = {
         sourceName: 'Robertson et al, 20XX',
         sourceUrl: []
     },
-    'DevAge':
+    'Age of Development':
     {
         layer:
         {
@@ -369,7 +369,7 @@ var rasters = {
         labels: null, //['Pervious', 'Impervious'],
         vizType: 'bigNumberSum'
     },
-    'landUse':
+    'Land Use':
     {
         layer:
         {
@@ -437,7 +437,7 @@ var rasters = {
         vizType: 'histogram'
         //var imageVisParam = {"opacity":1,"bands":["sum"],"min":100,"max":1000,"palette":["000000","182e49","2b6f39","a07949","d490c6","c2d8f3","ffffff"]};
     },
-    'Runoff_in':
+    'Runoff (inches)':
     {
         layer:
         {
