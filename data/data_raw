@@ -51,14 +51,7 @@ exports.slope = slopeZone;
 var slope_cont = ee.Terrain
                 .slope(NED).rename('slope')
 
-//Age of development 
 
-
-// var age_of_development = ee.Image(
-//         'JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1'
-//         )
-//     .select(
-//         'built')
 
 
 /*---------------------------
