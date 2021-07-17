@@ -91,6 +91,8 @@ exports.PS_AU = ee.FeatureCollection(
 /*---------------------------
 Stormwaterheatmap Image Assets 
 */
+
+exports.population_per_ha = ee.Image("users/stormwaterheatmap/population_per_ha") 
 exports.landuse_img = landuse.reduceToImage(['Master_num'], ee.Reducer.first())
   .rename("land_use_code")
 
