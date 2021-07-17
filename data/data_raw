@@ -110,6 +110,7 @@ exports.precip = ee.Image("users/stormwaterheatmap/CigP2500");
 
 //Landcover 
 var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
+exports.tncLC = tncLC
 
 //Imperviousness
 var imperviousness = tncLC.eq(6)
