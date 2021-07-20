@@ -62,13 +62,28 @@ targetUrl: link
   //combine into a horizontal label 
 var combined_panel = ui.Panel({widgets:[panel_label,info_label], layout:ui.Panel.Layout.flow('horizontal')}); 
 return(combined_panel)
-
-
 }
 
+//Map - set style and center on puget sound 
+
+function make_tnc_map(map) {
+    var m = map || Map
+    m.setOptions('Dark', Style.mapStyles)
+    m.setControlVisibility({
+        all: false,
+        zoomControl: true,
+        mapTypeControl: true,
+        layerList: true,
+        fullscreenControl: true
+    });
+    m.setCenter(-122.3077440902171, 47.6043996364779, 9)
+}
+exports.make_tnc_map = make_tnc_map
 exports.clear_map_add_layer = clear_map_add_layer 
 exports.addObject = addObject
 exports.removeObject = removeObject
 exports.makeLegend = makeLegend
 exports.info_panel = info_panel
+
+make_tnc_map()
 
