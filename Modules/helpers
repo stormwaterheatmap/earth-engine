@@ -68,7 +68,6 @@ return(combined_panel)
 
 function make_tnc_map(map) {
     var m = map || Map
-    m.setOptions('Dark', Style.mapStyles)
     m.setControlVisibility({
         all: false,
         zoomControl: true,
@@ -77,6 +76,7 @@ function make_tnc_map(map) {
         fullscreenControl: true
     });
     m.setCenter(-122.3077440902171, 47.6043996364779, 9)
+    m.setOptions('Dark', Style.mapStyles)
 }
 exports.make_tnc_map = make_tnc_map
 exports.clear_map_add_layer = clear_map_add_layer 
