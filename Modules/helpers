@@ -1,0 +1,67 @@
+var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+print(legends)
+
+var makeLegend = function (layerObject) {
+
+    var legend
+    if (layerObject.discrete) {
+        legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
+        // call the histogram function print('histogram')
+    } else {
+        legend = (barLegend(layerObject))
+    } //add reports  
+
+
+    /*//add legend 
+    legendPanel.clear()
+    legendPanel.add(legend)*/
+
+return(legend)
+}
+//var f = map.removeObject(imgElem1.getEeObject(), Map) //this worked!
+var removeObject = function (eeObject, map) {
+    var m = map || Map
+    var layers = m.layers()
+    var layersJS = layers.getJsArray()
+    var removedIndexes = []
+    for (var i in layersJS) {
+        var layer = layersJS[i]
+        var object = layer.getEeObject()
+        if (object === eeobject) {
+            m.remove(layer)
+            removedIndexes.push(Number(i))
+        }
+    }
+    return removedIndexes
+}
+var addObject = function (layerObject, map) {
+    // var pobj = ui.mapPanel.Layer({eeObject: layerProperties.Precipitation.layer.eeObject}).getEeObject()//redefine inputs as ui.mapPanel.layer
+    // mapPanel.add(layerObject.uiLayer)
+    var m = map || Map
+    m.layers().add(layerObject.layer)
+    // mapPanel.layers().add(layerObject.layer)
+}
+
+var clear_map_add_layer = function(layerObject,map){ 
+  var m = map || Map
+  m.layers().reset()
+  m.layers().add(layerObject.layer)
+  var legend = makeLegend(layerObject)
+  legend.style().set({position: "bottom-right"}); 
+  m.add(legend)
+}
+
+
+var rasters = data.rasters
+
+var ltype = (rasters["Input Data Layers"])
+print(ltype)
+var test_lay = (ltype["Soils"])
+
+
+clear_map_add_layer(test_lay)
+
+
