@@ -120,7 +120,7 @@ var imperviousness = tncLC.eq(6)
 exports.imperviousness = imperviousness  
 
 var water = tncLC.eq(0)
-var watermask = tncLc.neq(0)
+var watermask = tncLC.neq(0)
 exports.imperviousness = imperviousness.updateMask(watermask)
 
 //age of development 
