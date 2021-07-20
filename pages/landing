@@ -76,16 +76,16 @@ panel.widgets().set(3, secondname_select);
 
 var map_init = function(map){
  var m = map || Map
- m.clear()
- m.add(panel)
- m.add(legendPanel)
+ //m.clear()
+ //m.add(panel)
+ //m.add(legendPanel)
  select_layer_type.setValue("Input Data Layers")
  secondname_select.setValue("Slope")
  //legendPanel.style().set({shown:true})
           //helpers.clear_map_add_layer(layer_obj,legendPanel)
   
 }
-
+helpers.make_tnc_map()
 map_init()
 
 
