@@ -110,12 +110,14 @@ var discreteLegend = function (layerObject) {
 exports.barLegend = barLegend
 exports.discreteLegend = discreteLegend
 
-var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
- var td = data.rasters["Input Data Layers"]
- var ttd = (td.Population)
-Map.addLayer(ttd.layer)
-print(ttd)
-Map.add(barLegend(ttd))
+//Tests 
+
+// var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
+// var td = data.rasters["Input Data Layers"]
+// var ttd = (td.Population)
+// Map.addLayer(ttd.layer)
+// print(ttd)
+// Map.add(barLegend(ttd))
  
  
 
