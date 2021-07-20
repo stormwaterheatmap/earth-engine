@@ -4,6 +4,7 @@ ui.root.setLayout(ui.Panel.Layout.absolute());
 // data 
 var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 
 var fonts = Style.fonts 
 
@@ -37,11 +38,11 @@ var panel_style = {position: 'bottom-left',width:'300px', height:"80%"}
 
 
 /* Panel */ 
-var panel = ui.Panel({widgets:[panel_label,layer_label],style:panel_style})//, layout:panel_layout})//, })
+var panel = ui.Panel({style:panel_style})//, layout:panel_layout})//, })
 Map.add(panel)
 
-
-
+var legendPanel = ui.Panel({style:{position:'bottom-right',shown:false}})
+Map.add(legendPanel)
 var select_layer_type = ui.Select({
   items: layer_types,
   placeholder: "Select Layer Type", 
@@ -54,29 +55,25 @@ print(layers_list)
       secondname_select = ui.Select({
         items: layers_list,//select_layer_type.getValue()], 
         onChange: function() {
-          var layer_obj = layer_dict[secondname_select.getValue()].layer
+          var layer_obj = layer_dict[secondname_select.getValue()]
           print(layer_obj)
-          Map.addLayer(layer_obj)
+          legendPanel.style().set({shown:true})
+          helpers.clear_map_add_layer(layer_obj,legendPanel)
         }
       });
     
   
   
-    panel.widgets().set(2, secondname_select);
+    panel.widgets().set(3, secondname_select);
   }
   
   });
 
-var getvalue = ui.Button({
-  label: 'Get Values',
-  onClick: function() {
-    //print('First: ' + firstname_select.getValue());
-    print('Select: ' + secondname_select.getValue());
-  }
-});
+
+
 
 var secondname_select = ui.Select();
-panel.widgets().insert(1, select_layer_type);
-
-panel.widgets().insert(2, secondname_select);
-panel.widgets().insert(3, getvalue);
+panel.widgets().set(0, panel_label); 
+panel.widgets().set(1, select_layer_type);
+panel.widgets().set(2,layer_label); 
+panel.widgets().set(3, secondname_select);
