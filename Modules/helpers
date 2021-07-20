@@ -42,14 +42,15 @@ var addObject = function (layerObject, map) {
     // mapPanel.layers().add(layerObject.layer)
 }
 
-var clear_map_add_layer = function(layerObject,map){ 
+var clear_map_add_layer = function(layerObject,legendPanel,map){ 
   var m = map || Map
   m.layers().reset() //reset all layers
-  m.widgets().remove(legend)//remove legend if exists 
+ // m.widgets().remove(legend)//remove legend if exists 
   m.layers().add(layerObject.layer)
   var legend = makeLegend(layerObject)
   legend.style().set({position: "bottom-right"}); 
-  m.add(legend)
+  legendPanel.clear().add(legend)
+  
 }
 
 exports.clear_map_add_layer = clear_map_add_layer 
