@@ -54,14 +54,3 @@ var clear_map_add_layer = function(layerObject,map){
   m.add(legend)
 }
 
-
-var rasters = data.rasters
-
-var ltype = (rasters["Input Data Layers"])
-print(ltype)
-var test_lay = (ltype["Soils"])
-
-
-clear_map_add_layer(test_lay)
-
-
