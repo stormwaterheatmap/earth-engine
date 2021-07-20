@@ -32,7 +32,8 @@ var barLegend = function (layerObj) {
       ui.Panel.Layout.flow('horizontal')
       //{width: '230px', position: 'top-center'}
       );
-  return ui.Panel([title_label,ColorBar(layerObj), labelPanel])
+  var units_label = ui.Label(layerObj.units)
+  return ui.Panel([title_label,ColorBar(layerObj), labelPanel,units_label])
 }
 
 var discreteLegend = function (layerObject) {
