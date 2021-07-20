@@ -1,6 +1,6 @@
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
-
+var barLegend = legends.barLegend
 var makeLegend = function (layerObject) {
 
     var legend
