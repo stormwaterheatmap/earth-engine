@@ -25,13 +25,15 @@ var rasters = {
                 name: 'Mean Annual Runoff',
                 visParams:
                 {
-                    palette: ['#00007f',
-                        '#002aff',
-                        '#00d4ff',
-                        '#7fff7f',
-                        '#ffd400',
-                        '#ff2a00',
-                        '#7f0000'
+                    palette: [
+  "#291b32",
+  "#622271",
+  "#8f3b9c",
+  "#9275b4",
+  "#8ca9cc",
+  "#98d6de",
+  "#f1f3ee"
+
                     ],
                     min: 100,
                     max: 1000,
@@ -53,13 +55,15 @@ var rasters = {
                 name: 'Mean Annual Runoff',
                 visParams:
                 {
-                    palette:  ['#00007f',
-                        '#002aff',
-                        '#00d4ff',
-                        '#7fff7f',
-                        '#ffd400',
-                        '#ff2a00',
-                        '#7f0000'
+                    palette:  [
+  "#291b32",
+  "#622271",
+  "#8f3b9c",
+  "#9275b4",
+  "#8ca9cc",
+  "#98d6de",
+  "#f1f3ee"
+
                     ], // ["#000000", "#182e49", "#2b6f39", "#a07949", "#d490c6", "#c2d8f3", "#ffffff"],
                     min: 5,
                     max: 30,
@@ -201,11 +205,11 @@ var rasters = {
         sourceName: null,
         sourceUrl: null 
     },
-    "Imperviousness": {
+    "imperviousness": {
         layer:
         {
             eeObject: data.imperviousness.rename('imperviousness'),
-            name: 'Imperviousness',
+            name: 'imperviousness',
             visParams:
             {
                 palette: ['10371c','f2298f'
@@ -488,3 +492,6 @@ exports.vectors = {
     MS4: data.MS4
 }
 exports.rasters = rasters
+
+
+
