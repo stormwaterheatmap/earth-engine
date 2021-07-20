@@ -54,3 +54,8 @@ var clear_map_add_layer = function(layerObject,map){
   m.add(legend)
 }
 
+exports.clear_map_add_layer = clear_map_add_layer 
+exports.addObject = addObject
+exports.removeObject = removeObject
+exports.makeLegend = makeLegend
+
