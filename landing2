@@ -47,11 +47,16 @@ var select_layer_type = ui.Select({
   placeholder: "Select Layer Type", 
   value: layer_types[0], 
   onChange: function() {
-    var layers_list = (Object.keys(rasters[select_layer_type.getValue()]))
-
+    var layer_dict = rasters[select_layer_type.getValue()]; 
+    print(layer_dict)
+    var layers_list = Object.keys(layer_dict); 
+print(layers_list)
       secondname_select = ui.Select({
         items: layers_list,//select_layer_type.getValue()], 
         onChange: function() {
+          var layer_obj = layer_dict[secondname_select.getValue()].layer
+          print(layer_obj)
+          Map.addLayer(layer_obj)
         }
       });
     
