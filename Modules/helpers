@@ -53,8 +53,23 @@ var clear_map_add_layer = function(layerObject,legendPanel,map){
   
 }
 
+
+var info_panel = function(label,link){
+  var panel_label = ui.Label({value:label,style:{fontSize: "18px", margin: "8px 0px 8px", padding: "0px"}}); 
+  var info_label = ui.Label({value:"🛈",style:{margin: "0px", padding: "0px"},
+targetUrl: link
+});
+
+  //combine into a horizontal label 
+var combined_panel = ui.Panel({widgets:[panel_label,info_label], layout:ui.Panel.Layout.flow('horizontal')}); 
+return(combined_panel)
+
+
+}
+
 exports.clear_map_add_layer = clear_map_add_layer 
 exports.addObject = addObject
 exports.removeObject = removeObject
 exports.makeLegend = makeLegend
+exports.info_panel = info_panel
 
