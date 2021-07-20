@@ -2,33 +2,18 @@
 ui.root.setLayout(ui.Panel.Layout.absolute());
 
 // data 
-var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 
 var fonts = Style.fonts 
 
-var layer_types = ["Threat Layers","Hydrology","Input Data Layers"]
-var display_layer_names = (["Total Suspended Solids","Total Zinc","Dissolved Zinc"])
+var rasters = data.rasters
+var layer_types = Object.keys(rasters)
+print(layer_types)
 
-var img_layers = {threats: 
-                {"Total Copper" : data.rasters['Total Copper']}, 
-                hydrology: {"Flow Duration Index": data.rasters["Flow Duration Index"]}}
-print(Object.keys(img_layers))
   
 
-// var input_layers = [
-//   "Traffic",
-//   "Age of Imperviousness",
-//   "Imperviousness",
-//   "Precipitation",
-//   "Soils",
-//   "SlopeCont",
-//   "landCover",
-//   "DevAge",
-//   "Population",
-//   "landUse",
-// ]
- 
+
 
 
 /* ----------------------------
@@ -37,15 +22,26 @@ WIDGETS
 /* Select */ 
 
 var select_layer_type = ui.Select({
-  items: Object.keys(img_layers),
+  items: layer_types,
   placeholder: "Select Layer Type", 
-  value: Object.keys(img_layers)[0]
-})
-
-
+  value: layer_types[0], 
+  onChange: get_display_layers
+   
+    
+      // secondname_select = ui.Select({
+      //   items: rasters[select_layer_type.getValue()], 
+      //   onChange: function() {
+      //   }})
+        
+  
+}); 
+    
+var get_display_layers = function(layer_type){
+  return(Object.keys(rasters[layer_type]))
+}
 
 var select_display_layer =  ui.Select({
-  items:  Object.keys(img_layers),
+  items:  get_display_layers(select_layer_type.getValue()),
   placeholder: "Select Display Layer"
   //value: "Total Suspended Solids"
 })
