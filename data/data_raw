@@ -104,8 +104,8 @@ exports.soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
   .clip(PugetSound)
 
 //imperviousnessation
-exports.imperviousnessation_per_ha = ee.Image(
-  "users/stormwaterheatmap/imperviousnessation_per_ha");
+exports.population_per_ha = ee.Image(
+  "users/stormwaterheatmap/population_per_ha");
 
 //Precipitation 
 exports.precip = ee.Image("users/stormwaterheatmap/CigP2500");
@@ -120,7 +120,8 @@ var imperviousness = tncLC.eq(6)
 exports.imperviousness = imperviousness  
 
 var water = tncLC.eq(0)
-exports.imperviousness = imperviousness.updateMask(water)
+var watermask = tncLc.neq(0)
+exports.imperviousness = imperviousness.updateMask(watermask)
 
 //age of development 
 exports.age_of_development = ee.Image(
