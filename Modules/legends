@@ -29,7 +29,7 @@ var barLegend = function (low, mid, high, layerObj) {
       ui.Panel.Layout.flow('horizontal')
       //{width: '230px', position: 'top-center'}
       );
-  return ui.Panel([ColorBar(palette), labelPanel])
+  return ui.Panel([ColorBar(layerObj), labelPanel])
 }
 
 var discreteLegend = function (layerObject) {
