@@ -16,10 +16,13 @@ function ColorBar(layerObj) {
 }
 
 
-var barLegend = function (low, mid, high, layerObj) {
-  var titlePanel = ui.Panel(
-    [ui.Label()]
-    )
+var barLegend = function (layerObj) {
+  var title_label = 
+    ui.Label(layerObj.layer.name)
+  
+  var low = (layerObj.layer.visParams.min)
+  var high = (layerObj.layer.visParams.max)
+  var mid = ee.Number(high).subtract(low).divide(2).getInfo()
   var labelPanel = ui.Panel(
       [
         ui.Label(low, {margin: '4px 8px',textAlign: 'left',stretch: 'horizontal'}),
@@ -29,7 +32,7 @@ var barLegend = function (low, mid, high, layerObj) {
       ui.Panel.Layout.flow('horizontal')
       //{width: '230px', position: 'top-center'}
       );
-  return ui.Panel([ColorBar(layerObj), labelPanel])
+  return ui.Panel([title_label,ColorBar(layerObj), labelPanel])
 }
 
 var discreteLegend = function (layerObject) {
@@ -106,3 +109,13 @@ var discreteLegend = function (layerObject) {
 
 exports.barLegend = barLegend
 exports.discreteLegend = discreteLegend
+
+var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
+ var td = data.rasters["Input Data Layers"]
+ var ttd = (td.Population)
+Map.addLayer(ttd.layer)
+print(ttd)
+Map.add(barLegend(ttd))
+ 
+ 
+
