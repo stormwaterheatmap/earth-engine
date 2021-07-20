@@ -50,7 +50,6 @@ var clear_map_add_layer = function(layerObject,legendPanel,map){
   var legend = makeLegend(layerObject)
   legend.style().set({position: "bottom-right"}); 
   legendPanel.clear().add(legend)
-  
 }
 
 
