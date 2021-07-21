@@ -7,7 +7,9 @@ var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
-var layerProperties = data.rasters["Input Data Layers"]
+var input_layers = data.rasters["Input Data Layers"]
+var hydrology_layers = data.rasters["Hydrology Data Layers"]
+var layerProperties = ee.Dictionary(input_layers).combine(hydrology_layers)
 print(layerProperties)
 
 var vectors = data.vectors
