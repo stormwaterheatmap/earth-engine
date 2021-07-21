@@ -41,7 +41,8 @@ var panel_style = {position: 'bottom-left'}//,width:'300px', height:"80%"}
 var panel = ui.Panel({style:panel_style})//, layout:panel_layout})//, })
 //Map.add(panel)
 
-var legendPanel = ui.Panel({style:{position:'bottom-right',shown:false}})
+var legendPanel = ui.Panel({style:{position:'bottom-left',shown:false, minWidth: "300px"}
+})
 Map.add(legendPanel)
 var select_layer_type = ui.Select({
   items: layer_types,
