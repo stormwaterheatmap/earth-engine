@@ -90,7 +90,7 @@ var colors = Style.colors
 
 function makeMainPanel(title) { //function that makes the main control panel; returns a panel with title 
     
-    title_label = title || "Title"
+   var title_label = title || "Title"
     
     var panelColors = {
         primary: '#004d40',
