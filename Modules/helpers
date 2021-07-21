@@ -78,12 +78,129 @@ function make_tnc_map(map) {
     m.setCenter(-122.3077440902171, 47.6043996364779, 9)
     m.setOptions('Dark', Style.mapStyles)
 }
+
+
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+
+
+var fonts = Style.fonts
+var colors = Style.colors
+
+
+
+function makeMainPanel(title) { //function that makes the main control panel; returns a panel with title 
+    var panelColors = {
+        primary: '#004d40',
+        dPrimary: '#002419', // 
+        lPrimary: '#38786a',
+        text: '#212121', //light black
+        sText: '#757575', //secondary text 
+        divider: '#BDBDBD',
+        secondary: '512ca8',
+        dSecondary: '140078',
+        lSecondary: '8558da',
+
+
+    } //divder text 
+
+
+    var mainPanel = ui.Panel({
+        style: {
+            width: 400, //main panel is white 
+            //height: '70%',
+            padding: 0,
+            position: 'top-left',
+            border: '1px solid black'
+        }
+    })
+   
+
+    var head = ui.Panel({ //header panel holds priority stuff 
+        style: {
+            backgroundColor: panelColors.lPrimary,
+            width: '100%',
+            margin: 0
+        },
+        layout: ui.Panel.Layout.flow('horizontal')
+    })
+
+    //buttons at the top 
+
+
+    ///buttons for tabs at the top 
+
+
+    //var
+
+    var topP = ui.Panel({ //topPanel holds title 
+        style: {
+            backgroundColor: panelColors.primary, //height:'8px'
+        }
+    })
+    topP.add(ui.Label({
+        value: 'View Data Layers',
+        style: {
+            fontFamily: fonts.H1.fontFamily,
+            fontSize: fonts.H1.fontSize,
+            fontWeight: fonts.H1.fontWeight,
+            backgroundColor: colors.transparent,
+            color: 'white'
+        }
+    }))
+
+
+
+
+    mainPanel.add(topP)
+
+    var subPan = ui.Panel({
+        style: {
+            margin: 0,
+            //padding:0,  
+            backgroundColor: '087f23', //height:'8px' //subpanel holds xx 
+        }
+    })
+/*    topP.add(ui.Label('Beta testing; version 0.2', {
+        backgroundColor: '00000000', //fontWeight:400,
+        margin: '0px 8px 4px 8px',
+        //padding: 0, 
+        fontSize: '12px',
+        fontWeight: 300,
+        fontFamily: fonts.Caption2.fontFamily,
+        color: 'white'
+    }))*/
+    mainPanel.add(subPan)
+
+    var bar = ui.Panel({
+        style: {
+            height: '4px',
+            stretch: 'both',
+            backgroundColor: panelColors.lPrimary //bar above buttons 
+        }
+    })
+    //add(ui.Label('bar'))
+    mainPanel.add(bar)
+
+
+
+
+  
+
+    mainPanel.add(head)
+
+    return mainPanel
+}
+
+
+
+
+
 exports.make_tnc_map = make_tnc_map
 exports.clear_map_add_layer = clear_map_add_layer 
 exports.addObject = addObject
 exports.removeObject = removeObject
 exports.makeLegend = makeLegend
 exports.info_panel = info_panel
-
+exports.makeMainPanel = makeMainPanel
 make_tnc_map()
 
