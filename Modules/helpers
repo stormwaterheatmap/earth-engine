@@ -10,7 +10,7 @@ var makeLegend = function (layerObject) {
     } else {
         legend = (barLegend(layerObject))
     } //add reports  
-    legend.insert(0,ui.Label("Legend"))
+    legend.insert(0,ui.Label({value: "Legend", style:Style.fonts.H2}))
 
     /*//add legend 
     legendPanel.clear()
