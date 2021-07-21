@@ -109,7 +109,7 @@ function makeMainPanel(title) { //function that makes the main control panel; re
 
     var mainPanel = ui.Panel({
         style: {
-            width: 400, //main panel is white 
+            minWidth: '300px', //main panel is white 
             //height: '70%',
             padding: 0,
             position: 'top-left',
