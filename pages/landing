@@ -36,9 +36,10 @@ panel_label.style().set('fontWeight','500')
 var panel_style = {position: 'bottom-left'}//,width:'300px', height:"80%"}
 
 
+
 /* Panel */ 
 var panel = ui.Panel({style:panel_style})//, layout:panel_layout})//, })
-Map.add(panel)
+//Map.add(panel)
 
 var legendPanel = ui.Panel({style:{position:'bottom-right',shown:false}})
 Map.add(legendPanel)
@@ -87,5 +88,7 @@ var map_init = function(map){
 }
 helpers.make_tnc_map()
 map_init()
-
+var mainPanel = helpers.makeMainPanel("View Data Layers");
+mainPanel.add(panel)
+Map.add(mainPanel)
 
