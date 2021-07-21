@@ -89,6 +89,9 @@ var colors = Style.colors
 
 
 function makeMainPanel(title) { //function that makes the main control panel; returns a panel with title 
+    
+    title_label = title || "Title"
+    
     var panelColors = {
         primary: '#004d40',
         dPrimary: '#002419', // 
@@ -138,7 +141,7 @@ function makeMainPanel(title) { //function that makes the main control panel; re
         }
     })
     topP.add(ui.Label({
-        value: 'View Data Layers',
+        value: title_label,
         style: {
             fontFamily: fonts.H1.fontFamily,
             fontSize: fonts.H1.fontSize,
