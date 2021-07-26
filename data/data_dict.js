@@ -272,7 +272,8 @@ var rasters = {
         eeObject: data.slope_cont.rename('slope'),
         name: 'Slope',
         visParams: {
-          palette: ['3f60ae',
+          palette: [
+            '3f60ae',
             '539eb6',
             '6db388',
             'cab843',
