@@ -286,7 +286,7 @@ var rasters = {
       },
       discrete: false,
       //values: [0, 1],
-      units: '%',
+      units: 'percent',
       labels: null,
       vizType: 'histogram'
     },
