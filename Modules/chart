@@ -657,37 +657,37 @@ var imgToFc = function (
 
 
 exports.imgToFc = imgToFc
-//testing 
+// //testing 
 
 // var data = require('users/stormwaterheatmap/apps:Modules/datasets')
 // var layerProperties = data.rasters
 // var layerObject = layerProperties.landUse;
 // var fctest = imgToFc(geometry, layerObject, 200)
-//print(fctest)
-//print(ui.Chart.feature.byFeature(fctest,'Class','Area').setChartType(
-//  'BarChart'))
+// print(fctest)
+// print(ui.Chart.feature.byFeature(fctest,'Class','Area').setChartType(
+//   'BarChart'))
 
-//(layerObject, geomtery, scale)
-// geometry, properties, scale, holeSize
-/*
-var layerObject = layerProperties.landUse 
-var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
-var imageBar = (  {chartArea: {left: '50%'},
-  hAxis: {
-          title: 'Area (acres)',
-          minValue: 0,
-        }, 
-        legend: {position: 'none'}, 
+// //(layerObject, geomtery, scale)
+// // geometry, properties, scale, holeSize
+
+// var layerObject = layerProperties.landUse 
+// var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
+// var imageBar = (  {chartArea: {left: '50%'},
+//   hAxis: {
+//           title: 'Area (acres)',
+//           minValue: 0,
+//         }, 
+//         legend: {position: 'none'}, 
         
-        }) 
+//         }) 
 
-var chart = histByClass(layerObject, 100, geometry); 
+// var chart = histByClass(layerObject, 100, geometry); 
 
-chart.setChartType('BarChart')
-chart2.setOptions(imageBar)
-//var options = 
-testPan.add(chart2)
-Map.add(testPan)
+// chart.setChartType('BarChart')
+// chart2.setOptions(imageBar)
+// //var options = 
+// var testPan = ui.Panel()
+// testPan.add(chart2)
+// Map.add(testPan)
 
 
-*/
