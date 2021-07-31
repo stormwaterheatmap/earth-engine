@@ -212,5 +212,5 @@ exports.makeLegend = makeLegend
 exports.info_panel = info_panel
 exports.makeMainPanel = makeMainPanel
 exports.make_chart = make_chart
-make_tnc_map()
+//make_tnc_map()
 
