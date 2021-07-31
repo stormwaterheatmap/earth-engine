@@ -195,7 +195,13 @@ function makeMainPanel(title) { //function that makes the main control panel; re
 }
 
 
+var make_chart = function(layer_object){
+//read chart type from layer object 
 
+if(layer_object.vizType == "histogram"){
+  return("HISTOGRAM")
+}
+}
 
 
 exports.make_tnc_map = make_tnc_map
