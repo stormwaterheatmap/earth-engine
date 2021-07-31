@@ -194,7 +194,6 @@ function makeMainPanel(title) { //function that makes the main control panel; re
     return mainPanel
 }
 
-
 function make_chart(layer_object,ws,scale) {
 //read chart type from layer object 
 
