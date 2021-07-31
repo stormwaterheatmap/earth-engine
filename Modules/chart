@@ -94,7 +94,7 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
         });
     return chart;
 };
-var histogramImage = function (layerObject, WS, scale) {
+function histogramImage(layerObject, WS, scale) {
     var chart = ui.Chart.image.histogram({
         image: layerObject.layer.eeObject,
         region: WS,
