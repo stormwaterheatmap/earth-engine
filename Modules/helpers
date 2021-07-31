@@ -198,7 +198,7 @@ function make_chart(layer_object,ws,scale) {
 //read chart type from layer object 
 
 if(layer_object.vizType == "histogram"){
-  return(histogramImage(layer_object,ws,scale))
+  return(charts.histogramImage(layer_object,ws,scale))
 }
 }
 
