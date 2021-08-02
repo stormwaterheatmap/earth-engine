@@ -149,7 +149,7 @@ var rasters = {
       values: null,
       units: 'Average Annual Daily Trips (log)',
       labels: null,
-      vizType: 'bigNumberPercent',
+      vizType: 'histogram',
       sourceName: null
     },
     'Age of Imperviousness': {
