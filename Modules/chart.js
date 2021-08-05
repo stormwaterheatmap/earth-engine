@@ -1,0 +1,693 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = /* color: #d63000 */ee.Geometry.Polygon(
+        [[[-122.18688550907996, 47.588485685274044],
+          [-122.13882032353308, 47.53659182056817],
+          [-122.05814919641182, 47.57734993250728],
+          [-122.11684766728308, 47.629223376175645],
+          [-122.16903272587683, 47.67547769385542]]]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var style = require('users/stormwaterheatmap/apps:Modules/Style')
+var colors = style.colors
+
+var histByClass = function (layerObject, scale, geom) {
+    var area = ee.Image.pixelArea().divide(4046.86) //area in acres 
+    var image = ee.Image.cat(area, layerObject.layer.eeObject)
+    // Define chart customization options.
+    var options = {
+        // chartArea: {width: '100%', height: '80%'},
+        legend: {
+            position: 'in'
+        },
+        //titlePosition: 'in', 
+        axisTitlesPosition: 'in',
+        //hAxis: {textPosition: 'in'}, 
+        vAxis: {
+            textPosition: 'in'
+        }
+    };
+
+    var histChart = (ui.Chart.image.byClass({
+            image: image, //
+            reducer: ee.Reducer.sum(),
+            classBand: 1,
+            region: geom,
+            scale: scale,
+            classLabels: layerObject.labels,
+            //titleTextStyle: style.fonts.LegendTitle
+            //     xLabels: layerObject.labels
+        })
+        .setOptions(options)
+    )
+
+    // var stacked = histChart.setOptions({isStacked:true})
+    return histChart
+
+}
+
+function stackedBar(layerObject, scale, geom) {
+    var area = ee.Image.pixelArea().divide(4046.856) //area in acres 
+    var image = ee.Image.cat(area, layerObject.layer.eeObject)
+    // Define chart customization options.
+    var options = {
+        isStacked: true,
+        legend: {
+            position: 'in'
+        },
+        //titlePosition: 'in', 
+        axisTitlesPosition: 'in',
+        //hAxis: {textPosition: 'in'}, 
+        vAxis: {
+            textPosition: 'in'
+        }
+    };
+
+    var histChart = (ui.Chart.image.byClass({
+            image: image, //
+            reducer: ee.Reducer.sum(),
+            classBand: 1,
+            region: geom,
+            scale: scale,
+            classLabels: layerObject.labels,
+            //titleTextStyle: style.fonts.LegendTitle
+            //     xLabels: layerObject.labels
+        })
+        .setOptions(options)
+    )
+
+    // var stacked = histChart.setOptions({isStacked:true})
+    return histChart.setChartType('BarChart')
+
+}
+
+exports.stackedBar = stackedBar
+exports.histogramFeature = function (region, propName, buckwidth, title) {
+    var chart = ui.Chart.feature
+        .histogram({
+            features: region,
+            property: propName,
+            // maxBuckets: 16,
+            //minBucketWidth: buckwidth
+        })
+        .setOptions({
+            title: title,
+            // titleTextStyle: style.fonts.LegendTitle
+        });
+    return chart;
+};
+function histogramImage(layerObject, WS, scale) {
+    var chart = ui.Chart.image.histogram({
+        image: layerObject.layer.eeObject,
+        region: WS,
+        scale: scale,
+        minBucketWidth: 0.5,
+        //  maxBuckets: 16,
+    });
+
+    chart.style().set({
+        width: '90%',
+        height: '185px'
+    })
+    chart.setSeriesNames(
+        (layerObject.layer.name + ' (' + layerObject.units + ')'), 0)
+    chart.setOptions({
+        //  fontSize:12,
+
+        //bar: {groupWidth: '90%'},
+        legend: {
+            position: 'none'
+        },
+        //explorer:{},
+        vAxis: {
+            gridlines: {
+                color: 'whitesmoke',
+                count: 4,
+                title: 'title'
+
+            },
+            minorGridlines: {
+                color: 'white'
+            },
+            format: 'short',
+            textPosition: 'in',
+            // baselineColor: 'black',
+            //  viewWindowMode: 'maximized'
+        },
+        chartArea: { //height:'80%', 
+            //width:'100%',
+            top: 36,
+            bottom: 36,
+            left: 8,
+            right: 8
+        },
+        hAxis: {
+            gridlines: {
+                color: 'white',
+                //  count: 4,
+            },
+            title: (layerObject.layer.name + ' (' + layerObject.units + ' )')
+            //textPosition:'in',
+            // format:'short',
+            // viewWindowMode: 'maximized',
+            //  baselineColor:'black'
+        },
+        //  titlePosition: 'in',
+        //theme:'maximized',
+        // title: ('Watershed histogram') // Elevation in Colorado (meters)'
+
+
+    });
+    return chart;
+};
+exports.histogramImage = histogramImage;
+
+var makePieChart = function (
+    geometry, properties, scale, holeSize) {
+    var AOI = geometry;
+    var image = properties.layer.eeObject
+    var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image); //acres
+    var clipImage = withArea.clip(AOI)
+    //////////////////////////////////////////////////////////////
+    // Calculations
+    //////////////////////////////////////////////////////////////
+    var lookup_names = ee.Dictionary.fromLists(
+        ee.List(properties.values).map(ee.String),
+        properties.labels
+    );
+    // print('lookup names', lookup_names)
+    var lookup_palette = ee.Dictionary.fromLists(
+        ee.List(properties.values).map(ee.String),
+        properties.layer.visParams.palette
+    );
+    // print(ee.List(lookup_palette))
+    //////////////////////////////////////////////////////////////   // Helper functions    //////////////////////////////////////////////////////////////
+    function createFeature(transition_class_stats) {
+        transition_class_stats = ee.Dictionary(transition_class_stats);
+        var class_number = transition_class_stats.get('class value');
+        var result = {
+            transition_class_number: class_number,
+            Class: lookup_names.get(class_number),
+            transition_class_palette: lookup_palette.get(class_number),
+            Area: transition_class_stats.get('sum')
+        };
+        return ee.Feature(null,
+            result); // Creates a feature without a geometry.
+    }
+    // Create a JSON dictionary that defines piechart colors based on thetransition class palette.
+    // https://developers.google.com/chart/interactive/docs/gallery/piechart
+    function createPieChartSliceDictionary(fc) {
+        return ee.List(fc.aggregate_array("transition_class_palette"))
+        // .map(function (p) {
+        //return {
+        //   'color': p
+        //};
+    }
+
+    //var classValue = image.get('system:title')
+    //print(classValue)
+    var reduction_results = clipImage.reduceRegion({
+        reducer: ee.Reducer.sum().group({
+            groupField: 1,
+            groupName: 'class value',
+        }),
+        geometry: AOI,
+        scale: scale,
+        bestEffort: true,
+    });
+    //   print('reduction_results', reduction_results);
+    var roi_stats = ee.List(reduction_results.get('groups'));
+    //    print('roi stats', roi_stats)
+    var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature)).
+    sort('Area',false);
+    //  print('transition_fc', transition_fc);
+    // Add a summary chart.
+    var transition_summary_chart =
+        ui.Chart.feature.byFeature({
+            features: transition_fc,
+            xProperty: 'Class',
+            yProperties: ['Area'] // 'transition_class_number']
+        })
+        .setChartType('PieChart') //le')
+
+    //.evaluate(function(result) {
+    // When the server returns the value, show it.
+
+    return transition_summary_chart.setOptions({
+        pieHole: holeSize,
+        is3D: true,
+        //   legend: {
+        //       position: 'none'
+        //    },
+        //     chartArea: {
+        //      height: '100%',
+        //     width: '100%'
+        //   },
+        pieSliceText: 'label',
+        title: properties.layer.name,
+        //  pieStartAngle: 100,
+        slices: createPieChartSliceDictionary(transition_fc).evaluate,
+        sliceVisibilityThreshold: 0.05
+    });
+};
+
+//
+exports.pieChart = makePieChart
+//exports.fc = makePieChart[1]
+
+/*var bigNum = function (layerObj, region, scale, reducerType) {
+    var panel = ui.Panel({
+        style: {
+            width: '33%',
+            padding: '10px',
+            margin: 0
+        }
+    }) //.style().set({width: '33%'})
+    var units = layerObj.units
+    var loading = 'loading...'
+    var infoLabel = ui.Label({
+        value: 'ⓘ',
+        targetUrl: 'https://github.com/stormwaterheatmap'
+    })
+    infoLabel.style().set({
+        margin: '2px',
+        padding: '2px',
+        color: 'white',
+        backgroundColor: style.colors.transparent,
+    })
+    var titlePanel = ui.Panel({
+        layout: ui.Panel.Layout.flow('horizontal')
+    })
+    titlePanel.style().set({
+        margin: 0,
+        padding: 0,
+        backgroundColor: color,
+        stretch: 'horizontal'
+    })
+    var card = ui.Panel({
+        style: {
+            backgroundColor: style.colors.transparent,
+            margin: 0,
+            //border: "0.5px solid black",
+            width: '100%',
+            //height: '100px', 
+            padding: 0,
+        }
+    }) //.setLayout(ui.Panel.Layout.absolute())//('horizontal')); 
+    var bigNum = ui.Label({
+        value: loading,
+        style: {
+            margin: 0,
+            padding: '0px 12px 0px 0px',
+            fontSize: '48px',
+            fontWeight: '700',
+            backgroundColor: style.colors.transparent,
+            color: 'white',
+            //position: 'middle-right', 
+            textAlign: 'right',
+            stretch: 'horizontal'
+        }
+    })
+
+    var titleLabel = ui.Label({
+        value: layerObj.layer.name,
+        style: style.fonts.Body1
+    });
+    titleLabel.style().set({
+        margin: 0,
+        padding: '4px 64px 0px 12px',
+        position: 'top-left',
+        stretch: 'horizontal',
+        color: 'white',
+        backgroundColor: color
+    });
+
+    units = ui.Label({
+        value: layerObj.units,
+        style: {
+            margin: '-8px 0px 0px 0px ',
+            padding: '0px 14px 4px 0px',
+            fontSize: '12px',
+            fontWeight: '400',
+            backgroundColor: style.colors.transparent,
+            color: 'white',
+            textAlign: 'right',
+            stretch: 'horizontal'
+        }
+    })
+    //make a right-hand-side panel to hold big number and units. 
+    var rightPan = ui.Panel({ //layout: ui.Panel.Layout.absolute(), 
+        layout: ui.Panel.Layout.flow('vertical'),
+        style: { //backgroundColor: style.colors.transparent,
+            //textAlign: 'center', 
+            //position: 'middle-right',
+            margin: 0,
+            padding: 0,
+            // border: '1px dotted white', 
+            backgroundColor: color
+        }
+    });
+
+ 
+    //one more panel to hold the information 
+    var outerCard = ui.Panel({
+        layout: ui.Panel.Layout.flow('vertical', true),
+        style: {
+            //border: '1px solid grey', 
+            // margin: '12px',
+            padding: '12px',
+            backgroundColor: style.colors.transparent,
+            position: 'top-left'
+        }
+    }) //.add(ui.Label('outer Card') )
+    var info = ui.Label({
+        value: 'more information here',
+        style: style.fonts.Caption1
+    })
+
+    info.style().set({
+        color: style.colors.grey,
+        //position: 'bottom-right', 
+        textAlign: 'right',
+        // fontWeight: '600',
+        stretch: 'horizontal',
+        //backgroundColor: style.colors.transparent, 
+        margin: 0,
+        padding: '4px',
+    });
+
+    //make panels 
+
+    titlePanel.add(titleLabel) //.add(infoLabel)
+    rightPan.add(bigNum).add(units)
+    card.add(titlePanel).add(rightPan)
+    outerCard.add(card).add(info)
+
+    /*rightPan.add(bigNum).add(units)
+    card.add(title).add(infoLabel).add(rightPan)
+    outerCard.add(card).add(info)
+    }*/
+/*
+    //makePanels()
+    if (reducerType === 'mean') {
+        var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+            reducer: ee.Reducer.mean(),
+            geometry: region,
+            scale: scale,
+            bestEffort: true
+
+        }).get(layerObj.layer.eeObject.bandNames().get(0)))
+
+        reduced.evaluate(function (result) {
+            // When the server returns the value, show it.
+            bigNum.setValue(result.toFixed(0))
+        })
+    } else if (reducerType === 'sum') {
+        //reduced = reduced.toFixed()
+         reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+            reducer: ee.Reducer.sum(),
+            geometry: region,
+            scale: scale,
+            bestEffort: true
+
+        }).get(layerObj.layer.eeObject.bandNames().get(0)))
+
+        reduced.evaluate(function (result) {
+            // When the server returns the value, show it.
+            bigNum.setValue(result.toFixed(0))
+        })
+
+    } else if (reducerType === 'percent') {
+        //reduced = reduced.toFixed()
+        var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+            reducer: ee.Reducer.mean(),
+            geometry: region,
+            scale: scale,
+            bestEffort: true
+
+        }).get(layerObj.layer.eeObject.bandNames().get(0)))
+
+
+        reduced.evaluate(function (result) {
+            // When the server returns the value, show it.
+            bigNum.setValue(
+                result.toFixed(0).toString().concat(
+                    "%"))
+        }) //.add(units)
+    }
+
+    return outerCard
+
+}
+*/
+//exports.bigNum = bigNum;
+littleNum(rasters)
+var littleNum = function (layerObj, region, scale, reducerType) {
+
+    var units = layerObj.units
+    var loading = 'loading...'
+
+    var bigNum = ui.Label({
+        value: loading,
+        style: style.fonts.Body3
+
+    });
+
+    bigNum.style().set({
+        margin: 2,
+        padding: 2,
+        width: '80%',
+        fontSize: '30px',
+        fontFamily: ['Roboto', 'Helvetica Neue',
+            'Arial', 'sans-serif'
+        ],
+        fontWeight: 500,
+        //  border: '1px solid blue', 
+        backgroundColor: style.colors.transparent,
+        textAlign: 'right',
+    })
+
+    var titleLabel = ui.Label({
+        value: layerObj.layer.name,
+        style: style.fonts.H4
+    });
+    titleLabel.style().set({
+        margin: 0,
+        padding: 0, //0px 2px 0px 4px',
+        width: '80%',
+        textAlign: 'right',
+        //   border: '1px solid red'
+    });
+
+    units = ui.Label({
+        value: layerObj.units,
+        style: style.fonts.Caption3
+    });
+    units.style().set({
+        textAlign: 'right',
+        width: '80%',
+        // margin: 0,
+        // padding: 0, //padding: '0px 4px 8px 5px',
+        //stretch: 'horizontal'
+    });
+
+    var numPan = ui.Panel({
+        layout: ui.Panel.Layout.flow('vertical'),
+        style: {
+            //  width: '200px', 
+            // stretch: 'vertical',
+            textAlign: 'right',
+            padding: 2,
+            margin: 2,
+            //padding: '0px 0px 0px 0px',
+            //position: 'middle-right', 
+            //    border: '1px solid black',
+            //     height: '100%',
+        }
+    }) //height: '200px'}}); 
+
+    numPan.add(titleLabel) //.add(infoLabel)
+    numPan.add(bigNum)
+    //if 
+    numPan.add(units)
+
+    var infoLabel = ui.Label({
+        style: style.fonts.Caption3
+    })
+    infoLabel.style().set({
+        margin: 0,
+        padding: 2, //  margin: 0, //
+        fontSize: '10px',
+        textAlign: 'right',
+        //   border: '1px solid green',
+        //width: '80%',
+        color: style.colors.sDark,
+    })
+    var labelText = (
+        'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale)
+    var labelText2 = ui.Label({
+        style: style.fonts.Caption3
+    });
+    labelText2.style().set({
+        //   margin: 0, //fontSize: '10px',
+        //color:style.colors.sDark,
+        margin: 2,
+        padding: 2,
+        textAlign: 'right',
+        width: '80%',
+        //      border: '1px solid pink', 
+        fontSize: '10px',
+    });
+    labelText2.setValue('Source: ' + layerObj.sourceName)
+    labelText2.setUrl(layerObj.sourceUrl);
+
+    infoLabel.setValue(labelText)
+    numPan //.add(infoLabel)
+        .add(labelText2) //.add(labelText2)
+
+    if (reducerType === 'mean') {
+        var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+            reducer: ee.Reducer.mean(),
+            geometry: region,
+            scale: scale,
+            bestEffort: true
+
+        }).get(layerObj.layer.eeObject.bandNames().get(0)))
+
+        reduced.evaluate(function (result) {
+            // When the server returns the value, show it.
+            bigNum.setValue(result.toFixed(0))
+        })
+        //  
+
+
+    } else if (reducerType === 'sum') {
+        //reduced = reduced.toFixed()
+        reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
+            reducer: ee.Reducer.sum(),
+            geometry: region,
+            scale: scale,
+            bestEffort: true
+
+        }).get(layerObj.layer.eeObject.bandNames().get(0)))
+
+        reduced.evaluate(function (result) {
+            // When the server returns the value, show it.
+            bigNum.setValue(result.toFixed(0))
+        })
+
+    } else if (reducerType === 'percent') {
+        //reduced = reduced.toFixed()
+        print('percent')
+        reduced = ee.Number((layerObj.layer.eeObject).multiply(ee.Image(100))
+        .reduceRegion({
+            reducer: ee.Reducer.mean(),
+            geometry: region,
+            scale: scale,
+            bestEffort: true
+
+        }).get(layerObj.layer.eeObject.bandNames().get(0)))
+        numPan.remove(units) //don't display units for percent 
+
+        reduced.evaluate(function (result) {
+            // When the server returns the value, show it.
+            print(574)
+            bigNum.setValue(
+                result.toFixed(0).toString().concat(
+                    "%"))
+        }) //.add(units)
+    }
+
+    return numPan
+
+}
+exports.littleNum = littleNum;
+
+var imgToFc = function (
+    geometry, properties, scale) {
+    var AOI = geometry;
+    var image = properties.layer.eeObject
+    var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image); //acres
+    var clipImage = withArea.clip(AOI)
+   
+    var lookup_names = ee.Dictionary.fromLists(
+        ee.List(properties.values).map(ee.String),
+        properties.labels
+    );
+    // print('lookup names', lookup_names)
+    var lookup_palette = ee.Dictionary.fromLists(
+        ee.List(properties.values).map(ee.String),
+        properties.layer.visParams.palette
+    );
+    // print(ee.List(lookup_palette))
+    function createFeature(transition_class_stats) {
+        transition_class_stats = ee.Dictionary(transition_class_stats);
+        var class_number = transition_class_stats.get('class value');
+        var result = {
+            transition_class_number: class_number,
+            Class: lookup_names.get(class_number),
+            transition_class_palette: lookup_palette.get(class_number),
+            Area: transition_class_stats.get('sum')
+        };
+        return ee.Feature(null,
+            result); // Creates a feature without a geometry.
+    }
+    // Create a JSON dictionary that defines piechart colors based on thetransition class palette.
+    // https://developers.google.com/chart/interactive/docs/gallery/piechart
+    function createPieChartSliceDictionary(fc) {
+        return ee.List(fc.aggregate_array("transition_class_palette"))
+        // .map(function (p) {
+        //return {
+        //   'color': p
+        //};
+    }
+    var reduction_results = clipImage.reduceRegion({
+        reducer: ee.Reducer.sum().group({
+            groupField: 1,
+            groupName: 'class value',
+        }),
+        geometry: AOI,
+        scale: scale,
+        bestEffort: true,
+    });
+    var roi_stats = ee.List(reduction_results.get('groups'));
+
+    var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature));
+
+    return transition_fc.sort('Area',false)
+};
+
+
+exports.imgToFc = imgToFc
+// //testing 
+
+// var data = require('users/stormwaterheatmap/apps:Modules/datasets')
+// var layerProperties = data.rasters
+// var layerObject = layerProperties.landUse;
+// var fctest = imgToFc(geometry, layerObject, 200)
+// print(fctest)
+// print(ui.Chart.feature.byFeature(fctest,'Class','Area').setChartType(
+//   'BarChart'))
+
+// //(layerObject, geomtery, scale)
+// // geometry, properties, scale, holeSize
+
+// var layerObject = layerProperties.landUse 
+// var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
+// var imageBar = (  {chartArea: {left: '50%'},
+//   hAxis: {
+//           title: 'Area (acres)',
+//           minValue: 0,
+//         }, 
+//         legend: {position: 'none'}, 
+        
+//         }) 
+
+// var chart = histByClass(layerObject, 100, geometry); 
+
+// chart.setChartType('BarChart')
+// chart2.setOptions(imageBar)
+// //var options = 
+// var testPan = ui.Panel()
+// testPan.add(chart2)
+// Map.add(testPan)
+
+
