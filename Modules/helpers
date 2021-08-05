@@ -201,8 +201,7 @@ function makeMainPanel(title) { //function that makes the main control panel; re
 
     return mainPanel
 }
-var layer_object = data.rasters["Input Data Layers"]
-print(layer_object)
+
 function make_chart(layer_object,ws,scale) {
 //read chart type from layer object 
 if(layer_object.vizType == "histogram"){
