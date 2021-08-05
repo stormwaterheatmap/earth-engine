@@ -1,4 +1,5 @@
-var KCimp = ee.Image("users/cnilsen/comb_imp"), 
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var KCimp = ee.Image("users/cnilsen/comb_imp"),
     NHDPlus = ee.FeatureCollection("users/cnilsen/PugetLowlandsNHDPlusWatershedsNamed"),
     TSS = ee.Image("users/cnilsen/TSSLoad"),
     geometry = /* color: #d63000 */ee.Geometry.MultiPoint(
@@ -8,6 +9,8 @@ var KCimp = ee.Image("users/cnilsen/comb_imp"),
          [-122.02170357329624, 47.599074995250184]]),
     PS_AU = ee.FeatureCollection("users/cnilsen/PS_AU"),
     HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
 
 // Displays global TSS density and TSS totals by country in
 // chart or table form.
