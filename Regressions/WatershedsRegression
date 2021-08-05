@@ -1,76 +1,18 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image = ee.Image("USGS/SRTMGL1_003");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var data = require('users/stormwaterheatmap/apps:Modules/datasets')
-var studyArea = ee.Image("users/cnilsen/studyArea2")
-var impervious = data.rasters.Imperviousness.layer.eeObject 
-var elevation = ee.Image("USGS/SRTMGL1_003").select('elevation'); 
-var palettes = require('users/gena/packages:palettes');
-var lightsPal = palettes.misc.parula[7];
-var vegPal = palettes.colorbrewer.PRGn[11]; 
+/*
+Christian: here are equations for the Landscape Predictors Models for copper, TSS and phosphorus:
 
-var dataset = ee.ImageCollection('NOAA/DMSP-OLS/CALIBRATED_LIGHTS_V4')
-                  .filter(ee.Filter.date('2009-01-01', '2013-12-31'));
-var nighttimeLights = dataset.select('avg_vis').median();
- 
-var generalizedLU = data.rasters.landUse.layer.eeObject 
-//Map.addLayer(generalizedLU) 
+ln(copper) = 2.24 - 0.14*rain + 0.42*summer + 0.35*traffic + 0.56*devAge2 + 0.66*pm25_na - 0.07*rain*pm25_na
 
+ln(TSS) = 10.17 + 0.14*rain + 0.21*traffic + 0.28*paved
 
-//Map.addLayer(studyArea,{},'studyArea'); 
-var COM = studyArea.neq(1).blend(generalizedLU.eq(4))//
-//Map.addLayer(COM,{},'COMIND',false); 
- 
-var WSSize = 200;  // Radius of a ws, in meters.
-//var circleKernel = ee.Kernel.circle(farmSize, 'meters');
-var squareKernel = ee.Kernel.circle(WSSize, 'meters', true);
-var WS = COM.convolve(squareKernel).clamp(0,1);
-//Map.addLayer(WS,{},'ws',false)
-var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
-//Map.addLayer(tncLC,{},'tncLC',0)
-//Normalize other layers 
-//var pm25 = pm25.subtract(3).divide(4)//clamp to min and max used in regression
-var lights = nighttimeLights.divide(300).clamp(0.087,0.89)
-var imp = tncLC.eq(7).or(tncLC.eq(6))
-//Map.addLayer(imp,{},'imp',false); 
+ln(phosphorus) = 4.38 - 0.09*rain + 0.60*summer + 0.83*grass + 0.97*paved + 0.20*sqrt_CO2_road
+Note that two of the predictors were transformed prior to standardization: devAge2 is devAge^2, and sqrt_CO2_road is sqrt(CO2_road).  I'll post the scripts that I used for obtaining, transforming and standardizing predictors on GitHub, along with the latest scripts for the three COCs.  Please let me know if you have questions or want quick answers, rather than digging through scripts to find them!  All scripts are NOT in final form.
+*/ 
 
-//NDVI
-// Load Sentinel-2 TOA reflectance data.
-
-
-var rgbVis = {
-  min: 0.0,
-  max: 0.3,
-  bands: ['B4', 'B3', 'B2'],
-};
-
-//var S2ndvi = s2.normalizedDifference(['B8', 'B4']).rename('NDVI').clamp(0.012,0.693);
-
-// regression values 
-var B0 = 4.4764
-var B1 = 1.3056 
-var B2 = -5.1560 
-
-//var B3 =  7.3191
-var impWS = imp.convolve(squareKernel)//.clamp(0.064,0.886);
-//Map.addLayer(impWS,{},'impws')
-
-//Map.addLayer(COMINDmean, {max: 1}, 'forest cover at MODIS scale');
-//var Zinc = (ee.Image(B0).add(ee.Image(B1).multiply(WS)).add(ee.Image(B2).multiply(S2ndvi))).exp()//S2ndvi
-
-
-//multiply by impervious areas 
-var LCmask = tncLC.neq(5).and(tncLC.neq(0))
-var low = 100
-var high = 72784
-
-//runoff 
-//var Zinc = Zinc.focal_mean(); 
-//var zincConcentration = Zinc
-//Map.addLayer(zincConcentration)
-
-
-
+//var predictors = traffic, devAge2, pm25_na paved, grass, sqrt_co2rd 
 
 
 var regressionList = {
