@@ -1,10 +1,14 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("MERIT/DEM/v1_0_3"),
+    imageVisParam = {"opacity":1,"bands":["dem"],"min":-40.00292747254963,"max":860.2585004293016,"palette":["e3f0fe","1f4e00","2c5100","3a5600","445900","4f5c02","5a6005","65660c","736d18","7e7423","8a7b2e","94823a","9f8945","ac9253","b79a5e","c3a36a"]};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 // Author: Christian Nilsen, Geosyntec Consultants 
 // Email: cnilsen@geosyntec.com
 // Date Created: 2019-07-19
 // ---------------------------
 /* 
-
+ 
 Load Data 
 */
 var data = require('users/stormwaterheatmap/apps:data/data_raw')
