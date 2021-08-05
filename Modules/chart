@@ -439,7 +439,7 @@ exports.pieChart = makePieChart
 }
 */
 //exports.bigNum = bigNum;
-
+littleNum(rasters)
 var littleNum = function (layerObj, region, scale, reducerType) {
 
     var units = layerObj.units
