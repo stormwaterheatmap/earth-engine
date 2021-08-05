@@ -1,3 +1,10 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = /* color: #d63000 */ee.Geometry.Polygon(
+        [[[-122.16886449915569, 47.73895217384394],
+          [-122.17435766321819, 47.635411665757815],
+          [-122.06998754603069, 47.71678222460966]]]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
@@ -194,16 +201,20 @@ function makeMainPanel(title) { //function that makes the main control panel; re
 
     return mainPanel
 }
-
+var layer_object = data.rasters["Input Data Layers"]
+print(layer_object)
 function make_chart(layer_object,ws,scale) {
 //read chart type from layer object 
-
 if(layer_object.vizType == "histogram"){
   return(charts.histogramImage(layer_object,ws,scale))
-}
+} else if 
+  (layer_object.vizType == "bigNumberPercent"){
+    return(charts.littleNum(layer_object,ws,scale,"percent"))
+  }
 }
 
-
+//var chart = make_chart(layer_object.Imperviousness,geometry,30)//,"percent")
+exports.make_chart = make_chart 
 exports.make_tnc_map = make_tnc_map
 exports.clear_map_add_layer = clear_map_add_layer 
 exports.addObject = addObject
