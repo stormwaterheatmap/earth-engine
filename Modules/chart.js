@@ -107,8 +107,10 @@ function histogramImage(layerObject, WS, scale) {
         width: '90%',
         height: '185px'
     })
+    
+    var units = "units"
     chart.setSeriesNames(
-        (layerObject.layer.name + ' (' + layerObject.units + ')'), 0)
+        (layerObject.layer.name + ' (' + units + ')'), 0)
     chart.setOptions({
         //  fontSize:12,
 
@@ -144,7 +146,7 @@ function histogramImage(layerObject, WS, scale) {
                 color: 'white',
                 //  count: 4,
             },
-            title: (layerObject.layer.name + ' (' + layerObject.units + ' )')
+            title: (layerObject.layer.name + ' (' + units + ' )')
             //textPosition:'in',
             // format:'short',
             // viewWindowMode: 'maximized',
@@ -442,7 +444,8 @@ exports.pieChart = makePieChart
 
 var littleNum = function (layerObj, region, scale, reducerType) {
 
-    var units = layerObj.units
+    //var units = layerObj.units
+    var units = 'units'
     var loading = 'loading...'
 
     var bigNum = ui.Label({
@@ -478,7 +481,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     });
 
     units = ui.Label({
-        value: layerObj.units,
+        value: units,
         style: style.fonts.Caption3
     });
     units.style().set({
