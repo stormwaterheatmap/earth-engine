@@ -442,7 +442,7 @@ exports.vectors = {
     MS4: data.MS4
 }
 
-exports.vectors_dict = {
+exports.vector_dict = {
   "County Boundaries": data.counties,
   "HUC12: USGS Watershed Boundary Dataset": data.HUC12,
   "HUC10: USGS Watershed Boundary Dataset": data.HUC10, 
