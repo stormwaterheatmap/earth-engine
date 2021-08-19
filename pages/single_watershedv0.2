@@ -379,22 +379,22 @@ var makeReports = function () {
 
     var luchart = charts.pieChart(clicked_basin_geom, layerProperties['Land Use'], mapPanel.getScale()).setChartType('BarChart')
     luchart.setOptions(Style.charts.imageBar)
-    var lcchart = charts.pieChart(clicked_basin_geom, layerProperties.landCover, mapPanel.getScale()).setChartType('BarChart')
+    var lcchart = charts.pieChart(clicked_basin_geom, layerProperties['Land Cover'], mapPanel.getScale()).setChartType('BarChart')
     lcchart.setOptions(Style.charts.imageBar)
     var luCard = cards('Land Use', [subtitle('Imperviousness'), impNum, //impChart, 
         layerButton(layerProperties.Imperviousness),
         hline(), subtitle('Land Use Classifications'), luchart,
-        layerButton(layerProperties.landUse),
+        layerButton(layerProperties['Land Use']),
         hline(),
-        subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties.landCover)
+        subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties['Land Cover'])
     ])
     analyzePanel.add(luCard)
 
 
-    var ageCard = charts.pieChart(clicked_basin_geom, layerProperties.DevAge, mapPanel.getScale())
+    var ageCard = charts.pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
     ageCard.setChartType('BarChart')
     ageCard.setOptions(Style.charts.imageBar)
-    var ageCard = cards('Age of Development', [ageCard, layerButton(layerProperties.DevAge)])
+    var ageCard = cards('Age of Development', [ageCard, layerButton(layerProperties['Age of Development'])])
     analyzePanel.add(ageCard)
 
     var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
@@ -407,24 +407,24 @@ var makeReports = function () {
     analyzePanel.add(soilsCard)
 
     //Make a panel for topography 
-    var topoChart = charts.histogramImage(layerProperties.SlopeCont, clicked_basin_geom, mapPanel.getScale())
+    var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, mapPanel.getScale())
 
-    var topoCats = charts.pieChart(clicked_basin_geom, layerProperties.Slope, mapPanel.getScale())
+    var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
     topoCats.setChartType('BarChart')
     topoCats.setOptions(Style.charts.imageBar)
-    var topoCard = cards('Topography', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties.SlopeCont), hline(),
-        subtitle('Slope Categories'), topoCats, layerButton(layerProperties.Slope)
+    var topoCard = cards('Topography', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties['Slope Categories']), hline(),
+        subtitle('Slope Categories'), topoCats, layerButton(layerProperties['Slope Categories'])
     ])
     print('topcard ok')
     analyzePanel.add(topoCard)
     //Make a panel for runoff 
-    var MeanQ = charts.histogramImage(layerProperties.Runoff_in, clicked_basin_geom, mapPanel.getScale())
+    var MeanQ = charts.histogramImage(layerProperties['Runoff (inches)'], clicked_basin_geom, mapPanel.getScale())
     MeanQ.setOptions({
         vAxis: {
             logscale: true
         }
     });
-    var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties.Runoff_in)])
+    var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties['Runoff (inches)'])])
     analyzePanel.add(qCard)
 
 }
