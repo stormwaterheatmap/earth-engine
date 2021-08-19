@@ -480,15 +480,17 @@ var buttonPanel = ui.Panel({
 });
 
 
+var vectors_dict = data.vector_dict
+
+
 //Get watershed values from the data list 
-var watershedSelect = ui.Select({
-    items: ['HUC12', 'PS_AU', 'MS4'],
+var watershedSelect = ui.Select({items: Object.keys(vectors_dict).sort(), 
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: function (selected) {
         mapPanel.layers().reset()
         print(selected)
-        var WS = vectors[selected]
+        var WS = vectors_dict[selected]
         mapPanel.addLayer(WS.style(featureStyle)) //oct
         analyzePanel.add((buttonPanel))
 
