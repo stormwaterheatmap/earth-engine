@@ -105,8 +105,7 @@ function handle_map_click(location) {
 print(107)
 
 function handle_inspect_click() {
-    print('inspector Activated')
-    //analyzePanel.add(ui.Label('If everything looks good, click "Accept"')); 
+    
     mapPanel.style().set({
         cursor: 'crosshair'
     })
@@ -481,7 +480,7 @@ var buttonPanel = ui.Panel({
 });
 
 
-
+//Get watershed values from the data list 
 var watershedSelect = ui.Select({
     items: ['HUC12', 'PS_AU', 'MS4'],
     placeholder: 'Select a value',
