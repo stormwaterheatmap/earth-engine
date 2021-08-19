@@ -66,12 +66,53 @@ var objectMerge = function(){
     return out;
 }
 var layerProperties = objectMerge(input_layers,hydrology_layers) 
-print(layerProperties)
+print(layerProperties['Precipitation'])
 //Select image 
-var imgtest = layerProperties.Precipitation
+var imgtest = layerProperties.Soils
+print(imgtest)
+function col_chart(layerObject, scale, geom) {
+    var area = ee.Image.pixelArea().divide(4046.856) //area in acres
+    print(layerObject)
+    var layerimg = layerObject.layer.eeObject
+    var image = ee.Image.cat(area, layerimg)
+    // Define chart customization options.
+    var options = {
+        isStacked: true,
+        legend: {
+            position: 'in'
+        },
+        //titlePosition: 'in', 
+        axisTitlesPosition: 'in',
+        //hAxis: {textPosition: 'in'}, 
+        vAxis: {
+            textPosition: 'in'
+        }
+    };
 
-print(imgtest.layer.name)
-var chart = charts.littleNum(imgtest,
-        geometry, Map.getScale(), 'mean')
-Map.add(chart)
+    var histChart = (ui.Chart.image.byClass({
+            image: image, //
+            reducer: ee.Reducer.sum(),
+            classBand: 1,
+            region: geom,
+            scale: scale,
+            classLabels: layerObject.labels,
+            //titleTextStyle: style.fonts.LegendTitle
+            //     xLabels: layerObject.labels
+        })
+        .setOptions(options)
+    )
+
+    // var stacked = histChart.setOptions({isStacked:true})
+    return histChart.setChartType('BarChart')
+
+}
+Map.addLayer(imgtest.layer)
+var soilsChart = col_chart(imgtest, 100, geometry)
+
+var soilfeat = charts.imgToFc(geometry, imgtest, 100) 
+print(soilfeat)
+
+var soilsChart = charts.pieChart(geometry, imgtest, 100)
+Map.add(soilsChart)
+
 
