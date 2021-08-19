@@ -4,16 +4,16 @@
 
 var data  = require('users/stormwaterheatmap/apps:data/data_dict.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
-var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 var input_layers = data.rasters["Input Data Layers"]
 var hydrology_layers = data.rasters["Hydrology Data Layers"]
 var layerProperties = ee.Dictionary(input_layers).combine(hydrology_layers)
-print(layerProperties)
+print("layer Properties", layerProperties)
 
-var vectors = data.vectors
+var vectors = data.vectors_dict
 
 
 /*Style defaults  
@@ -110,7 +110,7 @@ function handle_inspect_click() {
         cursor: 'crosshair'
     })
     var WSname = watershedSelect.getValue();
-    WS = vectors[WSname];
+    WS = vectors_dict[WSname];
     mapPanel.onClick(function (location) {
         (handle_map_click(location))
     })
@@ -366,7 +366,7 @@ var makeReports = function () {
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
 
 
-    var luchart = charts.pieChart(clicked_basin_geom, layerProperties.landUse, mapPanel.getScale()).setChartType('BarChart')
+    var luchart = charts.pieChart(clicked_basin_geom, layerProperties['Land Use'], mapPanel.getScale()).setChartType('BarChart')
     luchart.setOptions(Style.charts.imageBar)
     var lcchart = charts.pieChart(clicked_basin_geom, layerProperties.landCover, mapPanel.getScale()).setChartType('BarChart')
     lcchart.setOptions(Style.charts.imageBar)
@@ -469,9 +469,13 @@ var inspect_button = ui.Button({
     label: 'Activate inspector',
     onClick: handle_inspect_click
 });
+
+var inspect_helper_text = ui.Label({value:
+  'Click "Activate Inspector" to enable watershed selection:'
+})
 //function to add user layer to the map
 var buttonPanel = ui.Panel({
-    widgets: [inspect_button, accept],
+    widgets: [inspect_helper_text,inspect_button, accept],
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
         position: 'top-left',
