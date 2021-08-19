@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 * Author: Christian Nilsen, Geosyntec Consultants 
 * Email: cnilsen@geosyntec.com
@@ -39,7 +42,7 @@ exports.PS_AU = ee.FeatureCollection(
   'users/cnilsen/PS_AU');
 
 exports.WRIA = ee.FeatureCollection(
-    "users/stormwaterheatmap/WAECY__Water_Resource_Inventory_Areas_WRIA"
+    "users/stormwaterheatmap/WRIA_Bounds"
   )
   .filterBounds(PugetSound);
 
