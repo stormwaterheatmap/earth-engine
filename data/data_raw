@@ -104,7 +104,7 @@ exports.landuse_img = landuse.reduceToImage(['Master_num'], ee.Reducer.first())
 
 //Soils 
 exports.soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
-  .clip(PugetSound)
+  .clip(PugetSound).selfMask()
 
 //imperviousnessation
 exports.population_per_ha = ee.Image(
