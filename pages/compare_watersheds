@@ -165,7 +165,7 @@ var analyzePanel = ui.Panel({
 analyzePanel.add(watershedSelectLabel)
 analyzePanel.add(watershedSelect)
 
-Map.add(analyzePanel)
+mainPanel.add(analyzePanel)
 
 //---
 /*Global Variables------------------------------------------------------------------------------------- 
