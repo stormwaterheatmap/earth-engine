@@ -42,47 +42,33 @@ var vectors_dict = data.vectors_dict
 var rasters = data.rasters
 var layer_types = Object.keys(rasters)
 
+//lay out ui elements 
+//---------------------------------------------------------------
 
 
-/*Style defaults  
----------------------------------------------------------------------------------------------------- 
-*/
-
-var colors = Style.colors
-print(colors)
-var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
-var featureStyle = {
-    color: 'white',
-    fillColor: '00000000'
-}
-
-
-// Layer Diaglog 
-
-var panel = ui.Panel();
 
 /* Label */ 
 
 var panel_label = helpers.info_panel("Select Layer Type:","null")
-        
 var layer_label = ui.Label({value:"Display Layer:"})
-var panel_layout = ui.Panel.Layout.absolute("bottom-left")
+
 
 /* Style */ 
 
+var panel_layout = ui.Panel.Layout.absolute("bottom-left")
 panel_label.style().set('fontWeight','500')
-
 var panel_style = {position: 'bottom-left'}//,width:'300px', height:"80%"}
 
 
 
 /* Panel */ 
 var panel = ui.Panel({style:panel_style})//, layout:panel_layout})//, })
-//Map.add(panel)
-
 var legendPanel = ui.Panel({style:{position:'bottom-left',shown:false, minWidth: "300px"}
 })
-Map.add(legendPanel)
+var mainPanel = helpers.makeMainPanel("View Data Layers");
+mainPanel.style().set("minWidth","16.66%")
+
+/* ui widgets */ 
 var select_layer_type = ui.Select({
   items: layer_types,
   placeholder: "Select Layer Type", 
@@ -106,14 +92,33 @@ var select_layer_type = ui.Select({
   
   });
 
-
-
-
 var secondname_select = ui.Select();
-panel.widgets().set(0, panel_label); 
-panel.widgets().set(1, select_layer_type);
-panel.widgets().set(2,layer_label); 
-panel.widgets().set(3, secondname_select);
+
+
+
+
+
+
+
+/*Style defaults  
+---------------------------------------------------------------------------------------------------- 
+*/
+
+var colors = Style.colors
+
+var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
+var featureStyle = {
+    color: 'white',
+    fillColor: '00000000'
+}
+
+
+
+
+
+
+Map.add(legendPanel)
+
 
 var map_init = function(map){
  var m = map || Map
@@ -126,17 +131,26 @@ var map_init = function(map){
           //helpers.clear_map_add_layer(layer_obj,legendPanel)
   
 }
+
 helpers.make_tnc_map()
 map_init()
-var mainPanel = helpers.makeMainPanel("View Data Layers");
+
+
+// Add widgets to panel
+panel.widgets().set(0, panel_label); 
+panel.widgets().set(1, select_layer_type);
+panel.widgets().set(2,layer_label); 
+panel.widgets().set(3, secondname_select);
+
 mainPanel.add(panel)
-Map.add(mainPanel)
+
+
+ui.root.insert(0,mainPanel)
 
 var vectors_dict = data.vector_dict
 
 var watershed_data_set = HUC12//initial value only
 //----Get vector data 
-print(data.vector_dict)
 //Get watershed values from the data list 
 var watershedSelect = ui.Select({items: Object.keys(data.vector_dict).sort(), 
     placeholder: 'Select a value',
@@ -274,43 +288,12 @@ Map.addLayer(colorStretch(TSSDisplay), TSS_style);
 print(watershed_data_set)
 var wsSelect = watershed_data_set.filterBounds(ee.Geometry(geometry)); 
 //return sum of selected Watersheds
-var load = TSS.reduceRegions({
-  collection: wsSelect,
-  reducer: ee.Reducer.sum() 
-  }); 
+
   
-print(load);   
-
-
-print(wsSelect); 
-
-
-//Test out making a bar chart 
-/*
-  var chart = ui.Chart.feature.byFeature(watershed, 'SOURCEFC',['AreaSqKM']);
-  chart.setChartType('BarChart');
-  chart.setOptions({
-    title: 'Population Comparison',
-    vAxis: {title: null},
-    hAxis: {title: 'Approximate 2015 Population', minValue: 0}
-  });
-  chart.style().set({stretch: 'both'});
-*/
-//print(chart); 
+   
 
 
 
-
-// Create the application title bar.
-//Map.add(ui.Label(
-//    'Puget Sound TSS Explorer', {fontWeight: 'bold', fontSize: '24px'}));
-
-
-/*
- * The chart panel in the bottom-right
- */
-
-// A list of points the user has clicked on, as [lon,lat] tuples.
 var selectedPoints = [];
 
 // Returns the list of watershed the user has selected.
@@ -322,9 +305,10 @@ function getSelectedwatershed() {
 function makeResultsBarChart(watershed) {
   //var wsSelect = watershed.filterBounds(ee.Geometry(geometry)); 
   //return sum of selected Watersheds
-  var load = TSS.reduceRegions({
+  var load = Map.layers().get(0).get('eeObject').reduceRegions({
     collection: watershed,
-    reducer: ee.Reducer.sum() 
+    reducer: ee.Reducer.sum(), 
+    scale: Map.getScale()
   }); 
   var chart = ui.Chart.feature.byFeature(load, 'WSName', ['sum']);
   chart.setChartType('BarChart');
@@ -339,6 +323,11 @@ function makeResultsBarChart(watershed) {
 
 // Makes a table of the given FeatureCollection of watershed by GRIDCODE.
 function makeResultsTable(watershed) {
+  var load = Map.layers().get(0).get('eeObject').reduceRegions({
+    collection: watershed,
+    reducer: ee.Reducer.sum(), 
+    scale: Map.getScale()
+  }); 
   var table = ui.Chart.feature.byFeature(load, 'WSName', ['sum']);
   table.setChartType('Table');
   table.setOptions({allowHtml: true, pageSize: 5});
