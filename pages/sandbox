@@ -155,7 +155,7 @@ function makeResultsTable(watershed,image) {
 
 //Make a random feature colleciton 
 var fc = table.filterBounds(geometry)
-print(fc)
+Map.addLayer(fc)
 //simulation selection of an image 
 var layer_object = layerProperties.Traffic
 var image = layer_object.layer.eeObject
@@ -173,35 +173,18 @@ print(chart)
 
 
 
-var extractList = function(dict, list) {
-  var empty = ee.List([])
-  list = ee.List(list)
-  dict = ee.Dictionary(dict)
-  var values = ee.List(list.iterate(function(el, first) {
-    var f = ee.List(first)
-    var cond = dict.contains(el);
-    return ee.Algorithms.If(cond, f.add(dict.get(el)), f)
-  }, empty))
-  return values
-}
+
 print(layerProperties)
 var discrete_vals = ["Traffic","Imperviousness","Population","Precipitation","Runoff","Runoff (inches)","Slope"] //images to reduce in watershed chart 
 
-var layer_select = ui.Select({items:discrete_vals, onChange: 
+var legendPanel = ui.Panel({style:{position:'bottom-right'}})
+Map.add(legendPanel)
 
 // Make a drop down menu of images.
 var imageSelect = ui.Select({
-  items: [
-    {label: 'SRTM', value: srtm},
-    {label: 'Landsat 8', value: landsat8}
-  ],
+  items: discrete_vals, 
   onChange: function(value) {
-    // Asynchronously get the list of band names.
-    value.bandNames().evaluate(function(bands) {
-      // Display the bands of the selected image.
-      bandSelect.items().reset(bands);
-      // Set the first band to the selected band.
-      bandSelect.setValue(bandSelect.items().get(0));
-    });
+    helpers.clear_map_add_layer(layerProperties[value],legendPanel)
   }
 });
+Map.add(imageSelect)
