@@ -430,7 +430,7 @@ var rasters = {
 
     }
 }
-exports.vectors = {
+exports.vectors = { //for legacy functions 
     counties: data.counties,
     HUC12: data.HUC12,
     HUC10: data.HUC10,
@@ -442,7 +442,7 @@ exports.vectors = {
     MS4: data.MS4
 }
 
-exports.vector_dict = {
+var vector_dict = {
   "County Boundaries": data.counties,
   "HUC12: USGS Watershed Boundary Dataset": data.HUC12,
   "HUC10: USGS Watershed Boundary Dataset": data.HUC10, 
@@ -451,5 +451,5 @@ exports.vector_dict = {
   "Puget Sound Assessment Units": data.PS_AU,
   "Ecology Water Resource Inventory Area (WRIA)": data.WRIA
 }
-
+exports.vector_dict = vector_dict
 exports.rasters = rasters
