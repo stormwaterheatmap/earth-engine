@@ -464,6 +464,6 @@ var  vector_dict_label_col = {
   "Ecology Water Resource Inventory Area (WRIA)": "WRIA_NM"
 }
   
-print(data.WRIA.first())
+exports.vector_dict_label_col = vector_dict_label_col
 exports.vector_dict = vector_dict
 exports.rasters = rasters
