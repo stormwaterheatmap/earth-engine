@@ -119,7 +119,7 @@ var soilsChart = charts.pieChart(geometry, imgtest, 100)
 //print(Map.layers().get(0).get('eeObject'))
 
 
-function makeResultsBarChart(watershed,image) {
+function makeResultsBarChart(watershed,xProp,image) {
   //var wsSelect = watershed.filterBounds(ee.Geometry(geometry)); 
   //return sum of selected Watersheds
   var load =image.reduceRegions({
