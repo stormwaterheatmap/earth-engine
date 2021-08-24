@@ -1,16 +1,18 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = 
-    /* color: #d63000 */
-    /* displayProperties: [
-      {
-        "type": "rectangle"
-      }
-    ] */
-    ee.Geometry.Polygon(
-        [[[-122.33131193787504, 47.817373473468436],
-          [-122.33131193787504, 47.77401389443029],
-          [-122.26402067810942, 47.77401389443029],
-          [-122.26402067810942, 47.817373473468436]]], null, false);
+var geometry = /* color: #98ff00 */ee.Geometry.MultiPolygon(
+        [[[[-122.10553416572102, 47.545512830869946],
+           [-122.10553416572102, 47.51769613201601],
+           [-122.0272565778304, 47.51769613201601],
+           [-122.0272565778304, 47.545512830869946]]],
+         [[[-122.17698069796525, 47.50688538323167],
+           [-122.17698069796525, 47.48809690101237],
+           [-122.14848490939103, 47.48809690101237],
+           [-122.14848490939103, 47.50688538323167]]],
+         [[[-122.18075724825822, 47.530767200201794],
+           [-122.18075724825822, 47.51708865444791],
+           [-122.14196177706681, 47.51708865444791],
+           [-122.14196177706681, 47.530767200201794]]]], null, false),
+    table = ee.FeatureCollection("USGS/WBD/2017/HUC12");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //ui.root.clear();
 
@@ -113,5 +115,93 @@ var soilfeat = charts.imgToFc(geometry, imgtest, 100)
 print(soilfeat)
 
 var soilsChart = charts.pieChart(geometry, imgtest, 100)
-Map.add(soilsChart)
-print(Map.layers().get(0).get('eeObject'))
+//Map.add(soilsChart)
+//print(Map.layers().get(0).get('eeObject'))
+
+
+function makeResultsBarChart(watershed,image) {
+  //var wsSelect = watershed.filterBounds(ee.Geometry(geometry)); 
+  //return sum of selected Watersheds
+  var load =image.reduceRegions({
+    collection: watershed,
+    reducer: ee.Reducer.sum(), 
+    scale: Map.getScale()
+  }); 
+  var chart = ui.Chart.feature.byFeature(load, 'WSName', ['sum']);
+  chart.setChartType('BarChart');
+  chart.setOptions({
+    title: 'TSS Comparison',
+    vAxis: {title: null},
+    hAxis: {title: 'Annual Stormwater TSS Load (kg/year', minValue: 0}
+  });
+  chart.style().set({stretch: 'both'});
+  return chart;
+}
+
+// Makes a table of the given FeatureCollection of watershed by GRIDCODE.
+function makeResultsTable(watershed,image) {
+  var load = image.reduceRegions({
+    collection: watershed,
+    reducer: ee.Reducer.sum(), 
+    scale: Map.getScale()
+  }); 
+  var table = ui.Chart.feature.byFeature(load, 'WSName', ['sum']);
+  table.setChartType('Table');
+  table.setOptions({allowHtml: true, pageSize: 5});
+  table.style().set({stretch: 'both'});
+  return table;
+}
+
+
+//Make a random feature colleciton 
+var fc = table.filterBounds(geometry)
+print(fc)
+//simulation selection of an image 
+var layer_object = layerProperties.Traffic
+var image = layer_object.layer.eeObject
+//var chart = makeResultsBarChart(geometry,layer_object.layer.eeObject)
+//print(chart)
+var feat = image.reduceRegions({
+    collection: fc,
+    reducer: ee.Reducer.sum(), 
+    scale: 100
+  })
+
+var chart = (ui.Chart.feature.byFeature({features:feat,xProperty: 'name', yProperties:['sum']}))
+chart.setChartType('ColumnChart')
+print(chart)
+
+
+
+var extractList = function(dict, list) {
+  var empty = ee.List([])
+  list = ee.List(list)
+  dict = ee.Dictionary(dict)
+  var values = ee.List(list.iterate(function(el, first) {
+    var f = ee.List(first)
+    var cond = dict.contains(el);
+    return ee.Algorithms.If(cond, f.add(dict.get(el)), f)
+  }, empty))
+  return values
+}
+print(layerProperties)
+var discrete_vals = ["Traffic","Imperviousness","Population","Precipitation","Runoff","Runoff (inches)","Slope"] //images to reduce in watershed chart 
+
+var layer_select = ui.Select({items:discrete_vals, onChange: 
+
+// Make a drop down menu of images.
+var imageSelect = ui.Select({
+  items: [
+    {label: 'SRTM', value: srtm},
+    {label: 'Landsat 8', value: landsat8}
+  ],
+  onChange: function(value) {
+    // Asynchronously get the list of band names.
+    value.bandNames().evaluate(function(bands) {
+      // Display the bands of the selected image.
+      bandSelect.items().reset(bands);
+      // Set the first band to the selected band.
+      bandSelect.setValue(bandSelect.items().get(0));
+    });
+  }
+});
