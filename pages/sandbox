@@ -114,5 +114,3 @@ print(soilfeat)
 
 var soilsChart = charts.pieChart(geometry, imgtest, 100)
 Map.add(soilsChart)
-
-
