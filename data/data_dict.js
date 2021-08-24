@@ -451,5 +451,19 @@ var vector_dict = {
   "Puget Sound Assessment Units": data.PS_AU,
   "Ecology Water Resource Inventory Area (WRIA)": data.WRIA
 }
+
+//used to look up which column to use for name for displaying
+var  vector_dict_label_col = {
+
+  "County Boundaries": "NAMELSAD",
+  "HUC12: USGS Watershed Boundary Dataset": "name",
+  "HUC10: USGS Watershed Boundary Dataset": "name", 
+  "HUC08: USGS Watershed Boundary Dataset":"name",
+  "NHDPlus High Resolution Watershed Dataset": "FEATUREID",
+  "Puget Sound Assessment Units": "OBJECTID", 
+  "Ecology Water Resource Inventory Area (WRIA)": "WRIA_NM"
+}
+  
+print(data.WRIA.first())
 exports.vector_dict = vector_dict
 exports.rasters = rasters
