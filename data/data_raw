@@ -1,5 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds");
+var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds"),
+    census = ee.FeatureCollection("TIGER/2010/Blocks");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 * Author: Christian Nilsen, Geosyntec Consultants 
@@ -95,7 +96,9 @@ exports.PS_AU = ee.FeatureCollection(
 Stormwaterheatmap Image Assets 
 */
 
-exports.population_per_ha = ee.Image("users/stormwaterheatmap/population_per_ha") 
+//exports.population_per_ha = ee.Image("users/stormwaterheatmap/population_per_ha") 
+var population = census.filterBounds(PugetSound).reduceToImage({properties:["pop10"], reducer:ee.Reducer.first()})
+exports.population = population.selfMask()
 exports.landuse_img = landuse.reduceToImage(['Master_num'], ee.Reducer.first())
   ///this has some weird slivers that look to be artifacts (coded as 8 in the shapefile)
 //making these 0 and remapping the rest
