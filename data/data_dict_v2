@@ -1,6 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image = ee.Image("MERIT/DEM/v1_0_3"),
-    imageVisParam = {"opacity":1,"bands":["dem"],"min":-40.00292747254963,"max":860.2585004293016,"palette":["e3f0fe","1f4e00","2c5100","3a5600","445900","4f5c02","5a6005","65660c","736d18","7e7423","8a7b2e","94823a","9f8945","ac9253","b79a5e","c3a36a"]};
+    imageVisParam = {"opacity":1,"bands":["dem"],"min":-40.00292747254963,"max":860.2585004293016,"palette":["e3f0fe","1f4e00","2c5100","3a5600","445900","4f5c02","5a6005","65660c","736d18","7e7423","8a7b2e","94823a","9f8945","ac9253","b79a5e","c3a36a"]},
+    imageVisParam2 = {"opacity":1,"bands":["Land Use"],"min":0,"max":15,"palette":["ff0000","008000"]};
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 // Author: Christian Nilsen, Geosyntec Consultants 
@@ -129,7 +130,7 @@ var rasters = {
             sourceUrl: null //'https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/'
         },
 
-    },
+    
     // 'Input Data Layers': {
         'Traffic': {
             layer: {
@@ -395,36 +396,51 @@ var rasters = {
                 name: 'Land Use',
                 visParams: {
                     palette: [
-                        '#eb3121', //res
-                        '#6203ae', //ind
-                        '#845609', //trans
-                        '#ae39f3', //com
-                        '#efcb09', //ag
-                        '#a0c29b', //timber
-                        '#476b9d', // water
-                        '#4c6c0a', //open space 
-                        //'#256C61' //
+'#394B59',// 0	Undesignated	'#F5F5F5',
+'#669C42',// 1	Agricultural Area	'#5C8944',✓
+'#EFD09E ',// 2	Tribal	'#FFFFBE', n✓
+'#14774C',// 3	Forest Lands	'#00A884',✓
+'#9E2B0E',// 4	Intensive Urban	'#E60000',✓
+'#F4A691',// 5	Rural Character Residential	'#55FF00',✓
+'#2778AC',// 6	Water	'#73DFFF',✓
+'#6E8387',// 7	Right of Way (ROW)	'#E1E1E1',✓
+// '#E1E1E1',//8 
+'#8EB8B3',// 8	Active Open Space and Recreation	'#00734C',
+'#D17257',// 9	Urban Character Residential	'#FFFF00',✓
+'#7C497B',// 10	Industrial	'#828282',✓ 
+'#554180',// 11	Public	'#DF73FF',✓
+'#66CDAB',// 12	Natural Preservation and Conservation	'#66CDAB',need a green 
+'#9FABA2',// 13	Military	'#D7C29E',need a light brown
+'#BF93BE'// 14	Mineral Resource Area	'#6DBB43',
                     ],
-                    min: 1,
-                    max: 8,
+                    min: 0,
+                    max: 14,
                     opacity: 0.8
                 }
             },
             discrete: true,
             values: [1, 2, 3, 4, 5, 6,
-                7, 8
+                7, 8, 9, 10, 11, 12, 13, 14, 14
             ],
             units: null,
-            labels: ['Residential',
-                'Industrial',
-                'Transportation ',
-                'Commercial',
-                'Agricultural',
-                'Timber and Resource Extraction',
-                'Water',
-                'open space'
-            ],
-            vizType: 'barChart'
+            labels: [
+            'Undesignated', 
+'Agricultural', 
+'Tribal', 
+'Forest Lands',
+'Intensive Urban',
+'Rural Character Residential',
+'Water',
+'Right of Way',
+'Active Open Space and Recreation',
+'Urban Character Residential', 
+'Industrial', 
+'Public', 
+'Natural Preservation', 
+'Military', 
+'Mineral Resource Area'
+            ]
+            
         },
 
 
@@ -467,5 +483,15 @@ var  vector_dict_label_col = {
 exports.vector_dict_label_col = vector_dict_label_col
 exports.vector_dict = vector_dict
 exports.rasters = rasters
-var testlayer = rasters["Input Data Layers"]
+var testlayer = rasters//["Input Data Layers"]
 Map.addLayer(testlayer['Age of Imperviousness'].layer)
+var i = 5
+var layernames = Object.keys(rasters).sort()
+
+print(layernames[i])
+print(ee.Dictionary(rasters).get(layernames[i]))
+Map.addLayer(rasters["Land Use"].layer)
+// Map.addLayer(rasters["Land Use"].layer.eeObject,
+// {"opacity":1,"min":0,"max":9,
+// "palette":["#2965CC", "#29A634", "#D99E0B", "#D13913", "#8F398F", "#00B3A4", "#DB2C6F", "#9BBF30", "#96622D", "#7157D9"]
+// })
