@@ -336,33 +336,33 @@ var rasters = {
             sourceUrl: []
         },
 
-        'Age of Development': {
-            layer: {
-                eeObject: data.age_of_development.rename('age_of_development'), //var visParams = {
-                name: 'Age of Development',
-                visParams: {
-                    palette: ['000000',
-                        '448564',
-                        '70daa4',
-                        '83ffbf',
-                        'ffffff'
-                    ],
-                    min: 2,
-                    max: 6,
-                    opacity: 0.8
-                }
-            },
-            discrete: true,
-            values: [2, 3, 4, 5, 6],
-            units: null,
-            labels: ['Not developed',
-                '2000 to 2014',
-                '1990 to 2000',
-                '1975 to 1990',
-                'Prior to 1975 '
-            ],
-            vizType: 'barChart'
-        },
+        // 'Age of Development': {
+        //     layer: {
+        //         eeObject: data.age_of_development.rename('age_of_development'), //var visParams = {
+        //         name: 'Age of Development',
+        //         visParams: {
+        //             palette: ['000000',
+        //                 '448564',
+        //                 '70daa4',
+        //                 '83ffbf',
+        //                 'ffffff'
+        //             ],
+        //             min: 2,
+        //             max: 6,
+        //             opacity: 0.8
+        //         }
+        //     },
+        //     discrete: true,
+        //     values: [2, 3, 4, 5, 6],
+        //     units: null,
+        //     labels: ['Not developed',
+        //         '2000 to 2014',
+        //         '1990 to 2000',
+        //         '1975 to 1990',
+        //         'Prior to 1975 '
+        //     ],
+        //     vizType: 'barChart'
+        // },
         //
 
         'Population': {
@@ -467,3 +467,5 @@ var  vector_dict_label_col = {
 exports.vector_dict_label_col = vector_dict_label_col
 exports.vector_dict = vector_dict
 exports.rasters = rasters
+var testlayer = rasters["Input Data Layers"]
+Map.addLayer(testlayer['Age of Imperviousness'].layer)
