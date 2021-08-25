@@ -1,6 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds"),
-    census = ee.FeatureCollection("TIGER/2010/Blocks");
+    census = ee.FeatureCollection("TIGER/2010/Blocks"),
+    image = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 * Author: Christian Nilsen, Geosyntec Consultants 
@@ -16,7 +17,7 @@ var PugetSound = ee.FeatureCollection(
   "users/stormwaterheatmap/tables/PugetSound");
 
 exports.PugetSound = PugetSound
-
+exports.hrus = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode")
 exports.counties = ee.FeatureCollection(
     "TIGER/2018/Counties")
   .filterBounds(
