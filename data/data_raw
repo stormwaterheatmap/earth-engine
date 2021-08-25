@@ -107,6 +107,21 @@ exports.landuse_img = landuse.reduceToImage(['Master_num'], ee.Reducer.first())
   [0,1,2,3,4,5,6,0,7,8,9,10,11,12,13,14]
   ).rename("Land Use").rename("land_use_code")
 
+
+
+// This function computes the feature's geometry area and adds it as a property.
+var calc_density = function(feature) {
+  return feature.set({population_density: feature.get('pop10').divide(feature.geometry().area().divide(100 * 100))});
+};
+exports.population_per_ha = ee.Image("users/stormwaterheatmap/population_per_ha")
+
+// Map the area getting function over the FeatureCollection.
+//var areaAdded = census.map(calc_density);
+//Map.addLayer(areaAdded)
+
+// Print the first feature from the collection with the added property.
+//print('First feature:', areaAdded.first());
+//var population_density = population.
 // Export.image.toAsset({image: landuse_img, assetId:"psrc_landuse_img", region: PugetSound, scale:1, 
 // maxPixels:1e12})
 
