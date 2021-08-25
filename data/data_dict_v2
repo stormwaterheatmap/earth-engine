@@ -496,16 +496,23 @@ exports.vector_dict_label_col = vector_dict_label_col
 exports.vector_dict = vector_dict
 exports.rasters = rasters
 var testlayer = rasters//["Input Data Layers"]
-Map.addLayer(testlayer['Age of Imperviousness'].layer)
-var i = 8
+//Map.addLayer(testlayer['Age of Imperviousness'].layer)
+var i = 9
 var layernames = Object.keys(rasters).sort()
 
 print(layernames[i])
 print(ee.Dictionary(rasters).get(layernames[i]))
 var layer = ee.Dictionary(rasters).get(layernames[i])
-Map.addLayer(ee.Dictionary(layer).get('layer'))
+var palettes = require('users/gena/packages:palettes');
+print( palettes.crameri.davos[10].reverse())
+var pal =[
+  "FEFEFE","7FB6D2","163648"]// palettes.crameri.davos[10].reverse()
 //Map.addLayer(rasters.layer)
-// Map.addLayer(rasters["Land Use"].layer.eeObject,
+Map.addLayer(rasters[layernames[i]].layer.eeObject.selfMask(),{min:0, max:1000, palette:pal
+//['#edf8fb','#b3cde3','#8c96c6','#8856a7','#810f7c']//["#D6CCFF", "#BDAFED", "#A492DB", "#8B77C9", "#715CB8", "#5642A6"]
+//["#97F3EB", "#7EDBD2", "#65C4BA", "#4BADA2", "#2E968B", "#008075"]//["#FFE39F", "#BACBA1", "#82AFA2", "#578FA1", "#376E9E", "#1F4B99"]
+  
+})
 // {"opacity":1,"min":0,"max":9,
 // "palette":["#2965CC", "#29A634", "#D99E0B", "#D13913", "#8F398F", "#00B3A4", "#DB2C6F", "#9BBF30", "#96622D", "#7157D9"]
 // })
