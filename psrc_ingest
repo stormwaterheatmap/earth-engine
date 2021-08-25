@@ -54,6 +54,6 @@ var pal =
 // 13	Natural Preservation and Conservation	'#66CDAB', need a green 
 // 14	Military	'#D7C29E',
 // 15	Mineral Resource Area	'#6DBB43',ma
-var maskcat = 2
+//var maskcat = 2
 //var landuse = landuse.mask(landuse.eq(maskcat))
-Map.addLayer(landuse, {min:0,max:14, palette:pal},'landuse')
+//Map.addLayer(landuse, {min:0,max:14, palette:pal},'landuse')
