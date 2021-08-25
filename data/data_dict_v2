@@ -130,7 +130,7 @@ var rasters = {
         },
 
     },
-    'Input Data Layers': {
+    // 'Input Data Layers': {
         'Traffic': {
             layer: {
                 eeObject: data.traffic.rename('traffic_AADT'),
@@ -428,7 +428,7 @@ var rasters = {
         },
 
 
-    }
+    // }
 }
 exports.vectors = { //for legacy functions 
     counties: data.counties,
