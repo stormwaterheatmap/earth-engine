@@ -108,13 +108,17 @@ var rasters = {
                 eeObject: data.fdr.rename('flow_duration_index'),
                 name: 'Flow Duration Index',
                 visParams: {
-                    palette: ['#00007f',
-                        '#002aff',
-                        '#00d4ff',
-                        '#7fff7f',
-                        '#ffd400',
-                        '#ff2a00',
-                        '#7f0000'
+                    palette:[
+  "FFFFCC",
+  "FBEC9A",
+  "F4CC68",
+  "ECA855",
+  "E48751",
+  "D2624D",
+  "A54742",
+  "73382F",
+  "422818",
+  "1A1A01"
                     ],
                     min: 1,
                     max: 10,
@@ -134,7 +138,7 @@ var rasters = {
     // 'Input Data Layers': {
         'Traffic': {
             layer: {
-                eeObject: data.traffic.rename('traffic_AADT'),
+                eeObject: data.traffic.rename('traffic_AADT').focal_mean(1).mask(data.traffic.exp().gt(1)),
                 name: 'Traffic',
                 visParams: {
                     palette: [
@@ -497,22 +501,21 @@ exports.vector_dict = vector_dict
 exports.rasters = rasters
 var testlayer = rasters//["Input Data Layers"]
 //Map.addLayer(testlayer['Age of Imperviousness'].layer)
-var i = 9
+var i = 1
 var layernames = Object.keys(rasters).sort()
 
 print(layernames[i])
 print(ee.Dictionary(rasters).get(layernames[i]))
 var layer = ee.Dictionary(rasters).get(layernames[i])
 var palettes = require('users/gena/packages:palettes');
-print( palettes.crameri.davos[10].reverse())
-var pal =[
-  "FEFEFE","7FB6D2","163648"]// palettes.crameri.davos[10].reverse()
+var pal = ( palettes.crameri.lajolla[10])
+print(pal)
 //Map.addLayer(rasters.layer)
-Map.addLayer(rasters[layernames[i]].layer.eeObject.selfMask(),{min:0, max:1000, palette:pal
+Map.addLayer(rasters[layernames[i]].layer.eeObject.selfMask(),{min:1,max:10,palette:pal})
 //['#edf8fb','#b3cde3','#8c96c6','#8856a7','#810f7c']//["#D6CCFF", "#BDAFED", "#A492DB", "#8B77C9", "#715CB8", "#5642A6"]
 //["#97F3EB", "#7EDBD2", "#65C4BA", "#4BADA2", "#2E968B", "#008075"]//["#FFE39F", "#BACBA1", "#82AFA2", "#578FA1", "#376E9E", "#1F4B99"]
   
-})
+//})
 // {"opacity":1,"min":0,"max":9,
 // "palette":["#2965CC", "#29A634", "#D99E0B", "#D13913", "#8F398F", "#00B3A4", "#DB2C6F", "#9BBF30", "#96622D", "#7157D9"]
 // })
