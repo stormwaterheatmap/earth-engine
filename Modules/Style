@@ -25,10 +25,10 @@ var colors = {
     'pChart' : '#4BE3A6', 
     'sChart' : 'cfcfcf', 
   };
-//print(colors.sText) 
+////print(colors.sText) 
 
 exports.colors = colors;
-print(colors.primary) 
+//print(colors.primary) 
 
 var charts = {
     histogram: {
@@ -618,4 +618,4 @@ exports.mapStyles = {
     ]
 }
 
-print(charts) 
+//print(charts) 
