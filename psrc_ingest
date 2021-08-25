@@ -4,48 +4,56 @@ var sheds = ee.FeatureCollection("users/stormwaterheatmap/revised_s8_watersheds_
 var landuse_table = ee.FeatureCollection("users/stormwaterheatmap/psrc_landuse")
 
 var selLU = landuse_table.filterBounds(sheds)
-Map.addLayer(selLU)
+//Map.addLayer(selLU,{},0)
 
 var landuse = landuse_table.reduceToImage(["Master_num"],ee.Reducer.first()).rename("landuseCode")
 // var img = landuse.reduceRegions(sheds, ee.Reducer.frequencyHistogram(), 100) 
 // print(img)
-// Map.addLayer(img)
+// //Map.addLayer(img)
 // print(img.reduceColumns(ee.Reducer.toList(2),["Location_N",'histogram']))
-
+////this has some weird slivers that look to be artifacts (coded as 8 in the shapefile)
+//making these 0 and remapping the rest
+var landuse = landuse.remap(
+  [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], 
+  [0,1,2,3,4,5,6,0,7,8,9,10,11,12,13,14]
+  ).rename("Land Use")
+//["#E4CBB2", "#D4B89E", "#C3A68A", "#B39477", "#A38364", "#937252", "#836140", "#73512F", "#63411E"]["#FFB7A5", "#F4A691", "#E9947D", "#DD836A", "#D17257", "#C56145", "#B85033", "#AB3E21", "#9E2B0E"]
 var pal = 
 [
-'#F5F5F5',
-'#5C8944',
-'#FFFFBE',
-'#00A884',
-'#E60000',
-'#55FF00',
-'#73DFFF',
-'#E1E1E1',
-'#E1E1E1',
-'#00734C',
-'#FFFF00',
-'#828282',
-'#DF73FF',
-'#66CDAB',
-'#D7C29E',
-'#6DBB43']
+'#394B59',// 0	Undesignated	'#F5F5F5',
+'#669C42',// 1	Agricultural Area	'#5C8944',✓
+'#EFD09E ',// 2	Tribal	'#FFFFBE', n✓
+'#14774C',// 3	Forest Lands	'#00A884',✓
+'#9E2B0E',// 4	Intensive Urban	'#E60000',✓
+'#F4A691',// 5	Rural Character Residential	'#55FF00',✓
+'#2778AC',// 6	Water	'#73DFFF',✓
+'#6E8387',// 7	Right of Way (ROW)	'#E1E1E1',✓
+// '#E1E1E1',//8 
+'#8EB8B3',// 8	Active Open Space and Recreation	'#00734C',
+'#D17257',// 9	Urban Character Residential	'#FFFF00',✓
+'#7C497B',// 10	Industrial	'#828282',✓ 
+'#554180',// 11	Public	'#DF73FF',✓
+'#66CDAB',// 12	Natural Preservation and Conservation	'#66CDAB',need a green 
+'#9FABA2',// 13	Military	'#D7C29E',need a light brown
+'#BF93BE']// 14	Mineral Resource Area	'#6DBB43',
 
 
 // 0	Undesignated	'#F5F5F5',
 // 1	Agricultural Area	'#5C8944',
-// 2	Tribal	'#FFFFBE',
+// 2	Tribal	'#FFFFBE', need a light yellow 
 // 3	Forest Lands	'#00A884',
 // 4	Intensive Urban	'#E60000',
 // 5	Rural Character Residential	'#55FF00',
 // 6	Water	'#73DFFF',
 // 7	Right of Way (ROW)	'#E1E1E1',
+//8 
 // 9	Active Open Space and Recreation	'#00734C',
 // 10	Urban Character Residential	'#FFFF00',
 // 11	Industrial	'#828282',
 // 12	Public	'#DF73FF',
-// 13	Natural Preservation and Conservation	'#66CDAB',
+// 13	Natural Preservation and Conservation	'#66CDAB', need a green 
 // 14	Military	'#D7C29E',
-// 15	Mineral Resource Area	'#6DBB43',
-Map.addLayer(landuse, {min:0,max:15, palette:pal},'landuse')
-Map.addLayer(sheds)
+// 15	Mineral Resource Area	'#6DBB43',ma
+var maskcat = 2
+//var landuse = landuse.mask(landuse.eq(maskcat))
+Map.addLayer(landuse, {min:0,max:14, palette:pal},'landuse')
