@@ -497,12 +497,14 @@ exports.vector_dict = vector_dict
 exports.rasters = rasters
 var testlayer = rasters//["Input Data Layers"]
 Map.addLayer(testlayer['Age of Imperviousness'].layer)
-var i = 6
+var i = 8
 var layernames = Object.keys(rasters).sort()
 
 print(layernames[i])
 print(ee.Dictionary(rasters).get(layernames[i]))
-Map.addLayer(rasters["Population Density"].layer)
+var layer = ee.Dictionary(rasters).get(layernames[i])
+Map.addLayer(ee.Dictionary(layer).get('layer'))
+//Map.addLayer(rasters.layer)
 // Map.addLayer(rasters["Land Use"].layer.eeObject,
 // {"opacity":1,"min":0,"max":9,
 // "palette":["#2965CC", "#29A634", "#D99E0B", "#D13913", "#8F398F", "#00B3A4", "#DB2C6F", "#9BBF30", "#96622D", "#7157D9"]
