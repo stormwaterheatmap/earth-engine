@@ -368,16 +368,10 @@ var rasters = {
 
         'Population': {
             layer: {
-                eeObject: data.population_per_ha.rename('population_count'),
+                eeObject: data.population.rename('population_count'),
                 name: 'Population Count',
                 visParams: {
-                    palette: ['#2f0f3e',
-                        '#66185c',
-                        '#9f2462',
-                        '#ce4356',
-                        '#eb7858',
-                        '#f7b37c',
-                        '#feedb0'
+                    palette: ["#FFC5D4","#FFB3D0", "#EF98B6", "#DE7C9C", "#CC6184", "#BB446C", "#A82255","#672941"
                     ],
                     min: 0,
                     max: 300,
@@ -389,6 +383,24 @@ var rasters = {
             units: 'Total Population',
             labels: null, //['Pervious', 'Impervious'],
             vizType: 'bigNumberSum'
+        },
+         'Population Density': {
+            layer: {
+                eeObject: data.population_per_ha.rename('population_density').mask(data.population),
+                name: 'Population Density',
+                visParams: {
+                    palette: ["#FFC5D4","#FFB3D0", "#EF98B6", "#DE7C9C", "#CC6184", "#BB446C", "#A82255","#672941"
+                    ],
+                    min: 0,
+                    max: 100,
+                    opacity: 0.8
+                }
+            },
+            discrete: false,
+            values: null,
+            units: 'Population per ha',
+            labels: null, //['Pervious', 'Impervious'],
+            vizType: 'bigNumberMean'
         },
         'Land Use': {
             layer: {
@@ -485,12 +497,12 @@ exports.vector_dict = vector_dict
 exports.rasters = rasters
 var testlayer = rasters//["Input Data Layers"]
 Map.addLayer(testlayer['Age of Imperviousness'].layer)
-var i = 5
+var i = 6
 var layernames = Object.keys(rasters).sort()
 
 print(layernames[i])
 print(ee.Dictionary(rasters).get(layernames[i]))
-Map.addLayer(rasters["Land Use"].layer)
+Map.addLayer(rasters["Population Density"].layer)
 // Map.addLayer(rasters["Land Use"].layer.eeObject,
 // {"opacity":1,"min":0,"max":9,
 // "palette":["#2965CC", "#29A634", "#D99E0B", "#D13913", "#8F398F", "#00B3A4", "#DB2C6F", "#9BBF30", "#96622D", "#7157D9"]
