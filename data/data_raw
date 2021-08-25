@@ -126,10 +126,12 @@ var water = tncLC.eq(0)
 var watermask = tncLC.neq(0)
 exports.imperviousness = imperviousness.updateMask(watermask)
 
+
+//updated 6/22/2021
+var imperviousAge = ee.Image("users/stormwaterheatmap/1m_cluster_age_v2")
+
 //age of development 
-exports.age_of_development = ee.Image(
-    "users/stormwaterheatmap/GHS_BUILT_LDSMT_GLOBE_R2018A_3857_30_V2_0_4_7")
-  .rename('built');
+exports.age_of_development = imperviousAge
 
 /*---------------------------
 // Import HSPF Layers 
