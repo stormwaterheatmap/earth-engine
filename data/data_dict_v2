@@ -579,7 +579,7 @@ var raster_keys = [
 
 
 
-print(ee.Dictionary(ee.Dictionary.fromLists(keys, rasters_formatted))) 
+print(ee.Dictionary(ee.Dictionary.fromLists(raster_keys, rasters_formatted))) 
 
 
 var rasters = {
