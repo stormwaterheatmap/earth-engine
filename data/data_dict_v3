@@ -445,7 +445,7 @@ var layNames =  Object.keys(layerSources)
 
 for (var i = 0; i < layNames.length; i++) {
    var thisLayer = (layNames[i]);
-   r[thisLayer].layer.eeObject = layerSources[thisLayer]
+   rasters[thisLayer].layer.eeObject = layerSources[thisLayer]
 }
 
 
