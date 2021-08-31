@@ -79,8 +79,8 @@ var palettes = require('users/gena/packages:palettes');
 var pal = palettes.crameri.roma[25].slice(11,24)
 Map.addLayer(imgtest.layer.eeObject.selfMask().focal_median(1.5).focal_min().focal_max(),//.focal_mean(1), 
 {palette: pal,min:1,max:1000})
-Map.addLayer(imgtest.layer.eeObject.selfMask().focal_median(1)
-.focal_min(1).focal_max(1).log(),//.focal_mean(1), 
+Map.addLayer(imgtest.layer.eeObject.selfMask().focal_median(1,'diamond')
+.focal_min(1).focal_max(1),//.focal_mean(1), 
 {palette: pal,min:1,max:1000})
 function col_chart(layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(4046.856) //area in acres
