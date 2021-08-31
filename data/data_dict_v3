@@ -238,7 +238,7 @@ var rasters = {
                         {
                             "min": 40,
                             "max": 1,
-                            "palette": [ "#DBEBB9", "#CAEBC9", "#B3E7D3", "#95DDD7", "#7AD0D7", "#61BDD3", "#52AACC", "#4898C5", "#4085BD", "#3874B5", "#3264AE", 2B53A7", "#2444A0"],
+                            "palette": [ "#DBEBB9", "#CAEBC9", "#B3E7D3", "#95DDD7", "#7AD0D7", "#61BDD3", "#52AACC", "#4898C5", "#4085BD", "#3874B5", "#3264AE", "#2B53A7", "#2444A0"],
                             "opacity": 0.8,
                             "_row": "Runoff (in)"
                         }
@@ -261,7 +261,7 @@ var rasters = {
                         {
                             "min": 1016,
                             "max": 25,
-                            "palette": [ "#DBEBB9", "#CAEBC9", "#B3E7D3", "#95DDD7", "#7AD0D7", "#61BDD3", "#52AACC", "#4898C5", "#4085BD", "#3874B5", "#3264AE", 2B53A7", "#2444A0"],
+                            "palette": [ "#DBEBB9", "#CAEBC9", "#B3E7D3", "#95DDD7", "#7AD0D7", "#61BDD3", "#52AACC", "#4898C5", "#4085BD", "#3874B5", "#3264AE", "#2B53A7", "#2444A0"],
                             "opacity": 0.8,
                             "_row": "Runoff (mm)"
                         }
