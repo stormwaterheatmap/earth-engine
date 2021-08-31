@@ -84,7 +84,7 @@ var rasters = {
             "labels": ["No data", "Grass/Low Vegetation", "Shrub/Medium Vegetation", "Trees/Forest", "Bare soil", "Water", "Impervious", "Impervious - Roofs "],
             "sourceName": "The Nature Conservancy",
             "units": "Land Cover Type",
-            "values": [ 0, 1, 2, 3, 4, 5 ],
+            "values": [ 0, 1, 2, 3, 4, 5, 6, 7],
             "default_reduction": "Category",
             "layer": 
                 {
@@ -375,7 +375,7 @@ var rasters = {
         {
             "discrete": "FALSE",
             "sourceName": "The Nature Conservancy",
-            "units": "unitless",
+            "units": "index",
             "vizType": "bigNumberMean",
             "default_reduction": "mean",
             "description": "Dimensionless index indicating level of flow control needed to match forest hydrology.",
@@ -426,6 +426,8 @@ var rasters = {
         }
     
 }
+
+
 
 
 
