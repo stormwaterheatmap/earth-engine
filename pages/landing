@@ -4,15 +4,45 @@
 ui.root.setLayout(ui.Panel.Layout.absolute());
 
 // data 
-var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
+var data = require('users/stormwaterheatmap/apps:data/data_dict_v3')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 
 var fonts = Style.fonts 
 
 var rasters = data.rasters
-var layer_types = Object.keys(rasters)
-var test_list = (Object.keys(rasters["Input Data Layers"]))
+print(rasters)
+var layer_types = {"Input Data Layers": {}, "Hydrology Data Layers": {}}; 
+layer_types["Input Data Layers"] = {
+  "Soils": rasters.Soils, 
+  "Age of Imperviousness": rasters["Age of Imperviousness"], 
+  "HSPF Land Cover Type": rasters["HSPF Land Cover Type"], 
+  "Imperviousness": rasters["Imperviousness"], 
+  "Land Cover": rasters["Land Cover"], 
+  "Land Use": rasters["Land Use"], 
+  "Population": rasters["Population"], 
+  "Population Density": rasters["Population Density"], 
+  "Precipitation (in)": rasters["Precipitation (in)"], 
+  "Precipitation (mm)": rasters["Precipitation (mm)"], 
+  "Runoff (in)": rasters["Runoff (in)"], 
+  "Runoff (mm)": rasters["Runoff (mm)"], 
+  "Slope": rasters["Slope"], 
+  "Slope Categories": rasters["Slope Categories"], 
+  "Traffic": rasters["Traffic"]}
+  
+
+layer_types["Hydrology Data Layers"]={
+  "Flow Duration Index": rasters["Flow Duration Index"], 
+  "Hydrologic Response Units": rasters["Hydrologic Response Units"], 
+  "Runoff (in)": rasters["Runoff (in)"], 
+  "Runoff (mm)": rasters["Runoff (mm)"]
+  
+}
+
+
+
+
+//var test_list = (Object.keys(rasters["Input Data Layers"]))
   
 
 
@@ -47,11 +77,12 @@ var legendPanel = ui.Panel({style:{position:'bottom-left',shown:false, minWidth:
 })
 Map.add(legendPanel)
 var select_layer_type = ui.Select({
-  items: layer_types,
+  items: Object.keys(layer_types),
   placeholder: "Select Layer Type", 
-  value: layer_types[0], 
+  value: Object.keys(layer_types)[0], 
   onChange: function() {
-    var layer_dict = rasters[select_layer_type.getValue()]; 
+    var layer_dict = layer_types[select_layer_type.getValue()]; 
+    print(layer_dict)
     var layers_list = Object.keys(layer_dict); 
       secondname_select = ui.Select({
         items: layers_list,//select_layer_type.getValue()], 
@@ -84,7 +115,7 @@ var map_init = function(map){
  //m.add(panel)
  //m.add(legendPanel)
  select_layer_type.setValue("Input Data Layers")
- secondname_select.setValue("Slope")
+ //secondname_select.setValue("Slope")
  //legendPanel.style().set({shown:true})
           //helpers.clear_map_add_layer(layer_obj,legendPanel)
   
