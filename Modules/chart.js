@@ -253,7 +253,7 @@ var makePieChart = function (
 
 //
 exports.pieChart = makePieChart
-exports.category_chart = makePieChart.setChartType('ColumnChart')
+//exports.category_chart = makePieChart.setChartType('ColumnChart')
 //exports.fc = makePieChart[1]
 
 /*var bigNum = function (layerObj, region, scale, reducerType) {
