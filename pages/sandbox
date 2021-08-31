@@ -1,5 +1,8 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #98ff00 */ee.Geometry.MultiPolygon(
+var geometry = 
+    /* color: #98ff00 */
+    /* shown: false */
+    ee.Geometry.MultiPolygon(
         [[[[-122.10553416572102, 47.545512830869946],
            [-122.10553416572102, 47.51769613201601],
            [-122.0272565778304, 47.51769613201601],
@@ -24,18 +27,18 @@ ui.root.setLayout(ui.Panel.Layout.absolute());
 ---------------------------------------------------------------------------------------------------- 
 */
 
-var data  = require('users/stormwaterheatmap/apps:data/data_dict.js')
+var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
-var input_layers = data.rasters["Input Data Layers"]
-var hydrology_layers = data.rasters["Hydrology Data Layers"]
-print(ee.Dictionary(hydrology_layers))
-var layerProperties = ee.Dictionary(input_layers).combine(hydrology_layers)
-print("layerProperties",layerProperties.get("Land Use"))
-var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
+//var input_layers = data.rasters["Input Data Layers"]
+//var hydrology_layers = data.rasters["Hydrology Data Layers"]
+//print(ee.Dictionary(hydrology_layers))
+var layerProperties = data.rasters
+//print("layerProperties",layerProperties.get("Land Use"))
+//var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 print(data)
@@ -43,7 +46,7 @@ var fonts = Style.fonts
 
 var rasters = data.rasters
 var layer_types = Object.keys(rasters)
-var test_list = (Object.keys(rasters["Input Data Layers"]))
+var test_list = (Object.keys(rasters))
 
 var vectors = data.vector_dict
 print(Object.keys(vectors))
@@ -55,7 +58,7 @@ function print_selected(value) {
   print ("change", value)
 }
 
-print(input_layers)
+//print(input_layers)
 var objectMerge = function(){
     var out = {};
     if(!arguments.length)
@@ -67,11 +70,18 @@ var objectMerge = function(){
     }
     return out;
 }
-var layerProperties = objectMerge(input_layers,hydrology_layers) 
-print(layerProperties['Precipitation'])
+//var layerProperties = objectMerge(input_layers,hydrology_layers) 
+//print(layerProperties['Precipitation'])
 //Select image 
-var imgtest = layerProperties.Soils
-print(imgtest)
+var imgtest = layerProperties["Runoff (mm)"]
+var palettes = require('users/gena/packages:palettes');
+
+var pal = palettes.crameri.roma[25].slice(11,24)
+Map.addLayer(imgtest.layer.eeObject.selfMask().focal_median(1.5).focal_min().focal_max(),//.focal_mean(1), 
+{palette: pal,min:1,max:1000})
+Map.addLayer(imgtest.layer.eeObject.selfMask().focal_median(1)
+.focal_min(1).focal_max(1).log(),//.focal_mean(1), 
+{palette: pal,min:1,max:1000})
 function col_chart(layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(4046.856) //area in acres
     print(layerObject)
