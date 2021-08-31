@@ -118,13 +118,13 @@ function col_chart(layerObject, scale, geom) {
     return histChart.setChartType('BarChart')
 
 }
-Map.addLayer(imgtest.layer)
-var soilsChart = col_chart(imgtest, 100, geometry)
+//Map.addLayer(imgtest.layer,{},'test')
+//var soilsChart = col_chart(imgtest, 100, geometry)
 
-var soilfeat = charts.imgToFc(geometry, imgtest, 100) 
-print(soilfeat)
+//var soilfeat = charts.imgToFc(geometry, imgtest, 100) 
+//print(soilfeat)
 
-var soilsChart = charts.pieChart(geometry, imgtest, 100)
+//var soilsChart = charts.pieChart(geometry, imgtest, 100)
 //Map.add(soilsChart)
 //print(Map.layers().get(0).get('eeObject'))
 
@@ -171,15 +171,34 @@ var layer_object = layerProperties.Traffic
 var image = layer_object.layer.eeObject
 //var chart = makeResultsBarChart(geometry,layer_object.layer.eeObject)
 //print(chart)
-var feat = image.reduceRegions({
-    collection: fc,
-    reducer: ee.Reducer.sum(), 
-    scale: 100
-  })
 
-var chart = (ui.Chart.feature.byFeature({features:feat,xProperty: 'name', yProperties:['sum']}))
-chart.setChartType('ColumnChart')
-print(chart)
+var colchart = function(layer_object,fc,scale){
+var feat = layer_object.layer.eeObject.reduceRegions({
+    collection: fc,
+    reducer: ee.Reducer.mean(), 
+    scale: scale
+})
+
+var title = layer_object.layer.name
+var units = layer_object.units 
+  
+feat = feat.select(['name','mean'],[title,units])
+  
+  
+
+  
+print(feat)
+var chart = (ui.Chart.feature.byFeature({features:feat,xProperty: title, yProperties:[units]
+}))
+chart.setChartType('ColumnChart').setOptions({
+  title: title+' by watershed',
+  hAxis:  {title:""}, 
+  vAxis: {title: units}
+})
+return(chart)
+}
+
+print(colchart(layer_object,fc,100))
 
 
 
