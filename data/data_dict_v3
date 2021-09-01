@@ -30,7 +30,7 @@ var rasters = {
     "HSPF Land Cover Type": 
         {
             "discrete": "TRUE",
-            "labels": ["Forest/Trees", "Pasture", "Grass", "Water", "Impervious.roof", "Impervious.nonRoof"],
+            "labels": ["Forest/Trees", "Pasture", "Grass", "Water", "Impervious-roof", "Impervious-nonRoof"],
             "sourceName": "The Nature Conservancy",
             "units": "Land Cover Type",
             "values": [ 0, 1, 2, 3, 4, 5 ],
@@ -486,51 +486,29 @@ exports.vectors = { //for legacy functions
     MS4: data.MS4
 }
 
-var rename_vector = function (fc, col_name) {
-  var DataRenamed = fc.map(function (feat) {
-    return ee.Feature(feat.geometry(), {
-        "Watershed Name": feat.get(col_name),
-      })
-      .copyProperties(feat)
-  })
-  return (DataRenamed)
-}
-
-
 var vector_dict = {
-  "County Boundaries": rename_vector(data.counties,"NAMELSAD"), 
-  "HUC12: USGS Watershed Boundary Dataset": rename_vector(data.HUC12, "name"),
-  "HUC10: USGS Watershed Boundary Dataset": rename_vector(data.HUC10,  "name"), 
-  "HUC08: USGS Watershed Boundary Dataset": rename_vector(data.HUC08,"name"),
-  "NHDPlus High Resolution Watershed Dataset": rename_vector(data.NHDPlus, "FEATUREID"), 
-  "Puget Sound Assessment Units": rename_vector(data.PS_AU,"OBJECTID"), 
-  "Ecology Water Resource Inventory Area (WRIA)": rename_vector(data.WRIA, "WRIA_NM") 
+  "County Boundaries": data.counties,
+  "HUC12: USGS Watershed Boundary Dataset": data.HUC12,
+  "HUC10: USGS Watershed Boundary Dataset": data.HUC10, 
+  "HUC08: USGS Watershed Boundary Dataset": data.HUC08,
+  "NHDPlus High Resolution Watershed Dataset": data.NHDPlus,
+  "Puget Sound Assessment Units": data.PS_AU,
+  "Ecology Water Resource Inventory Area (WRIA)": data.WRIA
 }
 
+//used to look up which column to use for name for displaying
+var  vector_dict_label_col = {
 
-print(vector_dict)
-// //used to look up which column to use for name for displaying
-// var  vector_dict_label_col = {
-
-//   "County Boundaries": "NAMELSAD",
-//   "HUC12: USGS Watershed Boundary Dataset": "name",
-//   "HUC10: USGS Watershed Boundary Dataset": "name", 
-//   "HUC08: USGS Watershed Boundary Dataset":"name",
-//   "NHDPlus High Resolution Watershed Dataset": "FEATUREID",
-//   "Puget Sound Assessment Units": "OBJECTID", 
-//   "Ecology Water Resource Inventory Area (WRIA)": "WRIA_NM"
-// }
-//ar fc = table.filterBounds(geometry)
-//print(fc.first())
-
-
-// var sheds = vector_dict["Ecology Water Resource Inventory Area (WRIA)"]//.map(remap_vector_name("WRIA_NM")))
-// //var tt = rename_vector(sheds,'WRIA_NM')
-// print(sheds.first())
-//print(ee.Feature(sheds.first()).get("WRIA_NM"))
-//print(sheds.map(remap_vector_name("WRIA_NM")))
-  //print(data.HUC12.first())//.get('name'))
-//exports.vector_dict_label_col = vector_dict_label_col
+  "County Boundaries": "NAMELSAD",
+  "HUC12: USGS Watershed Boundary Dataset": "name",
+  "HUC10: USGS Watershed Boundary Dataset": "name", 
+  "HUC08: USGS Watershed Boundary Dataset":"name",
+  "NHDPlus High Resolution Watershed Dataset": "FEATUREID",
+  "Puget Sound Assessment Units": "OBJECTID", 
+  "Ecology Water Resource Inventory Area (WRIA)": "WRIA_NM"
+}
+  
+exports.vector_dict_label_col = vector_dict_label_col
 exports.vector_dict = vector_dict
 exports.rasters = rasters
 
