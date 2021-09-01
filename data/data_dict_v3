@@ -397,7 +397,7 @@ var rasters = {
                 }
             
         }
-    ,
+   // ,
     // "Hydrologic Response Units": 
     //     {
     //         "discrete": "TRUE",
@@ -465,7 +465,7 @@ var layerSources = {
   "Soils":data.soils.rename('soils'), 
   "Traffic":data.traffic.rename('traffic_AADT').focal_mean(1).mask(data.traffic.exp().gt(1)), 
   "Flow Duration Index":data.fdr.rename('flow_duration_index'),
-  "Hydrologic Response Units": null
+  //"Hydrologic Response Units": null
 }
 
 
