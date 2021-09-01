@@ -167,7 +167,7 @@ var makePieChart = function (
     var AOI = geometry;
     var image = properties.layer.eeObject
     var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image); //acres
-    var clipImage = withArea.clip(AOI)
+    //var clipImage = withArea.clip(AOI)
     //////////////////////////////////////////////////////////////
     // Calculations
     //////////////////////////////////////////////////////////////
@@ -206,7 +206,7 @@ var makePieChart = function (
 
     //var classValue = image.get('system:title')
     //print(classValue)
-    var reduction_results = clipImage.reduceRegion({
+    var reduction_results = withArea.reduceRegion({
         reducer: ee.Reducer.sum().group({
             groupField: 1,
             groupName: 'class value',
@@ -253,7 +253,8 @@ var makePieChart = function (
 
 //
 exports.pieChart = makePieChart
-//exports.category_chart = makePieChart.setChartType('ColumnChart')
+
+
 //exports.fc = makePieChart[1]
 
 /*var bigNum = function (layerObj, region, scale, reducerType) {
@@ -661,6 +662,44 @@ var imgToFc = function (
 
 
 exports.imgToFc = imgToFc
+ 
+var stack_bands = function (layer_object) {
+  var img = ee.Image(layer_object.layer.eeObject)
+  for(var i = 0; i < layer_object.values.length; i++) {
+    var bandName = layer_object.labels[i]
+    img = img.addBands({
+      srcImg: layer_object.layer.eeObject.eq(layer_object.values[i])
+        .rename(bandName)
+        .multiply(ee.Image.pixelArea()
+          .divide(4046.86) //m2 in an acre), 
+        ),
+      names: [bandName]
+    })
+  }
+  return (img.select(layer_object.labels))
+}
+function cat_cart(layer_object, regions) {
+  var stacked = stack_bands(layer_object)
+  var chart = ui.Chart.image.byRegion({
+      image: stacked,
+      regions: regions,
+      reducer: ee.Reducer.sum(),
+      scale: 100,
+      xProperty: "Watershed Name"
+    })
+    .setChartType('ColumnChart')
+    .setOptions({
+      title: layer_object.layer.name,
+      vAxis: {
+        title: 'acres',
+        format: 'short'
+      }
+    })
+  return (chart)
+}
+
+exports.cat_chart = cat_chart
+
 // //testing 
 
 // var data = require('users/stormwaterheatmap/apps:Modules/datasets')
