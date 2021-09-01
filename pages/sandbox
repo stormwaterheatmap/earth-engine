@@ -171,6 +171,7 @@ function makeResultsTable(watershed,image) {
 //makes a column chart for a layer_object (mean, sum)
 var colchart = function (layer_object, fc, scale) {
   //print(layer_object.default_reduction)
+  var chart
   if(layer_object.default_reduction != 'Category')
   {
   var feat = layer_object.layer.eeObject.reduceRegions({
@@ -182,7 +183,7 @@ var colchart = function (layer_object, fc, scale) {
   var units = layer_object.units
   //print(feat,title,units)
   feat = feat.select(['name', layer_object.default_reduction], [title, units])
-  var chart = (ui.Chart.feature.byFeature({
+   chart = (ui.Chart.feature.byFeature({
     features: feat,
     xProperty: title,
     yProperties: [units]
@@ -196,6 +197,7 @@ var colchart = function (layer_object, fc, scale) {
       vAxis: {
         title: units
       }
+      
     })}
     else{
       chart = charts.cat_chart(layer_object,fc,scale) // geometry, properties, scale
@@ -208,8 +210,9 @@ var layers = Object.keys(rasters)
 var fc = data.vector_dict[vector_names[3]].filterBounds(geometry)
 print(fc)
 //testing all charts
-for (var i = 0; i < Object.keys(rasters).length; i++) {
+for (var i = 7; i < Object.keys(rasters).length; i++) {
 //var j = 2
+
 var layer_object = rasters[layers[i]]
 
 //simulation selection of an image 
