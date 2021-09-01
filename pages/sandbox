@@ -205,7 +205,8 @@ var colchart = function (layer_object, fc, scale) {
   return (chart)
 }
 var layers = Object.keys(rasters)
-var fc = data.vector_dict[vector_names[2]].filterBounds(geometry)
+var fc = data.vector_dict[vector_names[3]].filterBounds(geometry)
+print(fc)
 //testing all charts
 for (var i = 0; i < Object.keys(rasters).length; i++) {
 //var j = 2
@@ -227,7 +228,7 @@ var layer_object = rasters[layers[i]]
 // print(grouped_features)
 print(
   layer_object.layer.name, 
-  colchart(layer_object,fc,500))
+  colchart(layer_object,fc,100))
 
 }
 
