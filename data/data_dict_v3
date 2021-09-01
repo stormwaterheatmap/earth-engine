@@ -508,7 +508,7 @@ var vector_dict = {
 }
 
 
-
+print(vector_dict)
 // //used to look up which column to use for name for displaying
 // var  vector_dict_label_col = {
 
