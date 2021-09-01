@@ -678,13 +678,13 @@ var stack_bands = function (layer_object) {
   }
   return (img.select(layer_object.labels))
 }
-function cat_cart(layer_object, regions) {
+function cat_chart(layer_object, regions,scale) {
   var stacked = stack_bands(layer_object)
   var chart = ui.Chart.image.byRegion({
       image: stacked,
       regions: regions,
       reducer: ee.Reducer.sum(),
-      scale: 100,
+      scale: scale,
       xProperty: "Watershed Name"
     })
     .setChartType('ColumnChart')
