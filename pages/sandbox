@@ -1,10 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = 
-    /* color: #98ff00 */
-    /* shown: false */
-    ee.Geometry.MultiPolygon(
-        [[[[-122.10553416572102, 47.545512830869946],
-           [-122.10553416572102, 47.51769613201601],
+var geometry = /* color: #98ff00 */ee.Geometry.MultiPolygon(
+        [[[[-122.05540904365071, 47.536242237271665],
+           [-122.05060252509602, 47.52557902799992],
            [-122.0272565778304, 47.51769613201601],
            [-122.0272565778304, 47.545512830869946]]],
          [[[-122.17698069796525, 47.50688538323167],
@@ -13,8 +10,9 @@ var geometry =
            [-122.14848490939103, 47.50688538323167]]],
          [[[-122.18075724825822, 47.530767200201794],
            [-122.18075724825822, 47.51708865444791],
+           [-122.16479274020158, 47.51894358154077],
            [-122.14196177706681, 47.51708865444791],
-           [-122.14196177706681, 47.530767200201794]]]], null, false),
+           [-122.15294810519181, 47.5265944626336]]]], null, false),
     table = ee.FeatureCollection("USGS/WBD/2017/HUC12");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //ui.root.clear();
@@ -26,6 +24,10 @@ ui.root.setLayout(ui.Panel.Layout.absolute());
 /*Load modules 
 ---------------------------------------------------------------------------------------------------- 
 */
+var palettes = require('users/gena/packages:palettes');
+
+var pal = palettes.crameri.roma[25].slice(11,24)
+//print(pal)
 
 var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
@@ -35,13 +37,13 @@ var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 //var input_layers = data.rasters["Input Data Layers"]
 //var hydrology_layers = data.rasters["Hydrology Data Layers"]
-//print(ee.Dictionary(hydrology_layers))
+////print(ee.Dictionary(hydrology_layers))
 var layerProperties = data.rasters
-//print("layerProperties",layerProperties.get("Land Use"))
+////print("layerProperties",layerProperties.get("Land Use"))
 //var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
-print(data)
+//print(data)
 var fonts = Style.fonts 
 
 var rasters = data.rasters
@@ -49,12 +51,13 @@ var layer_types = Object.keys(rasters)
 var test_list = (Object.keys(rasters))
 
 var vectors = data.vector_dict
-print(Object.keys(vectors))
+//print(vectors)
+var vector_names = (Object.keys(vectors))
 var sel = ui.Select({items: Object.keys(vectors).sort(), onChange: print_selected }) 
-Map.add(sel)
+//Map.add(sel)
 function print_selected(value) {
  var laytoshow = vectors[value]
- Map.addLayer(laytoshow)
+ //Map.addLayer(laytoshow)
   print ("change", value)
 }
 
@@ -73,18 +76,16 @@ var objectMerge = function(){
 //var layerProperties = objectMerge(input_layers,hydrology_layers) 
 //print(layerProperties['Precipitation'])
 //Select image 
-var imgtest = layerProperties["Runoff (mm)"]
-var palettes = require('users/gena/packages:palettes');
+var imgtest = layerProperties["Runoff (in)"]
 
-var pal = palettes.crameri.roma[25].slice(11,24)
-Map.addLayer(imgtest.layer.eeObject.selfMask().focal_median(1.5).focal_min().focal_max(),//.focal_mean(1), 
-{palette: pal,min:1,max:1000})
-Map.addLayer(imgtest.layer.eeObject.selfMask().focal_median(1,'diamond')
-.focal_min(1).focal_max(1),//.focal_mean(1), 
-{palette: pal,min:1,max:1000})
+//Map.addLayer(imgtest.layer.eeObject.selfMask().focal_median(1.5).focal_min().focal_max(),//.focal_mean(1), 
+//{palette: pal,min:1,max:1000})
+//Map.addLayer(imgtest.layer.eeObject.selfMask().focal_median(1,'diamond')
+//.focal_min(1).focal_max(1),//.focal_mean(1), 
+//{palette: pal,min:1,max:1000})
 function col_chart(layerObject, scale, geom) {
     var area = ee.Image.pixelArea().divide(4046.856) //area in acres
-    print(layerObject)
+    //print(layerObject)
     var layerimg = layerObject.layer.eeObject
     var image = ee.Image.cat(area, layerimg)
     // Define chart customization options.
@@ -118,14 +119,14 @@ function col_chart(layerObject, scale, geom) {
     return histChart.setChartType('BarChart')
 
 }
-//Map.addLayer(imgtest.layer,{},'test')
+////Map.addLayer(imgtest.layer,{},'test')
 //var soilsChart = col_chart(imgtest, 100, geometry)
 
 //var soilfeat = charts.imgToFc(geometry, imgtest, 100) 
 //print(soilfeat)
 
 //var soilsChart = charts.pieChart(geometry, imgtest, 100)
-//Map.add(soilsChart)
+////Map.add(soilsChart)
 //print(Map.layers().get(0).get('eeObject'))
 
 
@@ -163,51 +164,81 @@ function makeResultsTable(watershed,image) {
 }
 
 
-//Make a random feature colleciton 
-var fc = table.filterBounds(geometry)
-Map.addLayer(fc)
-//simulation selection of an image 
-var layer_object = layerProperties.Traffic
-var image = layer_object.layer.eeObject
+
 //var chart = makeResultsBarChart(geometry,layer_object.layer.eeObject)
 //print(chart)
 
-var colchart = function(layer_object,fc,scale){
-var feat = layer_object.layer.eeObject.reduceRegions({
+//makes a column chart for a layer_object (mean, sum)
+var colchart = function (layer_object, fc, scale) {
+  //print(layer_object.default_reduction)
+  if(layer_object.default_reduction != 'Category')
+  {
+  var feat = layer_object.layer.eeObject.reduceRegions({
     collection: fc,
-    reducer: ee.Reducer.mean(), 
+    reducer:layer_object.default_reduction,// ee.Reducer.mean(),
     scale: scale
-})
+  })
+  var title = layer_object.layer.name
+  var units = layer_object.units
+  //print(feat,title,units)
+  feat = feat.select(['name', layer_object.default_reduction], [title, units])
+  var chart = (ui.Chart.feature.byFeature({
+    features: feat,
+    xProperty: title,
+    yProperties: [units]
+  }))
+  chart.setChartType('ColumnChart')
+    .setOptions({
+      title: title + ' by watershed'+' ('+layer_object.default_reduction+')',
+      hAxis: {
+        title: ""
+      },
+      vAxis: {
+        title: units
+      }
+    })}
+    else{
+      chart = charts.cat_chart(layer_object,fc,scale) // geometry, properties, scale
+      //chart = chart.setChartType('ColumnChart')
+      ////chart = ui.Chart.feature.byFeature({})
+    }
+  return (chart)
+}
+var layers = Object.keys(rasters)
+var fc = data.vector_dict[vector_names[2]].filterBounds(geometry)
+//testing all charts
+for (var i = 0; i < Object.keys(rasters).length; i++) {
+//var j = 2
+var layer_object = rasters[layers[i]]
 
-var title = layer_object.layer.name
-var units = layer_object.units 
-  
-feat = feat.select(['name','mean'],[title,units])
-  
-  
+//simulation selection of an image 
+//var layer_object = layerProperties['Land Cover']
+// var image = layer_object.layer.eeObject
 
-  
-print(feat)
-var chart = (ui.Chart.feature.byFeature({features:feat,xProperty: title, yProperties:[units]
-}))
-chart.setChartType('ColumnChart').setOptions({
-  title: title+' by watershed',
-  hAxis:  {title:""}, 
-  vAxis: {title: units}
-})
-return(chart)
+// var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image); //acres
+// var grouped_features = withArea.reduceRegions({collection: fc,
+// reducer: ee.Reducer.sum(),//.group({
+// //             groupField: 1,
+// //             groupName: 'class value',
+// //         }), 
+//         scale:100
+// })
+// //grouped_features_ = grouped_features.sel
+// print(grouped_features)
+print(
+  layer_object.layer.name, 
+  colchart(layer_object,fc,500))
+
 }
 
-print(colchart(layer_object,fc,100))
 
+//print(layerProperties)
+//Make a random feature colleciton 
 
-
-
-print(layerProperties)
 var discrete_vals = ["Traffic","Imperviousness","Population","Precipitation","Runoff","Runoff (inches)","Slope"] //images to reduce in watershed chart 
 
 var legendPanel = ui.Panel({style:{position:'bottom-right'}})
-Map.add(legendPanel)
+//Map.add(legendPanel)
 
 // Make a drop down menu of images.
 var imageSelect = ui.Select({
@@ -216,4 +247,4 @@ var imageSelect = ui.Select({
     helpers.clear_map_add_layer(layerProperties[value],legendPanel)
   }
 });
-Map.add(imageSelect)
+//Map.add(imageSelect)
