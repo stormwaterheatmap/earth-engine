@@ -679,6 +679,7 @@ var stack_bands = function (layer_object) {
   return (img.select(layer_object.labels))
 }
 function cat_chart(layer_object, regions,scale) {
+  print("Cat Chart", layer_object)
   var stacked = stack_bands(layer_object)
   var chart = ui.Chart.image.byRegion({
       image: stacked,
