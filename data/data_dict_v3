@@ -2,11 +2,11 @@ var rasters = {
     "Age of Imperviousness": 
         {
             "discrete": "TRUE",
-            "labels": ["2000–2014", "1990–2000", "1975–1990", "Before 1975"],
-            "sourceName": "The Nature Conservancy; Columbia University, Center for International Earth Science Information Network",
+            "labels": ["2000–2014",  "1990–2000",  "1975–1990",  "Before 1975"],
+            "sourceName": "The Nature Conservancy; Columbia University,  Center for International Earth Science Information Network",
             "sourceUrl": "http://doi.org/10.2905/jrc-ghsl-10007",
             "units": "epoch",
-            "values": [3,4,5,6],
+            "values": [3, 4, 5, 6],
             "vizType": "barChart",
             "default_reduction": "Category",
             "docs_link": "docs/API/image_layers/Age%20of%20Development",
@@ -18,7 +18,7 @@ var rasters = {
                         {
                             "min": 3,
                             "max": 6,
-                            "palette": ["#018571", "#80cdc1", "#dfc27d", "#a6611a"],
+                            "palette": ["#018571",  "#80cdc1",  "#dfc27d",  "#a6611a"],
                             "opacity": 0.8,
                             "_row": "Age of Imperviousness"
                         }
@@ -81,7 +81,7 @@ var rasters = {
     "Land Cover": 
         {
             "discrete": "TRUE",
-            "labels": ["No data", "Grass/Low Vegetation", "Shrub/Medium Vegetation", "Trees/Forest", "Bare soil", "Water", "Impervious", "Impervious - Roofs "],
+            "labels": ["No data",  "Grass/Low Vegetation",  "Shrub/Medium Vegetation",  "Trees/Forest",  "Bare soil",  "Water",  "Impervious",  "Impervious - Roofs "],
             "sourceName": "The Nature Conservancy",
             "units": "Land Cover Type",
             "values": [ 0, 1, 2, 3, 4, 5, 6, 7],
@@ -94,7 +94,7 @@ var rasters = {
                         {
                             "min": 0,
                             "max": 7,
-                            "palette": ["#ffffff", "#3ead63", "#96ca6e", "#26532b", "#a39171", "#476b9d", "#adacb5", "#d8d5db"],
+                            "palette": ["#ffffff",  "#3ead63",  "#96ca6e",  "#26532b",  "#a39171",  "#476b9d",  "#adacb5",  "#d8d5db"],
                             "opacity": 0.8,
                             "_row": "Land Cover"
                         }
@@ -275,7 +275,7 @@ var rasters = {
     "Slope Categories": 
         {
             "discrete": "TRUE",
-            "labels": ["Flat,Moderate,Steep"],
+            "labels": ["Flat", "Moderate", "Steep"],
             "sourceName": "The Nature Conservancy",
             "units": "Category",
             "values": [ 0, 1, 2],
@@ -290,7 +290,7 @@ var rasters = {
                         {
                             "min": 0,
                             "max": 2,
-                            "palette": ["#009B9E", "#F1F1F1", "#C75DAB"],
+                            "palette": ["#009B9E",  "#F1F1F1",  "#C75DAB"],
                             "opacity": 0.8,
                             "_row": "Slope Categories"
                         }
@@ -427,6 +427,7 @@ var rasters = {
         }
     
 }
+
 
 
 
