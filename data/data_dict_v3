@@ -30,7 +30,7 @@ var rasters = {
     "HSPF Land Cover Type": 
         {
             "discrete": "TRUE",
-            "labels": ["Forest/Trees", "Pasture", "Grass", "Water", "Impervious.roof", "Impervious.nonRoof"],
+            "labels": ["Forest/Trees", "Pasture", "Grass", "Water", "Impervious-roof", "Impervious-nonRoof"],
             "sourceName": "The Nature Conservancy",
             "units": "Land Cover Type",
             "values": [ 0, 1, 2, 3, 4, 5 ],
