@@ -65,7 +65,7 @@ var discreteLegend = function (layerObject) {
     });
     legend.add(loading);
     // Creates and styles 1 row of the legend.
-    var makeRow = function (color, name) {
+    var makeRow = function (name,color) {
         // Create the label that is actually the colored box.
         var colorBox = ui.Label({
             style: {
@@ -94,23 +94,23 @@ var discreteLegend = function (layerObject) {
         var palette = layerObject.layer.visParams.palette;
       
         var names = layerObject.labels;
-
+   
         loading.style().set('shown', false);
 
         for (var i = 0; i < names.length; i++) {
          
          
-            legend.add(makeRow(palette[i], names[i]));
+            legend.add(makeRow(names[i],palette[i]));
         }
     
 
     return legend
 
 }
-
+var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
 exports.barLegend = barLegend
 exports.discreteLegend = discreteLegend
-
+print(discreteLegend(data.rasters["Land Use"]))
 //Tests 
 
 // var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
