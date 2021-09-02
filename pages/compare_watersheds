@@ -316,7 +316,7 @@ var makeResultsBarChart = function (fc) {
   var feat = layer_object.layer.eeObject.reduceRegions({
     collection: fc,
     reducer:layer_object.default_reduction,// ee.Reducer.mean(),
-    scale: scale
+    scale: Map.getScale()
   })
   var title = layer_object.layer.name
   var units = layer_object.units
