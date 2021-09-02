@@ -76,10 +76,10 @@ mainPanel.style().set("minWidth","16.66%")
 //   onChange: function() {
 //     var layer_dict = rasters[select_layer_type.getValue()]; 
 //     var layers_list = Object.keys(layer_dict); 
-//       secondname_select = ui.Select({
+//       layer_select = ui.Select({
 //         items: layers_list,//select_layer_type.getValue()], 
 //         onChange: function() {
-//           var layer_obj = layer_dict[secondname_select.getValue()]
+//           var layer_obj = layer_dict[layer_select.getValue()]
 //           legendPanel.style().set({shown:true})
 //           helpers.clear_map_add_layer(layer_obj,legendPanel)
 //         }
@@ -87,18 +87,18 @@ mainPanel.style().set("minWidth","16.66%")
     
   
   
-//     panel.widgets().set(3, secondname_select);
+//     panel.widgets().set(3, layer_select);
 //   }
   
 //   });
 //var layer_obj = rasters["Imperviousness"]
-var secondname_select = ui.Select({
+var layer_select = ui.Select({
         items: Object.keys(rasters),//select_layer_type.getValue()], 
-        onChange: function() {
-          var layer_obj = rasters[secondname_select.getValue()]
+        onChange: function(value) {
+          var layer_obj = rasters[value]
           //map_init
-          //legendPanel.style().set({shown:true})
-           //helpers.clear_map_add_layer(layer_obj,legendPanel)
+          legendPanel.style().set({shown:true})
+           helpers.clear_map_add_layer(layer_obj,legendPanel)
         }
       });
 
@@ -124,14 +124,14 @@ var featureStyle = {
 
 
 
-
+//Run at the beginning of the 
 var map_init = function(map){
  var m = map || Map
  //m.clear()
  //m.add(panel)
  m.add(legendPanel)
  //select_layer_type.setValue("Input Data Layers")
- //secondname_select.setValue("Slope")
+ //layer_select.setValue("Slope")
  legendPanel.style().set({shown:true})
  //helpers.clear_map_add_layer(layer_obj,legendPanel)
   
@@ -145,7 +145,7 @@ map_init()
 panel.widgets().set(0, panel_label); 
 //panel.widgets().set(1, select_layer_type);
 panel.widgets().set(1,layer_label); 
-panel.widgets().set(2, secondname_select);
+panel.widgets().set(2, layer_select);
 
 mainPanel.add(panel)
 
@@ -306,25 +306,48 @@ function getSelectedwatershed() {
   return watershed_data_set.filterBounds(ee.Geometry.MultiPoint(selectedPoints));
 }
 
-// Makes a bar chart of the given FeatureCollection of watershed by GRIDCODE.
-function makeResultsBarChart(watershed) {
-  //var wsSelect = watershed.filterBounds(ee.Geometry(geometry)); 
-  //return sum of selected Watersheds
-  var load = Map.layers().get(0).get('eeObject').reduceRegions({
-    collection: watershed,
-    reducer: ee.Reducer.sum(), 
-    scale: Map.getScale()
-  }); 
-  var chart = ui.Chart.feature.byFeature(load, 'WSName', ['sum']);
-  chart.setChartType('BarChart');
-  chart.setOptions({
-    title: 'TSS Comparison',
-    vAxis: {title: null},
-    hAxis: {title: 'Annual Stormwater TSS Load (kg/year', minValue: 0}
-  });
-  chart.style().set({stretch: 'both'});
-  return chart;
+
+var makeResultsBarChart = function (fc) {
+  //print(layer_object.default_reduction)
+  var chart
+  var layer_object = rasters[layer_select.getValue()]
+  if(layer_object.default_reduction != 'Category')
+  {
+  var feat = layer_object.layer.eeObject.reduceRegions({
+    collection: fc,
+    reducer:layer_object.default_reduction,// ee.Reducer.mean(),
+    scale: scale
+  })
+  var title = layer_object.layer.name
+  var units = layer_object.units
+  //print(feat,title,units)
+  feat = feat.select(['name', layer_object.default_reduction], [title, units])
+   chart = (ui.Chart.feature.byFeature({
+    features: feat,
+    xProperty: title,
+    yProperties: [units]
+  }))
+  chart.setChartType('ColumnChart')
+    .setOptions({
+      title: title + ' by watershed'+' ('+layer_object.default_reduction+')',
+      hAxis: {
+        title: ""
+      },
+      vAxis: {
+        title: units
+      }
+      
+    })}
+    else{
+      chart = charts.cat_chart(layer_object,fc,scale) // geometry, properties, scale
+      //chart = chart.setChartType('ColumnChart')
+      ////chart = ui.Chart.feature.byFeature({})
+    }
+  return (chart)
 }
+
+// Makes a bar chart of the given FeatureCollection of watershed by GRIDCODE.
+
 
 // Makes a table of the given FeatureCollection of watershed by GRIDCODE.
 function makeResultsTable(watershed) {
