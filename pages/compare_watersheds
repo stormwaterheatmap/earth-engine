@@ -34,7 +34,7 @@ var hydrology_layers = data.rasters["Hydrology Data Layers"]
 //     return out;
 // }
 var layerProperties = data.rasters 
-print("layer Properties", layerProperties.Precipitation)
+//("layer Properties", layerProperties.Precipitation)
 
 var vectors_dict = data.vectors_dict
 
@@ -91,18 +91,19 @@ mainPanel.style().set("minWidth","16.66%")
 //   }
   
 //   });
-
+//var layer_obj = rasters["Imperviousness"]
 var secondname_select = ui.Select({
         items: Object.keys(rasters),//select_layer_type.getValue()], 
         onChange: function() {
           var layer_obj = rasters[secondname_select.getValue()]
-          legendPanel.style().set({shown:true})
-          helpers.clear_map_add_layer(layer_obj,legendPanel)
+          //map_init
+          //legendPanel.style().set({shown:true})
+           //helpers.clear_map_add_layer(layer_obj,legendPanel)
         }
       });
 
 
-
+var layer_obj = rasters["Imperviousness"]
 
 
 
@@ -113,7 +114,7 @@ var secondname_select = ui.Select({
 
 var colors = Style.colors
 
-var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
+var fonts = Style.fonts //var panelStyle = Style.panelStyle////(panelStyle)
 var featureStyle = {
     color: 'white',
     fillColor: '00000000'
@@ -124,18 +125,15 @@ var featureStyle = {
 
 
 
-Map.add(legendPanel)
-
-
 var map_init = function(map){
  var m = map || Map
  //m.clear()
  //m.add(panel)
- //m.add(legendPanel)
+ m.add(legendPanel)
  //select_layer_type.setValue("Input Data Layers")
- secondname_select.setValue("Slope")
- //legendPanel.style().set({shown:true})
-          //helpers.clear_map_add_layer(layer_obj,legendPanel)
+ //secondname_select.setValue("Slope")
+ legendPanel.style().set({shown:true})
+ //helpers.clear_map_add_layer(layer_obj,legendPanel)
   
 }
 
@@ -164,7 +162,7 @@ var watershedSelect = ui.Select({items: Object.keys(data.vector_dict).sort(),
     //value: 'HUC 12'
     onChange: function (selected) {
         Map.layers().reset()
-        print(selected)
+        //(selected)
         var WS = vectors_dict[selected]
         Map.addLayer(WS.style(featureStyle)) 
         watershed_data_set = WS//oct
@@ -201,7 +199,7 @@ var TSS = TSS.divide(1e6); //covert to kg/year
 // Country boundary data with associated precomputed TSS totals.
 // var WSVal = watershedSelect.getValue();
 // var watershed = ee.FeatureCollection(vectors_dict.WSVal);
-// print(watershed.first())
+// //(watershed.first())
 
 
 
@@ -292,7 +290,7 @@ Map.addLayer(colorStretch(TSSDisplay), TSS_style);
 //Map.addLayer((TSS.unmask(0).updateMask(1)), TSS_style);
 
 //Map.addLayer(watershed.style(watershed_STYLE)); //this should be removed and done in the function
-print(watershed_data_set)
+//(watershed_data_set)
 var wsSelect = watershed_data_set.filterBounds(ee.Geometry(geometry)); 
 //return sum of selected Watersheds
 
