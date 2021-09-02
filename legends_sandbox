@@ -1,0 +1,21 @@
+
+
+var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
+
+
+var rasters = data.rasters
+//test layers 
+//imperviousness
+//Landuse 
+for (var i = 13; i < Object.keys(rasters).length; i++) {
+print(i,Object.keys(rasters)[i])
+var layer_obj = data.rasters[Object.keys(data.rasters)[i]]
+
+
+var l = helpers.makeLegend(layer_obj)
+print(l)
+}
