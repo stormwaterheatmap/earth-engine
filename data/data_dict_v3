@@ -30,7 +30,7 @@ var rasters = {
     "HSPF Land Cover Type": 
         {
             "discrete": "TRUE",
-            "labels": ["Forest/Trees", "Pasture", "Grass", "Water", "Impervious-roof", "Impervious-nonRoof"],
+            "labels": ["Forest/Trees", "Pasture", "Grass", "Water", "Impervious.roof", "Impervious.nonRoof"],
             "sourceName": "The Nature Conservancy",
             "units": "Land Cover Type",
             "values": [ 0, 1, 2, 3, 4, 5 ],
@@ -110,7 +110,6 @@ var rasters = {
             "sourceName": "Puget Sound Mapping Project",
             "sourceUrl": "https://www.commerce.wa.gov/serving-communities/growth-management/puget-sound-mapping-project/",
             "units": "Land Use type",
-            "values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
             "default_reduction": "Category",
             "layer": 
                 {
@@ -120,7 +119,7 @@ var rasters = {
                         {
                             "min": 0,
                             "max": 14,
-                            "palette": ["#394B59", "#669C42", "#EFD09E ", "#14774C", "#9E2B0E", "#F4A691", "#2778AC", "#6E8387", "#8EB8B3", "#D17257", "#7C497B", "#554180", "#66CDAB", "#9FABA2", "#BF93BE"],
+                            "palette": ["#394B59", "#669C42", "#EFD09E", "#14774C", "#9E2B0E", "#F4A691", "#2778AC", "#6E8387", "#8EB8B3", "#D17257", "#7C497B", "#554180", "#66CDAB", "#9FABA2", "#BF93BE"],
                             "opacity": 0.8,
                             "_row": "Land Use"
                         }
@@ -398,7 +397,7 @@ var rasters = {
                 }
             
         }
-    ,
+   // ,
     // "Hydrologic Response Units": 
     //     {
     //         "discrete": "TRUE",
@@ -430,10 +429,6 @@ var rasters = {
 }
 
 
-print(rasters)
-
-
-
 
 
 
@@ -455,9 +450,9 @@ var layerSources = {
   "HSPF Land Cover Type":data.hspf_landcover.rename('hspf_landcover_categories'),
   "Imperviousness":              data.imperviousness.rename('imperviousness'),
   "Land Cover":data.tncLC.rename('landcover'),
-  "Land Use": data.landuse_img.rename("landuse"),
-  "Population":data.population.rename('population'), 
-  "Population Density":data.population_per_ha.rename('population_per_ha'),
+  "Land Use": null,
+  "Population":null,
+  "Population Density":null,
   "Precipitation (in)":data.precip.divide(
                     ee.Image(25.4)),
   "Precipitation (mm)":data.precip, 
@@ -544,3 +539,5 @@ print(vector_dict)
 //exports.vector_dict_label_col = vector_dict_label_col
 exports.vector_dict = vector_dict
 exports.rasters = rasters
+
+
