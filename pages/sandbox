@@ -212,25 +212,11 @@ var layers = Object.keys(rasters)
 var fc = data.vector_dict[vector_names[3]].filterBounds(geometry)
 print(fc)
 //testing all charts
-for (var i = 16; i < Object.keys(rasters).length; i++) {
+for (var i = 0; i < Object.keys(rasters).length; i++) {
 //var j = 2
 
 var layer_object = rasters[layers[i]]
 
-//simulation selection of an image 
-//var layer_object = layerProperties['Land Cover']
-// var image = layer_object.layer.eeObject
-
-// var withArea = (ee.Image.pixelArea().divide(4046.86)).addBands(image); //acres
-// var grouped_features = withArea.reduceRegions({collection: fc,
-// reducer: ee.Reducer.sum(),//.group({
-// //             groupField: 1,
-// //             groupName: 'class value',
-// //         }), 
-//         scale:100
-// })
-// //grouped_features_ = grouped_features.sel
-// print(grouped_features)
 print("step = ", i , 
   layer_object.layer.name, 
   colchart(layer_object,fc,100))
