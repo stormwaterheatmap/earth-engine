@@ -450,9 +450,9 @@ var layerSources = {
   "HSPF Land Cover Type":data.hspf_landcover.rename('hspf_landcover_categories'),
   "Imperviousness":              data.imperviousness.rename('imperviousness'),
   "Land Cover":data.tncLC.rename('landcover'),
-  "Land Use": null,
-  "Population":null,
-  "Population Density":null,
+  "Land Use": data.landuse_img.rename("landuse"),
+  "Population":data.population.rename('population'), 
+  "Population Density":data.population_per_ha.rename('population_per_ha'),
   "Precipitation (in)":data.precip.divide(
                     ee.Image(25.4)),
   "Precipitation (mm)":data.precip, 
