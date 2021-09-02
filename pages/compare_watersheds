@@ -22,18 +22,18 @@ var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 var input_layers = data.rasters["Input Data Layers"]
 var hydrology_layers = data.rasters["Hydrology Data Layers"]
-var objectMerge = function(){
-    var out = {};
-    if(!arguments.length)
-        return out;
-    for(var i=0; i<arguments.length; i++) {
-        for(var key in arguments[i]){
-            out[key] = arguments[i][key];
-        }
-    }
-    return out;
-}
-var layerProperties = objectMerge(input_layers,hydrology_layers) 
+// var objectMerge = function(){
+//     var out = {};
+//     if(!arguments.length)
+//         return out;
+//     for(var i=0; i<arguments.length; i++) {
+//         for(var key in arguments[i]){
+//             out[key] = arguments[i][key];
+//         }
+//     }
+//     return out;
+// }
+var layerProperties = data.rasters 
 print("layer Properties", layerProperties.Precipitation)
 
 var vectors_dict = data.vectors_dict
@@ -69,30 +69,37 @@ var mainPanel = helpers.makeMainPanel("View Data Layers");
 mainPanel.style().set("minWidth","16.66%")
 
 /* ui widgets */ 
-var select_layer_type = ui.Select({
-  items: layer_types,
-  placeholder: "Select Layer Type", 
-  value: layer_types[0], 
-  onChange: function() {
-    var layer_dict = rasters[select_layer_type.getValue()]; 
-    var layers_list = Object.keys(layer_dict); 
-      secondname_select = ui.Select({
-        items: layers_list,//select_layer_type.getValue()], 
+// var select_layer_type = ui.Select({
+//   items: layer_types,
+//   placeholder: "Select Layer Type", 
+//   value: layer_types[0], 
+//   onChange: function() {
+//     var layer_dict = rasters[select_layer_type.getValue()]; 
+//     var layers_list = Object.keys(layer_dict); 
+//       secondname_select = ui.Select({
+//         items: layers_list,//select_layer_type.getValue()], 
+//         onChange: function() {
+//           var layer_obj = layer_dict[secondname_select.getValue()]
+//           legendPanel.style().set({shown:true})
+//           helpers.clear_map_add_layer(layer_obj,legendPanel)
+//         }
+//       });
+    
+  
+  
+//     panel.widgets().set(3, secondname_select);
+//   }
+  
+//   });
+
+var secondname_select = ui.Select({
+        items: Object.keys(rasters),//select_layer_type.getValue()], 
         onChange: function() {
-          var layer_obj = layer_dict[secondname_select.getValue()]
+          var layer_obj = rasters[secondname_select.getValue()]
           legendPanel.style().set({shown:true})
           helpers.clear_map_add_layer(layer_obj,legendPanel)
         }
       });
-    
-  
-  
-    panel.widgets().set(3, secondname_select);
-  }
-  
-  });
-
-var secondname_select = ui.Select();
 
 
 
@@ -125,7 +132,7 @@ var map_init = function(map){
  //m.clear()
  //m.add(panel)
  //m.add(legendPanel)
- select_layer_type.setValue("Input Data Layers")
+ //select_layer_type.setValue("Input Data Layers")
  secondname_select.setValue("Slope")
  //legendPanel.style().set({shown:true})
           //helpers.clear_map_add_layer(layer_obj,legendPanel)
@@ -138,9 +145,9 @@ map_init()
 
 // Add widgets to panel
 panel.widgets().set(0, panel_label); 
-panel.widgets().set(1, select_layer_type);
-panel.widgets().set(2,layer_label); 
-panel.widgets().set(3, secondname_select);
+//panel.widgets().set(1, select_layer_type);
+panel.widgets().set(1,layer_label); 
+panel.widgets().set(2, secondname_select);
 
 mainPanel.add(panel)
 
