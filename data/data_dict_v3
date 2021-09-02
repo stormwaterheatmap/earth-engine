@@ -110,6 +110,7 @@ var rasters = {
             "sourceName": "Puget Sound Mapping Project",
             "sourceUrl": "https://www.commerce.wa.gov/serving-communities/growth-management/puget-sound-mapping-project/",
             "units": "Land Use type",
+            "values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
             "default_reduction": "Category",
             "layer": 
                 {
@@ -429,6 +430,8 @@ var rasters = {
 }
 
 
+print(rasters)
+
 
 
 
@@ -543,3 +546,5 @@ exports.vector_dict = vector_dict
 exports.rasters = rasters
 
 
+
+Map.addLayer(data.landuse_img)
