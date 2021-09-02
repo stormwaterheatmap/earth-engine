@@ -39,6 +39,8 @@ var fonts = Style.fonts
 //var hydrology_layers = data.rasters["Hydrology Data Layers"]
 ////print(ee.Dictionary(hydrology_layers))
 var layerProperties = data.rasters
+print(data.rasters)
+Map.addLayer(layerProperties['Slope Categories'].layer)
 ////print("layerProperties",layerProperties.get("Land Use"))
 //var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
@@ -210,7 +212,7 @@ var layers = Object.keys(rasters)
 var fc = data.vector_dict[vector_names[3]].filterBounds(geometry)
 print(fc)
 //testing all charts
-for (var i = 7; i < Object.keys(rasters).length; i++) {
+for (var i = 16; i < Object.keys(rasters).length; i++) {
 //var j = 2
 
 var layer_object = rasters[layers[i]]
@@ -229,7 +231,7 @@ var layer_object = rasters[layers[i]]
 // })
 // //grouped_features_ = grouped_features.sel
 // print(grouped_features)
-print(
+print("step = ", i , 
   layer_object.layer.name, 
   colchart(layer_object,fc,100))
 
