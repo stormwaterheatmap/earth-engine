@@ -399,33 +399,33 @@ var rasters = {
             
         }
     ,
-    "Hydrologic Response Units": 
-        {
-            "discrete": "TRUE",
-            "labels": ["Outwash, Forest, Flat",  "Outwash,  Forest,  Moderate",    "Outwash, Forest,  Steep",  "Outwash,  Pasture,  Flat",  "Outwash,  Pasture,  Moderate",  "Outwash,  Pasture,  Steep",  "Outwash,  Lawn ,  Flat",  "Outwash,  Lawn ,  Moderate",  "Outwash,  Lawn ,  Steep",  "Till,  Forest,  Flat",  "Till,  Forest,  Moderate",  "Till,  Forest,  Steep",  "Till,  Pasture,  Flat",  "Till,  Pasture,  Moderate",  "Till,  Pasture,  Steep",  "Till,  Lawn ,  Flat",  "Till,  Lawn ,  Moderate",  "Till,  Lawn ,  Steep",  "Saturated,  Forest,  Flat",  "Saturated,  Forest,  Moderate",  "Saturated,  Forest,  Steep",  "Saturated,  Pasture,  Flat",  "Saturated,  Pasture,  Moderate",  "Saturated,  Pasture,  Steep",  "Saturated,  Lawn ,  Flat",  "Saturated,  Lawn ,  Moderate",  "Saturated,  Lawn ,  Steep",  "Impervious,   Flat",  "Impervious,  Moderate",  "Impervious,  Steep" ],
-            "sourceName": "The Nature Conservancy",
-            "units": "HRU",
-            "values": [0, 1, 2, 10, 11, 12, 20, 21, 22, 100, 101, 102, 110, 111, 112, 120, 121, 122, 200, 201, 202, 210, 211, 212, 220, 221, 222, 250, 251, 252],
-            "vizType": "bigNumberMean",
-            "default_reduction": "Category",
-            "description": "Dimensionless index indicating level of flow control needed to match forest hydrology.",
-            "docs_link": "docs/API/image_layers/Flow%20Duration%20Index",
-            "layer": 
-                {
-                    "eeObject": "eeObject",
-                    "name": "Hydrologic Response Units",
-                    "visParams": 
-                        {
-                            "min": 0,
-                            "max": 252,
-                            "palette": ["#e5f5f9", "#99d8c9", "#2ca25f", "#e0ecf4", "#9ebcda", "#8856a7", "#e0f3db", "#a8ddb5", "#43a2ca", "#ece7f2", "#a6bddb", "#2b8cbe", "#ece2f0", "#a6bddb", "#1c9099", "#e7e1ef", "#c994c7", "#dd1c77", "#fde0dd", "#fa9fb5", "#c51b8a", "#edf8b1", "#7fcdbb", "#2c7fb8", "#f7fcb9", "#addd8e", "#31a354", "#fee6ce", "#fdae6b", "#e6550d"],
-                            "opacity": 0.8,
-                            "_row": "Hydrologic Response Units"
-                        }
+    // "Hydrologic Response Units": 
+    //     {
+    //         "discrete": "TRUE",
+    //         "labels": ["Outwash, Forest, Flat",  "Outwash,  Forest,  Moderate",    "Outwash, Forest,  Steep",  "Outwash,  Pasture,  Flat",  "Outwash,  Pasture,  Moderate",  "Outwash,  Pasture,  Steep",  "Outwash,  Lawn ,  Flat",  "Outwash,  Lawn ,  Moderate",  "Outwash,  Lawn ,  Steep",  "Till,  Forest,  Flat",  "Till,  Forest,  Moderate",  "Till,  Forest,  Steep",  "Till,  Pasture,  Flat",  "Till,  Pasture,  Moderate",  "Till,  Pasture,  Steep",  "Till,  Lawn ,  Flat",  "Till,  Lawn ,  Moderate",  "Till,  Lawn ,  Steep",  "Saturated,  Forest,  Flat",  "Saturated,  Forest,  Moderate",  "Saturated,  Forest,  Steep",  "Saturated,  Pasture,  Flat",  "Saturated,  Pasture,  Moderate",  "Saturated,  Pasture,  Steep",  "Saturated,  Lawn ,  Flat",  "Saturated,  Lawn ,  Moderate",  "Saturated,  Lawn ,  Steep",  "Impervious,   Flat",  "Impervious,  Moderate",  "Impervious,  Steep" ],
+    //         "sourceName": "The Nature Conservancy",
+    //         "units": "HRU",
+    //         "values": [0, 1, 2, 10, 11, 12, 20, 21, 22, 100, 101, 102, 110, 111, 112, 120, 121, 122, 200, 201, 202, 210, 211, 212, 220, 221, 222, 250, 251, 252],
+    //         "vizType": "bigNumberMean",
+    //         "default_reduction": "Category",
+    //         "description": "Dimensionless index indicating level of flow control needed to match forest hydrology.",
+    //         "docs_link": "docs/API/image_layers/Flow%20Duration%20Index",
+    //         "layer": 
+    //             {
+    //                 "eeObject": "eeObject",
+    //                 "name": "Hydrologic Response Units",
+    //                 "visParams": 
+    //                     {
+    //                         "min": 0,
+    //                         "max": 252,
+    //                         "palette": ["#e5f5f9", "#99d8c9", "#2ca25f", "#e0ecf4", "#9ebcda", "#8856a7", "#e0f3db", "#a8ddb5", "#43a2ca", "#ece7f2", "#a6bddb", "#2b8cbe", "#ece2f0", "#a6bddb", "#1c9099", "#e7e1ef", "#c994c7", "#dd1c77", "#fde0dd", "#fa9fb5", "#c51b8a", "#edf8b1", "#7fcdbb", "#2c7fb8", "#f7fcb9", "#addd8e", "#31a354", "#fee6ce", "#fdae6b", "#e6550d"],
+    //                         "opacity": 0.8,
+    //                         "_row": "Hydrologic Response Units"
+    //                     }
                     
-                }
+    //             }
             
-        }
+    //     }
     
 }
 
