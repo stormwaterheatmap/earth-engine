@@ -12,7 +12,7 @@ var barLegend = legends.barLegend
 var makeLegend = function (layerObject) {
 
     var legend
-    if (layerObject.discrete) {
+    if (layerObject.discrete == "TRUE") {
         legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
         // call the histogram function print('histogram')
     } else {
