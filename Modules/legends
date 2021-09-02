@@ -1,5 +1,4 @@
 //makes stretched legend
-
 function ColorBar(layerObj) {
   return ui.Thumbnail({
     image: ee.Image.pixelLonLat().select(0),
@@ -14,8 +13,6 @@ function ColorBar(layerObj) {
     style: {stretch: 'horizontal', margin: '0px 8px'},
   });
 }
-
-
 var barLegend = function (layerObj) {
   var title_label = 
     ui.Label(layerObj.layer.name)
