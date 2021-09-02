@@ -5,39 +5,7 @@ var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
-function ColorBar(layerObj) {
-  return ui.Thumbnail({
-    image: ee.Image.pixelLonLat().select(0),
-    params: {
-      bbox: [0, 0, 1, 0.1],
-      dimensions: '200x20',
-      format: 'png',
-      min: 0,
-      max: 1,
-      palette: layerObj.layer.visParams.palette,
-    },
-    style: {stretch: 'horizontal', margin: '0px 8px'},
-  });
-}
-var barLegend = function (layerObj) {
-  var title_label = 
-    ui.Label(layerObj.layer.name)
-  
-  var low = (layerObj.layer.visParams.min)
-  var high = (layerObj.layer.visParams.max)
-  var mid = ee.Number(high).subtract(low).divide(2).getInfo()
-  var labelPanel = ui.Panel(
-      [
-        ui.Label(low, {margin: '4px 8px',textAlign: 'left',stretch: 'horizontal'}),
-        ui.Label(mid, {margin: '4px 8px', textAlign: 'center',stretch: 'horizontal'}),
-        ui.Label(high, {margin: '4px 8px',textAlign: 'right',stretch: 'horizontal'})
-      ],
-      ui.Panel.Layout.flow('horizontal')
-      //{width: '230px', position: 'top-center'}
-      );
-  var units_label = ui.Label(layerObj.units)
-  return ui.Panel([title_label,ColorBar(layerObj), labelPanel,units_label])
-}
+
 
 var rasters = data.rasters
 print(Object.keys(rasters))
