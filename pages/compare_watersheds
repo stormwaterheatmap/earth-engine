@@ -339,6 +339,8 @@ var makeResultsBarChart = function (fc) {
       
     })}
     else{
+      
+      var scale = ui.Map.getScale()
       chart = charts.cat_chart(layer_object,fc,scale) // geometry, properties, scale
       //chart = chart.setChartType('ColumnChart')
       ////chart = ui.Chart.feature.byFeature({})
