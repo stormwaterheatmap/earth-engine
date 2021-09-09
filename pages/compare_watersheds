@@ -337,8 +337,10 @@ var makeResultsBarChart = function (fc) {
         title: units
       }
       
+      
     })}
     else{
+      var scale=30
       chart = charts.cat_chart(layer_object,fc,scale) // geometry, properties, scale
       //chart = chart.setChartType('ColumnChart')
       ////chart = ui.Chart.feature.byFeature({})
