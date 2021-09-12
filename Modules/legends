@@ -41,7 +41,7 @@ var barLegend = function (layerObj) {
   var layer_description = ui.Label({value: layerObj.description, style:fonts.Caption2})
   return ui.Panel([title_label,layer_description,ColorBar(layerObj), labelPanel,units_label])
 }
-print(style.Caption2)
+
 var discreteLegend = function (layerObject) {
     //var BAND_NAME = bandName //Land_Cover_Type_1';  
   
