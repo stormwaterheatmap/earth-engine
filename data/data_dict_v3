@@ -1,4 +1,5 @@
-var rasters = {
+var rasters = 
+{
     "Age of Imperviousness": 
         {
             "discrete": "TRUE",
@@ -30,7 +31,7 @@ var rasters = {
     "HSPF Land Cover Type": 
         {
             "discrete": "TRUE",
-            "labels": ["Forest/Trees", "Pasture", "Grass", "Water", "Impervious.roof", "Impervious.nonRoof"],
+            "labels": ["Forest/Trees", "Pasture", "Grass", "Water", "Impervious-roof", "Impervious-nonRoof"],
             "sourceName": "The Nature Conservancy",
             "units": "Land Cover Type",
             "values": [ 0, 1, 2, 3, 4, 5 ],
@@ -110,6 +111,7 @@ var rasters = {
             "sourceName": "Puget Sound Mapping Project",
             "sourceUrl": "https://www.commerce.wa.gov/serving-communities/growth-management/puget-sound-mapping-project/",
             "units": "Land Use type",
+            "values": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
             "default_reduction": "Category",
             "layer": 
                 {
@@ -237,8 +239,8 @@ var rasters = {
                     "name": "Runoff (in)",
                     "visParams": 
                         {
-                            "min": 40,
-                            "max": 1,
+                            "min": 1,
+                            "max": 40,
                             "palette": [ "#DBEBB9", "#CAEBC9", "#B3E7D3", "#95DDD7", "#7AD0D7", "#61BDD3", "#52AACC", "#4898C5", "#4085BD", "#3874B5", "#3264AE", "#2B53A7", "#2444A0"],
                             "opacity": 0.8,
                             "_row": "Runoff (in)"
@@ -261,8 +263,8 @@ var rasters = {
                     "name": "Runoff (mm)",
                     "visParams": 
                         {
-                            "min": 1016,
-                            "max": 25,
+                            "min": 25,
+                            "max": 1016,
                             "palette": [ "#DBEBB9", "#CAEBC9", "#B3E7D3", "#95DDD7", "#7AD0D7", "#61BDD3", "#52AACC", "#4898C5", "#4085BD", "#3874B5", "#3264AE", "#2B53A7", "#2444A0"],
                             "opacity": 0.8,
                             "_row": "Runoff (mm)"
@@ -313,6 +315,8 @@ var rasters = {
                     "name": "Slope",
                     "visParams": 
                         {
+                            "min": 30,
+                            "max": 0,
                             "palette": ["#3f60ae", "#539eb6", "#6db388", "#cab843", "#e78532", "#d92120"],
                             "opacity": 0.8,
                             "_row": "Slope"
@@ -427,6 +431,8 @@ var rasters = {
         }
     
 }
+
+
 
 
 //set data sources here 
