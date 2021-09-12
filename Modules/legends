@@ -15,11 +15,17 @@ function ColorBar(layerObj) {
 }
 var barLegend = function (layerObj) {
   var title_label = 
-    ui.Label(layerObj.layer.name)
+    ui.Label({value: layerObj.layer.name,
+    style: {
+            fontWeight: 'bold',
+            fontSize: '18px',
+            margin: '0 0 4px 0',
+            padding: '0'
+        })
   
   var low = (layerObj.layer.visParams.min)
   var high = (layerObj.layer.visParams.max)
-  var mid = ee.Number(high).subtract(low).divide(2).getInfo()
+  var mid = (ee.Number(high).subtract(low)).divide(2).getInfo()
   var labelPanel = ui.Panel(
       [
         ui.Label(low, {margin: '4px 8px',textAlign: 'left',stretch: 'horizontal'}),
