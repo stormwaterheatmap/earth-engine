@@ -87,7 +87,7 @@ var landuse = ee.FeatureCollection("users/stormwaterheatmap/psrc_landuse")
 exports.traffic = ee.Image(0)
   .blend(ee.Image(
       "users/cnilsen/trafficExport")
-    .log())
+    )
 
 //Watersheds     
 exports.PS_AU = ee.FeatureCollection(
@@ -170,3 +170,5 @@ exports.fdr = hspfLayers.fdr
 
 exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
   'hspf_landcover_categories')
+  
+Map.addLayer(ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode"))
