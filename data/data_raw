@@ -171,4 +171,3 @@ exports.fdr = hspfLayers.fdr
 exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
   'hspf_landcover_categories')
   
-Map.addLayer(ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode"))
