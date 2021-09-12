@@ -38,7 +38,7 @@ var barLegend = function (layerObj) {
       //{width: '230px', position: 'top-center'}
       );
   var units_label = ui.Label(layerObj.units)
-  var layer_description = ui.Label({value: layerObject.description, style:style.Caption2})
+  var layer_description = ui.Label({value: layerObj.description, style:style.Caption2})
   return ui.Panel([title_label,layer_description,ColorBar(layerObj), labelPanel,units_label])
 }
 
