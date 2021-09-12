@@ -16,7 +16,7 @@ var layer_types = {"Input Data Layers": {}, "Hydrology Data Layers": {}};
 layer_types["Input Data Layers"] = {
   "Soils": rasters.Soils, 
   "Age of Imperviousness": rasters["Age of Imperviousness"], 
-  // "HSPF Land Cover Type": rasters["HSPF Land Cover Type"], 
+  "HSPF Land Cover Type": rasters["HSPF Land Cover Type"], 
   "Imperviousness": rasters["Imperviousness"], 
   "Land Cover": rasters["Land Cover"], 
   "Land Use": rasters["Land Use"], 
@@ -24,8 +24,8 @@ layer_types["Input Data Layers"] = {
   "Population Density": rasters["Population Density"], 
   "Precipitation (in)": rasters["Precipitation (in)"], 
   "Precipitation (mm)": rasters["Precipitation (mm)"], 
-  // "Runoff (in)": rasters["Runoff (in)"], 
-  // "Runoff (mm)": rasters["Runoff (mm)"], 
+  "Runoff (in)": rasters["Runoff (in)"], 
+  "Runoff (mm)": rasters["Runoff (mm)"], 
   "Slope": rasters["Slope"], 
   "Slope Categories": rasters["Slope Categories"], 
   "Traffic": rasters["Traffic"]}
@@ -36,6 +36,7 @@ layer_types["Hydrology Data Layers"]={
   "Hydrologic Response Units": rasters["Hydrologic Response Units"], 
   "Runoff (in)": rasters["Runoff (in)"], 
   "Runoff (mm)": rasters["Runoff (mm)"]
+  
 }
 
 
@@ -72,7 +73,7 @@ var panel_style = {position: 'bottom-left'}//,width:'300px', height:"80%"}
 var panel = ui.Panel({style:panel_style})//, layout:panel_layout})//, })
 //Map.add(panel)
 
-var legendPanel = ui.Panel({style:{position:'bottom-left',shown:false, minWidth: "300px"}
+var legendPanel = ui.Panel({style:{position:'bottom-left',shown:false, minWidth: "300px", maxWidth: "400px"}
 })
 Map.add(legendPanel)
 var select_layer_type = ui.Select({
