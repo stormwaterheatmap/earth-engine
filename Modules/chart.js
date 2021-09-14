@@ -464,7 +464,7 @@ var imgToFc = function (
 };
 exports.imgToFc = imgToFc
 
-var img_class_chart = function(layer_object, region, scale){
+function img_class_chart(layer_object, region, scale){
   var fc = charts.imgToFc(geometry, lay, 100)
 
 var chart = ui.Chart.feature.byFeature(fc2,'Class',['Area'])
@@ -509,6 +509,7 @@ function cat_chart(layer_object, regions, scale) {
   return (chart)
 }
 exports.cat_chart = cat_chart
+exports.img_class_chart = img_class_chart
 // //testing 
 // var data = require('users/stormwaterheatmap/apps:data/data_dict_v3')
 // var layerProperties = data.rasters
