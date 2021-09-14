@@ -74,6 +74,7 @@ function stackedBar(layerObject, scale, geom) {
   return histChart.setChartType('BarChart')
 }
 exports.stackedBar = stackedBar
+exports.histByClass = histByClass
 exports.histogramFeature = function (region, propName, buckwidth, title) {
   var chart = ui.Chart.feature
     .histogram({
@@ -496,35 +497,26 @@ function cat_chart(layer_object, regions, scale) {
 }
 exports.cat_chart = cat_chart
 // //testing 
-// var data = require('users/stormwaterheatmap/apps:data/data_dict_v3')
-// var layerProperties = data.rasters
-// var layerObject = layerProperties["Precipitation (in)"]; 
+var data = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+var layerProperties = data.rasters
 
-// print(layerObject)
-// print(histogramImage(layerObject,geometry,100))
+print(Object.keys(layerProperties))
+print(layerProperties)
 
-
-
-
-// var fctest = imgToFc(geometry, layerObject, 200)
-// print(fctest)
-// print(ui.Chart.feature.byFeature(fctest,'Class','Area').setChartType(
-//   'BarChart'))
-// //(layerObject, geomtery, scale)
-// // geometry, properties, scale, holeSize
-// var layerObject = layerProperties.landUse 
-// var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
-// var imageBar = (  {chartArea: {left: '50%'},
-//   hAxis: {
-//           title: 'Area (acres)',
-//           minValue: 0,
-//         }, 
-//         legend: {position: 'none'}, 
-//         }) 
-// var chart = histByClass(layerObject, 100, geometry); 
-// chart.setChartType('BarChart')
-// chart2.setOptions(imageBar)
-// //var options = 
-// var testPan = ui.Panel()
-// testPan.add(chart2)
-// Map.add(testPan)
+//
+var layerObject = layerProperties["Age of Imperviousness"] 
+var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
+var imageBar = (  {chartArea: {left: '50%'},
+  hAxis: {
+          title: 'Area (acres)',
+          minValue: 0,
+        }, 
+        legend: {position: 'none'}, 
+        }) 
+var chart = histByClass(layerObject, 100, geometry); 
+chart.setChartType('BarChart')
+chart2.setOptions(imageBar)
+//var options = 
+var testPan = ui.Panel()
+testPan.add(chart2)
+Map.add(testPan)
