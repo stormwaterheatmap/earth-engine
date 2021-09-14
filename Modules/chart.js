@@ -9,6 +9,9 @@ var geometry = /* color: #d63000 */ee.Geometry.Polygon(
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var colors = style.colors
 var histByClass = function (layerObject, scale, geom) {
+  //get values that are in the roi 
+  
+  
   var area = ee.Image.pixelArea()
     .divide(4046.86) //area in acres 
   var image = ee.Image.cat(area, layerObject.layer.eeObject)
@@ -460,6 +463,14 @@ var imgToFc = function (
   return transition_fc.sort('Area', false)
 };
 exports.imgToFc = imgToFc
+
+var img_class_chart = function(layer_object, region, scale){
+  var fc = charts.imgToFc(geometry, lay, 100)
+
+var chart = ui.Chart.feature.byFeature(fc2,'Class',['Area'])
+print(chart2.setChartType('ColumnChart'))
+}
+
 
 var stack_bands = function (layer_object) {
   var img = ee.Image(layer_object.layer.eeObject)
