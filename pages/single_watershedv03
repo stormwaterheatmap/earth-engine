@@ -364,8 +364,9 @@ var makeReports = function () {
 
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
 
-
-    var luchart = charts.pieChart(clicked_basin_geom, layerProperties['Land Use'], mapPanel.getScale()).setChartType('BarChart')
+//To Do this is a temporary fix. 
+    var luchart = charts.pieChart(clicked_basin_geom, layerProperties['Land Cover'],//['Land Use'],
+    mapPanel.getScale()).setChartType('BarChart')
     luchart.setOptions(Style.charts.imageBar)
     var lcchart = charts.pieChart(clicked_basin_geom, layerProperties['Land Cover'], mapPanel.getScale()).setChartType('BarChart')
     lcchart.setOptions(Style.charts.imageBar)
@@ -378,11 +379,13 @@ var makeReports = function () {
     ])
     analyzePanel.add(luCard)
 
-
-    var ageCard = charts.pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
-    ageCard.setChartType('BarChart')
-    ageCard.setOptions(Style.charts.imageBar)
-    var ageCard = cards('Age of Development', [ageCard, layerButton(layerProperties['Age of Development'])])
+///img_class_chart(layer_object, region, scale){
+    var ageCard = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,mapPanel.getScale() )
+    
+    //pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
+    //ageCard.setChartType('BarChart')
+    //ageCard.setOptions(Style.charts.imageBar)
+    var ageCard = cards('Age of Impervjiousness', [ageCard, layerButton(layerProperties['Age of Development'])])
     analyzePanel.add(ageCard)
 
     var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
