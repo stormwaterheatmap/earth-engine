@@ -401,9 +401,10 @@ var makeReports = function () {
     //Make a panel for topography 
     var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, mapPanel.getScale())
 
-    var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
-    topoCats.setChartType('BarChart')
-    topoCats.setOptions(Style.charts.imageBar)
+    // var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
+    // topoCats.setChartType('ColumnChart')
+    var topoCats =  charts.img_class_chart(layerProperties['Slope Categories'],clicked_basin_geom,mapPanel.getScale() )
+    //topoCats.setOptions(Style.charts.imageBar)
     var topoCard = cards('Topography', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties['Slope Categories']), hline(),
         subtitle('Slope Categories'), topoCats, layerButton(layerProperties['Slope Categories'])
     ])
