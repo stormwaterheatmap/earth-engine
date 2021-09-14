@@ -13,18 +13,19 @@ var histByClass = function (layerObject, scale, geom) {
     .divide(4046.86) //area in acres 
   var image = ee.Image.cat(area, layerObject.layer.eeObject)
   // Define chart customization options.
-  // var options = {
-  //   // chartArea: {width: '100%', height: '80%'},
-  //   legend: {
-  //     position: 'in'
-  //   },
-  //   //titlePosition: 'in', 
-  //   axisTitlesPosition: 'in',
-  //   //hAxis: {textPosition: 'in'}, 
-  //   vAxis: {
-  //     textPosition: 'in'
-  //   }
-  // };
+  var options = {
+    titleTextStyle: style.fonts.LegendTitle, 
+    // chartArea: {width: '100%', height: '80%'},
+    legend: {
+      position: 'in'
+    },
+    //titlePosition: 'in', 
+    axisTitlesPosition: 'in',
+    //hAxis: {textPosition: 'in'}, 
+    vAxis: {
+      textPosition: 'in'
+    }
+  };
   var histChart = (ui.Chart.image.byClass({
       image: image, //
       reducer: ee.Reducer.sum(),
