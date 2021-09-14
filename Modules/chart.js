@@ -99,11 +99,11 @@ function histogramImage(layerObject, WS, scale) {
     minBucketWidth: 0.5,
     //  maxBuckets: 16,
   });
-  chart.style()
-    .set({
-      width: '90%',
-      height: '185px'
-    })
+  // chart.style()
+  //   .set({
+  //     width: '90%',
+  //     height: '185px'
+  //   })
   var units = layerObject.units
   chart.setSeriesNames(
     (layerObject.layer.name + ' (' + units + ')'), 0)
@@ -496,12 +496,12 @@ function cat_chart(layer_object, regions, scale) {
 }
 exports.cat_chart = cat_chart
 // //testing 
-var data = require('users/stormwaterheatmap/apps:data/data_dict_v3')
-var layerProperties = data.rasters
-var layerObject = layerProperties["Precipitation (in)"]; 
+// var data = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+// var layerProperties = data.rasters
+// var layerObject = layerProperties["Precipitation (in)"]; 
 
-print(layerObject)
-print(histogramImage(layerObject,geometry,100))
+// print(layerObject)
+// print(histogramImage(layerObject,geometry,100))
 
 
 
