@@ -9,6 +9,7 @@ var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var barLegend = legends.barLegend
+
 var makeLegend = function (layerObject) {
 
     var legend
@@ -209,6 +210,10 @@ if(layer_object.vizType == "histogram"){
 } else if 
   (layer_object.vizType == "bigNumberPercent"){
     return(charts.littleNum(layer_object,ws,scale,"percent"))
+  }
+  else if 
+  (layer_object.vizType =="barChart"){
+    return(charts.histByClass(layer_object,scale, ws))
   }
 }
 
