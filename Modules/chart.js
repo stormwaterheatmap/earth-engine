@@ -277,6 +277,10 @@ var littleNum = function (layerObj, region, scale, reducerType) {
       textAlign: 'right',
     })
     
+  var title_value = layerObj.layer.name
+  if(layerObject.layer.name == "Population Density"){
+    title_value = "Total Population" //need this to make the reducer sum work out. 
+  }
   var titleLabel = ui.Label({
     value: layerObj.layer.name,
     style: style.fonts.H4
