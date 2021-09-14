@@ -252,8 +252,10 @@ var makePieChart = function (
 };
 //
 exports.pieChart = makePieChart
+
+
 var littleNum = function (layerObj, region, scale, reducerType) {
-  //var units = layerObj.units
+//text for loading whil calucations happen 
   var units = 'units'
   var loading = 'loading...'
   var bigNum = ui.Label({
@@ -274,6 +276,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
       backgroundColor: style.colors.transparent,
       textAlign: 'right',
     })
+    
   var titleLabel = ui.Label({
     value: layerObj.layer.name,
     style: style.fonts.H4
@@ -294,27 +297,20 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     .set({
       textAlign: 'right',
       width: '80%',
-      // margin: 0,
-      // padding: 0, //padding: '0px 4px 8px 5px',
-      //stretch: 'horizontal'
     });
+    
   var numPan = ui.Panel({
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
-      //  width: '200px', 
-      // stretch: 'vertical',
       textAlign: 'right',
       padding: 2,
       margin: 2,
-      //padding: '0px 0px 0px 0px',
-      //position: 'middle-right', 
-      //    border: '1px solid black',
-      //     height: '100%',
+     
     }
   }) //height: '200px'}}); 
   numPan.add(titleLabel) //.add(infoLabel)
   numPan.add(bigNum)
-  //if 
+  
   numPan.add(units)
   var infoLabel = ui.Label({
     style: style.fonts.Caption3
@@ -350,7 +346,8 @@ var littleNum = function (layerObj, region, scale, reducerType) {
   infoLabel.setValue(labelText)
   numPan //.add(infoLabel)
     .add(labelText2) //.add(labelText2)
-  if(reducerType === 'mean') {
+    
+  if(reducerType == 'mean') {
     var reduced = ee.Number((layerObj.layer.eeObject)
       .reduceRegion({
         reducer: ee.Reducer.mean(),
@@ -365,7 +362,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
       bigNum.setValue(result.toFixed(0))
     })
     //  
-  } else if(reducerType === 'sum') {
+  } else if(reducerType == 'sum') {
     //reduced = reduced.toFixed()
     reduced = ee.Number((layerObj.layer.eeObject)
       .reduceRegion({
@@ -380,7 +377,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
       // When the server returns the value, show it.
       bigNum.setValue(result.toFixed(0))
     })
-  } else if(reducerType === 'percent') {
+  } else if(reducerType == 'percent') {
     //reduced = reduced.toFixed()
     print('percent')
     reduced = ee.Number((layerObj.layer.eeObject)
@@ -396,7 +393,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
     numPan.remove(units) //don't display units for percent 
     reduced.evaluate(function (result) {
       // When the server returns the value, show it.
-      print(574)
+      
       bigNum.setValue(
         result.toFixed(0)
         .toString()
