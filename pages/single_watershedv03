@@ -392,8 +392,7 @@ var makeReports = function () {
     soilsChart.setChartType('BarChart');
     soilsChart.setOptions(Style.charts.imageBar)
 
-    var soilsCard = cards('Soils and Lithology', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(),
-
+    var soilsCard = cards('Soils', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(),
     ])
     analyzePanel.add(soilsCard)
 
