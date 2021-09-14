@@ -95,6 +95,8 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
     return chart;
 };
 function histogramImage(layerObject, WS, scale) {
+    
+    var img = stack_bands(layerObject)
     var chart = ui.Chart.image.histogram({
         image: layerObject.layer.eeObject,
         region: WS,
@@ -108,17 +110,17 @@ function histogramImage(layerObject, WS, scale) {
         height: '185px'
     })
     
-    var units = "units"
+    var units = layerObject.units
     chart.setSeriesNames(
         (layerObject.layer.name + ' (' + units + ')'), 0)
     chart.setOptions({
-        //  fontSize:12,
 
-        //bar: {groupWidth: '90%'},
+
+
         legend: {
             position: 'none'
         },
-        //explorer:{},
+
         vAxis: {
             gridlines: {
                 color: 'whitesmoke',
@@ -255,194 +257,6 @@ var makePieChart = function (
 exports.pieChart = makePieChart
 
 
-//exports.fc = makePieChart[1]
-
-/*var bigNum = function (layerObj, region, scale, reducerType) {
-    var panel = ui.Panel({
-        style: {
-            width: '33%',
-            padding: '10px',
-            margin: 0
-        }
-    }) //.style().set({width: '33%'})
-    var units = layerObj.units
-    var loading = 'loading...'
-    var infoLabel = ui.Label({
-        value: 'ⓘ',
-        targetUrl: 'https://github.com/stormwaterheatmap'
-    })
-    infoLabel.style().set({
-        margin: '2px',
-        padding: '2px',
-        color: 'white',
-        backgroundColor: style.colors.transparent,
-    })
-    var titlePanel = ui.Panel({
-        layout: ui.Panel.Layout.flow('horizontal')
-    })
-    titlePanel.style().set({
-        margin: 0,
-        padding: 0,
-        backgroundColor: color,
-        stretch: 'horizontal'
-    })
-    var card = ui.Panel({
-        style: {
-            backgroundColor: style.colors.transparent,
-            margin: 0,
-            //border: "0.5px solid black",
-            width: '100%',
-            //height: '100px', 
-            padding: 0,
-        }
-    }) //.setLayout(ui.Panel.Layout.absolute())//('horizontal')); 
-    var bigNum = ui.Label({
-        value: loading,
-        style: {
-            margin: 0,
-            padding: '0px 12px 0px 0px',
-            fontSize: '48px',
-            fontWeight: '700',
-            backgroundColor: style.colors.transparent,
-            color: 'white',
-            //position: 'middle-right', 
-            textAlign: 'right',
-            stretch: 'horizontal'
-        }
-    })
-
-    var titleLabel = ui.Label({
-        value: layerObj.layer.name,
-        style: style.fonts.Body1
-    });
-    titleLabel.style().set({
-        margin: 0,
-        padding: '4px 64px 0px 12px',
-        position: 'top-left',
-        stretch: 'horizontal',
-        color: 'white',
-        backgroundColor: color
-    });
-
-    units = ui.Label({
-        value: layerObj.units,
-        style: {
-            margin: '-8px 0px 0px 0px ',
-            padding: '0px 14px 4px 0px',
-            fontSize: '12px',
-            fontWeight: '400',
-            backgroundColor: style.colors.transparent,
-            color: 'white',
-            textAlign: 'right',
-            stretch: 'horizontal'
-        }
-    })
-    //make a right-hand-side panel to hold big number and units. 
-    var rightPan = ui.Panel({ //layout: ui.Panel.Layout.absolute(), 
-        layout: ui.Panel.Layout.flow('vertical'),
-        style: { //backgroundColor: style.colors.transparent,
-            //textAlign: 'center', 
-            //position: 'middle-right',
-            margin: 0,
-            padding: 0,
-            // border: '1px dotted white', 
-            backgroundColor: color
-        }
-    });
-
- 
-    //one more panel to hold the information 
-    var outerCard = ui.Panel({
-        layout: ui.Panel.Layout.flow('vertical', true),
-        style: {
-            //border: '1px solid grey', 
-            // margin: '12px',
-            padding: '12px',
-            backgroundColor: style.colors.transparent,
-            position: 'top-left'
-        }
-    }) //.add(ui.Label('outer Card') )
-    var info = ui.Label({
-        value: 'more information here',
-        style: style.fonts.Caption1
-    })
-
-    info.style().set({
-        color: style.colors.grey,
-        //position: 'bottom-right', 
-        textAlign: 'right',
-        // fontWeight: '600',
-        stretch: 'horizontal',
-        //backgroundColor: style.colors.transparent, 
-        margin: 0,
-        padding: '4px',
-    });
-
-    //make panels 
-
-    titlePanel.add(titleLabel) //.add(infoLabel)
-    rightPan.add(bigNum).add(units)
-    card.add(titlePanel).add(rightPan)
-    outerCard.add(card).add(info)
-
-    /*rightPan.add(bigNum).add(units)
-    card.add(title).add(infoLabel).add(rightPan)
-    outerCard.add(card).add(info)
-    }*/
-/*
-    //makePanels()
-    if (reducerType === 'mean') {
-        var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
-            reducer: ee.Reducer.mean(),
-            geometry: region,
-            scale: scale,
-            bestEffort: true
-
-        }).get(layerObj.layer.eeObject.bandNames().get(0)))
-
-        reduced.evaluate(function (result) {
-            // When the server returns the value, show it.
-            bigNum.setValue(result.toFixed(0))
-        })
-    } else if (reducerType === 'sum') {
-        //reduced = reduced.toFixed()
-         reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
-            reducer: ee.Reducer.sum(),
-            geometry: region,
-            scale: scale,
-            bestEffort: true
-
-        }).get(layerObj.layer.eeObject.bandNames().get(0)))
-
-        reduced.evaluate(function (result) {
-            // When the server returns the value, show it.
-            bigNum.setValue(result.toFixed(0))
-        })
-
-    } else if (reducerType === 'percent') {
-        //reduced = reduced.toFixed()
-        var reduced = ee.Number((layerObj.layer.eeObject).reduceRegion({
-            reducer: ee.Reducer.mean(),
-            geometry: region,
-            scale: scale,
-            bestEffort: true
-
-        }).get(layerObj.layer.eeObject.bandNames().get(0)))
-
-
-        reduced.evaluate(function (result) {
-            // When the server returns the value, show it.
-            bigNum.setValue(
-                result.toFixed(0).toString().concat(
-                    "%"))
-        }) //.add(units)
-    }
-
-    return outerCard
-
-}
-*/
-//exports.bigNum = bigNum;
 
 var littleNum = function (layerObj, region, scale, reducerType) {
 
