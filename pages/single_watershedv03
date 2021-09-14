@@ -380,17 +380,19 @@ var makeReports = function () {
     analyzePanel.add(luCard)
 
 ///img_class_chart(layer_object, region, scale){
-    var ageCard = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,mapPanel.getScale() )
+    var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,mapPanel.getScale() )
     
     //pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
     //ageCard.setChartType('BarChart')
     //ageCard.setOptions(Style.charts.imageBar)
-    var ageCard = cards('Age of Impervjiousness', [ageCard, layerButton(layerProperties['Age of Development'])])
+    var ageCard = cards('Age of Imperviousness', [ageChart, layerButton(layerProperties['Age of Imperviousness'])])
     analyzePanel.add(ageCard)
 
-    var soilsChart = charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
-    soilsChart.setChartType('BarChart');
-    soilsChart.setOptions(Style.charts.imageBar)
+    var soilsChart = charts.img_class_chart(layerProperties['Soils'],clicked_basin_geom,mapPanel.getScale() )
+    
+    //charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
+    //soilsChart.setChartType('BarChart');
+    //soilsChart.setOptions(Style.charts.imageBar)
 
     var soilsCard = cards('Soils', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(),
     ])
