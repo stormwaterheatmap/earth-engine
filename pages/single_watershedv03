@@ -369,8 +369,8 @@ var makeReports = function () {
     
     
     //luchart.setOptions(Style.charts.imageBar)
-    var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom,  mapPanel.getScale())
-    lcchart.setOptions(Style.charts.imageBar)
+    var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, mapPanel.getScale())
+    //lcchart.setOptions(Style.charts.imageBar)
     var luCard = cards('Land Use', [subtitle('Imperviousness'), impNum, //impChart, 
         layerButton(layerProperties.Imperviousness),
         hline(), subtitle('Land Use Classifications'), luchart,
