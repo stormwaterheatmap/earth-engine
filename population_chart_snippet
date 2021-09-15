@@ -1,0 +1,31 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #98ff00 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-122.07710094762001, 47.57099875176972],
+          [-122.07710094762001, 47.51769637321308],
+          [-121.99607677769814, 47.51769637321308],
+          [-121.99607677769814, 47.57099875176972]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
+//print('CHARTS', charts)
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
+
+
+var population = data.rasters["Population Density"]
+print(population )
+Map.addLayer(population.layer)
+print(population)
+var pop_chart = charts.littleNum(population,geometry,100,'sum')//(layerObj, region, scale, reducerType) {
+//var pop_chart = 
+print(pop_chart)
+   
