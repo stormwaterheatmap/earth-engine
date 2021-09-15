@@ -365,7 +365,7 @@ var makeReports = function () {
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
 
 //To Do this is a temporary fix. 
-    var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
+    var luchart =  charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom,mapPanel.getScale() ); 
     
     
     //luchart.setOptions(Style.charts.imageBar)
