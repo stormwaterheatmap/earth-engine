@@ -365,10 +365,11 @@ var makeReports = function () {
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
 
 //To Do this is a temporary fix. 
-    var luchart = charts.pieChart(clicked_basin_geom, layerProperties['Land Cover'],//['Land Use'],
-    mapPanel.getScale()).setChartType('BarChart')
-    luchart.setOptions(Style.charts.imageBar)
-    var lcchart = charts.pieChart(clicked_basin_geom, layerProperties['Land Cover'], mapPanel.getScale()).setChartType('BarChart')
+    var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
+    
+    
+    //luchart.setOptions(Style.charts.imageBar)
+    var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom,  mapPanel.getScale())
     lcchart.setOptions(Style.charts.imageBar)
     var luCard = cards('Land Use', [subtitle('Imperviousness'), impNum, //impChart, 
         layerButton(layerProperties.Imperviousness),
