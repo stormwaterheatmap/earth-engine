@@ -4,47 +4,17 @@ var imageCollection = ee.ImageCollection("NOAA/PERSIANN-CDR");
 
 var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
 
-exports.vectors = { //for legacy functions 
-    counties: data.counties,
-    HUC12: data.HUC12,
-    HUC10: data.HUC10,
-    HUC08: data.HUC08,
-    NHDPlus: data.NHDPlus,
-    PS_AU: data.PS_AU,
-    PugetSound: data.PugetSound,
-    WRIA: data.WRIA,
-    MS4: data.MS4
-}
+print(data)
 
-var rename_vector = function (fc, col_name) {
-  var DataRenamed = fc.map(function (feat) {
-    return ee.Feature(feat.geometry(), {
-        "Watershed Name": feat.get(col_name),
-      })
-      .copyProperties(feat)
-  })
-  return (DataRenamed)
-}
-
-
-var vector_dict = {
-  "County Boundaries": rename_vector(data.counties,"NAMELSAD"), 
-  "HUC12: USGS Watershed Boundary Dataset": rename_vector(data.HUC12, "name"),
-  "HUC10: USGS Watershed Boundary Dataset": rename_vector(data.HUC10,  "name"), 
-  "HUC08: USGS Watershed Boundary Dataset": rename_vector(data.HUC08,"name"),
-  "NHDPlus High Resolution Watershed Dataset": rename_vector(data.NHDPlus, "FEATUREID"), 
-  "Puget Sound Assessment Units": rename_vector(data.PS_AU,"OBJECTID"), 
-  "Ecology Water Resource Inventory Area (WRIA)": rename_vector(data.WRIA, "WRIA_NM") 
-}
 
 
 var simplify_vectors = function (fc){
   return(fc.simplify(1))
 }
 
-var simplifiedtest = data.WRIA.map(simplify_vectors)
-Map.addLayer(data.counties)
-Map.addLayer(imageCollection)
+var simplifiedtest = data.vectors.WRIA.map(simplify_vectors)
+
+Map.addLayer(simplifiedtest)
 
 
 
