@@ -12,7 +12,7 @@ var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds"),
 /*---------------------------
 */ 
 var simplify_vectors = function (fc){
-  return(fc.simplify({maxError: 1}))
+  return(fc.simplify({maxError: 5}))
 }
 
 
