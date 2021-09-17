@@ -82,7 +82,7 @@ exports.counties = ee.FeatureCollection(
     "TIGER/2018/Counties")
   .filterBounds(
     PugetSound);
-var landuse = ee.FeatureCollection("users/stormwaterheatmap/psrc_landuse")
+
 
 exports.traffic = ee.Image(0)
   .blend(ee.Image(
@@ -100,7 +100,9 @@ Stormwaterheatmap Image Assets
 //exports.population_per_ha = ee.Image("users/stormwaterheatmap/population_per_ha") 
 var population = census.filterBounds(PugetSound).reduceToImage({properties:["pop10"], reducer:ee.Reducer.first()})
 exports.population = population.selfMask()
-exports.landuse_img = landuse.reduceToImage(['Master_num'], ee.Reducer.first())
+exports.landuse_img = ee.Image(
+"projects/ee-stormwaterheatmap/assets/lu5m"
+)
   ///this has some weird slivers that look to be artifacts (coded as 8 in the shapefile)
 //making these 0 and remapping the rest
 .remap(
