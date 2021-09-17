@@ -86,9 +86,23 @@ var population = census.filterBounds(PugetSound)
     reducer: ee.Reducer.first()
   })
 exports.population = population.selfMask()
-exports.landuse_img = ee.Image(
+var landuse = ee.Image(
     "projects/ee-stormwaterheatmap/assets/lu5m"
   )
+  //clean up land use image 
+
+
+var kernel = ee.Kernel.square({radius: 30, units: 'meters'})
+var grown = image.selfMask().
+reduceNeighborhood({reducer:ee.Reducer.mode(), kernel:ee.Kernel.square({radius:30, units: 'pixels'}),optimization:"window", skipMasked:false}) 
+Map.addLayer(grown)
+
+//replace 0 with grown regions 
+var lu_fin = grown.blend(landuse.selfMask())
+exports.landuse_img = lu_fin
+  
+  
+  
   ///this has some weird slivers that look to be artifacts (coded as 8 in the shapefile)
   //making these 0 and remapping the rest
   // .remap(
