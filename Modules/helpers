@@ -1,9 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #d63000 */ee.Geometry.Polygon(
-        [[[-122.16886449915569, 47.73895217384394],
-          [-122.17435766321819, 47.635411665757815],
-          [-122.06998754603069, 47.71678222460966]]]);
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
@@ -64,8 +58,8 @@ var clear_map_add_layer = function(layerObject,legendPanel,map){
 
 var info_panel = function(label,link){
   var panel_label = ui.Label({value:label,style:{margin: "8px 0px 8px", padding: "0px"}}); 
-  var info_label = ui.Label({value:"🛈",style:{margin: "0px", padding: "0px"},
-targetUrl: link
+  //var info_label = ui.Label({value:"🛈",style:{margin: "0px", padding: "0px"},
+//targetUrl: link
 });
 
   //combine into a horizontal label 
