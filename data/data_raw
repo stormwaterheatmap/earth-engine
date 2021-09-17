@@ -10,6 +10,15 @@ var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds"),
 *---------------------------
 
 /*---------------------------
+*/ 
+var simplify_vectors = function (fc){
+  return(fc.simplify({maxError: 1}))
+}
+
+
+
+
+/*
 Vectors
 */
 var PugetSound = ee.FeatureCollection(
@@ -19,7 +28,7 @@ exports.hrus = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode")
 exports.counties = ee.FeatureCollection(
     "TIGER/2018/Counties")
   .filterBounds(
-    PugetSound)
+    PugetSound).map(simplify_vectors)
 exports.HUC12 = ee.FeatureCollection(
     "USGS/WBD/2017/HUC12")
   .filterBounds(
@@ -27,24 +36,24 @@ exports.HUC12 = ee.FeatureCollection(
 exports.HUC10 = ee.FeatureCollection(
     "USGS/WBD/2017/HUC10")
   .filterBounds(
-    PugetSound);
+    PugetSound).map(simplify_vectors);
 exports.HUC08 = ee.FeatureCollection(
     "USGS/WBD/2017/HUC08")
   .filterBounds(
     PugetSound);
 exports.NHDPlus = ee.FeatureCollection(
   'users/cnilsen/PugetSoundNHDPlusWatersheds'
-);
+).map(simplify_vectors);
 exports.PS_AU = ee.FeatureCollection(
-  'users/cnilsen/PS_AU');
+  'users/cnilsen/PS_AU').map(simplify_vectors);
 exports.WRIA = ee.FeatureCollection(
     "users/stormwaterheatmap/WRIA_Bounds"
-  )
+  ).map(simplify_vectors)
   .filterBounds(PugetSound);
 exports.MS4 = ee.FeatureCollection(
     "users/stormwaterheatmap/MS4_bounds"
   )
-  .filterBounds(PugetSound)
+  .filterBounds(PugetSound).map(simplify_vectors)
 /*---------------------------
 Earth Engine Catalog Data 
 */
@@ -69,13 +78,13 @@ Stormwaterheatmap Vector Assets
 exports.counties = ee.FeatureCollection(
     "TIGER/2018/Counties")
   .filterBounds(
-    PugetSound);
+    PugetSound).map(simplify_vectors);
 exports.traffic = ee.Image(0)
   .blend(ee.Image(
     "users/cnilsen/trafficExport"))
 //Watersheds     
 exports.PS_AU = ee.FeatureCollection(
-  'users/cnilsen/PS_AU')
+  'users/cnilsen/PS_AU').map(simplify_vectors)
 /*---------------------------
 Stormwaterheatmap Image Assets 
 */
