@@ -2,11 +2,6 @@
 var KCimp = ee.Image("users/cnilsen/comb_imp"),
     NHDPlus = ee.FeatureCollection("users/cnilsen/PugetLowlandsNHDPlusWatershedsNamed"),
     TSS = ee.Image("users/cnilsen/TSSLoad"),
-    geometry = /* color: #d63000 */ee.Geometry.MultiPoint(
-        [[-122.05088915251235, 47.59999236617272],
-         [-122.03337654692905, 47.616203741519826],
-         [-122.01930031401889, 47.61134345114383],
-         [-122.02170357329624, 47.599074995250184]]),
     PS_AU = ee.FeatureCollection("users/cnilsen/PS_AU"),
     HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
@@ -154,10 +149,15 @@ ui.root.insert(0,mainPanel)
 
 var vectors_dict = data.vector_dict
 
-var watershed_data_set = HUC12//initial value only
+
 //----Get vector data 
 //Get watershed values from the data list 
-var watershedSelect = ui.Select({items: Object.keys(data.vector_dict).sort(), 
+var watershedSelect = ui.Select({items: [
+"HUC12: USGS Watershed Boundary Dataset", 
+"NHDPlus High Resolution Watershed Dataset", 
+"Puget Sound Assessment Units"
+  
+  ],//Object.keys(data.vector_dict).sort(), 
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: function (selected) {
@@ -291,7 +291,7 @@ Map.addLayer(colorStretch(TSSDisplay), TSS_style);
 
 //Map.addLayer(watershed.style(watershed_STYLE)); //this should be removed and done in the function
 //(watershed_data_set)
-var wsSelect = watershed_data_set.filterBounds(ee.Geometry(geometry)); 
+//var wsSelect = watershed_data_set.filterBounds(ee.Geometry(geometry)); 
 //return sum of selected Watersheds
 
   
