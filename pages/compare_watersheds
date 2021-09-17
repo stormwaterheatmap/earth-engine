@@ -156,7 +156,6 @@ var watershedSelect = ui.Select({items: [
 "HUC12: USGS Watershed Boundary Dataset", 
 "NHDPlus High Resolution Watershed Dataset", 
 "Puget Sound Assessment Units"
-  
   ],//Object.keys(data.vector_dict).sort(), 
     placeholder: 'Select a value',
     //value: 'HUC 12'
@@ -190,7 +189,7 @@ mainPanel.add(analyzePanel)
 /*Global Variables------------------------------------------------------------------------------------- 
  */
 
-
+var watershed_data_set
 
 // The GHSL global TSS density dataset for 2015.
 var TSS = TSS.select('remapped_1');//mg/year 
@@ -281,12 +280,10 @@ Map.setCenter(-122.3, 47.6, 10);
 //Map.addLayer(colorStretch(TSS.unmask(0).updateMask(1)), TSS_style);
 //Map.addLayer(colorStretch(TSS), TSS_style);
 
-var boxcar = ee.Kernel.circle({radius: 2});
+
 
 // Smooth the image by convolving with the boxcar kernel.
-var TSSDisplay = TSS.convolve(boxcar);
 
-Map.addLayer(colorStretch(TSSDisplay), TSS_style);
 //Map.addLayer((TSS.unmask(0).updateMask(1)), TSS_style);
 
 //Map.addLayer(watershed.style(watershed_STYLE)); //this should be removed and done in the function
@@ -383,7 +380,7 @@ function updateChart() {
 function clearResults() {
   selectedPoints = [];
   Map.layers().remove(Map.layers().get(2));
-  var instructionsLabel = ui.Label('Select regions to compare TSS.');
+  var instructionsLabel = ui.Label('Select regions to compare data.');
   resultsPanel.widgets().reset([instructionsLabel]);
 }
 
