@@ -1,0 +1,16 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("projects/ee-stormwaterheatmap/assets/lu5m"),
+    imageVisParam = {"opacity":1,"bands":["Land_Use"],"palette":["ff0000"]};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+//clean up land use image 
+var image = image//.selfMask()
+Map.addLayer(image)
+
+var kernel = ee.Kernel.square({radius: 30, units: 'meters'})
+var grown = image.selfMask().
+reduceNeighborhood({reducer:ee.Reducer.mode(), kernel:ee.Kernel.square({radius:30, units: 'pixels'}),optimization:"window", skipMasked:false}) 
+Map.addLayer(grown)
+
+//replace 0 with grown regions 
+var lu_fin = grown.blend(image.selfMask())
+Map.addLayer(lu_fin)
