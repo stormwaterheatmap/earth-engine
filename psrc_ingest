@@ -1,5 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var sheds = ee.FeatureCollection("users/stormwaterheatmap/revised_s8_watersheds_v4");
+var sheds = ee.FeatureCollection("users/stormwaterheatmap/revised_s8_watersheds_v4"),
+    PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var landuse_table = ee.FeatureCollection("users/stormwaterheatmap/psrc_landuse")
 
@@ -16,7 +17,7 @@ var landuse = landuse_table.reduceToImage(["Master_num"],ee.Reducer.first()).ren
 var landuse = landuse.remap(
   [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15], 
   [0,1,2,3,4,5,6,0,7,8,9,10,11,12,13,14]
-  ).rename("Land Use")
+  ).rename("Land_Use")
 //["#E4CBB2", "#D4B89E", "#C3A68A", "#B39477", "#A38364", "#937252", "#836140", "#73512F", "#63411E"]["#FFB7A5", "#F4A691", "#E9947D", "#DD836A", "#D17257", "#C56145", "#B85033", "#AB3E21", "#9E2B0E"]
 var pal = 
 [
@@ -57,3 +58,5 @@ var pal =
 //var maskcat = 2
 //var landuse = landuse.mask(landuse.eq(maskcat))
 //Map.addLayer(landuse, {min:0,max:14, palette:pal},'landuse')
+Export.table.toAsset({collection:landuse_table,maxVertices:200 })
+Export.image.toAsset({image:landuse, region:PugetSound, scale:10,maxPixels:1e13})
