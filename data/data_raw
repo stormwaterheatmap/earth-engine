@@ -95,7 +95,7 @@ var landuse = ee.Image(
 var kernel = ee.Kernel.square({radius: 30, units: 'meters'})
 var grown = image.selfMask().
 reduceNeighborhood({reducer:ee.Reducer.mode(), kernel:ee.Kernel.square({radius:30, units: 'pixels'}),optimization:"window", skipMasked:false}) 
-Map.addLayer(grown)
+
 
 //replace 0 with grown regions 
 var lu_fin = grown.blend(landuse.selfMask())
