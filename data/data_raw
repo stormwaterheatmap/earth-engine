@@ -21,9 +21,7 @@ exports.counties = ee.FeatureCollection(
   .filterBounds(
     PugetSound)
 exports.HUC12 = ee.FeatureCollection(
-   "projects/ee-stormwaterheatmap/assets/HUC12")
-  .filterBounds(
-    PugetSound);
+   "projects/ee-stormwaterheatmap/assets/HUC12");
 exports.HUC10 = ee.FeatureCollection(
     "USGS/WBD/2017/HUC10")
   .filterBounds(
