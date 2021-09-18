@@ -60,7 +60,7 @@ var panel_style = {position: 'bottom-left'}//,width:'300px', height:"80%"}
 var panel = ui.Panel({style:panel_style})//, layout:panel_layout})//, })
 var legendPanel = ui.Panel({style:{position:'bottom-left',shown:false, minWidth: "300px"}
 })
-var mainPanel = helpers.makeMainPanel("View Data Layers");
+var mainPanel = helpers.makeMainPanel("Compare Watersheds");
 mainPanel.style().set("minWidth","16.66%")
 
 /* ui widgets */ 
