@@ -21,7 +21,7 @@ exports.counties = ee.FeatureCollection(
   .filterBounds(
     PugetSound)
 exports.HUC12 = ee.FeatureCollection(
-    "USGS/WBD/2017/HUC12")
+   "projects/ee-stormwaterheatmap/assets/HUC12")
   .filterBounds(
     PugetSound);
 exports.HUC10 = ee.FeatureCollection(
@@ -33,10 +33,10 @@ exports.HUC08 = ee.FeatureCollection(
   .filterBounds(
     PugetSound);
 exports.NHDPlus = ee.FeatureCollection(
-  'users/cnilsen/PugetSoundNHDPlusWatersheds'
+  'projects/ee-stormwaterheatmap/assets/NHDPlus'
 );
 exports.PS_AU = ee.FeatureCollection(
-  'users/cnilsen/PS_AU');
+ "projects/ee-stormwaterheatmap/assets/NHDPlus")
 exports.WRIA = ee.FeatureCollection(
     "users/stormwaterheatmap/WRIA_Bounds"
   )
@@ -86,31 +86,17 @@ var population = census.filterBounds(PugetSound)
     reducer: ee.Reducer.first()
   })
 exports.population = population.selfMask()
-var landuse = ee.Image(
+exports.landuse_img = ee.Image(
     "projects/ee-stormwaterheatmap/assets/lu5m"
   )
-  //clean up land use image 
-
-
-var kernel = ee.Kernel.square({radius: 30, units: 'meters'})
-var grown = image.selfMask().
-reduceNeighborhood({reducer:ee.Reducer.mode(), kernel:ee.Kernel.square({radius:30, units: 'pixels'}),optimization:"window", skipMasked:false}) 
-
-
-//replace 0 with grown regions 
-var lu_fin = grown.blend(landuse.selfMask())
-exports.landuse_img = lu_fin
-  
-  
-  
   ///this has some weird slivers that look to be artifacts (coded as 8 in the shapefile)
   //making these 0 and remapping the rest
-  // .remap(
-  //   [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-  //   [0, 1, 2, 3, 4, 5, 6, 0, 7, 8, 9, 10, 11, 12, 13, 14]
-  // )
-  // .rename("Land Use")
-  // .rename("land_use_code")
+  .remap(
+    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    [0, 1, 2, 3, 4, 5, 6, 0, 7, 8, 9, 10, 11, 12, 13, 14]
+  )
+  .rename("Land Use")
+  .rename("land_use_code")
 // This function computes the feature's geometry area and adds it as a property.
 var calc_density = function (feature)
 {
