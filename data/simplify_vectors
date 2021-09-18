@@ -1,5 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var imageCollection = ee.ImageCollection("NOAA/PERSIANN-CDR");
+var imageCollection = ee.ImageCollection("NOAA/PERSIANN-CDR"),
+    table = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
 var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
