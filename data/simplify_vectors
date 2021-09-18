@@ -6,11 +6,17 @@ var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
 
 print(data)
 
-
-
 var simplify_vectors = function (fc){
   return(fc.simplify(1))
 }
+
+var to_export = data.vector_dict["Puget Sound Assessment Units"].map(simplify_vectors)
+
+Export.table.toAsset({collection:to_export, 
+assetId: "Puget_Sound_Assessment_Units:",
+description:"Puget_Sound_Assessment_Units:"
+  
+})
 
 var simplifiedtest = data.vectors.WRIA.map(simplify_vectors)
 
