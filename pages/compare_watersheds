@@ -33,13 +33,13 @@ var layerProperties = data.rasters
 
 var vectors_dict = data.vectors_dict
 
-
+var watershed_data_set
 var rasters = data.rasters
 var layer_types = Object.keys(rasters)
 
 //lay out ui elements 
 //---------------------------------------------------------------
-
+var HIGHLIGHT_STYLE = {color: '8856a7', fillColor: '8856a7C0'};
 
 
 /* Label */ 
@@ -163,8 +163,8 @@ var watershedSelect = ui.Select({items: [
         Map.layers().reset()
         //(selected)
         var WS = vectors_dict[selected]
-        Map.addLayer(WS.style(featureStyle)) 
-        watershed_data_set = WS//oct
+        //Map.addLayer(WS.style(featureStyle)) 
+        watershed_data_set = vectors_dict[selected]//oct
         //analyzePanel.add((buttonPanel))
 
     }
@@ -180,6 +180,8 @@ var analyzePanel = ui.Panel({
     }
 })
 
+
+
 analyzePanel.add(watershedSelectLabel)
 analyzePanel.add(watershedSelect)
 
@@ -189,51 +191,8 @@ mainPanel.add(analyzePanel)
 /*Global Variables------------------------------------------------------------------------------------- 
  */
 
-var watershed_data_set
+// var watershed_data_set
 
-// The GHSL global TSS density dataset for 2015.
-var TSS = TSS.select('remapped_1');//mg/year 
-var TSS = TSS.divide(1e6); //covert to kg/year
-
-// Country boundary data with associated precomputed TSS totals.
-// var WSVal = watershedSelect.getValue();
-// var watershed = ee.FeatureCollection(vectors_dict.WSVal);
-// //(watershed.first())
-
-
-
-/*
- * Visualization and styling
- */
-//Palettes
-var virdis = [ '420052','472075','3F4286','33608C','27798E',
-                '1E918D','1FAA86','42C175','7BD259','BCE03B','FCE83F']; 
-                
- var magma = [ '000000', '090285','41009C','6B00A7','6B00A7','B22490',
-                'CD4479','E16465','F18551','FBA742','FBA742','F0F93F', 'defce1']; 
-
-// Constants used to visualize the data on the map.
-var TSS_style = {
-  min: 0,
-  max: 1,
-  opacity: 0.80,
-  palette: virdis
-};
-
-//#d1eeea,#a8dbd9,#85c4c9,#68abb8,#4f90a6,#3b738f,#2a5674
-
-
-
-var TSS_VIS_MAX_VALUE = 16;
-var TSS_VIS_NONLINEARITY = 2;
-var watershed_STYLE = {color: 'ffffff', fillColor: '00000000'};
-var HIGHLIGHT_STYLE = {color: '8856a7', fillColor: '8856a7C0'};
-
-// Apply a non-linear stretch to the TSS data for visualization.
-function colorStretch(image) {
-  return image.divide(TSS_VIS_MAX_VALUE)
-      .pow(1 / TSS_VIS_NONLINEARITY);
-}
 
 // Inverts the nonlinear stretch we apply to the TSS data for
 // visualization, so that we can back out values to display in the legend.
@@ -296,13 +255,18 @@ Map.setCenter(-122.3, 47.6, 10);
 
 
 
-var selectedPoints = [];
+var selectedPoints =[]
 
 // Returns the list of watershed the user has selected.
 function getSelectedwatershed() {
-  return watershed_data_set.filterBounds(ee.Geometry.MultiPoint(selectedPoints));
+var watershed_data_set = vectors_dict[watershedSelect.getValue()]
+
+  var ws_selected =  watershed_data_set.filterBounds(ee.Geometry.MultiPoint(selectedPoints));
+  print(ws_selected)
+  return(ws_selected)
 }
 
+// var wsSelect = watershed_data_set//.filterBounds(ee.Geometry(selectedPoints)); 
 
 var makeResultsBarChart = function (fc) {
   //print(layer_object.default_reduction)
@@ -388,6 +352,7 @@ function clearResults() {
 // list and updates the map overlay and chart accordingly.
 function handleMapClick(location) {
   selectedPoints.push([location.lon, location.lat]);
+print(selectedPoints); 
   updateOverlay();
   updateChart();
 }
@@ -436,40 +401,11 @@ clearResults();
 /*Dropdown to select watershed layer to use
 */ 
 
-/*
-var places = {
-  NHDPlusWatersheds: [NHDPlus],
-  HUC12: [HUC12],
-  WSCharacterization: [PS_AU]
-};
 
-var select = ui.Select({
-  items: Object.keys(places),
-  onChange: function(key) {
-    WSVal = (places[key[0]]),
-    Map.addLayer(watershed); //here we need to call a function containing the reducer function
-  }
-});*/
 
 // Set a place holder.
 watershedSelect.setPlaceholder('Choose a watershed data set');
 
-//add to ui
-// Add the select to the toolPanel with some explanatory text.
-//Map.add(ui.Label('View the Layers', {'font-size': '18'}));
-//Map.add(select);
-
-
-
-
-
-
-/*
- * The legend panel in the bottom-left
- */
-
-// A color bar widget. Makes a horizontal color bar to display the given
-// color palette.
 function ColorBar(palette) {
   return ui.Thumbnail({
     image: ee.Image.pixelLonLat().select(0),
@@ -485,47 +421,3 @@ function ColorBar(palette) {
   });
 }
 
-// // Returns our labeled legend, with a color bar and three labels representing
-// // the minimum, middle, and maximum values.
-// function makeLegend() {
-//   var labelPanel = ui.Panel(
-//       [
-//         ui.Label(Math.round(undoColorStretch(0)), {margin: '4px 8px'}),
-//         ui.Label(
-//             Math.round(undoColorStretch(0.5)),
-//             {margin: '4px 8px', textAlign: 'center', stretch: 'horizontal'}),
-//         ui.Label(Math.round(undoColorStretch(1)), {margin: '4px 8px'})
-//       ],
-//       ui.Panel.Layout.flow('horizontal'));
-//   return ui.Panel([ColorBar(TSS_style.palette), labelPanel]);
-// }
-
-// // Styling for the legend title.
-// var LEGEND_TITLE_STYLE = {
-//   fontSize: '20px',
-//   fontWeight: 'bold',
-//   stretch: 'horizontal',
-//   textAlign: 'center',
-//   margin: '4px',
-// };
-
-// // Styling for the legend footnotes.
-// var LEGEND_FOOTNOTE_STYLE = {
-//   fontSize: '10px',
-//   stretch: 'horizontal',
-//   textAlign: 'center',
-//   margin: '4px',
-// };
-
-// // Assemble the legend panel.
-// Map.add(ui.Panel(
-//     [
-//       ui.Label('Stormwater TSS Load', LEGEND_TITLE_STYLE), makeLegend(),
-//       ui.Label(
-//           'kg/year', LEGEND_FOOTNOTE_STYLE),
-//       ui.Label(
-//           'Source: ', LEGEND_FOOTNOTE_STYLE),
-//       ui.Label('Data source', LEGEND_FOOTNOTE_STYLE)
-//     ],
-//     ui.Panel.Layout.flow('vertical'),
-//     {width: '230px', position: 'bottom-left'}));
