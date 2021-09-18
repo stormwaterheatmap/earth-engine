@@ -314,12 +314,7 @@ var makeResultsBarChart = function (fc) {
 
 // Makes a table of the given FeatureCollection of watershed by GRIDCODE.
 function makeResultsTable(watershed) {
-  var load = Map.layers().get(0).get('eeObject').reduceRegions({
-    collection: watershed,
-    reducer: ee.Reducer.sum(), 
-    scale: Map.getScale()
-  }); 
-  var table = ui.Chart.feature.byFeature(load, 'WSName', ['sum']);
+  var table = makeResultsBarChart(watershed)
   table.setChartType('Table');
   table.setOptions({allowHtml: true, pageSize: 5});
   table.style().set({stretch: 'both'});
