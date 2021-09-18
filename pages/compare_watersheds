@@ -163,7 +163,7 @@ var watershedSelect = ui.Select({items: [
         Map.layers().reset()
         //(selected)
         var WS = vectors_dict[selected]
-        //Map.addLayer(WS.style(featureStyle)) 
+        Map.addLayer(WS.style(featureStyle)) 
         watershed_data_set = vectors_dict[selected]//oct
         //analyzePanel.add((buttonPanel))
 
