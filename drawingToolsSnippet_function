@@ -11,7 +11,9 @@ var Style = require(
   )
 //map.drawingTools({shape:'polygon'})//, selected, shown, linked))
 var drawingTools = map.drawingTools({shape:'rectangle'});
-
+var helpers = require(
+  'users/stormwaterheatmap/apps:Modules/helpers'
+  )
 
 // ui.Button({label:'OK', 
 //   onClick:function(){
@@ -161,6 +163,7 @@ var scale_drop_down = ui.Slider({
 
 function map_init() {
   // mapaddLayer(img)
+  helpers.make_tnc_map(map)
   map.layers().reset()
   map.widgets().reset([panel])
   downloadLabel.style().set({
@@ -297,3 +300,4 @@ var exmap = drawing_tools_function(data["Age of Imperviousness"],ui.Map())
 
 ui.root.clear()
 ui.root.add(exmap)
+
