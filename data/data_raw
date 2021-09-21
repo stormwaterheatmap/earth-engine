@@ -30,7 +30,7 @@ exports.HUC08 = ee.FeatureCollection(
     "USGS/WBD/2017/HUC08")
   .filterBounds(
     PugetSound);
-exports.NHDPlus = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/NHDPlus"
+exports.NHDPlus = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/NHDPlus_High_Resolution_Watershed_Dataset_string"
 );
 exports.PS_AU = ee.FeatureCollection(
  "projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units_string")
