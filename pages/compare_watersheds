@@ -3,7 +3,9 @@ var KCimp = ee.Image("users/cnilsen/comb_imp"),
     NHDPlus = ee.FeatureCollection("users/cnilsen/PugetLowlandsNHDPlusWatershedsNamed"),
     TSS = ee.Image("users/cnilsen/TSSLoad"),
     PS_AU = ee.FeatureCollection("users/cnilsen/PS_AU"),
-    HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12");
+    HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
+    table = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
+    table2 = ee.FeatureCollection("WWF/HydroSHEDS/v1/Basins/hybas_12");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /*Load modules 
 ---------------------------------------------------------------------------------------------------- 
@@ -324,7 +326,7 @@ function makeResultsTable(watershed) {
 // Updates the map overlay using the currently-selected watershed.
 function updateOverlay() {
   var overlay = getSelectedwatershed().style(HIGHLIGHT_STYLE);
-  Map.layers().set(2, ui.Map.Layer(overlay));
+  Map.layers().insert(1, ui.Map.Layer(overlay));
 }
 
 // Updates the chart using the currently-selected charting function,
@@ -333,12 +335,24 @@ function updateChart() {
   var chart = chartBuilder(getSelectedwatershed());
   resultsPanel.clear().add(chart).add(buttonPanel);
 }
+var infoTablePanel = ui.Panel({style:{shown:false}})
+var infoTableButton = ui.Button({label: 'Show Watershed Info Table', 
+onClick: function() {infoTablePanel.style().set({shown:true})}
+})
+
+mainPanel.add(infoTableButton).add(infoTablePanel)
+function updateInfoTable(){
+var chart = ui.Chart.feature.byProperty({features: getSelectedwatershed(), 
+seriesProperty: "Watershed Name"})
+infoTablePanel.clear().add(chart.setChartType('Table'))
+}
 
 // Clears the set of selected points and resets the overlay and results
 // panel to their default state.
 function clearResults() {
-  selectedPoints = [];
-  Map.layers().remove(Map.layers().get(2));
+  selectedPoints = [];//clear points 
+  Map.layers().reset() //remove(Map.layers().get(2));
+  legendPanel.style().set({shown:false})
   var instructionsLabel = ui.Label('Select regions to compare data.');
   resultsPanel.widgets().reset([instructionsLabel]);
 }
@@ -350,6 +364,7 @@ function handleMapClick(location) {
 print(selectedPoints); 
   updateOverlay();
   updateChart();
+  updateInfoTable();
 }
 Map.onClick(handleMapClick);
 
