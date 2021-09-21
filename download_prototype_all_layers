@@ -85,10 +85,14 @@ var geometry =
   /* shown: false */
   geometry;
 var data = require(
-  'users/stormwaterheatmap/apps:Modules/datasets'
+  'users/stormwaterheatmap/apps:data/data_dict_v3'
   )
 var Style = require(
   'users/stormwaterheatmap/apps:Modules/Style'
+  )
+  
+var helpers = require(
+  'users/stormwaterheatmap/apps:Modules/helpers'
   )
 var legends = require(
   'users/stormwaterheatmap/apps:Modules/legends'
@@ -110,9 +114,9 @@ style:{position: 'top-left'},
   onChange: function(value){
     map = drawing_tools_function
   .display_drawing_tools(data.rasters[value],
-    ui.Map())
-ui.root.clear();
-ui.root.add(map);
+    map)
+//ui.root.clear();
+//ui.root.add(map);
     print("Widgets", map.widgets())
     map.layers().reset()
     map.addLayer(data.rasters[value].layer)
@@ -121,7 +125,12 @@ ui.root.add(map);
   
   
 }) 
-map.add(layer_dropdown)
+
+var mainPanel = helpers.makeMainPanel("Download Data")
+
+mainPanel.add(
+  layer_dropdown)
+  map.add(mainPanel)
 
 var legend = legends.discreteLegend(
   layer_object)
