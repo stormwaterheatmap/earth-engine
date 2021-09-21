@@ -166,8 +166,8 @@ function map_init() {
   downloadLabel.style().set({
     shown: false
   })
-  map.addLayer(img, layer_object.layer.visParams)
-  print(map.layers())
+//  map.addLayer(img, layer_object.layer.visParams)
+  //print(map.layers())
 
 }
 
