@@ -8,20 +8,22 @@ var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
 print(data)
 
 var simplify_vectors = function (fc){
-  return(fc.simplify(1))
+  var fc2 = (fc.simplify(2))
+  return(fc2.set({"Watershed Name": ee.String(fc2.get('Watershed Name'))}))
+  
 }
-
-var to_export = data.vector_dict["Puget Sound Assessment Units"].map(simplify_vectors)
-
+//"NHDPlus High Resolution Watershed Dataset"
+var to_export = data.vector_dict["HUC12: USGS Watershed Boundary Dataset"].map(simplify_vectors)
+print(to_export.first())
 Export.table.toAsset({collection:to_export, 
-assetId: "Puget_Sound_Assessment_Units:",
-description:"Puget_Sound_Assessment_Units:"
+assetId: "HUC12:_USGS_Watershed_Boundary_Dataset_string",
+description:"HUC12:_USGS_Watershed_Boundary_Dataset_string"
   
 })
 
 var simplifiedtest = data.vectors.WRIA.map(simplify_vectors)
 
-Map.addLayer(simplifiedtest)
+Map.addLayer(to_export)
 
 
 
