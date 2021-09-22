@@ -272,7 +272,6 @@ var watershed_data_set = vectors_dict[watershedSelect.getValue()]
 // var wsSelect = watershed_data_set//.filterBounds(ee.Geometry(selectedPoints)); 
 
 var makeResultsBarChart = function (fc) {
-  //print(layer_object.default_reduction)
   var chart
   var layer_object = rasters[layer_select.getValue()]
   if(layer_object.default_reduction != 'Category')
@@ -285,7 +284,7 @@ var makeResultsBarChart = function (fc) {
   var title = layer_object.layer.name
   var units = layer_object.units
   //print(feat,title,units)
-  feat = feat.select(['name', layer_object.default_reduction], [title, units])
+  feat = feat.select(['Watershed Name', layer_object.default_reduction], [title, units])
    chart = (ui.Chart.feature.byFeature({
     features: feat,
     xProperty: title,
