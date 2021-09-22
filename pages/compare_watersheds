@@ -93,9 +93,9 @@ var layer_select = ui.Select({
         items: Object.keys(rasters),//select_layer_type.getValue()], 
         onChange: function(value) {
           var layer_obj = rasters[value]
-          //map_init
+          Map.layers().set(0, ui.Map.Layer(layer_obj.layer)) 
           legendPanel.style().set({shown:true})
-           helpers.clear_map_add_layer(layer_obj,legendPanel)
+          // helpers.clear_map_add_layer(layer_obj,legendPanel)
         }
       });
 
@@ -162,10 +162,10 @@ var watershedSelect = ui.Select({items: [
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: function (selected) {
-        Map.layers().reset()
+       // Map.layers().reset()
         //(selected)
         var WS = vectors_dict[selected]
-        Map.addLayer(WS.style(featureStyle)) 
+        Map.layers().set(2, ui.Map.Layer(WS.style(featureStyle))) 
         watershed_data_set = vectors_dict[selected]//oct
         //analyzePanel.add((buttonPanel))
 
@@ -337,7 +337,10 @@ function updateChart() {
 }
 var infoTablePanel = ui.Panel({style:{shown:false}})
 var infoTableButton = ui.Button({label: 'Show Watershed Info Table', 
-onClick: function() {infoTablePanel.style().set({shown:true})}
+onClick: function() {
+  infoTablePanel.style().set({shown:true})
+  infoTableButton.style().set({shown: false})
+}
 })
 
 mainPanel.add(infoTableButton).add(infoTablePanel)
