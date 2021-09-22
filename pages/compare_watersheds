@@ -280,7 +280,7 @@ var makeResultsBarChart = function (fc) {
   var feat = layer_object.layer.eeObject.reduceRegions({
     collection: fc,
     reducer:layer_object.default_reduction,// ee.Reducer.mean(),
-    scale: Map.getScale()
+    scale: scale
   })
   var title = layer_object.layer.name
   var units = layer_object.units
@@ -304,7 +304,7 @@ var makeResultsBarChart = function (fc) {
     })}
     else{
       
-      var scale = Map.getScale()
+      //var scale = Map.getScale()
       chart = charts.cat_chart(layer_object,fc,scale) // geometry, properties, scale
       //chart = chart.setChartType('ColumnChart')
       ////chart = ui.Chart.feature.byFeature({})
@@ -345,7 +345,7 @@ onClick: function() {
 }
 })
 
-var infoTableButton = ui.Button({label: 'Show Watershed Info Table', style:{shown:true},
+var infoTableButton = ui.Button({label: 'Show Watershed Info Table', style:{shown:false},
 onClick: function() {
   infoTablePanel.style().set({shown:true})
   infoTableButton.style().set({shown: false})
@@ -374,6 +374,7 @@ function clearResults() {
 // list and updates the map overlay and chart accordingly.
 function handleMapClick(location) {
   selectedPoints.push([location.lon, location.lat]);
+  infoTableButton.style().set({shown:true})
 print(selectedPoints); 
   updateOverlay();
   updateChart();
