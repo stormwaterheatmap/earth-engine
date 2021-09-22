@@ -41,7 +41,7 @@ var layer_types = Object.keys(rasters)
 
 //lay out ui elements 
 //---------------------------------------------------------------
-var HIGHLIGHT_STYLE = {color: '8856a7', fillColor: '8856a7C0'};
+var HIGHLIGHT_STYLE = {color: '8856a7', fillColor: '8856a7C0',width:2};
 
 
 /* Label */ 
@@ -115,7 +115,7 @@ var fonts = Style.fonts //var panelStyle = Style.panelStyle////(panelStyle)
 var featureStyle = {
     color: 'white',
     fillColor: '00000000', 
-    width: 1.5
+    width: 1.3
 }
 
 
@@ -193,7 +193,7 @@ mainPanel.add(analyzePanel)
 //---
 /*Global Variables------------------------------------------------------------------------------------- 
  */
-
+var scale = 100; 
 // var watershed_data_set
 
 
