@@ -1,0 +1,34 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
+    geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-122.41125568279203, 47.602310337279036],
+          [-122.41125568279203, 47.35681713747527],
+          [-121.85781940349516, 47.35681713747527],
+          [-121.85781940349516, 47.602310337279036]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var text = require('users/gena/packages:text')
+var labels = require('users/fitoprincipe/geetools:labels')
+var sheds = table.filterBounds(geometry)
+Map.addLayer(sheds)
+
+// draw text at map center
+
+var add_labels = function(){
+var scale = Map.getScale()
+var text = labels.labelCollection(sheds, 'name', scale,  {fontSize:16})
+Map.addLayer(text, {}, 'simple text')  
+}
+
+Map.onChangeBounds(add_labels())
+// add text as a raster layer
+
+
+
