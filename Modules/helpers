@@ -151,7 +151,7 @@ function makeMainPanel(title) { //function that makes the main control panel; re
             fontSize: fonts.H1.fontSize,
             fontWeight: fonts.H1.fontWeight,
            // backgroundColor: colors.transparent,
-            color: 'white'
+           // color: 'white'
         }
     }))
 
