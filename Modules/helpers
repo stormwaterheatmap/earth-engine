@@ -1,9 +1,9 @@
-//var data = require('users/stormwaterheatmap/apps:data/data_dict.js')
+var data = require('users/stormwaterheatmap/apps:data/public')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var barLegend = legends.barLegend
-
+print(data)
 var makeLegend = function (layerObject) {
 
     var legend
@@ -213,10 +213,12 @@ if(layer_object.vizType == "histogram"){
 }
 
 function make_docs_link(layer_object){
+  var docs_url = "http://stormwaterheatmap.dev/docs/Data_Layers/"
   return(
-    ui.Label({value: "?", style:Style.fonts.Capton3, targetUrl:layer_object.sourceUrl})
+    ui.Label({value: "more info 🡥", style:Style.fonts.Capton3, targetUrl:docs_url+layer_object.safe_name })
     )
 }
+
 
 // //var chart = make_chart(layer_object.Imperviousness,geometry,30)//,"percent")
 exports.make_chart = make_chart 
