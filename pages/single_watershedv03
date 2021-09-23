@@ -46,7 +46,7 @@ var bounds
 
 function handle_map_click(location) {
 
-    print('hi from handleMapClick')
+   // print('hi from handleMapClick')
     var clicked_point = ee.Geometry.Point(location.lon, location.lat);
     clicked_basin_fc = WS.filterBounds(clicked_point); //use for display
     clicked_basin = ee.Feature(clicked_basin_fc.first());
@@ -312,7 +312,7 @@ var mainPanel = helpers.makeMainPanel();
 
 
 var watershedSelectLabel = ui.Label({
-    value: 'Select a watershed dataset to aggregate data:',
+    value: 'Select a watershed dataset to aggregate data:',style: Style.fonts.Caption2
 });
 
 
@@ -453,6 +453,7 @@ var cards = function (title, widgetItems) {
 var accept = ui.Button({
 
     label: 'Accept Selected Watershed ',
+    style: {shown:false},
     onClick: function () {
         mapPanel.unlisten()
         mainPanel.style().set({
@@ -477,8 +478,8 @@ var inspect_button = ui.Button({
 });
 
 var inspect_helper_text = ui.Label({value:
-  'Click "Activate Inspector" to enable watershed selection:'
-})
+  'Click "Activate Inspector" to enable watershed selection:',
+style: Style.fonts.Caption2})
 //function to add user layer to the map
 var buttonPanel = ui.Panel({
     widgets: [inspect_helper_text,inspect_button, accept],
