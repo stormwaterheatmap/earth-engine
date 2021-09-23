@@ -25,7 +25,8 @@ print(colors)
 var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
 var featureStyle = {
     color: 'white',
-    fillColor: '00000000'
+    fillColor: '00000000', 
+    width: 1
 }
 var imageVisParam = {
     "opacity": 0.81,
