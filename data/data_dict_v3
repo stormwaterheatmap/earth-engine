@@ -1,4 +1,5 @@
-var rasters = {
+var rasters = 
+{
     "Age of Imperviousness": 
         {
             "discrete": "TRUE",
@@ -12,6 +13,7 @@ var rasters = {
             "description": "Impervious surface by estimated date of conversion",
             "docs_link": "docs/API/image_layers/Age%20of%20Development",
             "Details": "This layer provides multi-temporal information on the presence of built-up surfaces derived from global Landsat satellite data collected from 1975 to 2014. The base image data collections were prepared by the Global Land Survey(https://www.usgs.gov/core-science-systems/nli/landsat/global-land-survey-gls) and the Joint Research Center(https://ec.europa.eu/jrc/en). The data was processed by fully automatic and reproducible methods based on statistical learning (Symbolic Machine Learning. The source product was developed with a spatial resolution of 30 meters. To provide a finer resolution for the stormwater heatmap, the source product was masked by 1-meter resolution imperviousness data(docs/) developed by the Nature Conservancy.",
+            "safe_name": "age_of_imperviousness",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -40,6 +42,7 @@ var rasters = {
             "default_reduction": "Category",
             "description": "Land cover classified by categories used in HSPF/WWHM",
             "Details": "This layer provides land cover classifications corresponding to default categories used in the Western Washington Hydrology Model.(https://ecology.wa.gov/Regulations-Permits/Guidance-technical-assistance/Stormwater-permittee-guidance-resources/Stormwater-manuals/Western-Washington-Hydrology-Model#latest)  rnrnLand cover was derived from the Nature Conservancy's high-resolution land cover data set and remapped according to the table below: rnrn| Derived Land Cover                                           | HSPF Land cover class |rn| :----------------------------------------------------------- | :-------------------- |rn| Fine Vegetation                                              | Grass                 |rn| Medium Vegetation                                            | Grass                 |rn| Coarse Vegetation                                            | Forest                |rn| Dirt/Barren                                                  | Grass                 |rn| Water                                                        | Water                 |rn| Impervious Other                                             | Impervious            |rn| Impervious Roofs (roofs were designated impervious/flat slope) | Impervious            |rn| NLCD Cropland                                                | Pasture               |rnrnrn",
+            "safe_name": "hspf_land_cover_type",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -67,6 +70,7 @@ var rasters = {
             "default_reduction": "mean",
             "description": "Percent impervious land cover",
             "Details": "This layer is a pixel-wise imperviousness derived from  the Nature Conservancy's high-resolution land cover data set. It is a binary classification of imperviousness (1 = impervious, 0 = not impervious)",
+            "safe_name": "imperviousness",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -94,6 +98,7 @@ var rasters = {
             "default_reduction": "Category",
             "description": "1-meter resolution land cover classification",
             "Details": "This layer provides automatically-derived land cover classifications of the Puget Sound trough below 1,500 meters elevation. A six-class 1-meter land cover layer was developed using the Naïve Bayes classifier (Google, 2019) and trained using a 10-meter land cover product from NOAA Coastal Change Analysis Program (C-CAP) (NOAA C-CAP, 2018a). Other data combined with this analysis includes water body and river polygons (Washington Department of Natural Resources), shoreline polygons (Esri), over-water structure polygons (Washington Department of Natural Resources), road polygons buffered from centerlines (U.S. Census Bureau, 2016), and building rooftops polygons (Microsoft, 2019). Accuracy was validated accuracy with an observed land cover point dataset from the Washington Department of Fish & Wildlife (Pierce, Jr., 2015).",
+            "safe_name": "land_cover",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -122,6 +127,7 @@ var rasters = {
             "default_reduction": "Category",
             "description": "Department of Commerce Master Land Use Category",
             "Details": "The Puget Sound Mapping Project provides land-use designations of the urban areas that drain into Puget Sound. Data is derived from zoning and land-use data from 113 cities in 12 counties.  A description of land use categories, provided by Commerce is below. rnrn**Intensive Urban**rnrnIntensive Urban areas include the sub-categories of Commercial/Office; Mixed Use; Residential (12+ Units/Acre) and Institutional Uses. The locations may contain development such as office buildings, retail stores, apartments, civic buildings, hospitals or institutions of higher learning. Generally, impervious surface coverage (buildings, pavement) exceeds 50 percent. PUBLIC Public use areas may have a mixture of intensively and sparsely developed locations that apply to a range of civic oriented places such as parks, schools, reservoirs, libraries and stadiums. rnrn**Industrial**rnrnThe Industrial category includes Airport/Seaport; Light Industrial; and Heavy Industrial subcategories. These locations not only have manufacturing facilities but may also include warehousing, repair shops and major transportation facilities. rnrn**Urban Character Residential**rnrnUrban Character Residential includes the Traditional Single Family Neighborhood designation, as well as locations within the Mixed Use/Planned Neighborhood and Low Density Urban (1.1 Unit/Acre to 3 Units/Acre) sub-categories. Detached homes predominate in these locations but may be interspersed with duplexes, parks, churches and schools. Lot sizes in these areas are over 3,600 square feet per unit but less than 1 acre. Some areas may have small neighborhood commercial stores or areas of apartments but these do not compose a significant amount of development and the overall density stays below 12 units/acre. rnrn**Rural Character Residential** rnrnThe Rural Character Residential category covers areas where lot size ranges from 1 acre to over 20 acres. This includes areas that are purely residential as well as areas that contain agriculture, timber and other rural uses intermixed among homes. These locations include the sub-categories of Urban Edge, Rural Transition, Large Lot Residential and Very Large Lot Residential. rnrn**Mining**rnrnThese locations may or may not be designated as mineral resource areas under the state’s Growth Management Act. They are often open pit operations (like gravel pits and quarries) for construction materials and aggregate. See http://www.commerce.wa.gov/serving-communities/growth-management/growthmanagement-topics/natural-resource-lands/rnrn**Forest Lands**rnrnForest lands include areas located within National Forest as well as locations that are privately held and intended for timber production. They may include some other land uses such as recreational areas and vacation homes. Subcategories include National Forest, Primary Forest Area and Other Forest Lands. See http://www.commerce.wa.gov/servingcommunities/growth-management/growth-management-topics/natural-resource-lands/ rnrn**Agricultural Areas**rnrnAgricultural areas include places specifically designated for agriculture as well as areas where agriculture is a significant (but not necessarily predominant) use. Agricultural uses include farms, ranches and dairies. Hobby farms and equestrian lots may also have a significant presence in these areas. Primary Agricultural Areas and Other Active Agriculture are the sub-categories contained within this master designation. See http://www.commerce.wa.gov/serving-communities/growth-management/growthmanagement-topics/natural-resource-lands/ rnrn**Active Open Space** rnrnCampgrounds, resort developments, large parks and open spaces with extensive trail systems typify locations with this type of zoning. rnrn**Natural Open Space** rnrnThe three national parks (Olympic, Mt. Rainier and North Cascades) correspond with the National Park sub-category. Other areas within this master category are a part of the Natural Preservation and Open Space sub-category where the intent is the preservation of watersheds, habitat, vegetation and other natural features. rnrn**Tribal** rnrnThe Tribal category includes locations within tribal reservations (Tribal Reservation) as well as land outside of the reservations controlled by tribal entities (Tribal Inholding Lands). rnrn**Military** rnrnThe Intensively Developed Military sub-category includes locations where the Naval, Army, Air Force, Marine and Coast Guard facilities have buildings, piers, airports or other similar active uses are included within this designation. Less developed portions of military reserves are included within the Undeveloped Military Lands sub-category. rnrn**ROW** rnrnFormally designated rights-of-way by jurisdictions are included in this designation. This may include roads, railroads or power transmission corridors. Locations identified by the Washington State Department of Transportation as a part of the state’s road network are incorporated as 60-foot wide rights-of-way from the centerline of the road. *This category includes areas designated as PROW (preliminarily identified ROW)*rnrn**Water** rnrnTidal bodies, lakes, ponds, streams and rivers are consolidated within the Water designation. Some water features may not have been included in source material and inadvertently omitted from these locations. rnrn**Undesignated** rnrnUndesignated Zoning and existing land use cannot be positively identified for these locations. This occurs in places for which jurisdictions have not created zoning designations. In addition, overlaps or gaps in maps along the boundary between jurisdictions may inhibit the ability to categorize these areas",
+            "safe_name": "land_use",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -146,6 +152,7 @@ var rasters = {
             "sourceUrl": "https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2010/TGRSHP10SF1.pdf",
             "units": "Total Population",
             "default_reduction": "sum",
+            "safe_name": "population",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -170,6 +177,7 @@ var rasters = {
             "sourceUrl": "https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2010/TGRSHP10SF1.pdf",
             "units": "Population per ha",
             "default_reduction": "mean",
+            "safe_name": "population_density",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -194,6 +202,7 @@ var rasters = {
             "sourceUrl": "https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/",
             "units": "in/year",
             "default_reduction": "mean",
+            "safe_name": "precipitation_in",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -218,6 +227,7 @@ var rasters = {
             "sourceUrl": "https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/",
             "units": "in/year",
             "default_reduction": "mean",
+            "safe_name": "precipitation_mm",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -242,6 +252,7 @@ var rasters = {
             "units": "in/year",
             "default_reduction": "mean",
             "description": "Mean Annual Runoff (1970-1999)",
+            "safe_name": "runoff_in",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -266,6 +277,7 @@ var rasters = {
             "units": "mm/year",
             "default_reduction": "mean",
             "description": "Mean Annual Runoff (1970-1999)",
+            "safe_name": "runoff_mm",
             "layer": 
                 {
                     "eeObject": "data.mean_annual_runoff.rename('mean_annual_runoff_mm')",
@@ -293,6 +305,7 @@ var rasters = {
             "vizType": "barChart",
             "default_reduction": "Category",
             "description": "Slope Categories",
+            "safe_name": "slope_categories",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -318,6 +331,7 @@ var rasters = {
             "units": "Percent",
             "default_reduction": "mean",
             "description": "Slope",
+            "safe_name": "slope",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -344,6 +358,7 @@ var rasters = {
             "values": [1,2,3,4],
             "vizType": "barChart",
             "default_reduction": "Category",
+            "safe_name": "soils",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -368,6 +383,7 @@ var rasters = {
             "units": "Average Annual Daily Trips (log)",
             "vizType": "bigNumberMean",
             "default_reduction": "mean",
+            "safe_name": "traffic",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -394,6 +410,7 @@ var rasters = {
             "default_reduction": "mean",
             "description": "Dimensionless index indicating level of flow control needed to match forest hydrology.",
             "docs_link": "docs/API/image_layers/Flow%20Duration%20Index",
+            "safe_name": "flow_duration_index",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -422,6 +439,7 @@ var rasters = {
             "default_reduction": "Category",
             "description": "Dimensionless index indicating level of flow control needed to match forest hydrology.",
             "docs_link": "docs/API/image_layers/Flow%20Duration%20Index",
+            "safe_name": "hydrologic_response_units",
             "layer": 
                 {
                     "eeObject": "eeObject",
@@ -440,6 +458,11 @@ var rasters = {
         }
     
 }
+
+
+
+
+
 
 
 
