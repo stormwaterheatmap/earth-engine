@@ -137,6 +137,7 @@ var makeLegend = function (layerObject) {
     var legend = helpers.makeLegend(layerObject)
     legendPanel.clear()
     legendPanel.add(legend)
+   // legendPanel.style().set({shown:true})
 
 
 }
@@ -222,6 +223,8 @@ var layerButton = function (layerObject) {
         ui.Button({
             label: 'Show Layer',
             onClick: function () {
+              print(mapPanel.layers())
+              print(layerObject.layer)
                 mapPanel.layers().insert(0, layerObject.layer)
 
                 legendPanel.style().set({
