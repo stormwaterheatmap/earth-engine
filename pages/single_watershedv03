@@ -134,13 +134,7 @@ function hline() {
 
 
 var makeLegend = function (layerObject) {
-    var legend
-    if (layerObject.discrete) {
-        print('true! ')
-        legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
-    } else {
-        legend = (barLegend(layerObject))
-    } //add reports  
+    var legend = helpers.makeLegend(layerObject)
 
 
     legendPanel.clear()
