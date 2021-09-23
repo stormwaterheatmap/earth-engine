@@ -224,6 +224,7 @@ var layerButton = function (layerObject) {
             label: 'Show Layer',
             onClick: function () {
               print(mapPanel.layers())
+              
               print(layerObject.layer)
                 mapPanel.layers().insert(0, layerObject.layer)
 
@@ -348,7 +349,7 @@ var makeReports = function () {
     // pchart2.setOptions(Style.charts.histogram)
     // pchart2.setSeriesNames
 
-    var laybut = layerButton(layerProperties.Precipitation)
+    var laybut = layerButton(layerProperties["Precipitation (in)"])
     var precipCard = cards('Precipitation', [pchart, pchart2, laybut])
     analyzePanel.add(precipCard)
 
