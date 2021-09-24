@@ -67,10 +67,14 @@ var discreteLegend = function (layerObject) {
             padding: '0'
         }
     });
-    legend.add(legendTitle);
+    
+    var layer_description = ui.Label({value: layerObject.description.toString(), style:fonts.Caption2})
+    legend.add(legendTitle).add(layer_description);
+    
     var loading = ui.Label('Loading legend...', {
         margin: '2px 0 4px 0'
     });
+    
     legend.add(loading);
     // Creates and styles 1 row of the legend.
     var makeRow = function (name,color) {
@@ -91,9 +95,9 @@ var discreteLegend = function (layerObject) {
                 margin: '0 0 4px 6px'
             }
         });
-var layer_description = ui.Label({value: layerObject.description, style:fonts.Caption2})
+
         return ui.Panel({
-            widgets: [colorBox, description,layer_description],
+            widgets: [colorBox, description],
             layout: ui.Panel.Layout.Flow('horizontal')
         });
     };
