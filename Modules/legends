@@ -1,5 +1,6 @@
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 var fonts = style.fonts
+var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 //makes stretched legend
 function ColorBar(layerObj) {
   return ui.Thumbnail({
