@@ -3,7 +3,15 @@ var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var barLegend = legends.barLegend
-print(data)
+
+
+function make_docs_link(layer_object){
+  var docs_url = "http://stormwaterheatmap.dev/docs/Data_Layers/"
+  return(
+    ui.Label({value: "more info 🡥", style:Style.fonts.Capton3, targetUrl:docs_url+layer_object.safe_name })
+    )
+}
+
 var makeLegend = function (layerObject) {
 
     var legend
@@ -18,8 +26,8 @@ var makeLegend = function (layerObject) {
     /*//add legend 
     legendPanel.clear()
     legendPanel.add(legend)*/
-
-return(legend)
+var docs_link = make_docs_link(layerObject)
+return(legend.add(docs_link))
 }
 //var f = map.removeObject(imgElem1.getEeObject(), Map) //this worked!
 var removeObject = function (eeObject, map) {
@@ -212,12 +220,7 @@ if(layer_object.vizType == "histogram"){
   }
 }
 
-function make_docs_link(layer_object){
-  var docs_url = "http://stormwaterheatmap.dev/docs/Data_Layers/"
-  return(
-    ui.Label({value: "more info 🡥", style:Style.fonts.Capton3, targetUrl:docs_url+layer_object.safe_name })
-    )
-}
+
 
 
 // //var chart = make_chart(layer_object.Imperviousness,geometry,30)//,"percent")
