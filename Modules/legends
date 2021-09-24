@@ -91,9 +91,9 @@ var discreteLegend = function (layerObject) {
                 margin: '0 0 4px 6px'
             }
         });
-
+var layer_description = ui.Label({value: layerObj.description, style:fonts.Caption2})
         return ui.Panel({
-            widgets: [colorBox, description],
+            widgets: [colorBox, description,layer_description],
             layout: ui.Panel.Layout.Flow('horizontal')
         });
     };
