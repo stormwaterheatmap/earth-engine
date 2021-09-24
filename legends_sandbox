@@ -13,7 +13,7 @@ var i = 14
 var n = Object.keys(rasters)[i]
 print(n)
 var l = rasters[n]
-//print(barLegend(l))
+
 //test layers 
 //imperviousness
 //Landuse 
@@ -25,9 +25,3 @@ var layer_obj = data.rasters[Object.keys(data.rasters)[i]]
 var l = helpers.makeLegend(layer_obj)
 print(l)
 }
-
-
-
-var link = "https://stormwaterheatmap.dev/docs/Data_Layers/age_of_imperviousness/"
-var info_label = (helpers.make_docs_link(data.rasters.Imperviousness))
-print(info_label.setUrl(link).setValue('about'))
