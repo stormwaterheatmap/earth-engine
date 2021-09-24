@@ -22,8 +22,8 @@ var barLegend = function (layerObj) {
     style: {
             fontWeight: 'bold',
             fontSize: '18px',
-            margin: '0 0 4px 0',
-            padding: '0'
+            // margin: '0 0 4px 0',
+            // padding: '0'
         }})
   
   var low = (layerObj.layer.visParams.min)
