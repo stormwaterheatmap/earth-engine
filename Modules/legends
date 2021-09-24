@@ -39,7 +39,8 @@ var barLegend = function (layerObj) {
       );
   var units_label = ui.Label(layerObj.units)
   var layer_description = ui.Label({value: layerObj.description, style:fonts.Caption2})
-  return ui.Panel([title_label,layer_description,ColorBar(layerObj), labelPanel,units_label])
+  var docs_link = helpers.make_docs_link(layerObj)
+  return ui.Panel([title_label,layer_description,docs_link,ColorBar(layerObj), labelPanel,units_label])
 }
 
 var discreteLegend = function (layerObject) {
