@@ -1,0 +1,19 @@
+var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
+
+var hru = data.rasters["Hydrologic Response Units"].layer.eeObject
+Map.addLayer(hru,{},"")
+
+//get slope 
+var slopes = data.rasters["Slope Categories"].layer.eeObject.add(1)//.divide(3)
+var soils = data.rasters.Soils.layer.eeObject
+soils = soils.mask(soils.neq(4))//.divide(3)
+var lc = data.rasters["HSPF Land Cover Type"].layer.eeObject.add(1)//.divide(6)
+
+
+var combined = ee.Image.cat(soils,lc,slopes)
+Map.addLayer(combined)
+
