@@ -1,3 +1,11 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Point([-122.28384807813852, 47.53890359480969]),
+    imageVisParam = {"opacity":1,"bands":["soils","slope_categories","hspf_landcover_categories"],"min":1,"max":4,"gamma":3.346},
+    imageVisParam2 = {"opacity":0.78,"bands":["soils","slope_categories","hspf_landcover_categories"],"min":1,"max":5,"gamma":2.1300000000000003};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
@@ -5,15 +13,14 @@ var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 
 var hru = data.rasters["Hydrologic Response Units"].layer.eeObject
-Map.addLayer(hru,{},"")
 
+Map.centerObject(geometry,8)
 //get slope 
 var slopes = data.rasters["Slope Categories"].layer.eeObject.add(1)//.divide(3)
 var soils = data.rasters.Soils.layer.eeObject
 soils = soils.mask(soils.neq(4))//.divide(3)
-var lc = data.rasters["HSPF Land Cover Type"].layer.eeObject.add(1)//.divide(6)
-
-
+var lc = data.rasters["HSPF Land Cover Type"].layer.eeObject.add(1)
 var combined = ee.Image.cat(soils,lc,slopes)
-Map.addLayer(combined)
+
+Map.addLayer(combined,imageVisParam2)
 
