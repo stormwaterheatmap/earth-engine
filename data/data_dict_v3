@@ -550,7 +550,9 @@ var vector_dict = {
 var img = ee.Image().paint(data.PS_AU,1,1)
 
 
-Export.image.toAsset({image:img,scale:1,region:data.PugetSound})
+Export.image.toAsset({image:img,scale:1,region:data.PugetSound,
+  maxPixels:1e15
+})
 print(vector_dict)
 // //used to look up which column to use for name for displaying
 // var  vector_dict_label_col = {
