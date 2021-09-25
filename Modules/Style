@@ -542,7 +542,7 @@ exports.mapStyles = {
       }
     ]
   }
-]
+],
     'Light': [{
             "featureType": "administrative",
             "elementType": "labels.text.fill",
