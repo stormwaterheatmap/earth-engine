@@ -547,7 +547,10 @@ var vector_dict = {
   "Ecology Water Resource Inventory Area (WRIA)": rename_vector(data.WRIA, "WRIA_NM") 
 }
 
+var img = ee.Image().paint(data.PS_AU,1,1)
 
+
+Export.image.toAsset({image:img,scale:1,region:data.PugetSound})
 print(vector_dict)
 // //used to look up which column to use for name for displaying
 // var  vector_dict_label_col = {
