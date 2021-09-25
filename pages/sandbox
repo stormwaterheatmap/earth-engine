@@ -240,3 +240,4 @@ var imageSelect = ui.Select({
   }
 });
 //Map.add(imageSelect)
+Map.setOptions('satellite', Style.mapStyles);
