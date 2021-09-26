@@ -1,0 +1,21 @@
+var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+print(data)
+var lu = data.rasters["HSPF Land Cover Type"].layer.eeObject
+var soils = data.rasters["Soils"].layer.eeObject
+var slope = data.rasters["Slope Categories"].layer.eeObject
+
+
+
+var implnd = lu.gte(4).selfMask()
+var perlnd = lu.mask(lu.lte(2))
+Map.addLayer(perlnd,{},"perlnd")
+Map.addLayer(implnd,{},"implnd")
+var comb = perlnd.blend(implnd.multiply(3))
+Map.addLayer(comb)
+soils = soils.mask(soils.neq(4)).subtract(1)
+print(lu)
+
+var rbg = ee.Image.cat(comb,
+slope,soils)
+Map.addLayer(rbg)
