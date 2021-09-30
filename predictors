@@ -1,10 +1,12 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image = ee.Image("users/stormwaterheatmap/predictors_convolved"),
-    imageVisParam = {"opacity":1,"bands":["population","logTraffic","impervious"],"min":-0.07505082716607447,"max":0.7109705969535312,"gamma":1};
+    imageVisParam = {"opacity":1,"bands":["population","logTraffic","impervious"],"min":-0.07505082716607447,"max":0.7109705969535312,"gamma":1},
+    table = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/s8_watersheds_v5");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-
+var image = ee.Image("projects/ee-stormwaterheatmap/assets/TSS_predictions"),
+    imageVisParam = {"opacity":1,"bands":["TSS_ug_L_high","TSS_ug_L","TSS_ug_L_low"],"min":7972.083728317528,"max":48222.11566623412,"gamma":1.2140000000000002};
 var predImage = ee.Image("users/cnilsen/predictors_not_scaled_30")
-var s8_watersheds = ee.FeatureCollection("users/cnilsen/s8_watersheds").select(
+var s8_watersheds = table.select(
     ['Location_N'], ['Location']
     ).filter(ee.Filter.neq('Location_N','POSOUTFALL_60'))
 
@@ -43,6 +45,8 @@ Map.add(ui.Panel({widgets:[title, ui.Label('Select a watershed to Zoom to Locati
 //var title = ui.Label({value:
 //'Predictor image: Red band - population, \n Green band: logTraffic, Blue band: impervious',
 //style:{position:"bottom-left"}})
-Map.addLayer(s8_watersheds)
+
 //Map.add(title)
 Map.centerObject(s8_watersheds.first(),12)
+Map.addLayer(image.resample().focal_mean(),imageVisParam)
+Map.addLayer(s8_watersheds)
