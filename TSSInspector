@@ -1,0 +1,106 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/s8_watersheds_v5");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var image = ee.Image("projects/ee-stormwaterheatmap/assets/TSS_predictions"),
+    imageVisParam = {"opacity":1,"bands":["TSS_ug_L_high","TSS_ug_L","TSS_ug_L_low"],"min":7972.083728317528,"max":48222.11566623412,"gamma":1.2140000000000002};
+var s8_watersheds = table.select(
+    ['Location_N'], ['Location']
+    ).filter(ee.Filter.neq('Location_N','POSOUTFALL_60'))
+var predImage = image.resample().focal_mean()
+
+print(predImage.bandNames())
+var s8List = {TFWFD1: {Lon:-122.4304751, Lat: 47.20415024},
+SEAI1S8D_OUT: {Lon:-122.2776301, Lat: 47.51420579},
+TAC001S8D_OF2: {Lon:-122.4395764, Lat: 47.24577693},
+TAC003S8D_OF2: {Lon:-122.4204566, Lat: 47.23909413},
+PIEHIRES_OUT: {Lon:-122.3175927, Lat: 47.13009025},
+PIELORES_OUT: {Lon:-122.6395466, Lat: 47.32489753},
+SNO_COM: {Lon:-122.2439709, Lat: 47.88238628},
+SNO_LDR: {Lon:-122.1014385, Lat: 47.8640767},
+SEAC1S8D_OUT: {Lon:-122.3151072, Lat: 47.66188192},
+POSOUTFALL_60: {Lon:-122.4053428, Lat: 47.68067917},
+SEAR1S8D_OUT: {Lon:-122.3564698, Lat: 47.71886038},
+POT564S8D_OUT: {Lon:-122.4139554, Lat: 47.26940901},
+PIECOMM_OUT: {Lon:-122.3566406, Lat: 47.15435407},
+SNO_HDR: {Lon:-122.1915391, Lat: 47.84740081},
+KICCOMS8D_OUT: {Lon:-121.8890867, Lat: 47.56576596},
+KICLDRS8D_OUT: {Lon:-122.1430769, Lat: 47.51101808},
+KICHDRS8D_OUT: {Lon:-121.8940183, Lat: 47.56450102}}
+print(Object.keys(s8List))
+
+var sel = ui.Select({items:
+  Object.keys(s8List),
+    //zoom to layer 
+  onChange: function(key) {
+    print(s8List[key])
+   var lat = ee.Number(s8List[key]["Lat"])
+   var long = ee.Number(s8List[key]["Lon"])
+    Map.setCenter(s8List[key]["Lon"], s8List[key]["Lat"],12);
+  }
+  })
+var title = ui.Label('S8 Monitored Watersheds',{fontWeight:'bold'})
+Map.add(ui.Panel({widgets:[title, ui.Label('Select a watershed to Zoom to Location'), sel],style:{position:'top-left'}}))
+//Map.addLayer(predImage,imageVisParam,"predictors image")
+//var title = ui.Label({value:
+//'Predictor image: Red band - population, \n Green band: logTraffic, Blue band: impervious',
+//style:{position:"bottom-left"}})
+
+//Map.add(title)
+Map.centerObject(s8_watersheds.first(),12)
+Map.addLayer(image.resample().focal_mean(),imageVisParam)
+Map.addLayer(s8_watersheds)
+
+// Desmontrate asynchronous updating of UI elements through evaluate().
+
+// Filter a collection to a time of interest.
+
+
+
+
+// Create an inspector panel with a horizontal layout.
+var inspector = ui.Panel({
+  layout: ui.Panel.Layout.flow('horizontal')
+});
+
+// Add a label to the panel.
+inspector.add(ui.Label('Click to get predicted Value'));
+
+// Add the panel to the default map.
+Map.add(inspector);
+
+// Set the default map's cursor to a "crosshair".
+Map.style().set('cursor', 'crosshair');
+
+// Register a callback on the map to be invoked when the map is clicked.
+Map.onClick(function(coords) {
+  // Clear the panel and show a loading message.
+  inspector.clear();
+  inspector.style().set('shown', true);
+  inspector.add(ui.Label('Loading...', {color: 'gray'}));
+
+  // Compute the mean NDVI; a potentially long-running server operation.
+  var point = ee.Geometry.Point(coords.lon, coords.lat);
+  var temporalMean = predImage;
+  var sampledPoint = temporalMean.reduceRegion(ee.Reducer.mean(), point, 30);
+  var computedValue = sampledPoint.get("TSS_ug_L");
+print(sampledPoint)
+  // Request the value from the server and use the results in a function.
+  computedValue.evaluate(function(result) {
+    inspector.clear();
+
+    // Add a label with the results from the server.
+    inspector.add(ui.Label({
+      value: 'Predicted TSS concentration: ' + result.toFixed(0)+
+      " ug/L",
+      style: {stretch: 'vertical'}
+    }));
+
+    // Add a button to hide the Panel.
+    inspector.add(ui.Button({
+      label: 'Close',
+      onClick: function() {
+        inspector.style().set('shown', false);
+      }
+    }));
+  });
+});
