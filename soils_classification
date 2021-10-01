@@ -2,53 +2,325 @@
 var image = ee.Image("OpenLandMap/SOL/SOL_SAND-WFRACTION_USDA-3A1A1A_M/v02"),
     image2 = ee.Image("OpenLandMap/SOL/SOL_CLAY-WFRACTION_USDA-3A1A1A_M/v02"),
     image3 = ee.Image("OpenLandMap/SOL/SOL_GRTGROUP_USDA-SOILTAX-HAPLUDALFS_P/v01"),
-    geometry = /* color: #d63000 */ee.Geometry.MultiPolygon(
-        [[[[-121.85217007544423, 47.48332044120278],
-           [-122.19137295630361, 47.43225142385174],
-           [-121.64480313208486, 47.193895450161655],
-           [-121.69012173560048, 47.428535378561534]]],
-         [[[-122.27789029028798, 48.24924665222581],
-           [-122.24493130591298, 48.08437839085556],
-           [-121.83431729224111, 47.79642817380429],
-           [-121.90984829810048, 48.197095707945415],
-           [-122.10485562231923, 48.26936087629929]]],
-         [[[-123.10534748135682, 48.09886049884354],
-           [-123.53106769620057, 48.10252896305858],
-           [-123.53244098721619, 48.0456383476692],
-           [-123.17813190518494, 48.023599286119236]]],
-         [[[-122.99411090909119, 48.075009100245076],
-           [-122.95291217862244, 47.91510343594306],
-           [-122.87188800870057, 47.88840430660295],
-           [-122.84167560635682, 47.953746729163356],
-           [-122.93643268643494, 48.01900662843558],
-           [-122.95016559659119, 48.08234917021928]]],
-         [[[-122.63514830333932, 48.96285204049675],
-           [-122.66261412365182, 48.87892978541455],
-           [-122.51429869396432, 48.804816816346126],
-           [-122.37284971935495, 48.74961285135768],
-           [-122.3810894654487, 48.66079738150939],
-           [-122.41130186779245, 48.47359243938238],
-           [-122.39482237560495, 48.36695864287516],
-           [-122.09956480724557, 48.725158925730426],
-           [-122.30006529552682, 48.875317062865165],
-           [-122.48408629162057, 48.906919538860684]]],
-         [[[-122.04592029924152, 47.31710574549292],
-           [-122.15372364396808, 47.35805427298463],
-           [-122.25260059709308, 47.305001239390904],
-           [-122.27869312638995, 47.261681657826074],
-           [-122.17363636369464, 47.26028366135567],
-           [-122.1111516224837, 47.23418095114957],
-           [-121.95047657365558, 47.133378561929426],
-           [-121.90035145158527, 47.23231597962587],
-           [-122.02806751603839, 47.279852252748995]]],
-         [[[-122.12816589859744, 47.74902389752486],
-           [-122.00010651139041, 47.6730210823614],
-           [-122.06705444840213, 47.74117463850006]]],
-         [[[-122.64606802142721, 47.79939355235034],
-           [-122.62134878314596, 47.73801250499631],
-           [-122.54015295184713, 47.75544193192961],
-           [-122.529681607853, 47.804582235454056],
-           [-122.55869238055807, 47.8123066478576]]]]),
+    geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "polygon"
+      },
+      {
+        "type": "polygon"
+      },
+      {
+        "type": "polygon"
+      },
+      {
+        "type": "polygon"
+      },
+      {
+        "type": "polygon"
+      },
+      {
+        "type": "polygon"
+      },
+      {
+        "type": "polygon"
+      },
+      {
+        "type": "polygon"
+      },
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry({
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -121.85217007544423,
+                47.48332044120278
+              ],
+              [
+                -122.19137295630361,
+                47.43225142385174
+              ],
+              [
+                -121.64480313208486,
+                47.193895450161655
+              ],
+              [
+                -121.69012173560048,
+                47.428535378561534
+              ]
+            ]
+          ],
+          "geodesic": true,
+          "evenOdd": true
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.27789029028798,
+                48.24924665222581
+              ],
+              [
+                -122.24493130591298,
+                48.08437839085556
+              ],
+              [
+                -121.83431729224111,
+                47.79642817380429
+              ],
+              [
+                -121.90984829810048,
+                48.197095707945415
+              ],
+              [
+                -122.10485562231923,
+                48.26936087629929
+              ]
+            ]
+          ],
+          "geodesic": true,
+          "evenOdd": true
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -123.10534748135682,
+                48.09886049884354
+              ],
+              [
+                -123.53106769620057,
+                48.10252896305858
+              ],
+              [
+                -123.53244098721619,
+                48.0456383476692
+              ],
+              [
+                -123.17813190518494,
+                48.023599286119236
+              ]
+            ]
+          ],
+          "geodesic": true,
+          "evenOdd": true
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.99411090909119,
+                48.075009100245076
+              ],
+              [
+                -122.95291217862244,
+                47.91510343594306
+              ],
+              [
+                -122.87188800870057,
+                47.88840430660295
+              ],
+              [
+                -122.84167560635682,
+                47.953746729163356
+              ],
+              [
+                -122.93643268643494,
+                48.01900662843558
+              ],
+              [
+                -122.95016559659119,
+                48.08234917021928
+              ]
+            ]
+          ],
+          "geodesic": true,
+          "evenOdd": true
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.63514830333932,
+                48.96285204049675
+              ],
+              [
+                -122.66261412365182,
+                48.87892978541455
+              ],
+              [
+                -122.51429869396432,
+                48.804816816346126
+              ],
+              [
+                -122.37284971935495,
+                48.74961285135768
+              ],
+              [
+                -122.3810894654487,
+                48.66079738150939
+              ],
+              [
+                -122.41130186779245,
+                48.47359243938238
+              ],
+              [
+                -122.39482237560495,
+                48.36695864287516
+              ],
+              [
+                -122.09956480724557,
+                48.725158925730426
+              ],
+              [
+                -122.30006529552682,
+                48.875317062865165
+              ],
+              [
+                -122.48408629162057,
+                48.906919538860684
+              ]
+            ]
+          ],
+          "geodesic": true,
+          "evenOdd": true
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.04592029924152,
+                47.31710574549292
+              ],
+              [
+                -122.15372364396808,
+                47.35805427298463
+              ],
+              [
+                -122.25260059709308,
+                47.305001239390904
+              ],
+              [
+                -122.27869312638995,
+                47.261681657826074
+              ],
+              [
+                -122.17363636369464,
+                47.26028366135567
+              ],
+              [
+                -122.1111516224837,
+                47.23418095114957
+              ],
+              [
+                -121.95047657365558,
+                47.133378561929426
+              ],
+              [
+                -121.90035145158527,
+                47.23231597962587
+              ],
+              [
+                -122.02806751603839,
+                47.279852252748995
+              ]
+            ]
+          ],
+          "geodesic": true,
+          "evenOdd": true
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.12816589859744,
+                47.74902389752486
+              ],
+              [
+                -122.00010651139041,
+                47.6730210823614
+              ],
+              [
+                -122.06705444840213,
+                47.74117463850006
+              ]
+            ]
+          ],
+          "geodesic": true,
+          "evenOdd": true
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.64606802142721,
+                47.79939355235034
+              ],
+              [
+                -122.62134878314596,
+                47.73801250499631
+              ],
+              [
+                -122.54015295184713,
+                47.75544193192961
+              ],
+              [
+                -122.529681607853,
+                47.804582235454056
+              ],
+              [
+                -122.55869238055807,
+                47.8123066478576
+              ]
+            ]
+          ],
+          "geodesic": true,
+          "evenOdd": true
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.55406825804631,
+                48.32880643396385
+              ],
+              [
+                -122.55406825804631,
+                48.32880643396385
+              ],
+              [
+                -122.55406825804631,
+                48.32880643396385
+              ],
+              [
+                -122.55406825804631,
+                48.32880643396385
+              ]
+            ]
+          ],
+          "geodesic": false,
+          "evenOdd": true
+        }
+      ],
+      "coordinates": []
+    }),
     image4 = ee.Image("ISDASOIL/Africa/v1/fcc"),
     image5 = ee.Image("CSP/ERGo/1_0/US/landforms"),
     image6 = ee.Image("NASA/NASADEM_HGT/001"),
@@ -58,42 +330,134 @@ var image = ee.Image("OpenLandMap/SOL/SOL_SAND-WFRACTION_USDA-3A1A1A_M/v02"),
     image10 = ee.Image("MERIT/Hydro/v1_0_1"),
     image11 = ee.Image("WWF/HydroSHEDS/15CONDEM"),
     image12 = ee.Image("WWF/HydroSHEDS/30CONDEM"),
-    image13 = ee.Image("WWF/HydroSHEDS/03CONDEM");
+    image13 = ee.Image("WWF/HydroSHEDS/03CONDEM"),
+    geometry2 = 
+    /* color: #98ff00 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.MultiPolygon(
+        [[[[-122.66152828001897, 48.33451260994759],
+           [-122.66152828001897, 48.30163628228942],
+           [-122.56196468138616, 48.30163628228942],
+           [-122.56196468138616, 48.33451260994759]]],
+         [[[-123.06857801554663, 48.378156914120176],
+           [-123.06857801554663, 47.8076323892239],
+           [-122.32425428507788, 47.8076323892239],
+           [-122.32425428507788, 48.378156914120176]]],
+         [[[-122.24734998820288, 48.531168420896414],
+           [-122.24734998820288, 48.28685965197602],
+           [-121.94522596476538, 48.28685965197602],
+           [-121.94522596476538, 48.531168420896414]]],
+         [[[-122.86258436320288, 47.57097847045736],
+           [-122.86258436320288, 47.45224872284037],
+           [-122.64011121867163, 47.45224872284037],
+           [-122.64011121867163, 47.57097847045736]]],
+         [[[-122.19516492960913, 47.63579520114156],
+           [-122.19516492960913, 47.42995698891405],
+           [-121.86832166789038, 47.42995698891405],
+           [-121.86832166789038, 47.63579520114156]]],
+         [[[-122.19791151164038, 47.88873422056117],
+           [-122.19791151164038, 47.72825123508008],
+           [-121.94247938273413, 47.72825123508008],
+           [-121.94247938273413, 47.88873422056117]]],
+         [[[-122.23061851622555, 48.317301465694136],
+           [-122.23061851622555, 47.808853293777396],
+           [-121.67992881895992, 47.808853293777396],
+           [-121.67992881895992, 48.317301465694136]]],
+         [[[-123.49267295958492, 48.10498850693109],
+           [-123.49267295958492, 48.04993668762922],
+           [-123.1397371685693, 48.04993668762922],
+           [-123.1397371685693, 48.10498850693109]]]], null, false),
+    imageCollection = ee.ImageCollection("NASA_USDA/HSL/SMAP10KM_soil_moisture"),
+    image14 = ee.Image("OpenLandMap/SOL/SOL_BULKDENS-FINEEARTH_USDA-4A1H_M/v02"),
+    imageCollection2 = ee.ImageCollection("LANDFIRE/Vegetation/EVC/v1_4_0"),
+    imageCollection3 = ee.ImageCollection("USDA/NASS/CDL"),
+    imageCollection4 = ee.ImageCollection("LANDFIRE/Vegetation/EVT/v1_4_0");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 // Upsample MODIS landcover classification (250m) to Landsat
 // resolution (30m) using a supervised classifier.
-
-
+var dataset = ee.ImageCollection('USDA/NASS/CDL')
+  .filter(ee.Filter.date('2018-01-01', '2019-12-31'))
+  .first();
+var cropLandcover = dataset.select('cropland');
+var wetlands = cropLandcover.eq(176)
+  .or(cropLandcover.eq(195))
+  .or(cropLandcover.eq(190))
 // Soil training data.
 var soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
-var mask_layer =  soils.mask(soils.neq(4)).selfMask()
+var elev = image7.multiply(3.2808)
+Map.addLayer(elev)
+var mask_layer = soils.mask(soils.neq(4)).and(elev.lt(2500))
+  .selfMask()
 soils = soils.mask(mask_layer)
 Map.addLayer(soils)
 // Draw the MODIS landcover image.
-Map.addLayer(soils.mask(mask_layer), {}, 'training');
-
-print(image7.projection())
-var slope = ee.Terrain.slope(image7).reproject({crs: "EPSG:4269", scale:90})
-Map.addLayer(slope)
-var soil_data = image.select('b0').rename('sand').
-addBands(image2.select('b0').rename('clay')).addBands(image3.select('grtgroup')).addBands(slope).mask(mask_layer)
-Map.addLayer(soil_data)
+var hand = ee.Image("MERIT/Hydro/v1_0_1")
+  .select('hnd').mask(mask_layer).divide(300);
+Map.addLayer(hand)
+var pal = [
+  '#69995D', '#564138', '#F06543'
+]
+var slope = ee.Terrain.slope(image7)
+  .reproject(
+  {
+    crs: "EPSG:4269",
+    scale: 90
+  })
+var soil_data = image.select('b0')
+  .rename('sand')
+  .addBands(hand)
+  . //.addBands(elev).
+addBands(image2.select('b0')
+    .rename('clay')) //.addBands(image3.select('grtgroup'))
+  .addBands(slope)
+  .addBands(wetlands)
+  .mask(mask_layer)
 // Make a training dataset by sampling the stacked images.
-var training = soils.addBands(soil_data).sample({
-  region: geometry,
-  scale: 30,
-  numPixels: 1000
-});
-
+var training = soils.addBands(soil_data)
+  .sample(
+  {
+    region: geometry2,
+    scale: 90,
+    numPixels: 1000
+  });
 // Train a classifier using the training data.
-var classifier = ee.Classifier.smileCart().train({
-  features: training,
-  classProperty: 'remapped_mode',
-});
-
+var classifier = ee.Classifier.smileNaiveBayes()
+  .train(
+  { //ee.Classifier.smileCart().train({
+    features: training,
+    classProperty: 'remapped_mode',
+  });
 // Apply the classifier to the original composite.
 var upsampled = soil_data.classify(classifier);
-
 // Draw the upsampled landcover image.
-Map.addLayer(upsampled, {}, 'Upsampled soils');
-
+Map.addLayer(upsampled,
+{
+  min: 1,
+  max: 3
+}, 'Upsampled soils');
