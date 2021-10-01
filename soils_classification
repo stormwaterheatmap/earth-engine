@@ -358,6 +358,12 @@ var image = ee.Image("OpenLandMap/SOL/SOL_SAND-WFRACTION_USDA-3A1A1A_M/v02"),
       },
       {
         "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
       }
     ] */
     ee.Geometry.MultiPolygon(
@@ -392,12 +398,21 @@ var image = ee.Image("OpenLandMap/SOL/SOL_SAND-WFRACTION_USDA-3A1A1A_M/v02"),
          [[[-123.49267295958492, 48.10498850693109],
            [-123.49267295958492, 48.04993668762922],
            [-123.1397371685693, 48.04993668762922],
-           [-123.1397371685693, 48.10498850693109]]]], null, false),
+           [-123.1397371685693, 48.10498850693109]]],
+         [[[-122.34377376097126, 47.525914553345345],
+           [-122.34377376097126, 46.9196887691759],
+           [-122.13640681761188, 46.9196887691759],
+           [-122.13640681761188, 47.525914553345345]]],
+         [[[-123.27349177854938, 47.00029511194375],
+           [-123.27349177854938, 46.76469701033455],
+           [-122.43853084104938, 46.76469701033455],
+           [-122.43853084104938, 47.00029511194375]]]], null, false),
     imageCollection = ee.ImageCollection("NASA_USDA/HSL/SMAP10KM_soil_moisture"),
     image14 = ee.Image("OpenLandMap/SOL/SOL_BULKDENS-FINEEARTH_USDA-4A1H_M/v02"),
     imageCollection2 = ee.ImageCollection("LANDFIRE/Vegetation/EVC/v1_4_0"),
     imageCollection3 = ee.ImageCollection("USDA/NASS/CDL"),
-    imageCollection4 = ee.ImageCollection("LANDFIRE/Vegetation/EVT/v1_4_0");
+    imageCollection4 = ee.ImageCollection("LANDFIRE/Vegetation/EVT/v1_4_0"),
+    image15 = ee.Image("OpenLandMap/SOL/SOL_WATERCONTENT-33KPA_USDA-4B1C_M/v01");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 // Upsample MODIS landcover classification (250m) to Landsat
 // resolution (30m) using a supervised classifier.
@@ -412,7 +427,7 @@ var wetlands = cropLandcover.eq(176)
 var soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
 var elev = image7.multiply(3.2808)
 Map.addLayer(elev)
-var mask_layer = soils.mask(soils.neq(4)).and(elev.lt(2500))
+var mask_layer = soils.mask(soils.neq(4))//.and(elev.lt(2500))
   .selfMask()
 soils = soils.mask(mask_layer)
 Map.addLayer(soils)
@@ -430,12 +445,14 @@ var slope = ee.Terrain.slope(image7)
     scale: 90
   })
 var soil_data = image.select('b0')
-  .rename('sand')
-  .addBands(hand)
-  . //.addBands(elev).
-addBands(image2.select('b0')
-    .rename('clay')) //.addBands(image3.select('grtgroup'))
-  .addBands(slope)
+  .rename('sand').
+  addBands(image15.select('b0'))
+  //.addBands(hand)
+ // . //.addBands(elev).
+.addBands(image2.select('b0').rename('clay'))
+    .addBands(image3.select('grtgroup'))
+    //.addBands(hand)
+ // .addBands(slope)
   .addBands(wetlands)
   .mask(mask_layer)
 // Make a training dataset by sampling the stacked images.
