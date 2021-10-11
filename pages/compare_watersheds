@@ -65,32 +65,12 @@ var legendPanel = ui.Panel({style:{position:'bottom-left',shown:false, minWidth:
 var mainPanel = helpers.makeMainPanel("Compare Watersheds");
 mainPanel.style().set("minWidth","16.66%")
 
-var subtitleLabel = ui.Label({value:"Choose a layer to display and select watersheds to compare.",style:fonts.subtitle})
+var subtitleLabel = ui.Label({value:"Choose a layer to display and compare differences across watersheds.",style:fonts.subtitle})
 
 /* ui widgets */ 
-// var select_layer_type = ui.Select({
-//   items: layer_types,
-//   placeholder: "Select Layer Type", 
-//   value: layer_types[0], 
-//   onChange: function() {
-//     var layer_dict = rasters[select_layer_type.getValue()]; 
-//     var layers_list = Object.keys(layer_dict); 
-//       layer_select = ui.Select({
-//         items: layers_list,//select_layer_type.getValue()], 
-//         onChange: function() {
-//           var layer_obj = layer_dict[layer_select.getValue()]
-//           legendPanel.style().set({shown:true})
-//           helpers.clear_map_add_layer(layer_obj,legendPanel)
-//         }
-//       });
-    
-  
-  
-//     panel.widgets().set(3, layer_select);
-//   }
-  
-//   });
-//var layer_obj = rasters["Imperviousness"]
+
+
+
 
 var layer_select = ui.Select({
         items: Object.keys(rasters),//select_layer_type.getValue()], 
