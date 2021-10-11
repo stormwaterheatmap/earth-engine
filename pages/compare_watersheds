@@ -64,6 +64,7 @@ var legendPanel = ui.Panel({style:{position:'bottom-left',shown:false, minWidth:
 })
 var mainPanel = helpers.makeMainPanel("Compare Watersheds");
 mainPanel.style().set("minWidth","16.66%")
+mainPanel.style().set("margin","8px")
 
 var subtitleLabel = ui.Label({value:"Choose a layer to display and compare differences across watersheds.",style:fonts.subtitle})
 
