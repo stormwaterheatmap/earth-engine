@@ -89,6 +89,7 @@ mainPanel.style().set("minWidth","16.66%")
   
 //   });
 //var layer_obj = rasters["Imperviousness"]
+
 var layer_select = ui.Select({
         items: Object.keys(rasters),//select_layer_type.getValue()], 
         onChange: function(value) {
@@ -141,9 +142,12 @@ map_init()
 
 // Add widgets to panel
 panel.widgets().set(0, panel_label); 
+
+//add subititle 
+panel.widgets().set(1,ui.Label('label'))
 //panel.widgets().set(1, select_layer_type);
-panel.widgets().set(1,layer_label); 
-panel.widgets().set(2, layer_select);
+panel.widgets().set(3,layer_label); 
+panel.widgets().set(4, layer_select);
 
 mainPanel.add(panel)
 
