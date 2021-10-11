@@ -141,10 +141,10 @@ map_init()
 
 
 // Add widgets to panel
-panel.widgets().set(0, panel_label); 
+panel.widgets().set(1, panel_label); 
 
 //add subititle 
-panel.widgets().set(1,ui.Label('label'))
+panel.widgets().set(0,ui.Label('label'))
 //panel.widgets().set(1, select_layer_type);
 panel.widgets().set(3,layer_label); 
 panel.widgets().set(4, layer_select);
