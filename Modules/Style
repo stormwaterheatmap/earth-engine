@@ -159,6 +159,14 @@ var fonts = {
         color: colors.text
         // wrap: true
     },
+        subtitle: {
+        fontFamily:  [
+            'Noto Sans', 'sans-serif'
+        ],
+        fontSize: '10px',
+        fontWeight: 300, 
+        color: colors.sText
+    },
     Body1: {
         fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
             // 'Dejavu Sans', 'Helvetica Neue',
