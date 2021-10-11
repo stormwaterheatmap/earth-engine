@@ -69,10 +69,6 @@ mainPanel.style().set("margin","8px")
 var subtitleLabel = ui.Label({value:"Choose a layer to display and compare differences across watersheds.",style:fonts.subtitle})
 
 /* ui widgets */ 
-
-
-
-
 var layer_select = ui.Select({
         items: Object.keys(rasters),//select_layer_type.getValue()], 
         onChange: function(value) {
