@@ -229,7 +229,7 @@ function hline() {
             height: '0px',
             padding: '0px ',
             margin: '0px 0px 0px 0px',
-            border: '0.5px solid gray',
+            border: '0.5px solid whitesmoke',
             stretch: 'horizontal',
         }
     }));
