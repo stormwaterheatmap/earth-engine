@@ -46,14 +46,15 @@ var HIGHLIGHT_STYLE = {color: '8856a7', fillColor: '8856a7C0',width:2};
 
 /* Label */ 
 
-var panel_label = helpers.info_panel("Select Layer Type:","null")
-var layer_label = ui.Label({value:"Display Layer:"})
+var panel_label = helpers.info_panel("1. Select Layer Type:","null")
+panel_label.style().set(fonts.H3)
+// var layer_label = ui.Label({value:"Display Layer:"})
 
 
 /* Style */ 
 
 var panel_layout = ui.Panel.Layout.absolute("bottom-left")
-panel_label.style().set('fontWeight','500')
+//panel_label//.style().set('fontWeight','500')
 var panel_style = {position: 'bottom-left',
    border: '1px solid whitesmoke',
         backgroundColor: 'white', 
@@ -77,6 +78,7 @@ mainPanel.style().set("border","0px")
 
 var subtitleLabel = ui.Label({value:"Choose a layer to display. Compare differences across watersheds.",style:fonts.subtitle})
 mainPanel.add(subtitleLabel)
+mainPanel.add(helpers.hline())
 
 /* ui widgets */ 
 var layer_select = ui.Select({
@@ -92,7 +94,17 @@ var layer_select = ui.Select({
 
 var layer_obj = rasters["Imperviousness"]
 
+var watershedSelectLabel = ui.Label({
+    value: '2. Select a watershed dataset to aggregate data:',
+});
 
+watershedSelectLabel.style().set(fonts.H3)
+
+var analyzePanel = ui.Panel({
+    style: {
+        shown: true
+    }
+})
 
 
 /*Style defaults  
@@ -125,25 +137,17 @@ var map_init = function(map){
   
 }
 
-helpers.make_tnc_map()
-map_init()
+var click_instructions = ui.Label({value:'Click on a watershed to display data',style:{shown:false}})
+analyzePanel.add(click_instructions)
 
+var reset_button= ui.Button({label:'Reset Map',style: {shown:false,position:'bottom-left'},
+onClick: function(){
+  
+  map_init
+  clearResults
+}
+})
 
-// Add widgets to panel
-panel.widgets().set(0, panel_label); 
-
-
-
-//panel.widgets().set(1, select_layer_type);
-panel.widgets().set(2,layer_label); 
-panel.widgets().set(3, layer_select);
-
-mainPanel.add(panel)
-
-
-ui.root.insert(0,mainPanel)
-
-var vectors_dict = data.vector_dict
 
 
 //----Get vector data 
@@ -158,30 +162,51 @@ var watershedSelect = ui.Select({items: [
     onChange: function (selected) {
        // Map.layers().reset()
         //(selected)
+        reset_button.style().set({shown:true})
         var WS = vectors_dict[selected]
         Map.layers().set(2, ui.Map.Layer(WS.style(featureStyle))) 
         watershed_data_set = vectors_dict[selected]//oct
         //analyzePanel.add((buttonPanel))
+        click_instructions.style().set({shown:true})
 
     }
 });
 
-
-var watershedSelectLabel = ui.Label({
-    value: 'Select a watershed dataset to aggregate data:',
-});
-var analyzePanel = ui.Panel({
-    style: {
-        shown: true
-    }
-})
+helpers.make_tnc_map()
+map_init()
 
 
-
-analyzePanel.add(watershedSelectLabel)
-analyzePanel.add(watershedSelect)
-
+// Add widgets to panel
+mainPanel.add(panel_label); 
+mainPanel.add(layer_select);
+//mainPanel.add(helpers.hline())
+watershedSelectLabel.style()
+mainPanel.add(watershedSelectLabel)
+mainPanel.add(watershedSelect)
+mainPanel.add(helpers.hline())
 mainPanel.add(analyzePanel)
+//mainPanel.add(panel)
+
+//footer panel to hold stuff on the bottom
+var footer_panel = ui.Panel()
+var tablePanel = ui.Panel()
+footer_panel.add(helpers.hline()).add(reset_button)
+mainPanel.insert(101,tablePanel)
+mainPanel.insert(102,footer_panel)
+
+ui.root.insert(0,mainPanel)
+
+var vectors_dict = data.vector_dict
+
+
+
+
+
+
+
+
+
+
 
 //---
 /*Global Variables------------------------------------------------------------------------------------- 
@@ -345,12 +370,20 @@ onClick: function() {
 }
 })
 
-mainPanel.add(infoTableButton).add(hideInfoTableButton).add(infoTablePanel)
+tablePanel.add(
+  ui.Label({value:'Results',style:fonts.H3}))
+  .add(infoTableButton)
+  .add(hideInfoTableButton)
+  .add(infoTablePanel);
+  
 function updateInfoTable(){
 var chart = ui.Chart.feature.byProperty({features: getSelectedwatershed(), 
 seriesProperty: "Watershed Name"})
 infoTablePanel.clear().add(chart.setChartType('Table'))
 }
+
+
+
 
 // Clears the set of selected points and resets the overlay and results
 // panel to their default state.
@@ -367,7 +400,7 @@ function clearResults() {
 function handleMapClick(location) {
   selectedPoints.push([location.lon, location.lat]);
   infoTableButton.style().set({shown:true})
-print(selectedPoints); 
+  click_instructions.style().set({shown:false})
   updateOverlay();
   updateChart();
   updateInfoTable();
