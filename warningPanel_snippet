@@ -12,13 +12,14 @@ function warning_panel(title,text) {
             width:'0px',
             padding: '0px ',
             margin: '0px 0px 0px 0px',
-            border: '4px solid #E6A700',
+            backgroundColor:"#E6A700" ,
+            border: '3.5px solid #E6A700',
             stretch: 'vertical',
         }
     }));
     
     var panel = ui.Panel({layout:ui.Panel.Layout.flow('horizontal'),style:{padding: '0px ',
-            margin: '0px 0px 0px 0px',backgroundColor:warningcolor}})
+            margin: '0px 0px 0px 0px',backgroundColor:warningcolor,border:'0.2px solid'+warningborder}})
             
     //Title 
     // var symbol = ui.Label({value:"⚠",style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px",
@@ -26,8 +27,23 @@ function warning_panel(title,text) {
 
 
 
-    var title = ui.Label({value:title,style:{backgroundColor:warningcolor,color:warningtextcolor,fontWeight:'600',padding:"0px",fontSize:'18px'}})        
-    var textbox = ui.Label({value:text,style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px"}})        
+    var title = ui.Label({value:title,style:{backgroundColor:warningcolor,color:warningtextcolor,
+      fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            //'Dejavu Sans', 'Helvetica Neue',
+            'Noto Sans', 'sans-serif'
+        ],
+        fontSize: '1.3rem',
+        fontWeight: 700,
+      
+    }})        
+    var textbox = ui.Label({value:text,style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px",
+              fontFamily: [ //'Segoe UI', 'Frutiger', 'Frutiger Linotype',
+            // 'Dejavu Sans', 'Helvetica Neue',
+            'Noto Sans', 'sans-serif'
+        ],
+        fontSize: '1rem',
+        fontWeight: 400, 
+    }})        
   
     var textPanel = 
     ui.Panel({style:{stretch:'both',backgroundColor:warningcolor}}).add(
@@ -50,10 +66,11 @@ return(panel)
 
 
 
-var pp = ui.Panel(ui.Label('panel'))
+
+var pp = ui.Panel({widgets:ui.Label('panel'),style:{border:'1px solid #E9E9E9'}})
 pp.add(warning_panel(
   'Warning',
-  'In CSS, the term "box model" is used when talking about design and layout.The CSS box model is essentially a box that wraps around every HTML element.'
+  "In CSS, the term is used when model is essentially around every HTML element."
 ))
 
 
