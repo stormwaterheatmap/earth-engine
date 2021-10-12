@@ -4,7 +4,7 @@ print(style.fonts)
 print(style.colors)
 
 var ze = style.fonts.H1
-var pan = ui.Panel({style: {position: 'bottom-left'}}); 
+var pan = ui.Panel({style: {position: 'bottom-left',height:'50rem'}}); 
 var H1 = (ui.Label('H1'))//
 var H2 =  ui.Label('H2')
 var H3 = ui.Label('H3')
