@@ -221,6 +221,7 @@ if(layer_object.vizType == "histogram"){
 }
 
 function hline() {
+  //Makes a horizontal line
     return(ui.Label({
         value: 'null',
         style: {
