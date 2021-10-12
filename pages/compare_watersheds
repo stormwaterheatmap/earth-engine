@@ -69,7 +69,7 @@ var panel_style = {position: 'bottom-left',
 
 /* Panel */ 
 var panel = ui.Panel({style:panel_style})//, layout:panel_layout})//, })
-var legendPanel = ui.Panel({style:{position:'bottom-left',shown:false, minWidth: "300px"}
+var legendPanel = ui.Panel({style:{position:'top-right',shown:false}// minWidth: "300px"}
 })
 var mainPanel = helpers.makeMainPanel("Compare Watersheds");
 mainPanel.style().set("minWidth","16.66%")
@@ -85,9 +85,9 @@ var layer_select = ui.Select({
         items: Object.keys(rasters),//select_layer_type.getValue()], 
         onChange: function(value) {
           var layer_obj = rasters[value]
-          Map.layers().set(0, ui.Map.Layer(layer_obj.layer)) 
+          //Map.layers().set(0, ui.Map.Layer(layer_obj.layer)) 
           legendPanel.style().set({shown:true})
-          // helpers.clear_map_add_layer(layer_obj,legendPanel)
+          helpers.clear_map_add_layer(layer_obj,legendPanel)
         }
       });
 
@@ -194,7 +194,7 @@ footer_panel.add(helpers.hline()).add(reset_button)
 mainPanel.insert(101,tablePanel)
 mainPanel.insert(102,footer_panel)
 
-ui.root.insert(0,mainPanel)
+Map.add(mainPanel)
 
 var vectors_dict = data.vector_dict
 
