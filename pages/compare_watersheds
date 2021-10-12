@@ -183,7 +183,7 @@ mainPanel.add(layer_select);
 watershedSelectLabel.style()
 mainPanel.add(watershedSelectLabel)
 mainPanel.add(watershedSelect)
-mainPanel.add(helpers.hline())
+//mainPanel.add(helpers.hline())
 mainPanel.add(analyzePanel)
 //mainPanel.add(panel)
 
