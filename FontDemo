@@ -18,7 +18,7 @@ var Caption3 = (ui.Label('Caption3'))//
 var subtitle = ui.Label('subtitle')
 
 H1.style().set(style.fonts.H1)
-H2.style().set(style.fonts.H2)
+H2.style().set({fontSize:'1.4rem',fontWeight:'600'})
 H3.style().set(style.fonts.H3)
 H4.style().set(style.fonts.H4)
 Body1.style().set(style.fonts.Body1)
@@ -31,3 +31,6 @@ subtitle.style().set(style.fonts.subtitle)
 
 pan.add(H1).add(subtitle).add(H2).add(H3).add(H4).add(Body1).add(Body2).add(Body3).add(Caption1).add(Caption2).add(Caption3)
 Map.add(pan)
+
+
+
