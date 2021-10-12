@@ -1,0 +1,62 @@
+
+function warning_panel(title,text) {
+  
+  var warningcolor = "#FFF8E6"
+  var warningborder =  "#E6A700"
+  var warningtextcolor = "#4D3800"
+    var line = (ui.Label({
+        value: 'null',
+        style: {
+            //width:'100%',
+           // height: '100%',
+            width:'0px',
+            padding: '0px ',
+            margin: '0px 0px 0px 0px',
+            border: '4px solid #E6A700',
+            stretch: 'vertical',
+        }
+    }));
+    
+    var panel = ui.Panel({layout:ui.Panel.Layout.flow('horizontal'),style:{padding: '0px ',
+            margin: '0px 0px 0px 0px',backgroundColor:warningcolor}})
+            
+    //Title 
+    // var symbol = ui.Label({value:"⚠",style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px",
+    // fontSize :'24px'}})
+
+
+
+    var title = ui.Label({value:title,style:{backgroundColor:warningcolor,color:warningtextcolor,fontWeight:'600',padding:"0px",fontSize:'18px'}})        
+    var textbox = ui.Label({value:text,style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px"}})        
+  
+    var textPanel = 
+    ui.Panel({style:{stretch:'both',backgroundColor:warningcolor}}).add(
+    ui.Panel({
+      // widgets:[symbol,title],
+      widgets:title,
+      style:{stretch:'both',backgroundColor:warningcolor},
+      layout:ui.Panel.Layout.flow('horizontal')
+    })).
+    add(textbox)
+    
+    
+    
+  panel.add(line).add(textPanel)
+
+return(panel)
+    
+}
+
+
+
+
+var pp = ui.Panel(ui.Label('panel'))
+pp.add(warning_panel(
+  'Warning',
+  'In CSS, the term "box model" is used when talking about design and layout.The CSS box model is essentially a box that wraps around every HTML element.'
+))
+
+
+
+
+Map.add(pp)
