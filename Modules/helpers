@@ -245,6 +245,7 @@ exports.removeObject = removeObject
 exports.makeLegend = makeLegend
 exports.info_panel = info_panel
 exports.makeMainPanel = makeMainPanel
+exports.hline = hline
 //exports.make_chart = make_chart
 //make_tnc_map()
 
