@@ -54,7 +54,12 @@ var layer_label = ui.Label({value:"Display Layer:"})
 
 var panel_layout = ui.Panel.Layout.absolute("bottom-left")
 panel_label.style().set('fontWeight','500')
-var panel_style = {position: 'bottom-left'}//,width:'300px', height:"80%"}
+var panel_style = {position: 'bottom-left',
+   border: '1px solid whitesmoke',
+        backgroundColor: 'white'
+  
+  
+}//,width:'300px', height:"80%"}
 
 
 
