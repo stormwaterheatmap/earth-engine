@@ -162,7 +162,7 @@ var watershedSelect = ui.Select({items: [
     onChange: function (selected) {
        // Map.layers().reset()
         //(selected)
-        reset_button.style().set({shown:true})
+        reset_button.style().set({shown:false})//to do: make the reset button reset the data layers.
         var WS = vectors_dict[selected]
         Map.layers().set(2, ui.Map.Layer(WS.style(featureStyle))) 
         watershed_data_set = vectors_dict[selected]//oct
@@ -189,7 +189,7 @@ mainPanel.add(analyzePanel)
 
 //footer panel to hold stuff on the bottom
 var footer_panel = ui.Panel()
-var tablePanel = ui.Panel()
+var tablePanel = ui.Panel({style:{shown:false}})
 footer_panel.add(helpers.hline()).add(reset_button)
 mainPanel.insert(101,tablePanel)
 mainPanel.insert(102,footer_panel)
@@ -371,7 +371,7 @@ onClick: function() {
 })
 
 tablePanel.add(
-  ui.Label({value:'Results',style:fonts.H3}))
+  ui.Label({value:'Results are displayed graphically in the map window.',style:fonts.Caption1}))
   .add(infoTableButton)
   .add(hideInfoTableButton)
   .add(infoTablePanel);
@@ -404,6 +404,7 @@ function handleMapClick(location) {
   updateOverlay();
   updateChart();
   updateInfoTable();
+  tablePanel.style().set({shown:true})
 }
 Map.onClick(handleMapClick);
 
