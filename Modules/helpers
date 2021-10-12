@@ -123,7 +123,7 @@ function makeMainPanel(title) { //function that makes the main control panel; re
         style: {
             minWidth: '300px', //main panel is white 
             //height: '70%',
-            padding: 0,
+           // padding: 0,
             position: 'top-left',
             //border: '1px solid black'
         }
