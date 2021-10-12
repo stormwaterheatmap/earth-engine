@@ -69,10 +69,12 @@ var panel_style = {position: 'bottom-left',
 
 /* Panel */ 
 var panel = ui.Panel({style:panel_style})//, layout:panel_layout})//, })
-var legendPanel = ui.Panel({style:{position:'top-right',shown:false}// minWidth: "300px"}
+var legendPanel = ui.Panel({style:{position:'top-right',shown:false, minWidth: "16.66%",
+  maxWidth:"20%", maxHeight: "30%"
+}
 })
 var mainPanel = helpers.makeMainPanel("Compare Watersheds");
-mainPanel.style().set("minWidth","16.66%")
+mainPanel.style().set({minWidth:"16.66%",maxWidth:"25%",maxHeight:"60%"})
 mainPanel.style().set("margin","8px")
 mainPanel.style().set("border","0px")
 
@@ -444,7 +446,7 @@ var buttonPanel = ui.Panel(
     [ui.Button('Clear results', clearResults), chartTypeToggleButton],
     ui.Panel.Layout.Flow('horizontal'), {margin: '0 0 0 auto', width: '500px'});
 
-var resultsPanel = ui.Panel({style: {position: 'bottom-right'}});
+var resultsPanel = ui.Panel({style: {position: 'bottom-right',maxHeight:'30%',maxWidth:'30%'}});
 Map.add(resultsPanel);
 clearResults();
 
