@@ -125,7 +125,7 @@ function makeMainPanel(title) { //function that makes the main control panel; re
             //height: '70%',
             padding: 0,
             position: 'top-left',
-            border: '1px solid black'
+            //border: '1px solid black'
         }
     })
    
