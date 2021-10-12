@@ -234,6 +234,54 @@ function hline() {
         }
     }));
 }
+function warning_panel(title,text) {
+  
+  var warningcolor = "#FFF8E6"
+  var warningborder =  "#E6A700"
+  var warningtextcolor = "#4D3800"
+    var line = (ui.Label({
+        value: 'null',
+        style: {
+            //width:'100%',
+           // height: '100%',
+            width:'0px',
+            padding: '0px ',
+            margin: '0px 0px 0px 0px',
+            backgroundColor:"#E6A700" ,
+            border: '3.5px solid #E6A700',
+            stretch: 'vertical',
+        }
+    }));
+    
+    var panel = ui.Panel({layout:ui.Panel.Layout.flow('horizontal'),style:{padding: '0px ',
+            margin: '0px 0px 0px 0px',backgroundColor:warningcolor,border:'0.2px solid'+warningborder}})
+            
+    //Title 
+    // var symbol = ui.Label({value:"⚠",style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px",
+    // fontSize :'24px'}})
+
+
+
+    var title = ui.Label({value:title,style:{backgroundColor:warningcolor,color:warningtextcolor,fontWeight:'600',padding:"0px",fontSize:'18px'}})        
+    var textbox = ui.Label({value:text,style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px"}})        
+  
+    var textPanel = 
+    ui.Panel({style:{stretch:'both',backgroundColor:warningcolor}}).add(
+    ui.Panel({
+      // widgets:[symbol,title],
+      widgets:title,
+      style:{stretch:'both',backgroundColor:warningcolor},
+      layout:ui.Panel.Layout.flow('horizontal')
+    })).
+    add(textbox)
+    
+    
+    
+  panel.add(line).add(textPanel)
+
+return(panel)
+    
+}
 
 
 // //var chart = make_chart(layer_object.Imperviousness,geometry,30)//,"percent")
@@ -247,6 +295,7 @@ exports.makeLegend = makeLegend
 exports.info_panel = info_panel
 exports.makeMainPanel = makeMainPanel
 exports.hline = hline
+exports.warning_panel = warning_panel
 //exports.make_chart = make_chart
 //make_tnc_map()
 
