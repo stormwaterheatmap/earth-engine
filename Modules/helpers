@@ -220,7 +220,19 @@ if(layer_object.vizType == "histogram"){
   }
 }
 
-
+function hline() {
+    return(ui.Label({
+        value: 'null',
+        style: {
+            //width:'100%',
+            height: '0px',
+            padding: '0px ',
+            margin: '0px 0px 0px 0px',
+            border: '0.5px solid gray',
+            stretch: 'horizontal',
+        }
+    }));
+}
 
 
 // //var chart = make_chart(layer_object.Imperviousness,geometry,30)//,"percent")
