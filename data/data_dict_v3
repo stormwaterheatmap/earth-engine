@@ -461,25 +461,50 @@ var rasters =
             
         }
     ,
-    "Total Suspended Solids ": 
+    "Total Suspended Solids Concentration": 
         {
             "discrete": "FALSE",
             "sourceName": "The Nature Conservancy",
             "units": "µg/L",
             "default_reduction": "mean",
             "description": "Median Total Suspended Concentration",
-            "safe_name": "total_suspended_solids",
+            "safe_name": "total_suspended_solids_concentration",
             "layer": 
                 {
                     "eeObject": "eeObject",
-                    "name": "TSS_ug_L",
+                    "name": "Total Suspended Solids Concentration",
                     "visParams": 
                         {
                             "min": 15000,
                             "max": 100000,
                             "palette": ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"],
                             "opacity": 0.9,
-                            "_row": "Total Suspended Solids"
+                            "_row": "Total Suspended Solids Concentration"
+                        }
+                    
+                }
+            
+        }
+    ,
+    "Total Suspended Solids Load": 
+        {
+            "discrete": "FALSE",
+            "sourceName": "The Nature Conservancy",
+            "units": "mg/m²/year",
+            "default_reduction": "mean",
+            "description": "Median Total Suspended Concentration",
+            "safe_name": "total_suspended_solids_load",
+            "layer": 
+                {
+                    "eeObject": "eeObject",
+                    "name": "Total Suspended Solids Load",
+                    "visParams": 
+                        {
+                            "min": 50000,
+                            "max": 0,
+                            "palette": ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"],
+                            "opacity": 0.9,
+                            "_row": "Total Suspended Solids Load"
                         }
                     
                 }
@@ -487,6 +512,8 @@ var rasters =
         }
     
 }
+
+
 
 
 
@@ -530,7 +557,8 @@ var layerSources = {
   "Traffic":data.traffic.rename('traffic_AADT').focal_mean(1).mask(data.traffic.exp().gt(1)), 
   "Flow Duration Index":data.fdr.rename('flow_duration_index'),
   "Hydrologic Response Units": data.hrus,
- "Total Suspended Solids": data.tss_concentration
+ "Total Suspended Solids Concentration": data.tss_concentration,
+  "Total Suspended Solids Load": data.tss_concentration
 }
 
 
@@ -609,3 +637,4 @@ print(vector_dict)
 //exports.vector_dict_label_col = vector_dict_label_col
 exports.vector_dict = vector_dict
 exports.rasters = rasters
+print(rasters)
