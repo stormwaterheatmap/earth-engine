@@ -417,8 +417,17 @@ var makeReports = function () {
   
     
      //Make a panel for topography 
-    var TSSchart = charts.histogramImage(layerProperties['Total Suspended Solids'], clicked_basin_geom, mapPanel.getScale())
-    var pollutantCard = cards('Pollutant Concentration', [subtitle('Total Suspended Solids'), TSSchart, layerButton(layerProperties['Total Suspended Solids'])])
+    var TSSchart = charts.histogramImage(layerProperties['Total Suspended Solids Concentration'], clicked_basin_geom, mapPanel.getScale())
+    
+    var TSSloadchart = charts.histogramImage(layerProperties['Total Suspended Solids Load'], clicked_basin_geom, mapPanel.getScale())
+    var pollutantCard = cards('Pollutant Concentration', 
+    [
+      subtitle('Total Suspended Solids Concentation'), 
+      TSSchart, layerButton(layerProperties['Total Suspended Solids Concentration']), 
+      subtitle('Total Suspended Solids Load'), 
+      TSSloadchart, layerButton(layerProperties['Total Suspended Solids Load'])
+      ]
+      )
 analyzePanel.add(pollutantCard)
 }
 
