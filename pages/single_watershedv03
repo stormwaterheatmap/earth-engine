@@ -414,6 +414,12 @@ var makeReports = function () {
     var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties['Runoff (inches)'])])
     analyzePanel.add(qCard)
 
+  
+    
+     //Make a panel for topography 
+    var TSSchart = charts.histogramImage(layerProperties['Total Suspended Solids'], clicked_basin_geom, mapPanel.getScale())
+    var pollutantCard = cards('Pollutant Concentration', [subtitle('Total Suspended Solids'), TSSchart, layerButton(layerProperties['Total Suspended Solids'])])
+analyzePanel.add(pollutantCard)
 }
 
 //cards function 
