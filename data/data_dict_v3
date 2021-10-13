@@ -492,7 +492,7 @@ var rasters =
             "sourceName": "The Nature Conservancy",
             "units": "mg/m²/year",
             "default_reduction": "mean",
-            "description": "Total Suspended Ssolids Load",
+            "description": "Total Suspended Solids Load",
             "safe_name": "total_suspended_solids_load",
             "layer": 
                 {
@@ -502,7 +502,6 @@ var rasters =
                         {
                             "min": 0,
                             "max": 50000,
-                            "bands": "tss_mg_m2_yr",
                             "palette": ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"],
                             "opacity": 0.9,
                             "_row": "Total Suspended Solids Load"
@@ -513,6 +512,8 @@ var rasters =
         }
     
 }
+
+
 
 
 
