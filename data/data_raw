@@ -1,7 +1,8 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds"),
     census = ee.FeatureCollection("TIGER/2010/Blocks"),
-    image = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode");
+    image = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode"),
+    imageVisParam = {"opacity":1,"bands":["tss_kg_m2_yr"],"max":0.14183858512625483,"palette":["000000","0000ff","ffff00","ffffff"]};
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 * Author: Christian Nilsen, Geosyntec Consultants 
@@ -138,7 +139,8 @@ exports.age_of_development = imperviousAge
 */
 var hspfLayers = require('users/stormwaterheatmap/source_data:hspfLayers');
 //runoff 
-exports.mean_annual_runoff = hspfLayers.mean_annual_runoff.mask(tncLC.neq(0))
+var mean_annual_runoff = hspfLayers.mean_annual_runoff
+exports.mean_annual_runoff = mean_annual_runoff
 //Flow Duration Index 
 exports.fdr = hspfLayers.fdr
 exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
@@ -147,4 +149,11 @@ exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
 var lc_watermask = tncLC.neq(5)
   // Pollutant Concentrations 
 var tss_ugL = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/TSS_ugL").mask(lc_watermask).resample()
+var ugL_convert = 1e-9 // multiply ug/L * mm/yr to get mg/m2/yr 
+
+var tss_kg_yr = tss_ugL.multiply(ugL_convert).multiply(mean_annual_runoff.focal_mean(2)).
+rename('tss_kg_m2_yr').addBands((ee.Image.pixelArea()).rename('pixelArea'))
+var tss_display = (tss_kg_yr//.focalMean({iterations:2})
+.focal_max().focal_min())
+Map.addLayer(tss_kg_yr,imageVisParam)
 exports.tss_ugL = tss_ugL
