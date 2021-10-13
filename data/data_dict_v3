@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var imageVisParam = {"opacity":1,"bands":["TSS_ug_L"],"min":2674.029232489531,"max":48491.76650370371,"gamma":1};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var rasters = 
 {
     "Age of Imperviousness": 
@@ -457,8 +460,35 @@ var rasters =
                 }
             
         }
+    ,
+    "Total Suspended Solids": 
+        {
+            "discrete": "FALSE",
+            "sourceName": "The Nature Conservancy",
+            "units": "µg/L",
+            "default_reduction": "mean",
+            "description": "Median Total Suspended Concentration",
+            "safe_name": "total_suspended_solids",
+            "layer": 
+                {
+                    "eeObject": "eeObject",
+                    "name": "TSS_ug_L",
+                    "visParams": 
+                        {
+                            "min": 15000,
+                            "max": 100000,
+                            "palette": ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"],
+                            "opacity": 0.9,
+                            "_row": "Total Suspended Solids"
+                        }
+                    
+                }
+            
+        }
     
 }
+
+
 
 
 
@@ -499,7 +529,8 @@ var layerSources = {
   "Soils":data.soils.rename('soils'), 
   "Traffic":data.traffic.rename('traffic_AADT').focal_mean(1).mask(data.traffic.exp().gt(1)), 
   "Flow Duration Index":data.fdr.rename('flow_duration_index'),
-  "Hydrologic Response Units": data.hrus
+  "Hydrologic Response Units": data.hrus,
+ "Total Suspended Solids": data.tss_ugL
 }
 
 
@@ -578,5 +609,3 @@ print(vector_dict)
 //exports.vector_dict_label_col = vector_dict_label_col
 exports.vector_dict = vector_dict
 exports.rasters = rasters
-
-
