@@ -445,7 +445,7 @@ var buttonPanel = ui.Panel(
     [ui.Button('Clear results', clearResults), chartTypeToggleButton],
     ui.Panel.Layout.Flow('horizontal',true), {margin: '0 0 0 auto', width: '500px'});
 
-var resultsPanel = ui.Panel({style: {position: 'bottom-right',maxHeight:'30%',maxWidth:'30%'}});
+var resultsPanel = ui.Panel({style: {position: 'bottom-right',maxWidth:'30%'}});
 Map.add(resultsPanel);
 clearResults();
 
