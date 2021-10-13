@@ -144,7 +144,7 @@ exports.fdr = hspfLayers.fdr
 exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
   'hspf_landcover_categories')
   
-  
+var lc_watermask = tncLC.neq(5)
   // Pollutant Concentrations 
-var tss_ugL = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/TSS_ugL").resample().mask(watermask)
+var tss_ugL = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/TSS_ugL").mask(lc_watermask).resample()
 exports.tss_ugL = tss_ugL
