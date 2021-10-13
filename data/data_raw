@@ -159,7 +159,7 @@ var ugL_convert = 1e-3 // multiply ug/L * mm/yr to get mg/m2/yr
 var pal = ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"]
 
 var tss_mg_yr = tss_ugL.multiply(ugL_convert).multiply(mean_annual_runoff.focal_mean(2)).
-rename('tss_mg_m2_yr').addBands((ee.Image.pixelArea()).rename('pixelArea'))
+rename('tss_mg_m2_yr')//.addBands((ee.Image.pixelArea()).rename('pixelArea'))
 
 //Map.addLayer(tss_mg_yr,{bands: "tss_mg_m2_yr", min:0, max:5e4, palette: pal})
 exports.tss_concentration = tss_ugL
