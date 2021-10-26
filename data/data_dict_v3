@@ -477,8 +477,7 @@ var rasters =
                         {
                             "min": 10000,
                             "max": 60000,
-                            "palette":
-                            ["440154","414487","2a788e","22a884","7ad151","fde725"],
+                            "palette":["440154","433e85","25858e","1e9b8a","2ab07f","52c569","86d549","c2df23","fde725"],
                             "opacity": 0.9,
                             "_row": "Total Suspended Solids Concentration"
                         }
