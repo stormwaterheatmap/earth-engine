@@ -475,7 +475,7 @@ var rasters =
                     "name": "Total Suspended Solids Concentration",
                     "visParams": 
                         {
-                            "min": 15000,
+                            "min": 10000,
                             "max": 80000,
                             "palette": ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"],
                             "opacity": 0.9,
