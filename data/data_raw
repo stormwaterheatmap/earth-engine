@@ -154,7 +154,7 @@ var lc_watermask =  ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2").select('MSK').mo
 // Pollutant Concentrations 
 //
 //// TSS
-var tss_ugL = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/TSS_ugL").resample().mask(lc_watermask).selfMask()
+var tss_ugL = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/TSS_ug_L").resample().mask(lc_watermask).selfMask()
 var ugL_convert = 1e-3 // multiply ug/L * mm/yr to get mg/m2/yr 
 var pal = ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"]
 
