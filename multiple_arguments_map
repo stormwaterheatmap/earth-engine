@@ -5,6 +5,7 @@ var image = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH35-
     imageCollection = ee.ImageCollection("LANDSAT/LT05/C02/T2_L2"),
     geometry = 
     /* color: #d63000 */
+    /* shown: false */
     /* displayProperties: [
       {
         "type": "rectangle"
@@ -17,7 +18,12 @@ var image = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH35-
           [-120.9958984375, 47.86086602791376]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 ////normalized Differense///////
-Map.addLayer(image.resample())
+var resampled = (image.resample())
+var actual = image 
+Map.addLayer(resampled)
+var er_img = (actual.subtract(resampled)).divide(actual)
+
+Map.addLayer(er_img,{min:-.1,max:.1})
 var imageCollection = imageCollection.filterBounds(geometry)
 // var bands = image3.bandNames()
 // print(bands)
