@@ -1,0 +1,69 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH35-NoNegs"),
+    image2 = ee.Image("users/stormwaterheatmap/CO2_onroad_2010"),
+    image3 = ee.Image("users/stormwaterheatmap/Vulcan_onroad"),
+    imageCollection = ee.ImageCollection("LANDSAT/LT05/C02/T2_L2"),
+    geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-123.061328125, 47.86086602791376],
+          [-123.061328125, 46.81863082379309],
+          [-120.9958984375, 46.81863082379309],
+          [-120.9958984375, 47.86086602791376]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+////normalized Differense///////
+Map.addLayer(image.resample())
+var imageCollection = imageCollection.filterBounds(geometry)
+// var bands = image3.bandNames()
+// print(bands)
+// var center_scale = function (band)
+// {
+//   return (image.subtract(ee.Image.constant(
+//     {
+//       value: ee.Number(stats.get('mean'))
+//     }))
+//     .divide(
+//       ee.Image.constant(
+//       {
+//         value: ee.Number(stats.get('sample_sd'))
+//       }))
+//   )
+// }
+// //And to call it:
+
+
+// var result = (['b1','b2']).map(ND) 
+
+// print(result)
+// Map.addLayer(result[0])
+
+////normalized Differense///////
+
+// var bands = ['b1','b2']
+
+
+
+
+// var ic = ee.Image(image3).map(ND(['b1','b2']))
+
+// print(ic)
+// Map.addLayer(ic[0])
+var bands = ['b1','b2']
+var moisture = 
+function(img,band){
+var int = function (band) {
+  
+  return  ee.Image(image3.select(band).pow(2));
+  }
+  return(int)
+}
+
+var result = bands.map(moisture(image3));
+  
+print(result)
+Map.addLayer(result[0])
