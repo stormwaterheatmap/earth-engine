@@ -1,5 +1,14 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var imageVisParam = {"opacity":1,"bands":["TSS_ug_L"],"min":2674.029232489531,"max":48491.76650370371,"gamma":1};
+var imageVisParam = {"opacity":1,"bands":["TSS_ug_L"],"min":2674.029232489531,"max":48491.76650370371,"gamma":1},
+    table = ee.FeatureCollection("projects/ee-tacoma-watershed/assets/vector/Tacoma_SWPolys_swOutfallAreas"),
+    table2 = ee.FeatureCollection("projects/ee-tacoma-watershed/assets/Tacoma_watershed_assets/Watersheds"),
+    table3 = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
+    geometry = /* color: #d63000 */ee.Geometry.MultiPoint(
+        [[-122.5131360310059, 47.28303011964914],
+         [-122.34353459057621, 47.241091082578755],
+         [-122.51759715694402, 47.20239175286671],
+         [-122.38894499856933, 47.10414463183235],
+         [-122.35117949563964, 47.189139389189606]]);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var rasters = 
 {
@@ -611,12 +620,12 @@ var vector_dict = {
   "Ecology Water Resource Inventory Area (WRIA)": rename_vector(data.WRIA, "WRIA_NM") 
 }
 
-var img = ee.Image().paint(data.PS_AU,1,1)
+// var img = ee.Image().paint(data.PS_AU,1,1)
 
 
-Export.image.toAsset({image:img,scale:1,region:data.PugetSound,
-  maxPixels:1e15
-})
+// Export.image.toAsset({image:img,scale:1,region:data.PugetSound,
+//   maxPixels:1e15
+// })
 print(vector_dict)
 // //used to look up which column to use for name for displaying
 // var  vector_dict_label_col = {
@@ -631,15 +640,27 @@ print(vector_dict)
 // }
 //ar fc = table.filterBounds(geometry)
 //print(fc.first())
+print(rasters) //var img = rasters
 
+var psau = vector_dict['Puget Sound Assessment Units']
+var city = table2.union()
+Map.addLayer(table2)
+var citypsau = psau.filterBounds(geometry)
+print(vector_dict)
+var img = rasters["Total Suspended Solids Concentration"].layer.eeObject
+var studyarea = table3.filterBounds(geometry).merge(city).union()
+Map.addLayer(img.clip(studyarea))
+Map.addLayer(studyarea)
 
-// var sheds = vector_dict["Ecology Water Resource Inventory Area (WRIA)"]//.map(remap_vector_name("WRIA_NM")))
-// //var tt = rename_vector(sheds,'WRIA_NM')
-// print(sheds.first())
-//print(ee.Feature(sheds.first()).get("WRIA_NM"))
-//print(sheds.map(remap_vector_name("WRIA_NM")))
-  //print(data.HUC12.first())//.get('name'))
-//exports.vector_dict_label_col = vector_dict_label_col
-exports.vector_dict = vector_dict
-exports.rasters = rasters
-print(rasters)
+//Map.addLayer(img.layer)
+// // var sheds = vector_dict["Ecology Water Resource Inventory Area (WRIA)"]//.map(remap_vector_name("WRIA_NM")))
+// // //var tt = rename_vector(sheds,'WRIA_NM')
+// // print(sheds.first())
+// //print(ee.Feature(sheds.first()).get("WRIA_NM"))
+// //print(sheds.map(remap_vector_name("WRIA_NM")))
+//   //print(data.HUC12.first())//.get('name'))
+// //exports.vector_dict_label_col = vector_dict_label_col
+// exports.vector_dict = vector_dict
+// exports.rasters = rasters
+// print(rasters)
+// Export.image.toAsset({image: img, region: studyarea, scale: 1, maxPixels:1e12})
