@@ -523,28 +523,6 @@ var rasters =
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //set data sources here 
 
 var data = require('users/stormwaterheatmap/apps:data/data_raw')
@@ -626,7 +604,7 @@ var vector_dict = {
 // Export.image.toAsset({image:img,scale:1,region:data.PugetSound,
 //   maxPixels:1e15
 // })
-print(vector_dict)
+//print(vector_dict)
 // //used to look up which column to use for name for displaying
 // var  vector_dict_label_col = {
 
@@ -640,17 +618,17 @@ print(vector_dict)
 // }
 //ar fc = table.filterBounds(geometry)
 //print(fc.first())
-print(rasters) //var img = rasters
+//print(rasters) //var img = rasters
 
-var psau = vector_dict['Puget Sound Assessment Units']
-var city = table2.union()
-Map.addLayer(table2)
-var citypsau = psau.filterBounds(geometry)
-print(vector_dict)
-var img = rasters["Total Suspended Solids Concentration"].layer.eeObject
-var studyarea = table3.filterBounds(geometry).merge(city).union()
-Map.addLayer(img.clip(studyarea))
-Map.addLayer(studyarea)
+// var psau = vector_dict['Puget Sound Assessment Units']
+// var city = table2.union()
+// Map.addLayer(table2)
+// var citypsau = psau.filterBounds(geometry)
+// print(vector_dict)
+// var img = rasters["Total Suspended Solids Concentration"].layer.eeObject
+// var studyarea = table3.filterBounds(geometry).merge(city).union()
+// Map.addLayer(img.clip(studyarea))
+// Map.addLayer(studyarea)
 
 //Map.addLayer(img.layer)
 // // var sheds = vector_dict["Ecology Water Resource Inventory Area (WRIA)"]//.map(remap_vector_name("WRIA_NM")))
@@ -660,7 +638,7 @@ Map.addLayer(studyarea)
 // //print(sheds.map(remap_vector_name("WRIA_NM")))
 //   //print(data.HUC12.first())//.get('name'))
 // //exports.vector_dict_label_col = vector_dict_label_col
-// exports.vector_dict = vector_dict
-// exports.rasters = rasters
+exports.vector_dict = vector_dict
+exports.rasters = rasters
 // print(rasters)
 // Export.image.toAsset({image: img, region: studyarea, scale: 1, maxPixels:1e12})
