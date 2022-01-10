@@ -36,7 +36,7 @@ var barLegend_log_xform = function(layerObj){
   var mid = (high - low)/2 
     var labelPanel = ui.Panel(
       [
-        ui.Label("≤ " + Math.round((low)), {margin: '4px 8px'}),
+        ui.Label( Math.round((low)), {margin: '4px 8px'}),
         ui.Label(
             (Math.round(mid)),
             {margin: '4px 8px', textAlign: 'center', stretch: 'horizontal'}),
