@@ -1,0 +1,37 @@
+var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
+
+
+var coc_layers = require("users/stormwaterheatmap/coc_layers:display_coc_layers")
+
+var coc_pal = ["00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","ffffff"]
+
+var cocs = {"Total Suspended Solids Concentration": {
+            "discrete": "FALSE",
+            "sourceName": "The Nature Conservancy",
+            "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_concentration",
+            "units": "μg/L",
+            "default_reduction": "mean",
+            "description": "Predicted Total Suspended Solids Concentration",
+            "safe_name": "total_suspended_solids_concentration",
+            "layer": 
+                {
+                    "eeObject": coc_layers.tss,//.divide(1000),
+                    "name": "TSS",
+                    "visParams": 
+                        {"bands":"log_tss_concentration_ug_per_L",
+                            "min": 1.73,
+                            "max": 3.27,
+                            "palette": coc_pal,
+                            "opacity": 0.8
+                        }
+                    
+                }
+            
+        }}
+Map.addLayer(cocs["Total Suspended Solids Concentration"].layer)
+
+var legendPanel = ui.Panel() 
+Map.add(legendPanel)
+
+helpers.clear_map_add_layer(cocs["Total Suspended Solids Concentration"],legendPanel)
+
