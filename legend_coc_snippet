@@ -1,5 +1,7 @@
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 
+var barLegend_log_xform = legends.barLegend_log_xform
 
 var coc_layers = require("users/stormwaterheatmap/coc_layers:display_coc_layers")
 
@@ -9,7 +11,7 @@ var cocs = {"Total Suspended Solids Concentration": {
             "discrete": "FALSE",
             "sourceName": "The Nature Conservancy",
             "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_concentration",
-            "units": "μg/L",
+            "units": "mg/L",
             "default_reduction": "mean",
             "description": "Predicted Total Suspended Solids Concentration",
             "safe_name": "total_suspended_solids_concentration",
@@ -28,10 +30,11 @@ var cocs = {"Total Suspended Solids Concentration": {
                 }
             
         }}
-Map.addLayer(cocs["Total Suspended Solids Concentration"].layer)
+var layerobj = cocs["Total Suspended Solids Concentration"]
 
 var legendPanel = ui.Panel() 
 Map.add(legendPanel)
 
-helpers.clear_map_add_layer(cocs["Total Suspended Solids Concentration"],legendPanel)
+
+legendPanel.add(barLegend_log_xform(cocs["Total Suspended Solids Concentration"]))
 
