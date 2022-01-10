@@ -71,9 +71,9 @@ var addObject = function (layerObject, map) {
     // mapPanel.layers().add(layerObject.layer)
 }
 
-var clear_map_add_layer = function(layerObject,legendPanel,map,log_transform){ 
+var clear_map_add_layer = function(layerObject,legendPanel,map,log_transform = false){ 
   var m = map || Map
-  var xform = log_transform || false
+  var xform = log_transform 
   m.layers().reset() //reset all layers
  // m.widgets().remove(legend)//remove legend if exists 
   m.layers().add(layerObject.layer)
