@@ -31,7 +31,7 @@ var barLegend_log_xform = function(layerObj){
             // padding: '0'
         }})
   
-  var low = Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
+  var low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
   var high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo())
   var mid = (high - low)/2 
     var labelPanel = ui.Panel(
