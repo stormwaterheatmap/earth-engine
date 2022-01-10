@@ -85,7 +85,7 @@ legend =   makeLegend(layerObject)
 }
 
  
-  print(legend)
+
   legend.style().set({position: "bottom-right"}); 
   legendPanel.clear().add(legend)
 }
