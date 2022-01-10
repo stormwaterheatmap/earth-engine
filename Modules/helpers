@@ -58,10 +58,15 @@ var clear_map_add_layer = function(layerObject,legendPanel,map,log_transform){
   m.layers().reset() //reset all layers
  // m.widgets().remove(legend)//remove legend if exists 
   m.layers().add(layerObject.layer)
- var legend =  ee.Algorithms.If(log_transform,
-  makeLegend(layerObject), 
-  makeLegend(layerObject))
-  
+var legend 
+  if(log_tranform){
+legend =   makeLegend(layerObject)    
+  } else {
+ legend = makeLegend(layerObject)  
+}
+
+ 
+  print(legend)
   legend.style().set({position: "bottom-right"}); 
   legendPanel.clear().add(legend)
 }
