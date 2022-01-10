@@ -31,9 +31,9 @@ var barLegend_log_xform = function(layerObj){
             // padding: '0'
         }})
   
-  var low = ee.Number(layerObj.layer.visParams.min)
-  var high = ee.Number(layerObj.layer.visParams.max)
-  var mid = high.subtract(low).divide(2)
+  var low = ee.Number(layerObj.layer.visParams.min).getInfo()
+  var high = ee.Number(layerObj.layer.visParams.max).getInfo()
+  var mid = high.subtract(low).divide(2).getInfo()
     var labelPanel = ui.Panel(
       [
         ui.Label(Math.round(undoColorStretch(low)), {margin: '4px 8px'}),
