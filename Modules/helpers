@@ -1,4 +1,4 @@
-var data = require('users/stormwaterheatmap/apps:data/public')
+
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
