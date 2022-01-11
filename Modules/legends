@@ -60,7 +60,7 @@ var barLegend = function (layerObj) {
             // margin: '0 0 4px 0',
             // padding: '0'
         }})
-  if(layerObj.log_transformed_viz == 'TRUE'){
+  if(layerObj.log_transformed_viz == "TRUE"){
 
 var   low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
   var high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo())
