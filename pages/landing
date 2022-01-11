@@ -128,7 +128,7 @@ var map_init = function(map){
  //m.add(panel)
  //m.add(legendPanel)
  select_layer_type.setValue("Pollutant Loading")
- secondname_select.setValue("Total Suspended Solids Concentration")
+// secondname_select.setValue("Total Suspended Solids Concentration")
  //legendPanel.style().set({shown:true})
  
 //helpers.clear_map_add_layer(coc_data["Total Suspended Solids Concentration"],legendPanel)
