@@ -30,22 +30,22 @@ var docs_link = make_docs_link(layerObject)
 return(legend.add(docs_link))
 }
 
-var makeLegend_log_xform = function (layerObject) {
-    var legend
-    if (layerObject.discrete == "TRUE") {
-        legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
-        // call the histogram function print('histogram')
-    } else {
-        legend = (barLegend_log_xform(layerObject))
-    } //add reports  
-    //legend.insert(0,ui.Label({value: "Legend", style:Style.fonts.H3}))
+// var makeLegend_log_xform = function (layerObject) {
+//     var legend
+//     if (layerObject.discrete == "TRUE") {
+//         legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
+//         // call the histogram function print('histogram')
+//     } else {
+//         legend = (barLegend_log_xform(layerObject))
+//     } //add reports  
+//     //legend.insert(0,ui.Label({value: "Legend", style:Style.fonts.H3}))
 
-    /*//add legend 
-    legendPanel.clear()
-    legendPanel.add(legend)*/
-var docs_link = make_docs_link(layerObject)
-return(legend.add(docs_link))
-}
+//     /*//add legend 
+//     legendPanel.clear()
+//     legendPanel.add(legend)*/
+// var docs_link = make_docs_link(layerObject)
+// return(legend.add(docs_link))
+// }
 
 //var f = map.removeObject(imgElem1.getEeObject(), Map) //this worked!
 var removeObject = function (eeObject, map) {
@@ -71,21 +71,13 @@ var addObject = function (layerObject, map) {
     // mapPanel.layers().add(layerObject.layer)
 }
 
-var clear_map_add_layer = function(layerObject,legendPanel,map,log_transform){ 
+var clear_map_add_layer = function(layerObject,legendPanel,map){ 
   var m = map || Map
-  var xform = (typeof log_transform !== 'undefined') ?  xform : "false"
-  // var xform = log_transform 
+  
   m.layers().reset() //reset all layers
  // m.widgets().remove(legend)//remove legend if exists 
   m.layers().add(layerObject.layer)
-var legend 
-  if(xform){
-legend =   makeLegend_log_xform(layerObject)    
-  } else {
- legend = makeLegend(layerObject)  
-}
-
- 
+var legend = makeLegend(layerObject)  
 
   legend.style().set({position: "bottom-right"}); 
   legendPanel.clear().add(legend)
