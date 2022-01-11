@@ -60,10 +60,18 @@ var barLegend = function (layerObj) {
             // margin: '0 0 4px 0',
             // padding: '0'
         }})
+  if(layerObj.log_transformed_viz == 'TRUE'){
   
   var low = (layerObj.layer.visParams.min)
   var high = (layerObj.layer.visParams.max)
   var mid = (ee.Number(high).subtract(low)).divide(2).getInfo()
+    
+  } else {
+   low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
+   high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo())
+   mid = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()/ 2)
+  }
+  
   var labelPanel = ui.Panel(
       [
         ui.Label(low, {margin: '4px 8px',textAlign: 'left',stretch: 'horizontal'}),
