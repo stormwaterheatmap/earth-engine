@@ -9,6 +9,7 @@ var coc_pal = ["00204c", "213d6b", "555b6c", "7b7a77", "a59c74", "d3c064",
 var cocs = {
     "Total Suspended Solids Concentration": {
         "discrete": "FALSE",
+        "log_transformed_viz": "TRUE", 
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_concentration",
         "units": "mg/L",
@@ -29,6 +30,7 @@ var cocs = {
     }, 
     "Total Copper Concentration": {
         "discrete": "FALSE",
+       "log_transformed_viz": "TRUE", 
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_concentration",
         "units": "µg/L",
@@ -47,29 +49,32 @@ var cocs = {
             }
         }
     }, 
-    "Total Suspended Solids Concentration": {
+    "Total Phosphorus Concentration": {
         "discrete": "FALSE",
+        "log_transformed_viz": "TRUE", 
         "sourceName": "The Nature Conservancy",
-        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_concentration",
-        "units": "mg/L",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_concentration",
+        "units": "ug/L",
         "default_reduction": "mean",
-        "description": "Predicted Total Suspended Solids Concentration",
-        "safe_name": "total_suspended_solids_concentration",
+        "description": "Predicted Total Phosphorus Concentration",
+        "safe_name": "total_phosphorus_concentration",
         "layer": {
-            "eeObject": coc_layers.tss, //.divide(1000),
-            "name": "TSS",
+            "eeObject": coc_layers.p, //.divide(1000),
+            "name": "Total Phosphorus",
             "visParams": {
-                "bands": "log_tss_concentration_mg_per_L",
-                "min": 1.73,
-                "max": 3.912,
+                "bands": "log_phosphorus_concentration_ug_per_L",
+                "min": 0,
+                "max": 5.298,
                 "palette": coc_pal,
                 "opacity": 0.8
             }
         }
     }
 }
-var layerobj = cocs["Total Copper Concentration"]
+var layerobj = cocs["Total Phosphorus Concentration"]
 var legendPanel = ui.Panel()
 Map.add(legendPanel)
-legendPanel.add(barLegend_log_xform(cocs[
-    "Total Copper Concentration"]))
+helpers.clear_map_add_layer(layerobj,legendPanel)
+//Map.add(legendPanel)
+// legendPanel.add(barLegend_log_xform(cocs[
+//     "Total Copper Concentration"]))
