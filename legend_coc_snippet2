@@ -59,7 +59,7 @@ var cocs = {
         "description": "Predicted Total Phosphorus Concentration",
         "safe_name": "total_phosphorus_concentration",
         "layer": {
-            "eeObject": coc_layers.p, //.divide(1000),
+            "eeObject": coc_layers.p,
             "name": "Total Phosphorus",
             "visParams": {
                 "bands": "log_phosphorus_concentration_ug_per_L",
