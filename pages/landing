@@ -84,7 +84,7 @@ var legendPanel = ui.Panel({style:{position:'bottom-right',shown:false, minWidth
 Map.add(legendPanel)
 var select_layer_type = ui.Select({
   items: Object.keys(layer_types),
-  placeholder: "Select Layer Type", 
+  //placeholder: "Select Layer Type", 
   value: Object.keys(layer_types)[2], 
   onChange: function() {
     var layer_dict = layer_types[select_layer_type.getValue()]; 
