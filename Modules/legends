@@ -63,8 +63,8 @@ var barLegend = function (layerObj) {
   if(layerObj.log_transformed_viz == "TRUE"){
 
 var   low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
-  var high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()).toPrecision(2)
-   var mid = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()/ 2).toPrecision(2)
+  var high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()).toPrecision(3)
+   var mid = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()/ 2).toPrecision(3)
 
     
   } else {
