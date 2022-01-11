@@ -21,34 +21,34 @@ function undoColorStretch(val) {
   return Math.exp(val)
 }
 
-var barLegend_log_xform = function(layerObj){
-   var title_label = 
-    ui.Label({value: layerObj.layer.name,
-    style: {
-            fontWeight: 'bold',
-            fontSize: '18px',
-            // margin: '0 0 4px 0',
-            // padding: '0'
-        }})
+// var barLegend_log_xform = function(layerObj){
+//   var title_label = 
+//     ui.Label({value: layerObj.layer.name,
+//     style: {
+//             fontWeight: 'bold',
+//             fontSize: '18px',
+//             // margin: '0 0 4px 0',
+//             // padding: '0'
+//         }})
   
-  var low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
-  var high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo())
-  var mid = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()/ 2)
+//   var low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
+//   var high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()).toPrecision(2)
+//   var mid = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()/ 2).toPrecision(2)
   
-    var labelPanel = ui.Panel(
-      [
-        ui.Label( Math.round((low)), {margin: '4px 8px'}),
-        ui.Label(
-            (Math.round(mid)),
-            {margin: '4px 8px', textAlign: 'center', stretch: 'horizontal'}),
-        ui.Label("≥ " + Math.round((high)), {margin: '4px 8px'})
-      ],
-      ui.Panel.Layout.flow('horizontal'));
-  var units_label = ui.Label({value:layerObj.units,style:fonts.Caption2})
-  var layer_description = ui.Label({value: layerObj.description, style:fonts.Caption2})
+//     var labelPanel = ui.Panel(
+//       [
+//         ui.Label(low, {margin: '4px 8px'}),
+//         ui.Label(
+//             (mid),
+//             {margin: '4px 8px', textAlign: 'center', stretch: 'horizontal'}),
+//         ui.Label("≥ " + (high), {margin: '4px 8px'})
+//       ],
+//       ui.Panel.Layout.flow('horizontal'));
+//   var units_label = ui.Label({value:layerObj.units,style:fonts.Caption2})
+//   var layer_description = ui.Label({value: layerObj.description, style:fonts.Caption2})
  
-  return ui.Panel([title_label,layer_description,ColorBar(layerObj), labelPanel,units_label])
-}
+//   return ui.Panel([title_label,layer_description,ColorBar(layerObj), labelPanel,units_label])
+// }
   
 
 var barLegend = function (layerObj) {
