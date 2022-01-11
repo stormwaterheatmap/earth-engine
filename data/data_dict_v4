@@ -10,6 +10,11 @@ var imageVisParam = {"opacity":1,"bands":["TSS_ug_L"],"min":2674.029232489531,"m
          [-122.38894499856933, 47.10414463183235],
          [-122.35117949563964, 47.189139389189606]]);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+/**
+ * @fileoverview bring in data from data_raw and oither sources. 
+ * Creates a dictionary of images and metadata for display and analysis. 
+ */
+
 var rasters = 
 {
     "Age of Imperviousness": 
@@ -522,36 +527,9 @@ var rasters =
     
 }
 
-var coc_layers = require("users/stormwaterheatmap/coc_layers:display_coc_layers")
-
-var coc_pal = ["00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","ffffff"]
-
-// var cocs = {"Total Suspended Solids Concentration": {
-//             "discrete": "FALSE",
-//             "sourceName": "2010 US Census Blocks",
-//             "sourceUrl": "https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2010/TGRSHP10SF1.pdf",
-//             "units": "Total Population",
-//             "default_reduction": "sum",
-//             "description": "2010 Census, population total",
-//             "safe_name": "population",
-//             "layer": 
-//                 {
-//                     "eeObject": coc_layers.tss,
-//                     "name": "Population",
-//                     "visParams": 
-//                         {
-//                             "min": 9,
-//                             "max": 10.4,
-//                             "palette": coc_pal,
-//                             "opacity": 0.8,
-//                             "_row": "Population"
-//                         }
-                    
-//                 }
-            
-//         }
-
-//set data sources here 
+/**
+ * Bring in data, renam and add sources to dictionary  
+ */
 
 var data = require('users/stormwaterheatmap/apps:data/data_raw')
 
@@ -581,17 +559,92 @@ var layerSources = {
  
 }
 
-
 var layNames =  Object.keys(layerSources)
 
-//add data to layer dictionary
+/**
+ * add data to layer dictionary
+ */
 
 for (var i = 0; i < layNames.length; i++) {
    var thisLayer = (layNames[i]);
    rasters[thisLayer].layer.eeObject = layerSources[thisLayer]
 }
 
+/**
+ * Bring in coc data and create a seperate data dictionary 
+ */
 
+var coc_layers = require("users/stormwaterheatmap/coc_layers:serve_coc_layers")
+
+//Common palette for all cocs: 
+var coc_pal = ["00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","ffffff"]
+
+//Coc data dictionary 
+var cocs = {
+    "Total Suspended Solids Concentration": {
+        "discrete": "FALSE",
+        "log_transformed_viz": "TRUE", 
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_concentration",
+        "units": "mg/L",
+        "default_reduction": "mean",
+        "description": "Predicted Total Suspended Solids Concentration",
+        "safe_name": "total_suspended_solids_concentration",
+        "layer": {
+            "eeObject": coc_layers.tss,
+            "name": "TSS",
+            "visParams": {
+                "bands": "log_tss_concentration_mg_per_L",
+                "min": 1.73,
+                "max": 3.912,
+                "palette": coc_pal,
+                "opacity": 0.8
+            }
+        }
+    }, 
+    "Total Copper Concentration": {
+        "discrete": "FALSE",
+       "log_transformed_viz": "TRUE", 
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_concentration",
+        "units": "µg/L",
+        "default_reduction": "mean",
+        "description": "Predicted Total Copper Concentration",
+        "safe_name": "total_copper_concentration",
+        "layer": {
+            "eeObject": coc_layers.copper, //.divide(1000),
+            "name": "Total Copper",
+            "visParams": {
+                "bands": "log_copper_concentration_ug_per_L",
+                "min": 0,
+                "max": 3.7,
+                "palette": coc_pal,
+                "opacity": 0.8
+            }
+        }
+    }, 
+    "Total Phosphorus Concentration": {
+        "discrete": "FALSE",
+        "log_transformed_viz": "TRUE", 
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_concentration",
+        "units": "ug/L",
+        "default_reduction": "mean",
+        "description": "Predicted Total Phosphorus Concentration",
+        "safe_name": "total_phosphorus_concentration",
+        "layer": {
+            "eeObject": coc_layers.p,
+            "name": "Total Phosphorus",
+            "visParams": {
+                "bands": "log_phosphorus_concentration_ug_per_L",
+                "min": 0,
+                "max": 5.298,
+                "palette": coc_pal,
+                "opacity": 0.8
+            }
+        }
+    }
+}
 
 exports.vectors = { //for legacy functions 
     counties: data.counties,
@@ -626,47 +679,9 @@ var vector_dict = {
   "Ecology Water Resource Inventory Area (WRIA)": rename_vector(data.WRIA, "WRIA_NM") 
 }
 
-// var img = ee.Image().paint(data.PS_AU,1,1)
 
 
-// Export.image.toAsset({image:img,scale:1,region:data.PugetSound,
-//   maxPixels:1e15
-// })
-//print(vector_dict)
-// //used to look up which column to use for name for displaying
-// var  vector_dict_label_col = {
 
-//   "County Boundaries": "NAMELSAD",
-//   "HUC12: USGS Watershed Boundary Dataset": "name",
-//   "HUC10: USGS Watershed Boundary Dataset": "name", 
-//   "HUC08: USGS Watershed Boundary Dataset":"name",
-//   "NHDPlus High Resolution Watershed Dataset": "FEATUREID",
-//   "Puget Sound Assessment Units": "OBJECTID", 
-//   "Ecology Water Resource Inventory Area (WRIA)": "WRIA_NM"
-// }
-//ar fc = table.filterBounds(geometry)
-//print(fc.first())
-//print(rasters) //var img = rasters
-
-// var psau = vector_dict['Puget Sound Assessment Units']
-// var city = table2.union()
-// Map.addLayer(table2)
-// var citypsau = psau.filterBounds(geometry)
-// print(vector_dict)
-// var img = rasters["Total Suspended Solids Concentration"].layer.eeObject
-// var studyarea = table3.filterBounds(geometry).merge(city).union()
-// Map.addLayer(img.clip(studyarea))
-// Map.addLayer(studyarea)
-
-//Map.addLayer(img.layer)
-// // var sheds = vector_dict["Ecology Water Resource Inventory Area (WRIA)"]//.map(remap_vector_name("WRIA_NM")))
-// // //var tt = rename_vector(sheds,'WRIA_NM')
-// // print(sheds.first())
-// //print(ee.Feature(sheds.first()).get("WRIA_NM"))
-// //print(sheds.map(remap_vector_name("WRIA_NM")))
-//   //print(data.HUC12.first())//.get('name'))
-// //exports.vector_dict_label_col = vector_dict_label_col
 exports.vector_dict = vector_dict
 exports.rasters = rasters
-// print(rasters)
-// Export.image.toAsset({image: img, region: studyarea, scale: 1, maxPixels:1e12})
+exports.cocs = cocs
