@@ -26,10 +26,50 @@ var cocs = {
                 "opacity": 0.8
             }
         }
+    }, 
+    "Total Copper Concentration": {
+        "discrete": "FALSE",
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_concentration",
+        "units": "µg/L",
+        "default_reduction": "mean",
+        "description": "Predicted Total Copper Concentration",
+        "safe_name": "total_copper_concentration",
+        "layer": {
+            "eeObject": coc_layers.copper, //.divide(1000),
+            "name": "Total Copper",
+            "visParams": {
+                "bands": "log_copper_concentration_ug_per_L",
+                "min": 0,
+                "max": 3.7,
+                "palette": coc_pal,
+                "opacity": 0.8
+            }
+        }
+    }, 
+    "Total Suspended Solids Concentration": {
+        "discrete": "FALSE",
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_concentration",
+        "units": "mg/L",
+        "default_reduction": "mean",
+        "description": "Predicted Total Suspended Solids Concentration",
+        "safe_name": "total_suspended_solids_concentration",
+        "layer": {
+            "eeObject": coc_layers.tss, //.divide(1000),
+            "name": "TSS",
+            "visParams": {
+                "bands": "log_tss_concentration_mg_per_L",
+                "min": 1.73,
+                "max": 3.912,
+                "palette": coc_pal,
+                "opacity": 0.8
+            }
+        }
     }
 }
-var layerobj = cocs["Total Suspended Solids Concentration"]
+var layerobj = cocs["Total Copper Concentration"]
 var legendPanel = ui.Panel()
 Map.add(legendPanel)
 legendPanel.add(barLegend_log_xform(cocs[
-    "Total Suspended Solids Concentration"]))
+    "Total Copper Concentration"]))
