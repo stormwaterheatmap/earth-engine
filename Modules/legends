@@ -165,7 +165,7 @@ var discreteLegend = function (layerObject) {
 
 exports.barLegend = barLegend
 exports.discreteLegend = discreteLegend
-exports.barLegend_log_xform = barLegend_log_xform
+//exports.barLegend_log_xform = barLegend_log_xform
 
  
 
