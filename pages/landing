@@ -84,8 +84,8 @@ var legendPanel = ui.Panel({style:{position:'bottom-right',shown:false, minWidth
 Map.add(legendPanel)
 var select_layer_type = ui.Select({
   items: Object.keys(layer_types),
-  //placeholder: "Select Layer Type", 
-  value: Object.keys(layer_types)[2], 
+  placeholder: "Select Layer Type", 
+  value: Object.keys(layer_types)[0], 
   onChange: function() {
     var layer_dict = layer_types[select_layer_type.getValue()]; 
     //print(layer_dict)
@@ -105,12 +105,12 @@ var select_layer_type = ui.Select({
   }
   
   });
-
+select_layer_type.setValue("Pollutant Loading")
 
 
 
 var secondname_select = ui.Select({items: 
-  Object.keys(layer_types["Input Data Layers"]),
+  Object.keys(layer_types["Pollutant Loading"]),
   onChange: function(result) {
           var layer_obj = data.rasters[result]
           legendPanel.style().set({shown:true})
@@ -127,10 +127,11 @@ var map_init = function(map){
  //m.clear()
  //m.add(panel)
  //m.add(legendPanel)
- select_layer_type.setValue("Input Data Layers")
- //secondname_select.setValue("Slope")
+ select_layer_type.setValue("Pollutant Loading")
+ secondname_select.setValue("Total Suspended Solids Concentration")
  //legendPanel.style().set({shown:true})
-          //helpers.clear_map_add_layer(layer_obj,legendPanel)
+ 
+//helpers.clear_map_add_layer(coc_data["Total Suspended Solids Concentration"],legendPanel)
   
 }
 helpers.make_tnc_map()
