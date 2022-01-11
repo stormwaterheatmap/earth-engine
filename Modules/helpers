@@ -80,7 +80,7 @@ var clear_map_add_layer = function(layerObject,legendPanel,map,log_transform){
   m.layers().add(layerObject.layer)
 var legend 
   if(xform){
-legend =   makeLegend(layerObject)    
+legend =   makeLegend_log_xform(layerObject)    
   } else {
  legend = makeLegend(layerObject)  
 }
