@@ -61,15 +61,16 @@ var barLegend = function (layerObj) {
             // padding: '0'
         }})
   if(layerObj.log_transformed_viz == 'TRUE'){
-  
-  var low = (layerObj.layer.visParams.min)
-  var high = (layerObj.layer.visParams.max)
-  var mid = (ee.Number(high).subtract(low)).divide(2).getInfo()
+
+var   low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
+  var high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo())
+   var mid = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()/ 2)
+
     
   } else {
-   low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
-   high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo())
-   mid = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()/ 2)
+   low = (layerObj.layer.visParams.min)
+   high = (layerObj.layer.visParams.max)
+   mid = (ee.Number(high).subtract(low)).divide(2).getInfo()
   }
   
   var labelPanel = ui.Panel(
