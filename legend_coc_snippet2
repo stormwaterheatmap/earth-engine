@@ -71,7 +71,7 @@ var cocs = {
         }
     }
 }
-var layerobj = cocs["Total Phosphorus Concentration"]
+var layerobj = cocs["Total Suspended Solids Concentration"]
 var legendPanel = ui.Panel()
 Map.add(legendPanel)
 helpers.clear_map_add_layer(layerobj,legendPanel)
