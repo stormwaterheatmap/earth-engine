@@ -3,7 +3,7 @@ var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var barLegend = legends.barLegend
-var barLegend_log_xform = legends.barLegend_log_xform
+//var barLegend_log_xform = legends.barLegend_log_xform
 
 
 function make_docs_link(layer_object){
