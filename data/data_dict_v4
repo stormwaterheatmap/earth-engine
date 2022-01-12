@@ -662,7 +662,7 @@ var cocs = {
               
                 "min": 0,
                 "max": 120,
-                "palette": coc_load,
+                "palette": load_pal,
                 "opacity": 0.8
             }
         }
