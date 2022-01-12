@@ -85,7 +85,7 @@ Map.add(legendPanel)
 var select_layer_type = ui.Select({
   items: Object.keys(layer_types),
   placeholder: "Select Layer Type", 
-  value: Object.keys(layer_types)[0], 
+  //value: Object.keys(layer_types)[0], 
   onChange: function() {
     var layer_dict = layer_types[select_layer_type.getValue()]; 
     //print(layer_dict)
@@ -105,7 +105,7 @@ var select_layer_type = ui.Select({
   }
   
   });
-select_layer_type.setValue("Pollutant Loading")
+//select_layer_type.setValue("Pollutant Loading")
 
 
 
@@ -127,7 +127,7 @@ var map_init = function(map){
  //m.clear()
  //m.add(panel)
  //m.add(legendPanel)
- select_layer_type.setValue("Pollutant Loading")
+ //select_layer_type.setValue("Pollutant Loading")
 // secondname_select.setValue("Total Suspended Solids Concentration")
  //legendPanel.style().set({shown:true})
  
