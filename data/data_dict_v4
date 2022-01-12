@@ -584,7 +584,7 @@ var load_pal = ["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"]
 var cocs = {
     "Total Suspended Solids Concentration": {
         "discrete": "FALSE",
-        "log_transformed_viz": "TRUE", 
+        "log_transformed_viz": "TRUE",
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_concentration",
         "units": "mg/L",
@@ -602,10 +602,10 @@ var cocs = {
                 "opacity": 0.8
             }
         }
-    }, 
+    },
     "Total Suspended Solids Load": {
         "discrete": "FALSE",
-        "log_transformed_viz": "FALSE", 
+        "log_transformed_viz": "FALSE",
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_load",
         "units": "g/m² per year",
@@ -616,7 +616,7 @@ var cocs = {
             "eeObject": coc_layers.tss_load,
             "name": "Total Suspended Solids Load",
             "visParams": {
-    
+
                 "min": 0,
                 "max": 40,
                 "palette": load_pal,
@@ -624,30 +624,10 @@ var cocs = {
             }
         }
     },
-    
-    
-    "Total Copper Load": {
-        "discrete": "FALSE",
-       "log_transformed_viz": "FALSE", 
-        "sourceName": "The Nature Conservancy",
-        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_load",
-        "units":  "mg/m² per year",
-        "default_reduction": "mean",
-        "description": "Predicted Total Copper Load",
-        "safe_name": "total_copper_load",
-        "layer": {
-            "eeObject": coc_layers.copper_load, 
-            "name": "Total Copper Load",
-            "visParams": {
-                "min": 0,
-                "max": 40,
-                "palette": load_pal,
-                "opacity": 0.8
-            }
-        }
-    }, 
 
 
+    
+    
     "Total Copper Concentration": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE",
@@ -658,7 +638,7 @@ var cocs = {
         "description": "Predicted Total Copper Concentration",
         "safe_name": "total_copper_concentration",
         "layer": {
-            "eeObject": coc_layers.copper,           
+            "eeObject": coc_layers.copper,
             "name": "Total Copper",
             "visParams": {
                 "bands": "log_copper_concentration_ug_per_L",
@@ -668,9 +648,29 @@ var cocs = {
             }
         }
     },
-
-
-
+    
+    "Total Copper Load": {
+        "discrete": "FALSE",
+        "log_transformed_viz": "FALSE",
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_load",
+        "units": "mg/m² per year",
+        "default_reduction": "mean",
+        "description": "Predicted Total Copper Load",
+        "safe_name": "total_copper_load",
+        "layer": {
+            "eeObject": coc_layers.copper_load,
+            "name": "Total Copper Load",
+            "visParams": {
+                "min": 0,
+                "max": 40,
+                "palette": load_pal,
+                "opacity": 0.8
+            }
+        }
+    },
+    
+    
     "Total Phosphorus Concentration": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE",
@@ -691,14 +691,11 @@ var cocs = {
             }
         }
     }
+    ,
 
-
-
-, 
-    
     "Total Phosphorus Load": {
         "discrete": "FALSE",
-        "log_transformed_viz": "TRUE", 
+        "log_transformed_viz": "TRUE",
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_load",
         "units": "mg/m² per year",
@@ -709,7 +706,7 @@ var cocs = {
             "eeObject": coc_layers.p_load,
             "name": "Total Phosphorus Load",
             "visParams": {
-              
+
                 "min": 0,
                 "max": 120,
                 "palette": load_pal,
