@@ -625,9 +625,6 @@ var cocs = {
         }
     },
 
-
-    
-    
     "Total Copper Concentration": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE",
@@ -645,6 +642,7 @@ var cocs = {
                 "min": 0,
                 "max": 3.7,
                 "palette": coc_pal,
+                "opacity": 0.8
             }
         }
     },
@@ -688,6 +686,7 @@ var cocs = {
                 "min": 0,
                 "max": 5.298,
                 "palette": coc_pal,
+                "opacity": 0.8
             }
         }
     }
