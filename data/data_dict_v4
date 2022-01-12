@@ -646,6 +646,56 @@ var cocs = {
             }
         }
     }, 
+    var lib = {
+
+    "Total Copper Concentration": {
+        "discrete": "FALSE",
+        "log_transformed_viz": "TRUE",
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_concentration",
+        "units": "µg/L",
+        "default_reduction": "mean",
+        "description": "Predicted Total Copper Concentration",
+        "safe_name": "total_copper_concentration",
+        "layer": {
+            "eeObject": coc_layers.copper,           
+            "name": "Total Copper",
+            "visParams": {
+                "bands": "log_copper_concentration_ug_per_L",
+                "min": 0,
+                "max": 3.7,
+                "palette": coc_pal,
+            }
+        }
+    },
+
+
+
+    "Total Phosphorus Concentration": {
+        "discrete": "FALSE",
+        "log_transformed_viz": "TRUE",
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_concentration",
+        "units": "ug/L",
+        "default_reduction": "mean",
+        "description": "Predicted Total Phosphorus Concentration",
+        "safe_name": "total_phosphorus_concentration",
+        "layer": {
+            "eeObject": coc_layers.p,
+            "name": "Total Phosphorus",
+            "visParams": {
+                "bands": "log_phosphorus_concentration_ug_per_L",
+                "min": 0,
+                "max": 5.298,
+                "palette": coc_pal,
+            }
+        }
+    }
+
+
+
+}
+    
     "Total Phosphorus Load": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE", 
