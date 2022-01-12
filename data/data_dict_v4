@@ -474,56 +474,56 @@ var rasters =
                 }
             
         }
-    ,
-    "Total Suspended Solids Concentration": 
-        {
-            "discrete": "FALSE",
-            "sourceName": "The Nature Conservancy",
-            "units": "µg/L",
-            "default_reduction": "mean",
-            "description": "Total Suspended Solids Concentration",
-            "safe_name": "total_suspended_solids_concentration",
-            "layer": 
-                {
-                    "eeObject": "eeObject",
-                    "name": "Total Suspended Solids Concentration",
-                    "visParams": 
-                        {
-                            "min": 10000,
-                            "max": 60000,
-                            "palette":["440154","433e85","25858e","1e9b8a","2ab07f","52c569","86d549","c2df23","fde725"],
-                            "opacity": 0.9,
-                            "_row": "Total Suspended Solids Concentration"
-                        }
+    // ,
+    // "Total Suspended Solids Concentration": 
+    //     {
+    //         "discrete": "FALSE",
+    //         "sourceName": "The Nature Conservancy",
+    //         "units": "µg/L",
+    //         "default_reduction": "mean",
+    //         "description": "Total Suspended Solids Concentration",
+    //         "safe_name": "total_suspended_solids_concentration",
+    //         "layer": 
+    //             {
+    //                 "eeObject": "eeObject",
+    //                 "name": "Total Suspended Solids Concentration",
+    //                 "visParams": 
+    //                     {
+    //                         "min": 10000,
+    //                         "max": 60000,
+    //                         "palette":["440154","433e85","25858e","1e9b8a","2ab07f","52c569","86d549","c2df23","fde725"],
+    //                         "opacity": 0.9,
+    //                         "_row": "Total Suspended Solids Concentration"
+    //                     }
                     
-                }
+    //             }
             
-        }
-    ,
-    "Total Suspended Solids Load": 
-        {
-            "discrete": "FALSE",
-            "sourceName": "The Nature Conservancy",
-            "units": "mg/m²/year",
-            "default_reduction": "mean",
-            "description": "Total Suspended Solids Load",
-            "safe_name": "total_suspended_solids_load",
-            "layer": 
-                {
-                    "eeObject": "eeObject",
-                    "name": "Total Suspended Solids Load",
-                    "visParams": 
-                        {
-                            "min": 0,
-                            "max": 50000,
-                            "palette": ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"],
-                            "opacity": 0.9,
-                            "_row": "Total Suspended Solids Load"
-                        }
+    //     }
+    // ,
+    // "Total Suspended Solids Load": 
+    //     {
+    //         "discrete": "FALSE",
+    //         "sourceName": "The Nature Conservancy",
+    //         "units": "mg/m²/year",
+    //         "default_reduction": "mean",
+    //         "description": "Total Suspended Solids Load",
+    //         "safe_name": "total_suspended_solids_load",
+    //         "layer": 
+    //             {
+    //                 "eeObject": "eeObject",
+    //                 "name": "Total Suspended Solids Load",
+    //                 "visParams": 
+    //                     {
+    //                         "min": 0,
+    //                         "max": 50000,
+    //                         "palette": ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"],
+    //                         "opacity": 0.9,
+    //                         "_row": "Total Suspended Solids Load"
+    //                     }
                     
-                }
+    //             }
             
-        }
+    //     }
     
 }
 
@@ -578,7 +578,8 @@ var coc_layers = require("users/stormwaterheatmap/coc_layers:serve_coc_data")
 
 //Common palette for all cocs: 
 var coc_pal = ["00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","ffffff"]
-
+var load_pal = ["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"]
+ 
 //Coc data dictionary 
 var cocs = {
     "Total Suspended Solids Concentration": {
@@ -592,7 +593,7 @@ var cocs = {
         "safe_name": "total_suspended_solids_concentration",
         "layer": {
             "eeObject": coc_layers.tss,
-            "name": "TSS",
+            "name": "Total Suspended Solids",
             "visParams": {
                 "bands": "log_tss_concentration_mg_per_L",
                 "min": 1.73,
@@ -602,44 +603,66 @@ var cocs = {
             }
         }
     }, 
-    "Total Copper Concentration": {
+    "Total Suspended Solids Load": {
         "discrete": "FALSE",
-       "log_transformed_viz": "TRUE", 
+        "log_transformed_viz": "FALSE", 
         "sourceName": "The Nature Conservancy",
-        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_concentration",
-        "units": "µg/L",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_load",
+        "units": "g/m² per year",
         "default_reduction": "mean",
-        "description": "Predicted Total Copper Concentration",
-        "safe_name": "total_copper_concentration",
+        "description": "Predicted Total Suspended Solids Load",
+        "safe_name": "total_suspended_solids_load",
         "layer": {
-            "eeObject": coc_layers.copper, //.divide(1000),
-            "name": "Total Copper",
+            "eeObject": coc_layers.tss_load,
+            "name": "Total Suspended Solids Load",
             "visParams": {
-                "bands": "log_copper_concentration_ug_per_L",
+    
                 "min": 0,
-                "max": 3.7,
-                "palette": coc_pal,
+                "max": 40,
+                "palette": load_pal,
+                "opacity": 0.8
+            }
+        }
+    },
+    
+    
+    "Total Copper Load": {
+        "discrete": "FALSE",
+       "log_transformed_viz": "FALSE", 
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_load",
+        "units":  "mg/m² per year",
+        "default_reduction": "mean",
+        "description": "Predicted Total Copper Load",
+        "safe_name": "total_copper_load",
+        "layer": {
+            "eeObject": coc_layers.copper_load, 
+            "name": "Total Copper Load",
+            "visParams": {
+                "min": 0,
+                "max": 40,
+                "palette": coc_load,
                 "opacity": 0.8
             }
         }
     }, 
-    "Total Phosphorus Concentration": {
+    "Total Phosphorus Load": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE", 
         "sourceName": "The Nature Conservancy",
-        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_concentration",
-        "units": "ug/L",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_load",
+        "units": "mg/m² per year",
         "default_reduction": "mean",
-        "description": "Predicted Total Phosphorus Concentration",
-        "safe_name": "total_phosphorus_concentration",
+        "description": "Predicted Total Phosphorus Load",
+        "safe_name": "total_phosphorus_load",
         "layer": {
-            "eeObject": coc_layers.p,
-            "name": "Total Phosphorus",
+            "eeObject": coc_layers.p_load,
+            "name": "Total Phosphorus Load",
             "visParams": {
-                "bands": "log_phosphorus_concentration_ug_per_L",
+              
                 "min": 0,
-                "max": 5.298,
-                "palette": coc_pal,
+                "max": 120,
+                "palette": coc_load,
                 "opacity": 0.8
             }
         }
