@@ -125,13 +125,14 @@ panel.widgets().set(3, secondname_select);
 var map_init = function(map){
  var m = map || Map
  //m.clear()
+ 
  //m.add(panel)
  //m.add(legendPanel)
  //select_layer_type.setValue("Pollutant Loading")
 // secondname_select.setValue("Total Suspended Solids Concentration")
- //legendPanel.style().set({shown:true})
+ legendPanel.style().set({shown:true})
  
-//helpers.clear_map_add_layer(coc_data["Total Suspended Solids Concentration"],legendPanel)
+helpers.clear_map_add_layer(coc_data["Total Suspended Solids Concentration"],legendPanel)
   
 }
 helpers.make_tnc_map()
