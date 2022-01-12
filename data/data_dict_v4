@@ -646,7 +646,7 @@ var cocs = {
             }
         }
     }, 
-    var lib = {
+
 
     "Total Copper Concentration": {
         "discrete": "FALSE",
