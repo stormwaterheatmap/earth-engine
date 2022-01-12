@@ -108,10 +108,17 @@ var map = drawing_tools_function
 ui.root.clear();
 ui.root.add(map);
 
-var layers = ee.Dictionary(data.rasters).combine(ee.Dictionary(data.cocs))
+var d1 = ee.Dictionary(data.rasters)
+var d2 = ee.Dictionary(data.cocs)
+
+var layers = (d1.combine(d2)).getInfo()
 
 
+print(layers)
 
+//print(layers.keys(),'layers keys')
+//var layer_keys = ee.List(layers.keys())
+///print(layer_keys)
 //drop down of layers 
 var layer_dropdown = ui.Select({items: Object.keys(layers), placeholder:'Select a layer', 
 style:{position: 'top-left'},
