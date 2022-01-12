@@ -694,7 +694,7 @@ var cocs = {
 
 
 
-}, 
+, 
     
     "Total Phosphorus Load": {
         "discrete": "FALSE",
