@@ -766,7 +766,7 @@ var cocs = {
         "safe_name": "tkn_concentration",
         "layer": {
             "eeObject": coc_layers.tkn,
-            "name": "Total Zinc",
+            "name": "Total Kjeldahl Nitrogen",
             "visParams": {
                 "bands": "log_tkn_concentration_ug_per_L",
                 "min": 5.27,
