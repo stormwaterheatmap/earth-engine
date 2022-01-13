@@ -712,6 +712,90 @@ var cocs = {
                 "opacity": 0.8
             }
         }
+    }, 
+      "Total Zinc Concentration": {
+        "discrete": "FALSE",
+        "log_transformed_viz": "TRUE",
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_zinc_concentration",
+        "units": "ug/L",
+        "default_reduction": "mean",
+        "description": "Predicted Total Zinc Concentration",
+        "safe_name": "total_zincconcentration",
+        "layer": {
+            "eeObject": coc_layers.zinc,
+            "name": "Total Zinc",
+            "visParams": {
+                "bands": "log_zinc_concentration_ug_per_L",
+                "min": 1.75,
+                "max": 5.75,
+                "palette": coc_pal,
+                "opacity": 0.8
+            }
+        }
+    },
+    "Total Zinc Load": {
+        "discrete": "FALSE",
+        "log_transformed_viz": "FALSE",
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_zinc_load",
+        "units": "mg/m² per year",
+        "default_reduction": "mean",
+        "description": "Predicted Total Zinc Load",
+        "safe_name": "total_zinc_load",
+        "layer": {
+            "eeObject": coc_layers.zinc_load,
+            "name": "Total Zinc Load",
+            "visParams": {
+
+                "min": 0,
+                "max": 40,
+                "palette": load_pal,
+                "opacity": 0.8
+            }
+        }
+    },
+    "Total Kjeldahl Nitrogen Concentration": {
+        "discrete": "FALSE",
+        "log_transformed_viz": "TRUE",
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/tkn_concentration",
+        "units": "ug/L",
+        "default_reduction": "mean",
+        "description": "Predicted Total Kjeldahl Nitrogen Concentration",
+        "safe_name": "tkn_concentration",
+        "layer": {
+            "eeObject": coc_layers.tkn,
+            "name": "Total Zinc",
+            "visParams": {
+                "bands": "log_tkn_concentration_ug_per_L",
+                "min": 5.27,
+                "max": 6.5,
+                "palette": coc_pal,
+                "opacity": 0.8
+            }
+        }
+    },
+    "Total Kjeldahl Nitrogen Load": {
+        "discrete": "FALSE",
+        "log_transformed_viz": "FALSE",
+        "sourceName": "The Nature Conservancy",
+        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/tkn_load",
+        "units": "mg/m² per year",
+        "default_reduction": "mean",
+        "description": "Predicted Kjeldahl Nitrogen Load",
+        "safe_name": "tkn_load",
+        "layer": {
+            "eeObject": coc_layers.tkn_load,
+            "name": "Total Kjeldahl Nitrogen Load",
+            "visParams": {
+
+                "min": 0,
+                "max": 40,
+                "palette": load_pal,
+                "opacity": 0.8
+            }
+        }
     }
 }
 
