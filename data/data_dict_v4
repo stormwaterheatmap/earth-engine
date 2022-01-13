@@ -694,7 +694,7 @@ var cocs = {
 
     "Total Phosphorus Load": {
         "discrete": "FALSE",
-        "log_transformed_viz": "TRUE",
+        "log_transformed_viz": "FALSE",
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_load",
         "units": "mg/m² per year",
@@ -791,7 +791,7 @@ var cocs = {
             "visParams": {
 
                 "min": 0,
-                "max": 40,
+                "max": 500,
                 "palette": load_pal,
                 "opacity": 0.8
             }
