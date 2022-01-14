@@ -136,7 +136,7 @@ style:{position: 'top-left'},
     
     var thisLayer = layers[value].layer
     map.addLayer({
-      eeObject: thisLayer.eeObject})
+      eeObject: ee.Image(thisLayer.eeObject)})
     
   }
   
