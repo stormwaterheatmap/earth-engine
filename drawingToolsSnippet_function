@@ -19,8 +19,8 @@ var helpers = require(
 //   onClick:function(){
 //     scale_drop_down.insert(1, ui.Label("OK"))
 //   }})
-var img = layer_object.layer.eeObject
-print(img)
+// var img = layer_object.layer.eeObject
+// print(img)
 drawingTools.setDrawModes(['polygon', 'rectangle'])
 map.setControlVisibility({drawingToolsControl:false} )
 //--------------------------
@@ -141,22 +141,6 @@ var scale_drop_down = ui.Slider({
 
 
 
-
-//list of widgets for donwload panel 
-// var downloadPanel_widgets
-
-// downloadPanel_widgets = ui.Panel({
-//         widgets: [line, 
-//             ui.Label('Choose scale to download layer:', {
-//                 fontWeight: 'bold'
-//             })
-            
-//         ]
-//     })
-
-
-// var download_panel = ui.Panel({widgets: [line,downloadPanel_widgets], style:{shown:false, width: 600, minWidth:300}})
- 
 
 
 //functions 
