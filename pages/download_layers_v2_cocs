@@ -111,7 +111,7 @@ ui.root.add(map);
 var d1 = ee.Dictionary(data.rasters)
 var d2 = ee.Dictionary(data.cocs)
 
-var layers = (d1.combine(d2)).getInfo()
+var layers = (d1.combine(d2)).getInfo()//bring from server back to client
 
 
 print(layers)
@@ -120,17 +120,23 @@ print(layers)
 //var layer_keys = ee.List(layers.keys())
 ///print(layer_keys)
 //drop down of layers 
+var test_img = layers["Total Zinc Load"].layer
+print(test_img)
+
+
 var layer_dropdown = ui.Select({items: Object.keys(layers), placeholder:'Select a layer', 
 style:{position: 'top-left'},
   onChange: function(value){
+    print(value)
     map = drawing_tools_function
   .display_drawing_tools(layers[value],
     map)
-//ui.root.clear();
-//ui.root.add(map);
     print("Widgets", map.widgets())
     map.layers().reset()
-    map.addLayer(layers[value].layer)
+    
+    var thisLayer = layers[value].layer
+    map.addLayer({
+      eeObject: thisLayer.eeObject})
     
   }
   
