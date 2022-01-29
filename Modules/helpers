@@ -108,7 +108,7 @@ function make_tnc_map(map) {
         fullscreenControl: true
     });
     m.setCenter(-122.3077440902171, 47.6043996364779, 9)
-    m.setOptions('Dark', Style.mapStyles)
+    m.setOptions('Light', Style.mapStyles)
 }
 
 
