@@ -468,10 +468,8 @@ exports.imgToFc = imgToFc
 
 function img_class_chart(layer_object, region, scale){
   var fc = imgToFc(region, layer_object, scale)
-
-var chart = ui.Chart.feature.byFeature(fc,'Class',['Area'])
-//print(chart.setChartType('ColumnChart'))
-return(chart.setChartType('ColumnChart'))
+  var chart = ui.Chart.feature.byFeature(fc,'Class',['Area'])
+  return(chart)//.setChartType('ColumnChart'))
 }
 
 
@@ -491,6 +489,8 @@ var stack_bands = function (layer_object) {
   return (img.select(layer_object.labels))
 }
 
+
+//Function for comparing multiple watersheds 
 function cat_chart(layer_object, regions, scale) {
   print("Cat Chart", layer_object)
   var stacked = stack_bands(layer_object)
