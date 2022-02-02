@@ -136,7 +136,7 @@ var rasters =
             "discrete": "FALSE",
             "sourceName": "The Nature Conservancy",
             "units": "Percent",
-            "values": [0, 1],
+            "values": ["0", "1"],
             "vizType": "bigNumberPercent",
             "default_reduction": "mean",
             "description": "Percent impervious land cover",
