@@ -472,7 +472,7 @@ exports.imgToFc = imgToFc
 function img_class_chart(layer_object, region, scale){
   var fc = imgToFc(region, layer_object, scale)
   var chart = ui.Chart.feature.byFeature(fc,'Class',['Area'])
-  return(chart).setChartType('ColumnChart'))
+  return(chart.setChartType('ColumnChart'))
 }
 
 
