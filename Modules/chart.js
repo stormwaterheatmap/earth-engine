@@ -156,7 +156,7 @@ function histogramImage(layerObject, WS, scale) {
     // title: ('Watershed histogram') // Elevation in Colorado (meters)'
   });
   return chart;
-};
+}
 exports.histogramImage = histogramImage;
 var makePieChart = function (
   geometry, properties, scale, holeSize) {
@@ -418,14 +418,17 @@ var imgToFc = function (
     .addBands(image); //acres
   var clipImage = withArea.clip(AOI)
   var lookup_names = ee.Dictionary.fromLists(
-    ee.List(properties.values)
-    .map(ee.String),
+    //ee.List(
+    properties.values //)
+    //.map(ee.String),
+    ,
     properties.labels
   );
   // print('lookup names', lookup_names)
   var lookup_palette = ee.Dictionary.fromLists(
-    ee.List(properties.values)
-    .map(ee.String),
+    //ee.List(
+    properties.values,//)
+    //.map(ee.String),
     properties.layer.visParams.palette
   );
   // print(ee.List(lookup_palette))
