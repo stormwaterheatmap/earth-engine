@@ -9,6 +9,7 @@ var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 
+var cocs = data.cocs
 
 var layerProperties = data.rasters
 
@@ -353,29 +354,29 @@ var makeReports = function () {
 
 
     var impChart = charts.stackedBar(layerProperties.Imperviousness, mapPanel.getScale(), clicked_basin_geom)
-    //impChart.setOptions(Style.charts.singleBar)
+    impChart.setOptions(Style.charts.singleBar)
 
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
 
 //To Do this is a temporary fix. 
-    //var luchart =  charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom,mapPanel.getScale() ); 
+    var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
     
     
-    //luchart.setOptions(Style.charts.imageBar)
-    //var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, mapPanel.getScale())
-    //lcchart.setOptions(Style.charts.imageBar)
-    // var luCard = cards('Land Use', [subtitle('Imperviousness'), impNum, //impChart, 
-    //     layerButton(layerProperties.Imperviousness),
-    //     hline(), subtitle('Land Use Classifications'), luchart,
-    //     layerButton(layerProperties['Land Use']),
-    //     hline(),
-    //     subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties['Land Cover'])
-    // ])
-    // analyzePanel.add(luCard)
+    luchart.setOptions(Style.charts.imageBar)
+    var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, mapPanel.getScale())
+    lcchart.setOptions(Style.charts.imageBar)
+    var luCard = cards('Land Use & Land Cover', [subtitle('Imperviousness'), impNum, //impChart, 
+        layerButton(layerProperties.Imperviousness),
+        hline(), subtitle('Land Use Classifications'), luchart,
+        layerButton(layerProperties['Land Use']),
+        hline(),
+        subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties['Land Cover'])
+    ])
+    analyzePanel.add(luCard)
 
 ///img_class_chart(layer_object, region, scale){
+    //var ageChart = charts.img_class_chart(
     var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,mapPanel.getScale() )
-    
     //pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
     //ageCard.setChartType('BarChart')
     //ageCard.setOptions(Style.charts.imageBar)
@@ -417,15 +418,15 @@ var makeReports = function () {
   
     
      //Make a panel for topography 
-    var TSSchart = charts.histogramImage(layerProperties['Total Suspended Solids Concentration'], clicked_basin_geom, mapPanel.getScale())
+    var TSSchart = charts.histogramImage(cocs['Total Suspended Solids Concentration'], clicked_basin_geom, mapPanel.getScale())
     
-    var TSSloadchart = charts.histogramImage(layerProperties['Total Suspended Solids Load'], clicked_basin_geom, mapPanel.getScale())
+    var TSSloadchart = charts.histogramImage(cocs['Total Suspended Solids Load'], clicked_basin_geom, mapPanel.getScale())
     var pollutantCard = cards('Pollutant Concentration', 
     [
       subtitle('Total Suspended Solids Concentation'), 
-      TSSchart, layerButton(layerProperties['Total Suspended Solids Concentration']), 
+      TSSchart, layerButton(cocs['Total Suspended Solids Concentration']), 
       subtitle('Total Suspended Solids Load'), 
-      TSSloadchart, layerButton(layerProperties['Total Suspended Solids Load'])
+      TSSloadchart, layerButton(cocs['Total Suspended Solids Load'])
       ]
       )
 analyzePanel.add(pollutantCard)
@@ -499,7 +500,7 @@ var buttonPanel = ui.Panel({
 
 
 var vectors_dict = data.vector_dict
-
+print(vectors_dict)
 
 //Get watershed values from the data list 
 var watershedSelect = ui.Select({items: Object.keys(vectors_dict).sort(), 
