@@ -164,7 +164,7 @@ var rasters =
             "labels": ["No data",  "Grass/Low Vegetation",  "Shrub/Medium Vegetation",  "Trees/Forest",  "Bare soil",  "Water",  "Impervious",  "Impervious - Roofs "],
             "sourceName": "The Nature Conservancy",
             "units": "Land Cover Type",
-            "values": [ 0, 1, 2, 3, 4, 5, 6, 7],
+            "values": [ "0", "1", "2", "3", "4", "5", "6", "7"],
             "default_reduction": "Category",
             "description": "1-meter resolution land cover classification",
             "safe_name": "land_cover",
