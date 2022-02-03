@@ -128,9 +128,13 @@ exports.tncLC = tncLC
 //Imperviousness
 var imperviousness = tncLC.eq(6)
   .or(tncLC.eq(7))
-exports.imperviousness = imperviousness
-var water = tncLC.eq(0)
-var watermask = water.neq(0)
+//exports.imperviousness = imperviousness
+//var water = ee.Image(0).blend(tncLC.eq(0).or(tncLC.eq(5)))
+
+var water = ee.Image("JRC/GSW1_3/GlobalSurfaceWater").select('occurrence')
+
+var watermask = ee.Image(1).blend(water.eq(0))
+Map.addLayer(imperviousness.mask(watermask))
 exports.imperviousness = imperviousness.mask(watermask)
 //updated 6/22/2021
 var imperviousAge = ee.Image("users/stormwaterheatmap/1m_cluster_age_v2")
