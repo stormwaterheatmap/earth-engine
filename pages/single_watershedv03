@@ -299,7 +299,7 @@ var makeFooter = function () {
     return footer
 }
 
-var mainPanel = helpers.makeMainPanel();
+var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
 
 
 
