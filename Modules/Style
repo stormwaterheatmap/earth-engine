@@ -661,7 +661,7 @@ exports.mapStyles = {
             "featureType": "water",
             "elementType": "all",
             "stylers": [{
-                    "color": "#dde6e8"
+                    "color": "#a6bddb"//#dde6e8"
                 },
                 {
                     "visibility": "on"
