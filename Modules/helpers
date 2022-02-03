@@ -122,7 +122,7 @@ var colors = Style.colors
 
 function makeMainPanel(title) { //function that makes the main control panel; returns a panel with title 
     
-   var title_label = title || "Analyze a Single Watershed"
+   var title_label = title || "Analyze a Watershed"
     
     var panelColors = {
         primary: '#004d40',
