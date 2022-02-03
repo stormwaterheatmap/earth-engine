@@ -130,8 +130,8 @@ var imperviousness = tncLC.eq(6)
   .or(tncLC.eq(7))
 exports.imperviousness = imperviousness
 var water = tncLC.eq(0)
-var watermask = tncLC.neq(0)
-exports.imperviousness = imperviousness.updateMask(watermask)
+var watermask = water.neq(0)
+exports.imperviousness = imperviousness.mask(watermask)
 //updated 6/22/2021
 var imperviousAge = ee.Image("users/stormwaterheatmap/1m_cluster_age_v2")
 //age of development 
