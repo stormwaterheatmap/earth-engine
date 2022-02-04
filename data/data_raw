@@ -127,7 +127,7 @@ var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
 exports.tncLC = tncLC
 //Imperviousness
 var imperviousness = tncLC.eq(6)
-  .or(tncLC.eq(7))
+  .or(tncLC.eq(7)).focal_mean()
 //exports.imperviousness = imperviousness
 //var water = ee.Image(0).blend(tncLC.eq(0).or(tncLC.eq(5)))
 
