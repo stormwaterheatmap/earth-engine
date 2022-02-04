@@ -149,7 +149,7 @@ var rasters =
                         {
                             "min": 0,
                             "max": 1,
-                            "palette": ["#10371c", "#f2298f"],
+                            "palette": ["#002564", "#fce644"],
                             "opacity": 0.8,
                             "_row": "Imperviousness"
                         }
