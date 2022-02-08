@@ -3,6 +3,7 @@ var rasters = data.rasters
 var vector_dict = data.vector_dict 
 exports.vector_dict = vector_dict
 exports.rasters = rasters
-exports.pollutant_loading = cocs
+exports.pollutant_loading = data.cocs
+
  
 
