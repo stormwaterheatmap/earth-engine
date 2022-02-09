@@ -48,7 +48,7 @@ exports.MS4 = ee.FeatureCollection(
 /*---------------------------
 Earth Engine Catalog Data 
 */
-var NED = ee.Image("USGS/NED");
+var NED = ee.Image("USGS/3DEP/10m");
 //Slope
 //Slope Categories: 
 var thresholds = ee.Image([5.0, 15,
