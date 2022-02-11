@@ -620,8 +620,8 @@ var cocs = {
             "name": "Total Suspended Solids Load",
             "visParams": {
 
-                "min": 0,
-                "max": 40,
+                "min": 10,
+                "max": 30,
                 "palette": load_pal,
                 "opacity": 0.8
             }
