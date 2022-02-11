@@ -65,7 +65,7 @@ var rasters =
                         {
                             "min": 1,
                             "max": 10,
-                            "palette": ["#FFFFCC", "#FBEC9A", "#F4CC68", "#ECA855", "#E48751", "#D2624D", "#A54742", "#73382F", "#422818", "#1A1A01"],
+                            "palette": ["f0f9e8","a8ddb5","7bccc4","43a2ca","0868ac"], 
                             "opacity": 0.8,
                             "_row": "Flow Duration Index"
                         }
