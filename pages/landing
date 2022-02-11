@@ -7,10 +7,9 @@ ui.root.setLayout(ui.Panel.Layout.absolute());
 var data = require('users/stormwaterheatmap/apps:data/data_dict_v4')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
-
 var fonts = Style.fonts 
 
-var rasters = data.rasters
+var rasters = data.rasters 
 print(rasters)
 var layer_types = {"Input Data Layers": {}, "Hydrology Data Layers": {}}; 
 layer_types["Input Data Layers"] = {
