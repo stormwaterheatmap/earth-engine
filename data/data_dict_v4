@@ -580,6 +580,8 @@ var coc_layers = require("users/stormwaterheatmap/coc_layers:serve_coc_data")
 
 //Common palette for all cocs: 
 var coc_pal = ["042333","2c3395","744992","b15f82","eb7958","fbb43d","e8fa5b","ffffff"]
+
+//["042333","2c3395","744992","b15f82","eb7958","fbb43d","e8fa5b","ffffff"]
 //["00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","ffffff"]
 var load_pal = ["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"]
  
@@ -599,8 +601,8 @@ var cocs = {
             "name": "Total Suspended Solids",
             "visParams": {
                 "bands": "log_tss_concentration_mg_per_L",
-                "min": 1.73,
-                "max": 3.912,
+                "min": 2.5,
+                "max": 3.6,
                 "palette": coc_pal,
                 "opacity": 0.8
             }
