@@ -38,7 +38,7 @@ var rasters =
                         {
                             "min": 3,
                             "max": 5,
-                            "palette": ["#018571",  "#80cdc1",  "#a6611a"],
+                            "palette": ["009E73","F0E442","CC6677"],
                             "opacity": 0.8,
                             "_row": "Age of Imperviousness"
                         }
