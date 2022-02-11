@@ -146,7 +146,7 @@ exports.age_of_development = imperviousAge
 */
 var hspfLayers = require('users/stormwaterheatmap/source_data:hspfLayers');
 //runoff 
-var mean_annual_runoff = hspfLayers.mean_annual_runoff
+var mean_annual_runoff = hspfLayers.mean_annual_runoff.focal_mean(1)
 exports.mean_annual_runoff = mean_annual_runoff
 //Flow Duration Index 
 exports.fdr = hspfLayers.fdr
