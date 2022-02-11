@@ -452,7 +452,7 @@ var rasters =
         {
             "discrete": "FALSE",
             "sourceName": "The Nature Conservancy",
-            "units": "Average Annual Daily Trips (square root transformed)",
+            "units": "Average Annual Daily Trips",
             "vizType": "bigNumberMean",
             "default_reduction": "mean",
             "description": "Mean Annual Average Daily Trips",
