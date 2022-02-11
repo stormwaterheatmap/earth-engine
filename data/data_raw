@@ -72,7 +72,7 @@ exports.counties = ee.FeatureCollection(
     PugetSound);
 exports.traffic = ee.Image(0)
   .blend(ee.Image(
-    "users/cnilsen/trafficExport")).focal_max()
+    "users/cnilsen/trafficExport")).focal_max(2)
 //Watersheds     
 exports.PS_AU = ee.FeatureCollection(
   'users/cnilsen/PS_AU')
