@@ -315,31 +315,31 @@ var rasters =
                 }
             
         }
-    ,
-    "Runoff (in)": 
-        {
-            "discrete": "FALSE",
-            "sourceName": "The Nature Conservancy",
-            "units": "in/year",
-            "default_reduction": "mean",
-            "description": "Mean annual runoff calculated through continuous simulation for the period 1970-1999.",
-            "safe_name": "runoff_in",
-            "layer": 
-                {
-                    "eeObject": "eeObject",
-                    "name": "Runoff (in)",
-                    "visParams": 
-                        {
-                            "min": 1,
-                            "max": 40,
-                            "palette": ["eafdfd","9cd4da","61a8c7","427bb7","3f4b96","292851","040613"],
-                            "opacity": 0.8,
-                            "_row": "Runoff (in)"
-                        }
+    // ,
+    // "Runoff (in)": 
+    //     {
+    //         "discrete": "FALSE",
+    //         "sourceName": "The Nature Conservancy",
+    //         "units": "in/year",
+    //         "default_reduction": "mean",
+    //         "description": "Mean annual runoff calculated through continuous simulation for the period 1970-1999.",
+    //         "safe_name": "runoff_in",
+    //         "layer": 
+    //             {
+    //                 "eeObject": "eeObject",
+    //                 "name": "Runoff (in)",
+    //                 "visParams": 
+    //                     {
+    //                         "min": 1,
+    //                         "max": 40,
+    //                         "palette": ["eafdfd","9cd4da","61a8c7","427bb7","3f4b96","292851","040613"],
+    //                         "opacity": 0.8,
+    //                         "_row": "Runoff (in)"
+    //                     }
                     
-                }
+    //             }
             
-        }
+    //     }
     ,
     "Runoff (mm)": 
         {
