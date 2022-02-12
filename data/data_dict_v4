@@ -264,32 +264,32 @@ var rasters =
             
         }
     ,
-    "Precipitation (in)": 
-        {
-            "discrete": "FALSE",
-            "sourceName": "Salathé et al 2019",
-            "sourceUrl": "https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/",
-            "units": "in/year",
-            "default_reduction": "mean",
-            "description": "Mean annual precipitation (1970-1999)",
-            "safe_name": "precipitation_in",
-            "layer": 
-                {
-                    "eeObject": "eeObject",
-                    "name": "Precipitation (in)",
-                    "visParams": 
-                        {
-                            "min": 20,
-                            "max": 120,
-                            "palette": ["#781c81", "#3f60ae", "#539eb6", "#6db388", "#cab843", "#e78532", "#d92120"],
-                            "opacity": 0.8,
-                            "_row": "Precipitation (in)"
-                        }
+    // "Precipitation (in)": 
+    //     {
+    //         "discrete": "FALSE",
+    //         "sourceName": "Salathé et al 2019",
+    //         "sourceUrl": "https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/",
+    //         "units": "in/year",
+    //         "default_reduction": "mean",
+    //         "description": "Mean annual precipitation (1970-1999)",
+    //         "safe_name": "precipitation_in",
+    //         "layer": 
+    //             {
+    //                 "eeObject": "eeObject",
+    //                 "name": "Precipitation (in)",
+    //                 "visParams": 
+    //                     {
+    //                         "min": 20,
+    //                         "max": 120,
+    //                         "palette": ["#781c81", "#3f60ae", "#539eb6", "#6db388", "#cab843", "#e78532", "#d92120"],
+    //                         "opacity": 0.8,
+    //                         "_row": "Precipitation (in)"
+    //                     }
                     
-                }
+    //             }
             
-        }
-    ,
+    //     }
+    // ,
     "Precipitation (mm)": 
         {
             "discrete": "FALSE",
