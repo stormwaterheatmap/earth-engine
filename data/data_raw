@@ -98,19 +98,25 @@ exports.landuse_img = ee.Image(
   .rename("Land Use")
   .rename("land_use_code")
 // This function computes the feature's geometry area and adds it as a property.
-var calc_density = function (feature)
-{
-  return feature.set(
-  {
-    population_density: feature.get('pop10')
-      .divide(feature.geometry()
-        .area()
-        .divide(100 * 100))
-  });
-};
-exports.population_per_ha = ee.Image(
-    "users/stormwaterheatmap/population_per_ha")
-  .selfMask()
+// var calc_density = function (feature)
+// {
+//   return feature.set(
+//   {
+//     population_density: feature.get('pop10')
+//       .divide(feature.geometry()
+//         .area()
+//         .divide(100 * 100))
+//   });
+// };
+
+var HRSL = ee.ImageCollection("projects/sat-io/open-datasets/hrsl/hrslpop");
+
+var population_density = ee.Image(0).
+blend(HRSL.mosaic().focal_mean(0.5))//.focal_min(1).focal_max(1))
+
+
+
+exports.population_density = population_density
 // Map the area getting function over the FeatureCollection.
 
 //Soils 
