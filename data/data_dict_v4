@@ -545,7 +545,7 @@ var layerSources = {
   "Land Cover":data.tncLC.rename('landcover'),
   "Land Use": data.landuse_img.rename('Land Use'),
   "Population":data.population.rename('population_count'),
-  "Population Density": data.population_density.rename('population_density').mask(data.population),
+  "Population Density": data.population_density.rename('population_density'),//.mask(data.population),
   "Precipitation (in)":data.precip.divide(
                     ee.Image(25.4)),
   "Precipitation (mm)":data.precip, 
