@@ -667,7 +667,7 @@ var cocs = {
             "name": "Total Copper Load",
             "visParams": {
                 "min": 0,
-                "max": 40,
+                "max": 16,
                 "palette": load_pal,
                 "opacity": 0.8
             }
