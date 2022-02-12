@@ -755,7 +755,7 @@ var cocs = {
             "visParams": {
 
                 "min": 0,
-                "max": 40,
+                "max": 100,
                 "palette": load_pal,
                 "opacity": 0.8
             }
