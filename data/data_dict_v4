@@ -211,32 +211,32 @@ var rasters =
                 }
             
         }
-    ,
-    "Population": 
-        {
-            "discrete": "FALSE",
-            "sourceName": "2010 US Census Blocks",
-            "sourceUrl": "https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2010/TGRSHP10SF1.pdf",
-            "units": "Total Population",
-            "default_reduction": "sum",
-            "description": "2010 Census, population total",
-            "safe_name": "population",
-            "layer": 
-                {
-                    "eeObject": "eeObject",
-                    "name": "Population",
-                    "visParams": 
-                        {
-                            "min": 0,
-                            "max": 300,
-                            "palette": ["#FFC5D4", "#FFB3D0", "#EF98B6", "#DE7C9C", "#CC6184", "#BB446C", "#A82255", "#672941"],
-                            "opacity": 0.8,
-                            "_row": "Population"
-                        }
+    //,
+    // "Population": 
+    //     {
+    //         "discrete": "FALSE",
+    //         "sourceName": "2010 US Census Blocks",
+    //         "sourceUrl": "https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2010/TGRSHP10SF1.pdf",
+    //         "units": "Total Population",
+    //         "default_reduction": "sum",
+    //         "description": "2010 Census, population total",
+    //         "safe_name": "population",
+    //         "layer": 
+    //             {
+    //                 "eeObject": "eeObject",
+    //                 "name": "Population",
+    //                 "visParams": 
+    //                     {
+    //                         "min": 0,
+    //                         "max": 300,
+    //                         "palette": ["#FFC5D4", "#FFB3D0", "#EF98B6", "#DE7C9C", "#CC6184", "#BB446C", "#A82255", "#672941"],
+    //                         "opacity": 0.8,
+    //                         "_row": "Population"
+    //                     }
                     
-                }
+    //             }
             
-        }
+    //     }
     ,
     "Population Density": 
         {
@@ -255,7 +255,10 @@ var rasters =
                         {
                             "min": 0,
                             "max": 100,
-                            "palette": ["#FFC5D4", "#FFB3D0", "#EF98B6", "#DE7C9C", "#CC6184", "#BB446C", "#A82255", "#672941"],
+                            "palette": 
+                            
+                            ["000000","00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","fbfdd9"],
+
                             "opacity": 0.8,
                             "_row": "Population Density"
                         }
@@ -542,7 +545,7 @@ var layerSources = {
   "Land Cover":data.tncLC.rename('landcover'),
   "Land Use": data.landuse_img.rename('Land Use'),
   "Population":data.population.rename('population_count'),
-  "Population Density": data.population_per_ha.rename('population_density').mask(data.population),
+  "Population Density": data.population_density.rename('population_density').mask(data.population),
   "Precipitation (in)":data.precip.divide(
                     ee.Image(25.4)),
   "Precipitation (mm)":data.precip, 
