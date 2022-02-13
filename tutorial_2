@@ -1,0 +1,49 @@
+//Import data dictionary from stormwater heatmap: 
+var data = require('users/stormwaterheatmap/apps:data/public')
+
+//Print data to console to view how its organized:  
+print("Data:", data)
+/* 
+data contains three categories: pollutant_loading, rasters, and vector_dict 
+pollutant_loading contains all consitituents (concentrations and annual loads)
+rasters contain both input layers and hydrology layers 
+vector_dict contain all the vector data (watershed boundaries, etc) 
+*/ 
+
+// Print data.rasters to view in console 
+print("Rasters:", data.rasters)
+/*
+Output: 
+Age of Imperviousness: Object (12 properties)
+Flow Duration Index: Object (9 properties)
+HSPF Land Cover Type: Object (10 properties)
+Hydrologic Response Units: Object (11 properties)
+Imperviousness: Object (9 properties)
+Land Cover: Object (9 properties)
+Land Use: Object (10 properties)
+Population Density: Object (8 properties)
+Precipitation (mm): Object (8 properties)
+Runoff (mm): Object (7 properties)
+Slope: Object (8 properties)
+Slope Categories: Object (10 properties)
+Soils: Object (10 properties)
+Traffic: Object (8 properties)
+*/ 
+
+// Get land cover 
+var landcover = data.rasters["Land Cover"]
+
+//Print layer in console: 
+print("Land Cover:", landcover)
+
+/*
+Individual objects contain all the info used in the stormwater heatmap. 
+To add it to the map, add the layer object 
+Use this for display 
+*/ 
+
+Map.addLayer(landcover.layer)
+
+// To get just the image add the eeObject 
+//use this for data analysis 
+Map.addLayer(landcover.layer.eeObject,{min:0,max:7},'eeobject')
