@@ -2,14 +2,14 @@
 var data = require('users/stormwaterheatmap/apps:data/public')
 
 //Print data to console to view how its organized:  
-print(data)
+print("Data:", data)
 // data contains three categories: pollutant_loading, rasters, and vector_dict 
 // pollutant_loading contains all consitituents (concentrations and annual loads)
 // rasters contain both input layers and hydrology layers 
 // vector_dict contain all the vector data (watershed boundaries, etc) 
 
 // Print data.rasters to view in console 
-Print(data.rasters)
+print("Rasters:", data.rasters)
 
 // Output: 
 // Age of Imperviousness: Object (12 properties)
@@ -31,4 +31,7 @@ Print(data.rasters)
 var layer = data.rasters["Land Cover"]
 
 //Print layer in console: 
-print(layer)
+print("Land Cover:", layer)
+
+// Individual objects contain all the info used in the stormwater heatmap. 
+// To add it to the 
