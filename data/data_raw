@@ -17,7 +17,7 @@ Vectors
 */
 var PugetSound = ee.FeatureCollection(
   "users/stormwaterheatmap/tables/PugetSound");
-poexports.PugetSound = PugetSound
+exports.PugetSound = PugetSound
 exports.hrus = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode")
 exports.counties = ee.FeatureCollection(
     "TIGER/2018/Counties")
