@@ -109,7 +109,7 @@ exports.landuse_img = ee.Image(
 //   });
 // };
 var HRSL = ee.ImageCollection("projects/sat-io/open-datasets/hrsl/hrslpop");
-var population_density = ee.Image(0).blend(HRSL.mosaic()).divide(0.09).focal_mode(3).focal_mean() //people per hectare
+var population_density = ee.Image(0).blend(HRSL.mosaic()).divide(0.09).focal_mode().focal_mean() //people per hectare
 //Map.addLayer(population_density.focal_mode(2).focal_max().focal_min(),{},'focal_mode')
 
 
