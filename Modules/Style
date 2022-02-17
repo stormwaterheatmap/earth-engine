@@ -283,7 +283,7 @@ var bb = ui.Label({
 
 //MapsStyle
 
-exports.GRAYMAP = {"Graymap": [{ // Dial down the map saturation.
+//exports.GRAYMAP = {"Graymap": [{ // Dial down the map saturation.
     stylers: [{
         saturation: -100
     }]
@@ -316,7 +316,7 @@ exports.GRAYMAP = {"Graymap": [{ // Dial down the map saturation.
         visibility: 'off'
     }]
 }]};
-exports.Dark2 =  {"Dark2": [
+//exports.Dark2 =  {"Dark2": [
   {
     "elementType": "geometry",
     "stylers": [
