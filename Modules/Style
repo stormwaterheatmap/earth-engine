@@ -614,13 +614,13 @@ var mapStyles = {
                 "color": "#f2f2f2"
             }]
         },
-        {
-            "featureType": "landscape",
-            "elementType": "icon",
-            "stylers": [{
-                "visibility": "off"
-            }]
-        },
+        // {
+        //     "featureType": "landscape",
+        //     "elementType": "icon",
+        //     "stylers": [{
+        //         "visibility": "off"
+        //     }]
+        // },
         {
             "featureType": "poi",
             "elementType": "all",
