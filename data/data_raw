@@ -109,13 +109,16 @@ exports.landuse_img = ee.Image(
 //   });
 // };
 var HRSL = ee.ImageCollection("projects/sat-io/open-datasets/hrsl/hrslpop");
-var population_density = ee.Image(0).blend(
-  HRSL.mosaic().divide(0.09))//.focal_mode().focal_mean()) //people per hectare
-//Map.addLayer(population_density.focal_mode(2).focal_max().focal_min(),{},'focal_mode')
+
+
+var HRSL = "projects/ee-stormwaterheatmap/assets/meta_population_200m"
+// var population_density = ee.Image(0).blend(
+//   HRSL.mosaic().divide(0.09))//.focal_mode().focal_mean()) //people per hectare
+// //Map.addLayer(population_density.focal_mode(2).focal_max().focal_min(),{},'focal_mode')
 
 
 
-exports.population_density = population_density
+exports.population_density = HRSL.focal_mean()
 // Map the area getting function over the FeatureCollection.
 
 //Soils 
