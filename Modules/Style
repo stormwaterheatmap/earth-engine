@@ -283,7 +283,8 @@ var bb = ui.Label({
 
 //MapsStyle
 
-//exports.GRAYMAP = {"Graymap": [{ // Dial down the map saturation.
+/*
+exports.GRAYMAP = {"Graymap": [{ // Dial down the map saturation.
     stylers: [{
         saturation: -100
     }]
@@ -595,6 +596,8 @@ var bb = ui.Label({
 }; 
 //var styles = {
 // 'Soft Blue': [
+
+*/ 
 exports.mapStyles = {
 
     'Light': [{
