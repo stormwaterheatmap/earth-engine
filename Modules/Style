@@ -735,13 +735,13 @@ exports.mapStyles = {
                 "color": "#4d6059"
             }]
         },
-        {
-            "featureType": "landscape.natural",
-            "elementType": "labels.text.fill",
-            "stylers": [{
-                "color": "#444444"
-            }]
-        },
+        // {
+        //     "featureType": "landscape.natural",
+        //     "elementType": "labels.text.fill",
+        //     "stylers": [{
+        //         "color": "#444444"
+        //     }]
+        // },
         {
             "featureType": "landscape.natural.landcover",
             "elementType": "geometry.fill",
@@ -753,7 +753,7 @@ exports.mapStyles = {
             "featureType": "landscape.natural.landcover",
             "elementType": "labels.text.stroke",
             "stylers": [{
-                "visibility": "off"
+                "visibility": "on"
             }]
         },
         {
