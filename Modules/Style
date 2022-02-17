@@ -607,13 +607,13 @@ var mapStyles = {
                 "color": "#444444"
             }]
         },
-        // {
-        //     "featureType": "landscape",
-        //     "elementType": "all",
-        //     "stylers": [{
-        //         "color": "#f2f2f2"
-        //     }]
-        // },
+        {
+            "featureType": "geometry",
+            "elementType": "all",
+            "stylers": [{
+                "color": "#f2f2f2"
+            }]
+        },
         {
             "featureType": "poi",
             "elementType": "all",
@@ -911,6 +911,6 @@ var mapStyles = {
 }
 
 exports.mapStyles = mapStyles
- Map.setOptions('Light', Style.mapStyles)
+ Map.setOptions('Light', mapStyles)
 
 //print(charts) 
