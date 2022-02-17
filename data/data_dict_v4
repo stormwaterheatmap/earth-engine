@@ -253,11 +253,19 @@ var rasters =
                     "name": "Population Density",
                     "visParams": 
                         {
-                            "min": 0,
-                            "max": 50,
-                            "palette": 
                             
-                            ["000000","00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","fbfdd9"],
+
+  "max": 50,
+  "palette": [
+    "042333",
+    "2c3395",
+    "b15f82",
+    "eb7958",
+    "fbb43d",
+    "e8fa5b",
+    "ffffff"
+  ]
+,
 
                             "opacity": 0.8,
                             "_row": "Population Density"
