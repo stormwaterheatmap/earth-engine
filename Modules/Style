@@ -608,10 +608,17 @@ var mapStyles = {
             }]
         },
         {
-            "featureType": "geometry",
-            "elementType": "all",
+            "featureType": "landscape",
+            "elementType": "geometry",
             "stylers": [{
                 "color": "#f2f2f2"
+            }]
+        },
+        {
+            "featureType": "landscape",
+            "elementType": "icon",
+            "stylers": [{
+                "visibility": "off"
             }]
         },
         {
