@@ -735,13 +735,13 @@ exports.mapStyles = {
                 "color": "#4d6059"
             }]
         },
-        {
-            "featureType": "landscape.natural",
-            "elementType": "labels.text.fill",
-            "stylers": [{
-                "color": "#f5f5f5"
-            }]
-        },
+        // {
+        //     "featureType": "landscape.natural",
+        //     "elementType": "labels.text.fill",
+        //     "stylers": [{
+        //         "color": "#f5f5f5"
+        //     }]
+        // },
         {
             "featureType": "landscape.natural.landcover",
             "elementType": "geometry.fill",
