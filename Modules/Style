@@ -598,7 +598,7 @@ exports.GRAYMAP = {"Graymap": [{ // Dial down the map saturation.
 // 'Soft Blue': [
 
 */ 
-exports.mapStyles = {
+var mapStyles = {
 
     'Light': [{
             "featureType": "administrative",
@@ -909,5 +909,8 @@ exports.mapStyles = {
         }
     ]
 }
+
+exports.mapStyles = mapStyles
+ Map.setOptions('Light', Style.mapStyles)
 
 //print(charts) 
