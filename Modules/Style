@@ -607,13 +607,13 @@ exports.mapStyles = {
                 "color": "#444444"
             }]
         },
-        {
-            "featureType": "landscape",
-            "elementType": "all",
-            "stylers": [{
-                "color": "#f2f2f2"
-            }]
-        },
+        // {
+        //     "featureType": "landscape",
+        //     "elementType": "all",
+        //     "stylers": [{
+        //         "color": "#f2f2f2"
+        //     }]
+        // },
         {
             "featureType": "poi",
             "elementType": "all",
