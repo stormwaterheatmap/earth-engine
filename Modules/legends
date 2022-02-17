@@ -21,34 +21,7 @@ function undoColorStretch(val) {
   return Math.exp(val)
 }
 
-// var barLegend_log_xform = function(layerObj){
-//   var title_label = 
-//     ui.Label({value: layerObj.layer.name,
-//     style: {
-//             fontWeight: 'bold',
-//             fontSize: '18px',
-//             // margin: '0 0 4px 0',
-//             // padding: '0'
-//         }})
-  
-//   var low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
-//   var high = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()).toPrecision(2)
-//   var mid = Math.exp(ee.Number(layerObj.layer.visParams.max).getInfo()/ 2).toPrecision(2)
-  
-//     var labelPanel = ui.Panel(
-//       [
-//         ui.Label(low, {margin: '4px 8px'}),
-//         ui.Label(
-//             (mid),
-//             {margin: '4px 8px', textAlign: 'center', stretch: 'horizontal'}),
-//         ui.Label("≥ " + (high), {margin: '4px 8px'})
-//       ],
-//       ui.Panel.Layout.flow('horizontal'));
-//   var units_label = ui.Label({value:layerObj.units,style:fonts.Caption2})
-//   var layer_description = ui.Label({value: layerObj.description, style:fonts.Caption2})
- 
-//   return ui.Panel([title_label,layer_description,ColorBar(layerObj), labelPanel,units_label])
-// }
+
   
 
 var barLegend = function (layerObj) {
@@ -85,16 +58,13 @@ var   low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
   var units_label = ui.Label({value:layerObj.units,style:fonts.Caption2})
   var layer_description = ui.Label({value: layerObj.description, style:fonts.Caption2})
  
+
+ 
   return ui.Panel([title_label,layer_description,ColorBar(layerObj), labelPanel,units_label])
 }
 
 var discreteLegend = function (layerObject) {
-    //var BAND_NAME = bandName //Land_Cover_Type_1';  
-  
-    //var image = ee.Image('MODIS/051/MCD12Q1/2001_01_01')
-    //          .select(BAND_NAME);
-  
-    // Create the panel for the legend items.
+    
     var legend = ui.Panel({
         style: {
             position: 'top-left',
@@ -115,12 +85,35 @@ var discreteLegend = function (layerObject) {
     var layer_description = ui.Label({value: layerObject.description.toString(), style:fonts.Caption2})
     legend.add(legendTitle).add(layer_description);
     
+    
     var loading = ui.Label('Loading legend...', {
         margin: '2px 0 4px 0'
     });
     
     legend.add(loading);
     // Creates and styles 1 row of the legend.
+    
+    var subPanel = ui.Panel({style:{border:'1px solid black'}})
+    var bool = true
+    var buttonLabel
+  subPanel.style().set({shown: bool})
+//create button
+var b = ui.Button({label:'Hide Legend',onClick: function() {
+    bool = !bool
+    subPanel.style().set({shown: bool})
+    print(bool)
+switch(bool){
+  case true:
+ buttonLabel = 'Hide Legend';
+ break;
+  case false:
+ buttonLabel= 'Show Legend'
+}
+    b.setLabel(buttonLabel)
+}})
+    
+    
+    
     var makeRow = function (name,color) {
         // Create the label that is actually the colored box.
         var colorBox = ui.Label({
@@ -156,11 +149,11 @@ var discreteLegend = function (layerObject) {
         for (var i = 0; i < names.length; i++) {
          
          
-            legend.add(makeRow(names[i],palette[i]));
+            subPanel.add(makeRow(names[i],palette[i]));
         }
     
 
-    return legend
+    return legend.add(b).add(subPanel)
 
 }
 
