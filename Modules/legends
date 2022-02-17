@@ -93,7 +93,7 @@ var discreteLegend = function (layerObject) {
     legend.add(loading);
     // Creates and styles 1 row of the legend.
     
-    var subPanel = ui.Panel({style:{border:'1px solid black'}})
+    var subPanel = ui.Panel()
     var bool = true
     var buttonLabel
   subPanel.style().set({shown: bool})
@@ -153,7 +153,7 @@ switch(bool){
         }
     
 
-    return legend.add(b).add(subPanel)
+    return legend.add(subPanel).add(b)
 
 }
 
