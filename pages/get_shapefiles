@@ -165,7 +165,7 @@ var HIGHLIGHT_STYLE = {color: '8856a7', fillColor: '8856a7C0',width:2};
 
 /* Label */ 
 
-var panel_label = helpers.info_panel("1. Select Layer Type:","null")
+var panel_label = helpers.info_panel("3. Select Layer Type:","null")
 panel_label.style().set(fonts.H3)
 // var layer_label = ui.Label({value:"Display Layer:"})
 
@@ -201,10 +201,18 @@ mainPanel.add(subtitleLabel)
 mainPanel.add(helpers.hline())
 
 /* ui widgets */ 
+
+
+
 var city_name
 var city_bounds 
 
 var cityLimits = data.vector_dict["City Boundaries"]
+
+var citySelectLabel = ui.Label({
+    value: '1. Select a city:',
+});
+
 var city_select = ui.Select({
    items: city_names,
   onChange: function(value){
@@ -244,6 +252,29 @@ var analyzePanel = ui.Panel({
     style: {
         shown: true
     }
+})
+
+var aggregate_data_button = ui.Button({
+  label: "Aggregate Data", 
+  onClick: function(){
+    var img = rasters[layer_select.getValue()]
+    
+    var ws_reduced = img.layer.eeObject.reduceRegions(
+      {
+        collection: watershed_data_set, 
+        reducer: ee.Reducer.mean(), 
+        scale: Map.getScale()/2 
+      }
+      )
+      print(ws_reduced)
+  var img_reduced = ws_reduced.reduceToImage(["mean"],ee.Reducer.first())  
+  Map.addLayer(img_reduced)
+  var img_reduced_layer = img 
+ // Map.addLayer()
+  img_reduced_layer.layer.eeObject = img_reduced.rename(img.layer.name)
+  Map.addLayer(img_reduced_layer.layer)    
+  }
+  
 })
 
 
@@ -303,9 +334,9 @@ var watershedSelect = ui.Select({items: [
        // Map.layers().reset()
         //(selected)
         reset_button.style().set({shown:false})//to do: make the reset button reset the data layers.
-        var WS = vectors_dict[selected]
+        var WS = vectors_dict[selected].filterBounds(city_bounds)
         Map.layers().set(2, ui.Map.Layer(WS.style(featureStyle))) 
-        watershed_data_set = vectors_dict[selected]//oct
+        watershed_data_set = WS//vectors_dict[selected]//oct
         //analyzePanel.add((buttonPanel))
         click_instructions.style().set({shown:true})
 
@@ -317,13 +348,15 @@ map_init()
 
 
 // Add widgets to panel
+mainPanel.add(citySelectLabel).add(city_select); 
 mainPanel.add(panel_label); 
 mainPanel.add(layer_select);
-mainPanel.add(city_select); 
+
 //mainPanel.add(helpers.hline())
 watershedSelectLabel.style()
 mainPanel.add(watershedSelectLabel)
 mainPanel.add(watershedSelect)
+mainPanel.add(aggregate_data_button)
 //mainPanel.add(helpers.hline())
 mainPanel.add(analyzePanel)
 //mainPanel.add(panel)
@@ -423,7 +456,7 @@ var selectedPoints =[]
 function getSelectedwatershed() {
 var watershed_data_set = vectors_dict[watershedSelect.getValue()]
 
-  var ws_selected =  watershed_data_set.filterBounds(city_bounds)//ee.Geometry.MultiPoint(selectedPoints));
+  var ws_selected =  watershed_data_set.filterBounds(ee.Geometry.MultiPoint(selectedPoints));
   print(ws_selected)
   return(ws_selected)
 }
