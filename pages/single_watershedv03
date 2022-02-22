@@ -339,97 +339,112 @@ var legendPanel = ui.Panel({
 
 
 var makeReports = function () {
-    var pchart = charts.littleNum(layerProperties["Precipitation (in)"],
+  print('Making reports...')
+    var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
         clicked_basin_geom, mapPanel.getScale(), 'mean')
     var pchart2 = charts.histogramImage(
-        layerProperties["Precipitation (in)"], clicked_basin_geom,
+        layerProperties["Precipitation (mm)"], clicked_basin_geom,
         mapPanel.getScale()
     )
     // pchart2.setOptions(Style.charts.histogram)
     // pchart2.setSeriesNames
 
-    var laybut = layerButton(layerProperties["Precipitation (in)"])
-    var precipCard = cards('Precipitation', [pchart, pchart2, laybut])
+    var laybut = layerButton(layerProperties["Precipitation (mm)"])
+    var precipCard = cards('Precipitation', 
+      
+      [hline(), subtitle('Watershed Mean'), 
+        pchart,
+        hline(), 
+        subtitle('Histogram of Values'), 
+        pchart2, 
+        laybut
+      ]
+      )
     analyzePanel.add(precipCard)
 
-
-    var impChart = charts.stackedBar(layerProperties.Imperviousness, mapPanel.getScale(), clicked_basin_geom)
-    impChart.setOptions(Style.charts.singleBar)
+print('done with precip_card')
+    //var impChart = charts.stackedBar(layerProperties.Imperviousness, mapPanel.getScale(), clicked_basin_geom)
+    //impChart.setOptions(Style.charts.singleBar)
 
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
-
-//To Do this is a temporary fix. 
-    var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
+    
+    var impcard = cards('Imperviousness', [
+   //   impChart, 
+      impNum //layerButton(layerProperties["Imperviousness"])
+      ])
+analyzePanel.add(impcard)
+// //To Do this is a temporary fix. 
+//     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
     
     
-    luchart.setOptions(Style.charts.imageBar)
-    var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, mapPanel.getScale())
-    lcchart.setOptions(Style.charts.imageBar)
-    var luCard = cards('Land Use & Land Cover', [subtitle('Imperviousness'), impNum, //impChart, 
-        layerButton(layerProperties.Imperviousness),
-        hline(), subtitle('Land Use Classifications'), luchart,
-        layerButton(layerProperties['Land Use']),
-        hline(),
-        subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties['Land Cover'])
-    ])
-    analyzePanel.add(luCard)
+//     luchart.setOptions(Style.charts.imageBar)
+//     var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, mapPanel.getScale())
+//     lcchart.setOptions(Style.charts.imageBar)
+//     var luCard = cards('Land Use & Land Cover', [subtitle('Imperviousness'), impNum, //impChart, 
+//         layerButton(layerProperties.Imperviousness),
+//         hline(), subtitle('Land Use Classifications'), luchart,
+//         layerButton(layerProperties['Land Use']),
+//         hline(),
+//         subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties['Land Cover'])
+//     ])
+//     analyzePanel.add(luCard)
 
-///img_class_chart(layer_object, region, scale){
-    //var ageChart = charts.img_class_chart(
-    var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,mapPanel.getScale() )
-    //pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
-    //ageCard.setChartType('BarChart')
-    //ageCard.setOptions(Style.charts.imageBar)
-    var ageCard = cards('Age of Imperviousness', [ageChart, layerButton(layerProperties['Age of Imperviousness'])])
-    analyzePanel.add(ageCard)
+// ///img_class_chart(layer_object, region, scale){
+//     //var ageChart = charts.img_class_chart(
+//     var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,mapPanel.getScale() )
+//     //pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
+//     //ageCard.setChartType('BarChart')
+//     //ageCard.setOptions(Style.charts.imageBar)
+//     var ageCard = cards('Age of Imperviousness', [ageChart, layerButton(layerProperties['Age of Imperviousness'])])
+//     analyzePanel.add(ageCard)
 
-    var soilsChart = charts.img_class_chart(layerProperties['Soils'],clicked_basin_geom,mapPanel.getScale() )
+//     var soilsChart = charts.img_class_chart(layerProperties['Soils'],clicked_basin_geom,mapPanel.getScale() )
     
-    //charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
-    //soilsChart.setChartType('BarChart');
-    //soilsChart.setOptions(Style.charts.imageBar)
+//     //charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
+//     //soilsChart.setChartType('BarChart');
+//     //soilsChart.setOptions(Style.charts.imageBar)
 
-    var soilsCard = cards('Soils', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(),
-    ])
-    analyzePanel.add(soilsCard)
+//     var soilsCard = cards('Soils', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(),
+//     ])
+//     analyzePanel.add(soilsCard)
 
-    //Make a panel for topography 
-    var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, mapPanel.getScale())
+//     //Make a panel for topography 
+//     var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, mapPanel.getScale())
 
-    // var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
-    // topoCats.setChartType('ColumnChart')
-    var topoCats =  charts.img_class_chart(layerProperties['Slope Categories'],clicked_basin_geom,mapPanel.getScale() )
-    //topoCats.setOptions(Style.charts.imageBar)
-    var topoCard = cards('Topography', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties['Slope Categories']), hline(),
-        subtitle('Slope Categories'), topoCats, layerButton(layerProperties['Slope Categories'])
-    ])
-    print('topcard ok')
-    analyzePanel.add(topoCard)
-    //Make a panel for runoff 
-    var MeanQ = charts.histogramImage(layerProperties["Runoff (in)"], clicked_basin_geom, mapPanel.getScale())
-    MeanQ.setOptions({
-        vAxis: {
-            logScale: true
-        }
-    });
-    var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties['Runoff (inches)'])])
-    analyzePanel.add(qCard)
+//     // var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
+//     // topoCats.setChartType('ColumnChart')
+//     var topoCats =  charts.img_class_chart(layerProperties['Slope Categories'],clicked_basin_geom,mapPanel.getScale() )
+//     //topoCats.setOptions(Style.charts.imageBar)
+//     var topoCard = cards('Topography', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties['Slope Categories']), hline(),
+//         subtitle('Slope Categories'), topoCats, layerButton(layerProperties['Slope Categories'])
+//     ])
+//     print('topcard ok')
+//     analyzePanel.add(topoCard)
+//     //Make a panel for runoff 
+//     var MeanQ = charts.histogramImage(layerProperties["Runoff (in)"], clicked_basin_geom, mapPanel.getScale())
+//     MeanQ.setOptions({
+//         vAxis: {
+//             logScale: true
+//         }
+//     });
+//     var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties['Runoff (inches)'])])
+//     analyzePanel.add(qCard)
 
   
     
-     //Make a panel for topography 
-    var TSSchart = charts.histogramImage(cocs['Total Suspended Solids Concentration'], clicked_basin_geom, mapPanel.getScale())
+//     //Make a panel for topography 
+//     var TSSchart = charts.histogramImage(cocs['Total Suspended Solids Concentration'], clicked_basin_geom, mapPanel.getScale())
     
-    var TSSloadchart = charts.histogramImage(cocs['Total Suspended Solids Load'], clicked_basin_geom, mapPanel.getScale())
-    var pollutantCard = cards('Pollutant Concentration', 
-    [
-      subtitle('Total Suspended Solids Concentation'), 
-      TSSchart, layerButton(cocs['Total Suspended Solids Concentration']), 
-      subtitle('Total Suspended Solids Load'), 
-      TSSloadchart, layerButton(cocs['Total Suspended Solids Load'])
-      ]
-      )
-analyzePanel.add(pollutantCard)
+//     var TSSloadchart = charts.histogramImage(cocs['Total Suspended Solids Load'], clicked_basin_geom, mapPanel.getScale())
+//     var pollutantCard = cards('Pollutant Concentration', 
+//     [
+//       subtitle('Total Suspended Solids Concentation'), 
+//       TSSchart, layerButton(cocs['Total Suspended Solids Concentration']), 
+//       subtitle('Total Suspended Solids Load'), 
+//       TSSloadchart, layerButton(cocs['Total Suspended Solids Load'])
+//       ]
+//       )
+// analyzePanel.add(pollutantCard)
 }
 
 //cards function 
