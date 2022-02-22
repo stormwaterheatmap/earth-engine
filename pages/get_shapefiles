@@ -6,7 +6,8 @@ var KCimp = ee.Image("users/cnilsen/comb_imp"),
     HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
     table = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
     table2 = ee.FeatureCollection("WWF/HydroSHEDS/v1/Basins/hybas_12"),
-    table3 = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits");
+    table3 = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits"),
+    imageVisParam = {"opacity":1,"bands":["Imperviousness"],"palette":["002564","fce644"]};
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /*Load modules 
 ---------------------------------------------------------------------------------------------------- 
@@ -263,7 +264,7 @@ var aggregate_data_button = ui.Button({
       {
         collection: watershed_data_set, 
         reducer: ee.Reducer.mean(), 
-        scale: Map.getScale()/2 
+        scale: Map.getScale()
       }
       )
       print(ws_reduced)
