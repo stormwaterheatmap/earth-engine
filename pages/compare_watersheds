@@ -5,13 +5,132 @@ var KCimp = ee.Image("users/cnilsen/comb_imp"),
     PS_AU = ee.FeatureCollection("users/cnilsen/PS_AU"),
     HUC12 = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
     table = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
-    table2 = ee.FeatureCollection("WWF/HydroSHEDS/v1/Basins/hybas_12");
+    table2 = ee.FeatureCollection("WWF/HydroSHEDS/v1/Basins/hybas_12"),
+    table3 = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /*Load modules 
 ---------------------------------------------------------------------------------------------------- 
 */
 
-var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+var data  = require('users/stormwaterheatmap/apps:data/data_dict_v4')
+
+
+//hard code city names to make loading faster
+var city_names = 
+[
+  "Algona",
+  "Anacortes",
+  "Arlington",
+  "Auburn",
+  "Bainbridge Island",
+  "Beaux Arts",
+  "Bellevue",
+  "Bellingham",
+  "Black Diamond",
+  "Blaine",
+  "Bonney Lake",
+  "Bothell",
+  "Bremerton",
+  "Brier",
+  "Buckley",
+  "Burien",
+  "Burlington",
+  "Carbonado",
+  "Carnation",
+  "Clyde Hill",
+  "Concrete",
+  "Coupeville",
+  "Covington",
+  "Darrington",
+  "Des Moines",
+  "DuPont",
+  "Duvall",
+  "Eatonville",
+  "Edgewood",
+  "Edmonds",
+  "Enumclaw",
+  "Everett",
+  "Everson",
+  "Federal Way",
+  "Ferndale",
+  "Fife",
+  "Fircrest",
+  "Friday Harbor",
+  "Gig Harbor",
+  "Gold Bar",
+  "Granite Falls",
+  "Hamilton",
+  "Hunts Point",
+  "Index",
+  "Issaquah",
+  "Kenmore",
+  "Kent",
+  "Kirkland",
+  "La Conner",
+  "Lacey",
+  "Lake Forest Park",
+  "Lake Stevens",
+  "Lakewood",
+  "Langley",
+  "Lyman",
+  "Lynden",
+  "Lynnwood",
+  "Maple Valley",
+  "Marysville",
+  "Medina",
+  "Mercer Island",
+  "Mill Creek",
+  "Milton",
+  "Monroe",
+  "Mount Vernon",
+  "Mountlake Terrace",
+  "Mukilteo",
+  "Newcastle",
+  "Nooksack",
+  "Normandy Park",
+  "North Bend",
+  "Oak Harbor",
+  "Olympia",
+  "Orting",
+  "Pacific",
+  "Port Angeles",
+  "Port Orchard",
+  "Port Townsend",
+  "Poulsbo",
+  "Puyallup",
+  "Rainier",
+  "Redmond",
+  "Renton",
+  "Roy",
+  "Ruston",
+  "Sammamish",
+  "SeaTac",
+  "Seattle",
+  "Sedro-Woolley",
+  "Sequim",
+  "Shelton",
+  "Shoreline",
+  "Skykomish",
+  "Snohomish",
+  "Snoqualmie",
+  "South Prairie",
+  "Stanwood",
+  "Steilacoom",
+  "Sultan",
+  "Sumas",
+  "Sumner",
+  "Tacoma",
+  "Tukwila",
+  "Tumwater",
+  "University Place",
+  "Wilkeson",
+  "Woodinville",
+  "Woodway",
+  "Yarrow Point",
+  "Yelm"
+]
+
+print(city_names)
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
@@ -82,6 +201,14 @@ mainPanel.add(subtitleLabel)
 mainPanel.add(helpers.hline())
 
 /* ui widgets */ 
+
+var cityLimits = data.vector_dict["City Boundaries"]
+var city_select = ui.Select({
+   items: city_names
+  
+ })
+
+
 var layer_select = ui.Select({
         items: Object.keys(rasters),//select_layer_type.getValue()], 
         onChange: function(value) {
@@ -180,6 +307,7 @@ map_init()
 // Add widgets to panel
 mainPanel.add(panel_label); 
 mainPanel.add(layer_select);
+mainPanel.add(city_select); 
 //mainPanel.add(helpers.hline())
 watershedSelectLabel.style()
 mainPanel.add(watershedSelectLabel)
