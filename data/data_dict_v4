@@ -825,7 +825,8 @@ exports.vectors = { //for legacy functions
     PS_AU: data.PS_AU,
     PugetSound: data.PugetSound,
     WRIA: data.WRIA,
-    MS4: data.MS4
+    MS4: data.MS4, 
+    Cities: data.cityLimits
 }
 
 var rename_vector = function (fc, col_name) {
