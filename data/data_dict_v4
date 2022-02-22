@@ -847,7 +847,8 @@ var vector_dict = {
   "HUC08: USGS Watershed Boundary Dataset": rename_vector(data.HUC08,"name"),
   "NHDPlus High Resolution Watershed Dataset": rename_vector(data.NHDPlus, "FEATUREID"), 
   "Puget Sound Assessment Units": rename_vector(data.PS_AU,"OBJECTID"), 
-  "Ecology Water Resource Inventory Area (WRIA)": rename_vector(data.WRIA, "WRIA_NM") 
+  "Ecology Water Resource Inventory Area (WRIA)": rename_vector(data.WRIA, "WRIA_NM") , 
+  "City Boundaries": data.cityLimits
 }
 
 
