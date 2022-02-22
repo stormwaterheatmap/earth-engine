@@ -4,7 +4,9 @@ var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds"),
     image = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode"),
     imageVisParam = {"opacity":1,"bands":["tss_kg_m2_yr"],"max":0.14183858512625483,"palette":["000000","0000ff","ffff00","ffffff"]},
     imageVisParam2 = {"opacity":1,"bands":["tss_mg_m2_yr"],"min":2572.7889242624424,"max":25450.068148609607,"palette":["0000ff","ffff00","ffffff"]},
-    imageVisParam3 = {"opacity":1,"bands":["tss_mg_m2_yr"],"max":50000,"palette":["352a87","056ede","089bce","33b7a0","a3bd6a","f9bd3f","f9fb0e"]};
+    imageVisParam3 = {"opacity":1,"bands":["tss_mg_m2_yr"],"max":50000,"palette":["352a87","056ede","089bce","33b7a0","a3bd6a","f9bd3f","f9fb0e"]},
+    table2 = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits"),
+    cityLimits = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 * Author: Christian Nilsen, Geosyntec Consultants 
@@ -19,6 +21,10 @@ var PugetSound = ee.FeatureCollection(
   "users/stormwaterheatmap/tables/PugetSound");
 exports.PugetSound = PugetSound
 exports.hrus = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode")
+
+exports.cityLimits = cityLimits.filterBounds(
+    PugetSound)
+    
 exports.counties = ee.FeatureCollection(
     "TIGER/2018/Counties")
   .filterBounds(
