@@ -23,8 +23,8 @@ layer_types["Input Data Layers"] = {
   "Population Density": rasters["Population Density"], 
   "Precipitation (in)": rasters["Precipitation (in)"], 
   //"Precipitation (mm)": rasters["Precipitation (mm)"], 
-  // "Runoff (in)": rasters["Runoff (in)"], 
-  // "Runoff (mm)": rasters["Runoff (mm)"], 
+   "Runoff (in)": rasters["Runoff (in)"], 
+ // "Runoff (mm)": rasters["Runoff (mm)"], 
   "Slope": rasters["Slope"], 
   "Slope Categories": rasters["Slope Categories"], 
   "Traffic": rasters["Traffic"]}
@@ -33,7 +33,7 @@ layer_types["Input Data Layers"] = {
 layer_types["Hydrology Data Layers"]={
   "Flow Duration Index": rasters["Flow Duration Index"], 
   "Hydrologic Response Units": rasters["Hydrologic Response Units"], 
-  "Runoff (in)": rasters["Runoff (in)"], 
+ // "Runoff (in)": rasters["Runoff (in)"], 
   "Runoff (mm)": rasters["Runoff (mm)"]
   
 }
