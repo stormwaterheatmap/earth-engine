@@ -7,6 +7,10 @@ var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
 predictors = predictors.scaled_predictors
 
 
+var traffic_band = predictors.select('traffic')
+Map.addLayer(traffic_band)
+
+
 
 var pred_bands = predictors.bandNames()
 print(pred_bands)
@@ -18,17 +22,17 @@ var clamped_img_max = ee.Image.constant(
         //"0_intercept":
         99,
         //"devAge2":
-        0,
+        2,
         //"grass":
-        0,
+        2,
         //"paved":
-        3,
+        2,
         //"pm25_na":
-        3,
+        2,
         //"sqrt_CO2_road":
-        3,
+        2,
         //"traffic":
-        3
+        2
     ]
 
     //1.59
@@ -36,13 +40,10 @@ var clamped_img_max = ee.Image.constant(
 
 var predictors = predictors.where(
     predictors.gt(clamped_img_max), clamped_img_max)
-////Map.addLayer(predictors)
-////Map.addLayer(clamped_img_max)
-//replace traffic band with clamped value 
-// applies thresholds and computes new property to be used for filtering
+
 
 var soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
-var water_mask = (ee.Image(0).blend(soils.neq(4).mask(image.unmask()))).byte()
+var water_mask = ee.Image(0).blend(soils.neq(4).byte())
 
 //var watermask = landcover.neq(9) 
 //predictors = predictors.mask(water_mask)
@@ -56,15 +57,44 @@ ln(total zinc) = 4.09 –
 0.57*paved – 
 0.10*rain*pm25_na
 **/
+/** TSS 
+ln(TSS) = 10.17 
++ 0.19*rain 
++ 0.26*sqrt_traffic 
++ 0.30*paved
+**/ 
+
+/** P 
+ln(phosphorus) = 
+4.38 
+– 0.09*rain 
++ 0.60*summer 
++ 0.83*grass 
++ 0.97*paved 
++ 0.20*sqrt_CO2_road)
+**/ 
+/** 
+ * Copper 
+ * 
+ln(copper) = 
+2.22 
+– 0.14*rain 
++ 0.41*summer 
++ 0.34*sqrt_traffic 
++ 0.56*devAge2 
++ 0.75*pm25_na 
+– 0.07*rain:pm25_na
+
+**/ 
 
 var regression_coefficients = {
     //            intercept,      devage2,     grass,   
     //paved,  pm25_na,  sqrt_CO2_road,  traffic
-    'copper': [2.24, 0.56, 0,
-        0, 0.66, 0, 0.35
+    'copper': [2.22, 0.56, 0,
+        0, 0.75, 0, 0.34
     ],
     'tss': [10.17, 0, 0,
-        0.28, 0, 0, 0.21
+        0.30, 0, 0, 0.26
     ],
     'p': [4.38, 0, 0.83,
         0.97, 0, 0.2, 0
@@ -73,7 +103,7 @@ var regression_coefficients = {
         0, 0, 0.28, 0
     ],
     'zinc': [4.09, 0, 0,
-        0.55, 0.33, 0, 0.29
+        0.57, 0.38, 0, 0.30
     ]
 }
 
@@ -157,7 +187,7 @@ var tss = generate_coc_layer("tss", convolved_clamped)
 var tkn = generate_coc_layer("tkn", convolved_clamped)
 var zinc = generate_coc_layer("zinc", convolved_clamped)
 
-var all_cocs = copper.addBands(p).addBands(tss) //.addBands(zinc).addBands(tkn)
+var all_cocs = copper.addBands(p).addBands(tss).addBands(zinc).addBands(tkn) //.addBands(zinc).addBands(tkn)
 print(all_cocs.toDictionary())
 
 var zinc_tkn = zinc.addBands(tkn)
@@ -195,7 +225,7 @@ var ws = ee.FeatureCollection("projects/ee-tacoma-watershed/assets/vector/Tacoma
 
 //var ws = s8_sheds
 //Cocs
-var wsdotMask = wsdot.unmask().lt(25000)
+//var wsdotMask = wsdot.unmask().lt(25000)
 ////Map.addLayer(wsdotMask,{},'wsdotmask')
 
 /**
@@ -204,7 +234,7 @@ var wsdotMask = wsdot.unmask().lt(25000)
  * 
  */
 
-var coc = copper
+var coc = zinc
 
 
 
@@ -212,7 +242,7 @@ var coc = copper
 
 ////Map.addLayer(coeffs)
 //Map.addLayer(coc,{},'cocs')
-Map.addLayer(convolved_clamped.select('traffic_mean'), {}, 'convolved_clamped')
+//Map.addLayer(convolved_clamped.select('traffic_mean'), {}, 'convolved_clamped')
 
 
 
@@ -249,7 +279,7 @@ var s8_predictors = convolved_clamped.reduceRegions({
 }) //.reduceToImage(['mean'], ee.Reducer.first())
 
 
-print(s8_predictors, 's8pred')
+
 
 var s8_predictors_image = s8_predictors.reduceToImage(
 
@@ -315,4 +345,4 @@ function colorStretch(image) {
     return image.log();
 }
 var PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask")
-Map.addLayer(zinc_tkn.mask(PugetSound_mask))
+Map.addLayer(all_cocs.mask(PugetSound_mask))
