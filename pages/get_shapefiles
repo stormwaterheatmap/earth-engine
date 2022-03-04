@@ -214,7 +214,7 @@ var city_select = ui.Select({
           value: value
         }))
    // if(city_bounds !== null){
-    Map.addLayer(city_bounds)
+    Map.addLayer(city_bounds,{},"City Boundary")
     
     Map.centerObject(city_bounds)
    // ws_layer = 
@@ -264,7 +264,7 @@ var aggregate_data_button = ui.Button({
       )
       print(ws_reduced)
   var img_reduced = ws_reduced.reduceToImage(["mean"],ee.Reducer.first())  
-  Map.addLayer(img_reduced)
+  //Map.addLayer(img_reduced)
   var img_reduced_layer = img 
  // Map.addLayer()
   img_reduced_layer.layer.eeObject = img_reduced.rename(img.layer.name)
@@ -336,7 +336,7 @@ onClick: function(){
 
 function update_ws_layers(vector_name){
 var WS = vectors_dict[vector_name].filterBounds(city_bounds)
-        Map.layers().set(2, ui.Map.Layer(WS.style(featureStyle))) 
+        Map.layers().set(2, ui.Map.Layer(WS.style(featureStyle),{},'Watersheds')) 
         watershed_data_set = WS
   
 }
