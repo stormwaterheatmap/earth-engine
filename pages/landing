@@ -137,7 +137,7 @@ helpers.clear_map_add_layer(coc_data["Total Suspended Solids Concentration"],leg
 helpers.make_tnc_map()
 map_init()
 var mainPanel = helpers.makeMainPanel("View Data Layers");
-var subheading = ui.Label('Explore layers, such as land cover, runoff,'+ 
+var subheading = ui.Label('Explore layers, such as land cover, runoff, '+ 
 'and pollutant loading using the selectors below. For information on a particular layer, '+
 "add it to the map, and click the 'more info' link in the lengend panel.")
 subheading.style().set(fonts.Caption2)
