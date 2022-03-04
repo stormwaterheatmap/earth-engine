@@ -1,0 +1,27 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var huc = ee.FeatureCollection("USGS/WBD/2017/HUC08");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+ 
+ var ls = ee.List([])
+ var geom = ee.Geometry.MultiPolygon()
+ Map.addLayer(huc)
+ 
+ Map.onClick(function(coords) {
+      var point = (coords.lon, coords.lat);
+     // print(point);
+      var this_shed = (huc.filterBounds(ee.Geometry.Point([coords.lon,coords.lat]))).first().geometry()
+      print(this_shed)
+      
+      ee.Algorithms.If(
+        geom.intersects(this_shed), 
+        geom=geom.difference(this_shed), 
+        geom=geom.union(this_shed)
+        
+        )
+      //geom = geom.union(this_shed)
+      print(geom)
+   //   Map.addLayer(geom)
+      // fc = ee.FeatureCollection(ee.List(ls))
+      Map.layers().set(1,geom)
+ })
+ //var point = ee.Geometry.Point(coords.lon, coords.lat)
