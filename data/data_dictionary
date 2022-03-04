@@ -497,7 +497,7 @@ var cocs = {
         "units": "g/m² per year",
         "default_reduction": "mean",
         "description": "Predicted Total Suspended Solids Load",
-        "safe_name": "total_suspended_solids_load",
+        "safe_name": "pollutant_load",
         "layer": {
             "eeObject": coc_layers.tss_load,
             "name": "Total Suspended Solids Load",
@@ -541,7 +541,7 @@ var cocs = {
         "units": "mg/m² per year",
         "default_reduction": "mean",
         "description": "Predicted Total Copper Load",
-        "safe_name": "total_copper_load",
+        "safe_name": "pollutant_load",
         "layer": {
             "eeObject": coc_layers.copper_load,
             "name": "Total Copper Load",
@@ -586,7 +586,7 @@ var cocs = {
         "units": "mg/m² per year",
         "default_reduction": "mean",
         "description": "Predicted Total Phosphorus Load",
-        "safe_name": "total_phosphorus_load",
+        "safe_name": "pollutant_load",
         "layer": {
             "eeObject": coc_layers.p_load,
             "name": "Total Phosphorus Load",
