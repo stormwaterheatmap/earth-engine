@@ -206,7 +206,7 @@ var city_select = ui.Select({
    items: city_names,
   onChange: function(value){
     city_name = value
-    if(city_bounds != null){
+    if(city_bounds !== null){
     city_bounds = cityLimits.filter(
       ee.Filter.eq(
         {
