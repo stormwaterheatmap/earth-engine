@@ -138,23 +138,12 @@ var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 var input_layers = data.rasters["Input Data Layers"]
 var hydrology_layers = data.rasters["Hydrology Data Layers"]
-// var objectMerge = function(){
-//     var out = {};
-//     if(!arguments.length)
-//         return out;
-//     for(var i=0; i<arguments.length; i++) {
-//         for(var key in arguments[i]){
-//             out[key] = arguments[i][key];
-//         }
-//     }
-//     return out;
-// }
 var layerProperties = data.rasters 
-//("layer Properties", layerProperties.Precipitation)
+
 
 var vectors_dict = data.vectors_dict
 
-var watershed_data_set
+var watershed_data_set = "Puget Sound Assessment Units"
 var rasters = data.rasters
 var layer_types = Object.keys(rasters)
 
@@ -223,8 +212,11 @@ var city_select = ui.Select({
           name: 'CITY_NM',
           value: value
         }))
+    if(city_bounds !== null){
     Map.addLayer(city_bounds)
+    
     Map.centerObject(city_bounds)
+    }
   }
  })
 
@@ -344,9 +336,9 @@ var watershedSelect = ui.Select({items: [
 "HUC12: USGS Watershed Boundary Dataset", 
 "NHDPlus High Resolution Watershed Dataset", 
 "Puget Sound Assessment Units"
-  ],//Object.keys(data.vector_dict).sort(), 
-    placeholder: 'Select a value',
-    //value: 'HUC 12'
+  ],
+    
+    value: "Puget Sound Assessment Units", 
     onChange: function (selected) {
        // Map.layers().reset()
         //(selected)
@@ -417,35 +409,35 @@ function undoColorStretch(val) {
 // Configure our map with a minimal set of controls.
 //Map.setControlVisibility(false);
 //Map.setControlVisibility({scaleControl: true, zoomControl: true});
-Map.style().set({cursor: 'crosshair'});
-var styles = {
-  'Soft Blue': [
-    {
-      featureType: 'all',
-      stylers: [
-        { saturation: -80 }
-      ]
-    },{
-      featureType: 'road.arterial',
-      elementType: 'geometry',
-      stylers: [
-        { hue: '#00ffee' },
-        { saturation: 50 }
-      ]
-    },{
-      featureType: 'poi.business',
-      elementType: 'labels',
-      stylers: [
-        { visibility: 'off' }
-      ]
-    }
-  ]
-};
+// Map.style().set({cursor: 'crosshair'});
+// var styles = {
+//   'Soft Blue': [
+//     {
+//       featureType: 'all',
+//       stylers: [
+//         { saturation: -80 }
+//       ]
+//     },{
+//       featureType: 'road.arterial',
+//       elementType: 'geometry',
+//       stylers: [
+//         { hue: '#00ffee' },
+//         { saturation: 50 }
+//       ]
+//     },{
+//       featureType: 'poi.business',
+//       elementType: 'labels',
+//       stylers: [
+//         { visibility: 'off' }
+//       ]
+//     }
+//   ]
+// };
 
-Map.setOptions('satellite', styles);
+// Map.setOptions('satellite', styles);
 
 
-Map.setCenter(-122.3, 47.6, 10);
+// Map.setCenter(-122.3, 47.6, 10);
 
 // Add our two base layers to the map: global TSS density and watershed.
 //Map.addLayer(colorStretch(TSS.unmask(0).updateMask(1)), TSS_style);
@@ -467,16 +459,16 @@ Map.setCenter(-122.3, 47.6, 10);
 
 
 
-var selectedPoints =[]
+//var selectedPoints =[]
 
 // Returns the list of watershed the user has selected.
-function getSelectedwatershed() {
-var watershed_data_set = vectors_dict[watershedSelect.getValue()]
+// function getSelectedwatershed() {
+// var watershed_data_set = vectors_dict[watershedSelect.getValue()]
 
-  var ws_selected =  watershed_data_set.filterBounds(ee.Geometry.MultiPoint(selectedPoints));
-  print(ws_selected)
-  return(ws_selected)
-}
+//   var ws_selected =  watershed_data_set.filterBounds(ee.Geometry.MultiPoint(selectedPoints));
+//   print(ws_selected)
+//   return(ws_selected)
+// }
 
 // var wsSelect = watershed_data_set//.filterBounds(ee.Geometry(selectedPoints)); 
 
