@@ -14,7 +14,7 @@ var huc = ee.FeatureCollection("USGS/WBD/2017/HUC08");
       
       ee.Algorithms.If(
         geom.intersects(this_shed), 
-        geom=geom.difference(this_shed), 
+        geom=geom.intersection(this_shed), 
         geom=geom.union(this_shed)
         
         )
