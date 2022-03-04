@@ -15,7 +15,6 @@ var KCimp = ee.Image("users/cnilsen/comb_imp"),
 
 var data  = require('users/stormwaterheatmap/apps:data/data_dict_v4')
 
-
 //hard code city names to make loading faster
 var city_names = 
 [
@@ -309,8 +308,25 @@ var map_init = function(map){
   
 }
 
+function start_over(){
+  print('reset')
+  //reset map layers
+  Map.layers().reset()
+  //reset dialog boxes 
+  city_select.setValue(null)
+  
+}
+
+var reset_button = ui.Button(
+  {label: 'Reset', 
+  onClick: start_over
+  
+  
+})
+
 var click_instructions = ui.Label({value:'Click on a watershed to display data',style:{shown:false}})
 analyzePanel.add(click_instructions)
+analyzePanel.add(reset_button)
 
 var reset_button= ui.Button({label:'Reset Map',style: {shown:false,position:'bottom-left'},
 onClick: function(){
