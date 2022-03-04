@@ -216,6 +216,8 @@ var city_select = ui.Select({
     Map.addLayer(city_bounds)
     
     Map.centerObject(city_bounds)
+   // ws_layer = 
+    update_ws_layers(watershedSelect.getValue())
     }
   }
  })
@@ -328,6 +330,12 @@ onClick: function(){
 }
 })
 
+function update_ws_layers(vector_name){
+var WS = vectors_dict[vector_name].filterBounds(city_bounds)
+        Map.layers().set(2, ui.Map.Layer(WS.style(featureStyle))) 
+        watershed_data_set = WS
+  
+}
 
 
 //----Get vector data 
@@ -342,12 +350,12 @@ var watershedSelect = ui.Select({items: [
     onChange: function (selected) {
        // Map.layers().reset()
         //(selected)
-        reset_button.style().set({shown:false})//to do: make the reset button reset the data layers.
-        var WS = vectors_dict[selected].filterBounds(city_bounds)
-        Map.layers().set(2, ui.Map.Layer(WS.style(featureStyle))) 
-        watershed_data_set = WS//vectors_dict[selected]//oct
-        //analyzePanel.add((buttonPanel))
-        click_instructions.style().set({shown:true})
+        update_ws_layers(selected)
+        // var WS = vectors_dict[selected].filterBounds(city_bounds)
+        // Map.layers().set(2, ui.Map.Layer(WS.style(featureStyle))) 
+        // watershed_data_set = WS//vectors_dict[selected]//oct
+        // //analyzePanel.add((buttonPanel))
+        // click_instructions.style().set({shown:true})
 
     }
 });
@@ -570,13 +578,13 @@ infoTablePanel.clear().add(chart.setChartType('Table'))
 
 // Clears the set of selected points and resets the overlay and results
 // panel to their default state.
-function clearResults() {
-  selectedPoints = [];//clear points 
-  Map.layers().reset() //remove(Map.layers().get(2));
-  legendPanel.style().set({shown:false})
-  var instructionsLabel = ui.Label('Select regions to compare data.');
-  resultsPanel.widgets().reset([instructionsLabel]);
-}
+// function clearResults() {
+//   selectedPoints = [];//clear points 
+//   Map.layers().reset() //remove(Map.layers().get(2));
+//   legendPanel.style().set({shown:false})
+//   var instructionsLabel = ui.Label('Select regions to compare data.');
+//   resultsPanel.widgets().reset([instructionsLabel]);
+// }
 
 // Register a click handler for the map that adds the clicked point to the
 // list and updates the map overlay and chart accordingly.
@@ -623,13 +631,13 @@ var chartTypeToggleButton = ToggleButton(
     updateChart);
 
 // A panel containing the two buttons .
-var buttonPanel = ui.Panel(
-    [ui.Button('Clear results', clearResults), chartTypeToggleButton],
-    ui.Panel.Layout.Flow('horizontal',true), {margin: '0 0 0 auto', width: '500px'});
+// var buttonPanel = ui.Panel(
+//     [ui.Button('Clear results', clearResults), chartTypeToggleButton],
+//     ui.Panel.Layout.Flow('horizontal',true), {margin: '0 0 0 auto', width: '500px'});
 
-var resultsPanel = ui.Panel({style: {position: 'bottom-right',maxWidth:'30%'}});
-Map.add(resultsPanel);
-clearResults();
+// var resultsPanel = ui.Panel({style: {position: 'bottom-right',maxWidth:'30%'}});
+// Map.add(resultsPanel);
+// clearResults();
 
 /*Dropdown to select watershed layer to use
 */ 
