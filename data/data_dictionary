@@ -476,7 +476,7 @@ var cocs = {
         "units": "mg/L",
         "default_reduction": "mean",
         "description": "Predicted Total Suspended Solids Concentration",
-        "safe_name": "total_suspended_solids_concentration",
+        "safe_name": "pollutant_concentration",
         "layer": {
             "eeObject": coc_layers.tss,
             "name": "Total Suspended Solids",
@@ -519,7 +519,7 @@ var cocs = {
         "units": "µg/L",
         "default_reduction": "mean",
         "description": "Predicted Total Copper Concentration",
-        "safe_name": "total_copper_concentration",
+        "safe_name": "pollutant_concentration",
         "layer": {
             "eeObject": coc_layers.copper,
             "name": "Total Copper",
@@ -563,7 +563,7 @@ var cocs = {
         "units": "ug/L",
         "default_reduction": "mean",
         "description": "Predicted Total Phosphorus Concentration",
-        "safe_name": "total_phosphorus_concentration",
+        "safe_name": "pollutant_concentration",
         "layer": {
             "eeObject": coc_layers.p,
             "name": "Total Phosphorus",
@@ -607,7 +607,7 @@ var cocs = {
         "units": "ug/L",
         "default_reduction": "mean",
         "description": "Predicted Total Zinc Concentration",
-        "safe_name": "total_zincconcentration",
+        "safe_name": "pollutant_concentration",
         "layer": {
             "eeObject": coc_layers.zinc,
             "name": "Total Zinc",
@@ -628,7 +628,7 @@ var cocs = {
         "units": "mg/m² per year",
         "default_reduction": "mean",
         "description": "Predicted Total Zinc Load",
-        "safe_name": "total_zinc_load",
+        "safe_name": "pollutant_load",
         "layer": {
             "eeObject": coc_layers.zinc_load,
             "name": "Total Zinc Load",
@@ -649,7 +649,7 @@ var cocs = {
         "units": "ug/L",
         "default_reduction": "mean",
         "description": "Predicted Total Kjeldahl Nitrogen Concentration",
-        "safe_name": "tkn_concentration",
+        "safe_name": "pollutant_concentration",
         "layer": {
             "eeObject": coc_layers.tkn,
             "name": "Total Kjeldahl Nitrogen",
@@ -670,7 +670,7 @@ var cocs = {
         "units": "mg/m² per year",
         "default_reduction": "mean",
         "description": "Predicted Kjeldahl Nitrogen Load",
-        "safe_name": "tkn_load",
+        "safe_name": "pollutant_load",
         "layer": {
             "eeObject": coc_layers.tkn_load,
             "name": "Total Kjeldahl Nitrogen Load",
