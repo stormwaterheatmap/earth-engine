@@ -206,19 +206,21 @@ var city_select = ui.Select({
    items: city_names,
   onChange: function(value){
     city_name = value
+    if(city_bounds != null){
     city_bounds = cityLimits.filter(
       ee.Filter.eq(
         {
           name: 'CITY_NM',
           value: value
         }))
-    if(city_bounds !== null){
+   // if(city_bounds !== null){
     Map.addLayer(city_bounds)
     
     Map.centerObject(city_bounds)
    // ws_layer = 
     update_ws_layers(watershedSelect.getValue())
-    }
+    //} else {}
+  }
   }
  })
 
@@ -308,6 +310,8 @@ function start_over(){
   Map.layers().reset()
   //reset dialog boxes 
   city_select.setValue(null)
+  //remove legend 
+  legendPanel.style().set({shown:false})
   
 }
 
