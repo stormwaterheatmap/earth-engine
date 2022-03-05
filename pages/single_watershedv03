@@ -2,19 +2,19 @@
 ---------------------------------------------------------------------------------------------------- 
 */
 
-var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
+var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
-var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+//var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 
-var cocs = data.cocs
+//var cocs = data.cocs
 
 var layerProperties = data.rasters
 
 
-var vectors = data.vectors_dict
+//var vectors = data.vectors_dict
 
 
 /*Style defaults  
@@ -23,19 +23,19 @@ var vectors = data.vectors_dict
 
 var colors = Style.colors
 
-var fonts = Style.fonts //var panelStyle = Style.panelStyle//print(panelStyle)
+var fonts = Style.fonts
 var featureStyle = {
     color: 'white',
-    fillColor: '00000000', 
+    fillColor: '00000000',
     width: 1
 }
-var imageVisParam = {
-    "opacity": 0.81,
-    "bands": ["first"],
-    "min": 5845.408857739145,
-    "max": 8458888.910842622,
-    "palette": ["1a9641", "a6d96a", "ffffbf", "fdae61", "d7191c"]
-};
+// var imageVisParam = {
+//     "opacity": 0.81,
+//     "bands": ["first"],
+//     "min": 5845.408857739145,
+//     "max": 8458888.910842622,
+//     "palette": ["1a9641", "a6d96a", "ffffbf", "fdae61", "d7191c"]
+// };
 
 /*Global Variables------------------------------------------------------------------------------------- 
  */
@@ -43,7 +43,7 @@ var clicked_basin
 var clicked_basin_geom
 var clicked_basin_fc
 var WS
-var bounds
+
 
 function handle_map_click(location) {
 
@@ -106,7 +106,7 @@ function handle_map_click(location) {
 
 
 function handle_inspect_click() {
-    
+
     mapPanel.style().set({
         cursor: 'crosshair'
     })
@@ -137,8 +137,6 @@ var makeLegend = function (layerObject) {
     var legend = helpers.makeLegend(layerObject)
     legendPanel.clear()
     legendPanel.add(legend)
-   // legendPanel.style().set({shown:true})
-
 
 }
 
@@ -159,54 +157,54 @@ function ColorBar(palette) {
         },
     });
 }
-var barLegend = function (obj) {
+// var barLegend = function (obj) {
 
-    var palette = obj.layer.visParams.palette
-    var low = obj.layer.visParams.min
-    var high = obj.layer.visParams.max
-    var mid = (low + high) / 2
-    var labelPanel = ui.Panel(
-        [
-            ui.Label(low, {
-                margin: '4px 8px',
-                textAlign: 'left',
-                stretch: 'horizontal'
-            }),
-            ui.Label(mid, {
-                margin: '4px 8px',
-                textAlign: 'center',
-                stretch: 'horizontal'
-            }),
-            ui.Label(high, {
-                margin: '4px 8px',
-                textAlign: 'right',
-                stretch: 'horizontal'
-            })
-        ],
-        ui.Panel.Layout.flow('horizontal'),
+//     var palette = obj.layer.visParams.palette
+//     var low = obj.layer.visParams.min
+//     var high = obj.layer.visParams.max
+//     var mid = (low + high) / 2
+//     var labelPanel = ui.Panel(
+//         [
+//             ui.Label(low, {
+//                 margin: '4px 8px',
+//                 textAlign: 'left',
+//                 stretch: 'horizontal'
+//             }),
+//             ui.Label(mid, {
+//                 margin: '4px 8px',
+//                 textAlign: 'center',
+//                 stretch: 'horizontal'
+//             }),
+//             ui.Label(high, {
+//                 margin: '4px 8px',
+//                 textAlign: 'right',
+//                 stretch: 'horizontal'
+//             })
+//         ],
+//         ui.Panel.Layout.flow('horizontal'),
 
-        {
-            width: '230px',
-            position: 'top-center'
-        }
-    );
+//         {
+//             width: '230px',
+//             position: 'top-center'
+//         }
+//     );
 
-    var unitlabel = (ui.Label(obj.units))
-    var barTitle = (ui.Label({
-        value: obj.layer.name,
-        style: fonts.LegendTitle
-    }))
+//     var unitlabel = (ui.Label(obj.units))
+//     var barTitle = (ui.Label({
+//         value: obj.layer.name,
+//         style: fonts.LegendTitle
+//     }))
 
-    var barPanel = ui.Panel({
-        widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel],
-        style: {
-            position: 'top-left',
-            padding: '12px'
-        }
-    })
+//     var barPanel = ui.Panel({
+//         widgets: [barTitle, ColorBar(palette), labelPanel, unitlabel],
+//         style: {
+//             position: 'top-left',
+//             padding: '12px'
+//         }
+//     })
 
-    return barPanel
-}
+//     return barPanel
+// }
 /* 
 UI Functions 
 ---------------------------------------------------------------------------------------------------- 
@@ -223,7 +221,7 @@ var layerButton = function (layerObject) {
         ui.Button({
             label: 'Show Layer',
             onClick: function () {
-             
+
                 mapPanel.layers().insert(0, layerObject.layer)
 
                 legendPanel.style().set({
@@ -300,12 +298,9 @@ var makeFooter = function () {
 
 var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
 
-
-
-
-
 var watershedSelectLabel = ui.Label({
-    value: 'Select a watershed dataset to aggregate data:',style: Style.fonts.Caption2
+    value: 'Select a watershed dataset to aggregate data:',
+    style: Style.fonts.Caption2
 });
 
 
@@ -320,132 +315,117 @@ var legendPanel = ui.Panel({
     },
 
 }).setLayout(ui.Panel.Layout.flow('vertical'));
-// var blankPanel = ui.Panel({
-//     style: {
-//         backgroundColor: colors.dPrimary,
-//         width: '100%',
 
-//     }
-// });
-// var mapInfoPanel = ui.Panel({
-//     style: {
-//         shown: false,
-//         position: 'bottom-center'
-//     }
-// })
-
-//histogramImage(layerObject, WS, scale) {
 
 
 var makeReports = function () {
-  print('Making reports...')
+    print('Making reports...')
     var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
         clicked_basin_geom, mapPanel.getScale(), 'mean')
     var pchart2 = charts.histogramImage(
         layerProperties["Precipitation (mm)"], clicked_basin_geom,
         mapPanel.getScale()
     )
-    // pchart2.setOptions(Style.charts.histogram)
-    // pchart2.setSeriesNames
+
 
     var laybut = layerButton(layerProperties["Precipitation (mm)"])
-    var precipCard = cards('Precipitation', 
-      
-      [hline(), subtitle('Watershed Mean'), 
-        pchart,
-        hline(), 
-        subtitle('Histogram of Values'), 
-        pchart2, 
-        laybut
-      ]
-      )
+    var precipCard = cards('Precipitation',
+
+        [hline(), subtitle('Watershed Mean'),
+            pchart,
+            hline(),
+            subtitle('Histogram of Values'),
+            pchart2,
+            laybut
+        ]
+    )
     analyzePanel.add(precipCard)
 
-print('done with precip_card')
+    print('done with precip_card')
     //var impChart = charts.stackedBar(layerProperties.Imperviousness, mapPanel.getScale(), clicked_basin_geom)
     //impChart.setOptions(Style.charts.singleBar)
 
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
-    
+
     var impcard = cards('Imperviousness', [
-   //   impChart, 
-      impNum //layerButton(layerProperties["Imperviousness"])
-      ])
-analyzePanel.add(impcard)
+        //   impChart, 
+        impNum //layerButton(layerProperties["Imperviousness"])
+    ])
+    analyzePanel.add(impcard)
 
-print('done with impcard')
-// //To Do this is a temporary fix. 
-//     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
-    
-    
-//     luchart.setOptions(Style.charts.imageBar)
-//     var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, mapPanel.getScale())
-//     lcchart.setOptions(Style.charts.imageBar)
-//     var luCard = cards('Land Use & Land Cover', [subtitle('Imperviousness'), impNum, //impChart, 
-//         layerButton(layerProperties.Imperviousness),
-//         hline(), subtitle('Land Use Classifications'), luchart,
-//         layerButton(layerProperties['Land Use']),
-//         hline(),
-//         subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties['Land Cover'])
-//     ])
-//     analyzePanel.add(luCard)
+    print('done with impcard')
+    // //To Do this is a temporary fix. 
+    //     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
 
-// ///img_class_chart(layer_object, region, scale){
-//     //var ageChart = charts.img_class_chart(
-//     var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,mapPanel.getScale() )
-//     //pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
-//     //ageCard.setChartType('BarChart')
-//     //ageCard.setOptions(Style.charts.imageBar)
-//     var ageCard = cards('Age of Imperviousness', [ageChart, layerButton(layerProperties['Age of Imperviousness'])])
-//     analyzePanel.add(ageCard)
 
-//     var soilsChart = charts.img_class_chart(layerProperties['Soils'],clicked_basin_geom,mapPanel.getScale() )
-    
-//     //charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
-//     //soilsChart.setChartType('BarChart');
-//     //soilsChart.setOptions(Style.charts.imageBar)
+    //     luchart.setOptions(Style.charts.imageBar)
+    //     var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, mapPanel.getScale())
+    //     lcchart.setOptions(Style.charts.imageBar)
+    //     var luCard = cards('Land Use & Land Cover', [subtitle('Imperviousness'), impNum, //impChart, 
+    //         layerButton(layerProperties.Imperviousness),
+    //         hline(), subtitle('Land Use Classifications'), luchart,
+    //         layerButton(layerProperties['Land Use']),
+    //         hline(),
+    //         subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties['Land Cover'])
+    //     ])
+    //     analyzePanel.add(luCard)
 
-//     var soilsCard = cards('Soils', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(),
-//     ])
-//     analyzePanel.add(soilsCard)
+    // ///img_class_chart(layer_object, region, scale){
+    //     //var ageChart = charts.img_class_chart(
+    //     var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,mapPanel.getScale() )
+    //     //pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
+    //     //ageCard.setChartType('BarChart')
+    //     //ageCard.setOptions(Style.charts.imageBar)
+    //     var ageCard = cards('Age of Imperviousness', [ageChart, layerButton(layerProperties['Age of Imperviousness'])])
+    //     analyzePanel.add(ageCard)
 
-//     //Make a panel for topography 
-//     var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, mapPanel.getScale())
+    //     var soilsChart = charts.img_class_chart(layerProperties['Soils'],clicked_basin_geom,mapPanel.getScale() )
 
-//     // var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
-//     // topoCats.setChartType('ColumnChart')
-//     var topoCats =  charts.img_class_chart(layerProperties['Slope Categories'],clicked_basin_geom,mapPanel.getScale() )
-//     //topoCats.setOptions(Style.charts.imageBar)
-//     var topoCard = cards('Topography', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties['Slope Categories']), hline(),
-//         subtitle('Slope Categories'), topoCats, layerButton(layerProperties['Slope Categories'])
-//     ])
-//     print('topcard ok')
-//     analyzePanel.add(topoCard)
-//     //Make a panel for runoff 
-//     var MeanQ = charts.histogramImage(layerProperties["Runoff (in)"], clicked_basin_geom, mapPanel.getScale())
-//     MeanQ.setOptions({
-//         vAxis: {
-//             logScale: true
-//         }
-//     });
-//     var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties['Runoff (inches)'])])
-//     analyzePanel.add(qCard)
+    //     //charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
+    //     //soilsChart.setChartType('BarChart');
+    //     //soilsChart.setOptions(Style.charts.imageBar)
 
-  
-    
-//     //Make a panel for topography 
-//     var TSSchart = charts.histogramImage(cocs['Total Suspended Solids Concentration'], clicked_basin_geom, mapPanel.getScale())
-    
-//     var TSSloadchart = charts.histogramImage(cocs['Total Suspended Solids Load'], clicked_basin_geom, mapPanel.getScale())
-//     var pollutantCard = cards('Pollutant Concentration', 
-//     [
-//       subtitle('Total Suspended Solids Concentation'), 
-//       TSSchart, layerButton(cocs['Total Suspended Solids Concentration']), 
-//       subtitle('Total Suspended Solids Load'), 
-//       TSSloadchart, layerButton(cocs['Total Suspended Solids Load'])
-//       ]
-//       )
-// analyzePanel.add(pollutantCard)
+    //     var soilsCard = cards('Soils', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(),
+    //     ])
+    //     analyzePanel.add(soilsCard)
+
+    //     //Make a panel for topography 
+    //     var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, mapPanel.getScale())
+
+    //     // var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
+    //     // topoCats.setChartType('ColumnChart')
+    //     var topoCats =  charts.img_class_chart(layerProperties['Slope Categories'],clicked_basin_geom,mapPanel.getScale() )
+    //     //topoCats.setOptions(Style.charts.imageBar)
+    //     var topoCard = cards('Topography', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties['Slope Categories']), hline(),
+    //         subtitle('Slope Categories'), topoCats, layerButton(layerProperties['Slope Categories'])
+    //     ])
+    //     print('topcard ok')
+    //     analyzePanel.add(topoCard)
+    //     //Make a panel for runoff 
+    //     var MeanQ = charts.histogramImage(layerProperties["Runoff (in)"], clicked_basin_geom, mapPanel.getScale())
+    //     MeanQ.setOptions({
+    //         vAxis: {
+    //             logScale: true
+    //         }
+    //     });
+    //     var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties['Runoff (inches)'])])
+    //     analyzePanel.add(qCard)
+
+
+
+    //     //Make a panel for topography 
+    //     var TSSchart = charts.histogramImage(cocs['Total Suspended Solids Concentration'], clicked_basin_geom, mapPanel.getScale())
+
+    //     var TSSloadchart = charts.histogramImage(cocs['Total Suspended Solids Load'], clicked_basin_geom, mapPanel.getScale())
+    //     var pollutantCard = cards('Pollutant Concentration', 
+    //     [
+    //       subtitle('Total Suspended Solids Concentation'), 
+    //       TSSchart, layerButton(cocs['Total Suspended Solids Concentration']), 
+    //       subtitle('Total Suspended Solids Load'), 
+    //       TSSloadchart, layerButton(cocs['Total Suspended Solids Load'])
+    //       ]
+    //       )
+    // analyzePanel.add(pollutantCard)
 }
 
 //cards function 
@@ -477,7 +457,9 @@ var cards = function (title, widgetItems) {
 var accept = ui.Button({
 
     label: 'Accept Selected Watershed ',
-    style: {shown:false},
+    style: {
+        shown: false
+    },
     onClick: function () {
         mapPanel.unlisten()
         mainPanel.style().set({
@@ -501,12 +483,13 @@ var inspect_button = ui.Button({
     onClick: handle_inspect_click
 });
 
-var inspect_helper_text = ui.Label({value:
-  'Click "Activate Inspector" to enable watershed selection:',
-style: Style.fonts.Caption2})
+var inspect_helper_text = ui.Label({
+    value: 'Click "Activate Inspector" to enable watershed selection:',
+    style: Style.fonts.Caption2
+})
 //function to add user layer to the map
 var buttonPanel = ui.Panel({
-    widgets: [inspect_helper_text,inspect_button, accept],
+    widgets: [inspect_helper_text, inspect_button, accept],
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
         position: 'top-left',
@@ -519,11 +502,12 @@ var vectors_dict = data.vector_dict
 
 
 //Get watershed values from the data list 
-var watershedSelect = ui.Select({items: [
-  "Puget Sound Assessment Units", 
-  "NHDPlus High Resolution Watershed Dataset", 
-  "HUC12: USGS Watershed Boundary Dataset"
-  ], 
+var watershedSelect = ui.Select({
+    items: [
+        "Puget Sound Assessment Units",
+        "NHDPlus High Resolution Watershed Dataset",
+        "HUC12: USGS Watershed Boundary Dataset"
+    ],
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: function (selected) {
@@ -538,10 +522,7 @@ var watershedSelect = ui.Select({items: [
 
 
 
-/* 
-Prioritizer functions and vars
-----------------------------------------------------------------------------------------------------
-*/
+
 
 
 
@@ -560,57 +541,57 @@ ui.root.clear();
 var mapPanel = makeMapPanel();
 var mainSubPanel = makeMainSubPanel();
 //
-var infoPanel = makeInfoPanel()
+//var infoPanel = makeInfoPanel()
 
-function makeInfoPanel() {
-    var infoPanel = ui.Panel({
-        style: {
-            shown: true
-        }
-    }).add(ui.Label('infoPanel'))
-    infoPanel.add(ui.Label({
-        value: 'How the Stormwater Heatmap Works',
-        style: fonts.H2
-    }))
-    infoPanel.add(ui.Label({
-        value: '1. Analyze a Watershed',
-        style: fonts.Body2
-    }))
-    infoPanel.add(ui.Label({
-        value: 'Analyze instructions here',
-        style: fonts.Caption2
-    }))
-    infoPanel.add(ui.Label({
-        value: '2. Prioritize Locations',
-        style: fonts.Body2
-    }))
-    infoPanel.add(ui.Label({
-        value: 'Prioritize instructions here',
-        style: fonts.Caption2
-    }))
+// function makeInfoPanel() {
+//     var infoPanel = ui.Panel({
+//         style: {
+//             shown: true
+//         }
+//     }).add(ui.Label('infoPanel'))
+//     infoPanel.add(ui.Label({
+//         value: 'How the Stormwater Heatmap Works',
+//         style: fonts.H2
+//     }))
+//     infoPanel.add(ui.Label({
+//         value: '1. Analyze a Watershed',
+//         style: fonts.Body2
+//     }))
+//     infoPanel.add(ui.Label({
+//         value: 'Analyze instructions here',
+//         style: fonts.Caption2
+//     }))
+//     infoPanel.add(ui.Label({
+//         value: '2. Prioritize Locations',
+//         style: fonts.Body2
+//     }))
+//     infoPanel.add(ui.Label({
+//         value: 'Prioritize instructions here',
+//         style: fonts.Caption2
+//     }))
 
-    infoPanel.add(ui.Label({
-        value: '3. Download Data',
-        style: fonts.Body2
-    }))
-    infoPanel.add(ui.Label({
-        value: 'Download instructions here',
-        style: fonts.Caption2
-    }))
-    infoPanel.add(hline())
-    infoPanel.add(ui.Label({
-        value: 'This site is in Beta testing. Send bug reports and comments to:',
-        style: fonts.Caption3
-    }))
+//     infoPanel.add(ui.Label({
+//         value: '3. Download Data',
+//         style: fonts.Body2
+//     }))
+//     infoPanel.add(ui.Label({
+//         value: 'Download instructions here',
+//         style: fonts.Caption2
+//     }))
+//     infoPanel.add(hline())
+//     infoPanel.add(ui.Label({
+//         value: 'This site is in Beta testing. Send bug reports and comments to:',
+//         style: fonts.Caption3
+//     }))
 
-    infoPanel.add(ui.Label({
-        value: 'stormwaterheatmap@gmail.com',
-        style: fonts.Caption3,
-        targetUrl: 'mailto:stormwaterheatmap@gmail.com'
-    }))
+//     infoPanel.add(ui.Label({
+//         value: 'stormwaterheatmap@gmail.com',
+//         style: fonts.Caption3,
+//         targetUrl: 'mailto:stormwaterheatmap@gmail.com'
+//     }))
 
-    return infoPanel
-}
+//     return infoPanel
+// }
 
 
 
@@ -627,7 +608,7 @@ mainSubPanel.add(analyzePanel)
 
 
 //header.add(ui.Label('header'))
-var footer = makeFooter();
+// var footer = makeFooter();
 
 ui.root.setLayout(ui.Panel.Layout.flow(
     'vertical'))
