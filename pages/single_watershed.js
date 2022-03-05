@@ -379,14 +379,14 @@ var makeReports = function () {
       
       charts.coc_mean_conc(data.cocs["Total Suspended Solids Concentration"],clicked_basin_geom, report_scale)
       ]
-  var concentration_card = cards('Stormwater Concentrations',concentrations)//.add(concentration_panel)
-  concentration_card.setLayout(ui.Panel.Layout.flow('horizontal','true'))    
+  //concentration_card.setLayout(ui.Panel.Layout.flow('horizontal','true'))    
       
       var concentration_panel = ui.Panel(
         {widgets: concentrations,
-          layout:ui.Panel.Layout.absolute(),//('horizontal',false),
-    style:{minWidth:'300px',margin:2, padding:2,border: '1px solid blue'}}) 
+          layout:ui.Panel.Layout.flow('horizontal',true),
+    style:{minWidth:'300px',margin:2, padding:2,stretch:'both',border: '1px solid blue'}}) 
      
+  var concentration_card = cards('Stormwater Concentrations',concentration_panel)//.add(concentration_panel)
      
      analyzePanel.add(concentration_card)
      
