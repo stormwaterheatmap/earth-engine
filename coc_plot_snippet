@@ -1,0 +1,79 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = /* color: #d63000 */ee.Geometry.Point([-122.05868163496143, 47.53760459472781]);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+var data  = require('users/stormwaterheatmap/apps:data/data_dict_v4')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
+var legends = require('users/stormwaterheatmap/apps:Modules/legends')
+var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
+
+var shed = data.vector_dict["Puget Sound Assessment Units"].filterBounds(geometry)
+Map.addLayer(shed)
+
+
+
+
+
+function conc_plot(layer_object,region){
+  
+
+
+var percentiles =  ee.List.sequence(2.5,97.5,10);
+var percentiles_100 = ee.List.sequence(0.025,0.97500001,0.1);
+var img = layer_object.layer.eeObject.select(0)
+
+var hist = img
+//conc.layer.eeObject.select(0)
+.reduceRegion({
+  reducer:
+ee.Reducer.percentile(percentiles),
+geometry: region, 
+maxPixels: 1000000,
+bestEffort:true,
+scale: 10
+}) 
+
+
+//Map.addLayer(hist_img)
+
+
+var dataArray = (hist.toArray())
+
+
+
+/* chart
+*/ 
+
+var histchart = ui.Chart.array.values(dataArray,0,percentiles_100.reverse())
+
+histchart.setOptions({
+   legend: {position: 'none'}, 
+    title: conc.layer.name,
+ //theme: "maximized",
+ //linewidth: 1,
+ 
+  //pointSize: 10,
+  lineSize: 2,
+  pointSize: 1,
+  hAxis: {title: "Percent Exceedance in Watershed",format: 'percent'},
+  vAxis: {title: "Concentration ("+(conc.units)+")", 
+    //logScale: true
+  } 
+
+}).setSeriesNames(['Concentration'])
+return(histchart.setChartType('ColumnChart'))
+}
+var conc = data.cocs["Total Copper Load"]
+//loads 
+var cc = conc_plot(conc,shed)
+print(cc)
+
+var what = conc.layer.eeObject.multiply(ee.Image.pixelArea()).reduceRegion({
+  reducer: ee.Reducer.sum(), 
+  geometry:shed, 
+  scale: 10
+})//total load 
+  
+  
+print('total load:', what )  

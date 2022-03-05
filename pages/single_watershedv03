@@ -2,7 +2,7 @@
 ---------------------------------------------------------------------------------------------------- 
 */
 
-var data  = require('users/stormwaterheatmap/apps:data/data_dictionary')
+var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
@@ -46,7 +46,6 @@ var WS
 var bounds
 
 function handle_map_click(location) {
-
 
     var clicked_point = ee.Geometry.Point(location.lon, location.lat);
     clicked_basin_fc = WS.filterBounds(clicked_point); //use for display
@@ -373,6 +372,8 @@ print('done with precip_card')
       impNum //layerButton(layerProperties["Imperviousness"])
       ])
 analyzePanel.add(impcard)
+
+print('done with impcard')
 // //To Do this is a temporary fix. 
 //     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
     
@@ -515,10 +516,14 @@ var buttonPanel = ui.Panel({
 
 
 var vectors_dict = data.vector_dict
-print(vectors_dict)
+
 
 //Get watershed values from the data list 
-var watershedSelect = ui.Select({items: Object.keys(vectors_dict).sort(), 
+var watershedSelect = ui.Select({items: [
+  "Puget Sound Assessment Units", 
+  "NHDPlus High Resolution Watershed Dataset", 
+  "HUC12: USGS Watershed Boundary Dataset"
+  ], 
     placeholder: 'Select a value',
     //value: 'HUC 12'
     onChange: function (selected) {
