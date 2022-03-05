@@ -342,10 +342,18 @@ var makeReports = function () {
     
     area.evaluate(function (result) {
       // When the server returns the value, show it.
-      area_chart.setValue(result.toFixed(0))});
-      
-    var qchart = charts.littleNum(layerProperties["Runoff (mm)"],
-        clicked_basin_geom, report_scale, 'mean')
+      area_chart.setValue([result.toFixed(0),' acres'])});
+    var qval = layerProperties['Runoff (mm)'].layer.eeObject.reduceRegion({reducer: 
+      ee.Reducer.mean(),geometry: clicked_basin_geom, scale: report_scale})//.multiply(area)
+    var calced_Q = qval.values().get(0)//.multiply(area)
+    var calced_annual_q = ee.Number(calced_Q).multiply(area).multiply(0.001)
+    
+    
+    var qchart = ui.Label('...loading')
+    calced_annual_q.evaluate(function(result){
+      qchart.setValue([result,' m3/yr'])
+    })
+    area_card.add(qchart)    
     
     // var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
     //     clicked_basin_geom, report_scale, 'mean')
