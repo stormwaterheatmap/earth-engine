@@ -566,7 +566,7 @@ function coc_mean_conc(layerObj, region, scale) {
       padding: '2px',
       margin: '2px',
       //minWidth: '100px',
-            border: '1px solid red'
+          //  border: '1px solid red'
 
     }
   }); //height: '200px'}}); 
@@ -575,7 +575,7 @@ function coc_mean_conc(layerObj, region, scale) {
     
     var num_unit_panel = ui.Panel({widgets:[bigNum],
     layout:ui.Panel.Layout.flow('horizontal'),
-      style:{width: '100%',stretch:'both'}
+      style:{width: '100%'}//,stretch:'both'}
     })
   numPan.add(num_unit_panel);
 
