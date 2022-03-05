@@ -372,6 +372,8 @@ print('done with precip_card')
       impNum //layerButton(layerProperties["Imperviousness"])
       ])
 analyzePanel.add(impcard)
+
+print('done with impcard')
 // //To Do this is a temporary fix. 
 //     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
     
