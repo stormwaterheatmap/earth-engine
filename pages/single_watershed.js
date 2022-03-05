@@ -365,18 +365,19 @@ var makeReports = function () {
     print('done with impcard')
     
     
-    var concentration_panel = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',false),
+    var concentration_panel = ui.Panel({layout:ui.Panel.Layout.absolute(),//('horizontal',false),
     style:{minWidth:'300px',margin:2, padding:2}}) 
-    concentration_panel.add(
-      charts.coc_mean_conc(data.cocs["Total Copper Concentration"],clicked_basin_geom, report_scale).add(
-      charts.coc_mean_conc(data.cocs["Total Zinc Concentration"],clicked_basin_geom, report_scale)).add(
-      charts.coc_mean_conc(data.cocs["Total Phosphorus Concentration"],clicked_basin_geom, report_scale)).add(
-      charts.coc_mean_conc(data.cocs["Total Kjeldahl Nitrogen Concentration"],clicked_basin_geom, report_scale)).add(
-      charts.coc_mean_conc(data.cocs["Total Suspended Solids Concentration"],clicked_basin_geom, report_scale))
-      )
-    var concentration_card = cards('Stormwater Concentrations',[]).add(concentration_panel)
+    concentration_panel.add([
+      charts.coc_mean_conc(data.cocs["Total Copper Concentration"],clicked_basin_geom, report_scale),
+      charts.coc_mean_conc(data.cocs["Total Zinc Concentration"],clicked_basin_geom, report_scale),
+      charts.coc_mean_conc(data.cocs["Total Phosphorus Concentration"],clicked_basin_geom, report_scale),
+      charts.coc_mean_conc(data.cocs["Total Kjeldahl Nitrogen Concentration"],clicked_basin_geom, report_scale), 
       
-     analyzePanel.add(concentration_card)
+      charts.coc_mean_conc(data.cocs["Total Suspended Solids Concentration"],clicked_basin_geom, report_scale)
+      ])
+  //  var concentration_card = cards('Stormwater Concentrations',[]).add(concentration_panel)
+      
+     analyzePanel.add(concentration_panel)
     // //To Do this is a temporary fix. 
     //     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,report_scale ); 
 
