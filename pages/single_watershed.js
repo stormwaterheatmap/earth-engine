@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("projects/ee-stormwaterheatmap/assets/pasu_painted");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * @ Author: Christian Nilsen
  * @ Create Time: 2022-03-04 20:26:44
@@ -365,19 +368,30 @@ var makeReports = function () {
     print('done with impcard')
     
     
-    var concentration_panel = ui.Panel({layout:ui.Panel.Layout.absolute(),//('horizontal',false),
-    style:{minWidth:'300px',margin:2, padding:2}}) 
-    concentration_panel.add([
+    
+    
+    var concentrations = 
+      [
       charts.coc_mean_conc(data.cocs["Total Copper Concentration"],clicked_basin_geom, report_scale),
       charts.coc_mean_conc(data.cocs["Total Zinc Concentration"],clicked_basin_geom, report_scale),
       charts.coc_mean_conc(data.cocs["Total Phosphorus Concentration"],clicked_basin_geom, report_scale),
       charts.coc_mean_conc(data.cocs["Total Kjeldahl Nitrogen Concentration"],clicked_basin_geom, report_scale), 
       
       charts.coc_mean_conc(data.cocs["Total Suspended Solids Concentration"],clicked_basin_geom, report_scale)
-      ])
-  //  var concentration_card = cards('Stormwater Concentrations',[]).add(concentration_panel)
+      ]
+  var concentration_card = cards('Stormwater Concentrations',concentrations)//.add(concentration_panel)
+  concentration_card.setLayout(ui.Panel.Layout.flow('horizontal','true'))    
       
-     analyzePanel.add(concentration_panel)
+      var concentration_panel = ui.Panel(
+        {widgets: concentrations,
+          layout:ui.Panel.Layout.absolute(),//('horizontal',false),
+    style:{minWidth:'300px',margin:2, padding:2,border: '1px solid blue'}}) 
+     
+     
+     analyzePanel.add(concentration_card)
+     
+     
+     
     // //To Do this is a temporary fix. 
     //     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,report_scale ); 
 
