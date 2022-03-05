@@ -563,8 +563,8 @@ function coc_mean_conc(layerObj, region, scale) {
     layout: ui.Panel.Layout.flow('vertical',true),
     style: {
       textAlign: 'right',
-      padding: 2,
-      margin: 4,
+      padding: '2px',
+      margin: '2px',
       //minWidth: '100px',
             border: '1px solid red'
 
