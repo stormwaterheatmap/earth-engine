@@ -1,13 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #d63000 */ee.Geometry.Polygon(
-        [[[-122.18688550907996, 47.588485685274044],
-          [-122.13882032353308, 47.53659182056817],
-          [-122.05814919641182, 47.57734993250728],
-          [-122.11684766728308, 47.629223376175645],
-          [-122.16903272587683, 47.67547769385542]]]);
+
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
-var colors = style.colors
 var histByClass = function (layerObject, scale, geom) {
   //get values that are in the roi 
   
