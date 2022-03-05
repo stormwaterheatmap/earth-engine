@@ -13,7 +13,6 @@
 var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
-//var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 
@@ -286,23 +285,23 @@ var makeMainSubPanel = function () {
     var mainSubPanel = ui.Panel({
         style: {
             width: '100%',
-           // border: '1px solid darkgray',
+            border: '1px solid darkgray',
             backgroundColor: 'white'
         }
     })
 
     return mainSubPanel
 };
-// var makeFooter = function () {
-//     var footer = ui.Panel({
-//         style: {
-//             width: '100%',
-//             border: '1px solid darkgray',
-//             backgroundColor: 'white'
-//         }
-//     })
-//     return footer
-// }
+var makeFooter = function () {
+    var footer = ui.Panel({
+        style: {
+            width: '100%',
+            border: '1px solid darkgray',
+            backgroundColor: 'white'
+        }
+    })
+    return footer
+}
 
 var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
 
@@ -464,7 +463,7 @@ var cards = function (title, widgetItems) {
 
 var accept = ui.Button({
 
-    label: 'Accept Selected Watershed ',
+    label: 'Analyze Selected Watershed ',
     style: {
         shown: false
     },
