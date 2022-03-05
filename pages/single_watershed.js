@@ -1,7 +1,7 @@
 /**
  * @ Author: Christian Nilsen
  * @ Create Time: 2022-03-04 20:26:44
- * @ Modified by: Your name
+ * @ Modified by: Christian Nilsen 
  * @ Modified time: 2022-03-04 20:40:31
  * @ Description:
  */
@@ -13,7 +13,6 @@
 var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
-//var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 
@@ -148,23 +147,23 @@ var makeLegend = function (layerObject) {
 
 }
 
-function ColorBar(palette) {
-    return ui.Thumbnail({
-        image: ee.Image.pixelLonLat().select(0),
-        params: {
-            bbox: [0, 0, 1, 0.1],
-            dimensions: '200x20',
-            format: 'png',
-            min: 0,
-            max: 1,
-            palette: palette,
-        },
-        style: {
-            stretch: 'horizontal',
-            margin: '0px 12px'
-        },
-    });
-}
+// function ColorBar(palette) {
+//     return ui.Thumbnail({
+//         image: ee.Image.pixelLonLat().select(0),
+//         params: {
+//             bbox: [0, 0, 1, 0.1],
+//             dimensions: '200x20',
+//             format: 'png',
+//             min: 0,
+//             max: 1,
+//             palette: palette,
+//         },
+//         style: {
+//             stretch: 'horizontal',
+//             margin: '0px 12px'
+//         },
+//     });
+// }
 // var barLegend = function (obj) {
 
 //     var palette = obj.layer.visParams.palette
