@@ -247,11 +247,10 @@ var makePieChart = function (
 //
 exports.pieChart = makePieChart
 
-
-var littleNum = function (layerObj, region, scale, reducerType) {
-//text for loading whil calucations happen 
-  var units = layerObj.units
-  var loading = 'loading...'
+function coc_mean_conc(layerObj, region, scale) {
+  //text for loading whil calucations happen 
+  var units = layerObj.units;
+  var loading = 'loading...';
   var bigNum = ui.Label({
     value: loading,
     style: style.fonts.Body3
@@ -269,13 +268,11 @@ var littleNum = function (layerObj, region, scale, reducerType) {
       //  border: '1px solid blue', 
       backgroundColor: style.colors.transparent,
       textAlign: 'right',
-    })
-    
-  var title_value = layerObj.layer.name
-  
-  if(layerObj.layer.name == "Population Density"){
-    title_value = "Total Population" //need this to make the reducer sum work out. 
-  }
+    });
+
+  var title_value = layerObj.layer.name;
+
+
   var titleLabel = ui.Label({
     value: title_value,
     style: style.fonts.H4
@@ -283,7 +280,7 @@ var littleNum = function (layerObj, region, scale, reducerType) {
   titleLabel.style()
     .set({
       margin: 0,
-      padding: 0, //0px 2px 0px 4px',
+      padding: 0,
       width: '80%',
       textAlign: 'right',
       //   border: '1px solid red'
@@ -297,35 +294,34 @@ var littleNum = function (layerObj, region, scale, reducerType) {
       textAlign: 'right',
       width: '80%',
     });
-    
+
   var numPan = ui.Panel({
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
       textAlign: 'right',
       padding: 2,
       margin: 2,
-     
     }
-  }) //height: '200px'}}); 
-  numPan.add(titleLabel) //.add(infoLabel)
-  numPan.add(bigNum)
-  
-  numPan.add(units)
+  }); //height: '200px'}}); 
+  numPan.add(titleLabel); //.add(infoLabel)
+  numPan.add(bigNum);
+
+  numPan.add(units);
   var infoLabel = ui.Label({
     style: style.fonts.Caption3
-  })
+  });
   infoLabel.style()
     .set({
       margin: 0,
-      padding: 2, //  margin: 0, //
+      padding: 2,
       fontSize: '10px',
       textAlign: 'right',
       //   border: '1px solid green',
       //width: '80%',
       color: style.colors.sDark,
-    })
+    });
   var labelText = (
-    'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale)
+    'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
   var labelText2 = ui.Label({
     style: style.fonts.Caption3
   });
@@ -340,13 +336,131 @@ var littleNum = function (layerObj, region, scale, reducerType) {
       //      border: '1px solid pink', 
       fontSize: '10px',
     });
-  labelText2.setValue('Source: ' + layerObj.sourceName)
+  labelText2.setValue('Source: ' + layerObj.sourceName);
   labelText2.setUrl(layerObj.sourceUrl);
-  infoLabel.setValue(labelText)
+  infoLabel.setValue(labelText);
   numPan //.add(infoLabel)
-    .add(labelText2) //.add(labelText2)
-    
-  if(reducerType == 'mean') {
+    .add(labelText2); //.add(labelText2)
+
+
+
+  //if(reducerType == 'mean') {
+  var reduced = ee.Number((layerObj.layer.eeObject)
+    .reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: region,
+      scale: scale,
+      bestEffort: true
+    })
+    .get(layerObj.layer.eeObject.bandNames()
+      .get(0)));
+  reduced.evaluate(function (result) {
+    // When the server returns the value, show it.
+    bigNum.setValue(result.toPrecision(3));
+  });
+  //  
+  return numPan;
+}
+  exports.coc_mean_conc = coc_mean_conc
+
+function littleNum(layerObj, region, scale, reducerType) {
+  //text for loading whil calucations happen 
+  var units = layerObj.units;
+  var loading = 'loading...';
+  var bigNum = ui.Label({
+    value: loading,
+    style: style.fonts.Body3
+  });
+  bigNum.style()
+    .set({
+      margin: 2,
+      padding: 2,
+      width: '80%',
+      fontSize: '30px',
+      fontFamily: ['Roboto', 'Helvetica Neue',
+        'Arial', 'sans-serif'
+      ],
+      fontWeight: 500,
+      //  border: '1px solid blue', 
+      backgroundColor: style.colors.transparent,
+      textAlign: 'right',
+    });
+
+  var title_value = layerObj.layer.name;
+
+  if (layerObj.layer.name == "Population Density") {
+    title_value = "Total Population"; //need this to make the reducer sum work out. 
+  }
+  var titleLabel = ui.Label({
+    value: title_value,
+    style: style.fonts.H4
+  });
+  titleLabel.style()
+    .set({
+      margin: 0,
+      padding: 0,
+      width: '80%',
+      textAlign: 'right',
+      //   border: '1px solid red'
+    });
+  units = ui.Label({
+    value: units,
+    style: style.fonts.Caption3
+  });
+  units.style()
+    .set({
+      textAlign: 'right',
+      width: '80%',
+    });
+
+  var numPan = ui.Panel({
+    layout: ui.Panel.Layout.flow('vertical'),
+    style: {
+      textAlign: 'right',
+      padding: 2,
+      margin: 2,
+    }
+  }); //height: '200px'}}); 
+  numPan.add(titleLabel); //.add(infoLabel)
+  numPan.add(bigNum);
+
+  numPan.add(units);
+  var infoLabel = ui.Label({
+    style: style.fonts.Caption3
+  });
+  infoLabel.style()
+    .set({
+      margin: 0,
+      padding: 2,
+      fontSize: '10px',
+      textAlign: 'right',
+      //   border: '1px solid green',
+      //width: '80%',
+      color: style.colors.sDark,
+    });
+  var labelText = (
+    'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
+  var labelText2 = ui.Label({
+    style: style.fonts.Caption3
+  });
+  labelText2.style()
+    .set({
+      //   margin: 0, //fontSize: '10px',
+      //color:style.colors.sDark,
+      margin: 2,
+      padding: 2,
+      textAlign: 'right',
+      width: '80%',
+      //      border: '1px solid pink', 
+      fontSize: '10px',
+    });
+  labelText2.setValue('Source: ' + layerObj.sourceName);
+  labelText2.setUrl(layerObj.sourceUrl);
+  infoLabel.setValue(labelText);
+  numPan //.add(infoLabel)
+    .add(labelText2); //.add(labelText2)
+
+  if (reducerType == 'mean') {
     var reduced = ee.Number((layerObj.layer.eeObject)
       .reduceRegion({
         reducer: ee.Reducer.mean(),
@@ -355,13 +469,13 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         bestEffort: true
       })
       .get(layerObj.layer.eeObject.bandNames()
-        .get(0)))
+        .get(0)));
     reduced.evaluate(function (result) {
       // When the server returns the value, show it.
-      bigNum.setValue(result.toFixed(0))
-    })
+      bigNum.setValue(result.toFixed(0));
+    });
     //  
-  } else if(reducerType == 'sum') {
+  } else if (reducerType == 'sum') {
     //reduced = reduced.toFixed()
     reduced = ee.Number((layerObj.layer.eeObject)
       .reduceRegion({
@@ -371,14 +485,14 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         bestEffort: true
       })
       .get(layerObj.layer.eeObject.bandNames()
-        .get(0)))
+        .get(0)));
     reduced.evaluate(function (result) {
       // When the server returns the value, show it.
-      bigNum.setValue(result.toFixed(0))
-    })
-  } else if(reducerType == 'percent') {
+      bigNum.setValue(result.toFixed(0));
+    });
+  } else if (reducerType == 'percent') {
     //reduced = reduced.toFixed()
-    print('percent')
+    print('percent');
     reduced = ee.Number((layerObj.layer.eeObject)
       .multiply(ee.Image(100))
       .reduceRegion({
@@ -388,19 +502,18 @@ var littleNum = function (layerObj, region, scale, reducerType) {
         bestEffort: true
       })
       .get(layerObj.layer.eeObject.bandNames()
-        .get(0)))
-    numPan.remove(units) //don't display units for percent 
+        .get(0)));
+    numPan.remove(units); //don't display units for percent 
     reduced.evaluate(function (result) {
       // When the server returns the value, show it.
-      
       bigNum.setValue(
         result.toFixed(0)
-        .toString()
-        .concat(
-          "%"))
-    }) //.add(units)
+          .toString()
+          .concat(
+            "%"));
+    }); //.add(units)
   }
-  return numPan
+  return numPan;
 }
 exports.littleNum = littleNum;
 var imgToFc = function (
