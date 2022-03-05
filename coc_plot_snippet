@@ -72,7 +72,7 @@ function coc_mean_conc(layerObj, region, scale) {
     .set({
       margin: 2,
       padding: 2,
-      width: '80%',
+      width: '100%',
       fontSize: '30px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
@@ -92,68 +92,76 @@ function coc_mean_conc(layerObj, region, scale) {
   });
   titleLabel.style()
     .set({
-      margin: 0,
-      padding: 0,
-      width: '80%',
+      margin: '2px',
+      padding: '2px',
+      stretch: 'both',
+      width: '100%',
       textAlign: 'right',
       //   border: '1px solid red'
     });
   units = ui.Label({
     value: units,
-    style: style.fonts.Caption3
+    style: style.fonts.Caption2
   });
   units.style()
     .set({
       textAlign: 'right',
-      width: '80%',
+      width: '100%',
+      margin:2
     });
 
   var numPan = ui.Panel({
-    layout: ui.Panel.Layout.flow('vertical'),
+    layout: ui.Panel.Layout.flow('vertical',true),
     style: {
       textAlign: 'right',
       padding: 2,
-      margin: 2,
+      margin: 4,
     }
   }); //height: '200px'}}); 
   numPan.add(titleLabel); //.add(infoLabel)
-  numPan.add(bigNum);
+  
+    
+    var num_unit_panel = ui.Panel({widgets:[bigNum],
+    layout:ui.Panel.Layout.flow('horizontal'),
+      style:{width: '100%',stretch:'both'}
+    })
+  numPan.add(num_unit_panel);
 
   numPan.add(units);
-  var infoLabel = ui.Label({
-    style: style.fonts.Caption3
-  });
-  infoLabel.style()
-    .set({
-      margin: 0,
-      padding: 2,
-      fontSize: '10px',
-      textAlign: 'right',
-      //   border: '1px solid green',
-      //width: '80%',
-      color: style.colors.sDark,
-    });
-  var labelText = (
-    'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
-  var labelText2 = ui.Label({
-    style: style.fonts.Caption3
-  });
-  labelText2.style()
-    .set({
-      //   margin: 0, //fontSize: '10px',
-      //color:style.colors.sDark,
-      margin: 2,
-      padding: 2,
-      textAlign: 'right',
-      width: '80%',
-      //      border: '1px solid pink', 
-      fontSize: '10px',
-    });
-  //labelText2.setValue('Source: ' + layerObj.sourceName);
-  //labelText2.setUrl(layerObj.sourceUrl);
-  //infoLabel.setValue(labelText);
-  //numPan //.add(infoLabel)
-    //.add(labelText2); //.add(labelText2)
+  // var infoLabel = ui.Label({
+  //   style: style.fonts.Caption3
+  // });
+  // infoLabel.style()
+  //   .set({
+  //     margin: 0,
+  //     padding: 2,
+  //     fontSize: '10px',
+  //     textAlign: 'right',
+  //     //   border: '1px solid green',
+  //     //width: '80%',
+  //     color: style.colors.sDark,
+  //   });
+  // var labelText = (
+  //   'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
+  // var labelText2 = ui.Label({
+  //   style: style.fonts.Caption3
+  // });
+  // labelText2.style()
+  //   .set({
+  //     //   margin: 0, //fontSize: '10px',
+  //     //color:style.colors.sDark,
+  //     margin: 2,
+  //     padding: 2,
+  //     textAlign: 'right',
+  //     width: '80%',
+  //     //      border: '1px solid pink', 
+  //     fontSize: '10px',
+  //   });
+  // //labelText2.setValue('Source: ' + layerObj.sourceName);
+  // //labelText2.setUrl(layerObj.sourceUrl);
+  // //infoLabel.setValue(labelText);
+  // //numPan //.add(infoLabel)
+  //   //.add(labelText2); //.add(labelText2)
 
 
 
@@ -170,7 +178,7 @@ function coc_mean_conc(layerObj, region, scale) {
       .get(0)));
   reduced.evaluate(function (result) {
     // When the server returns the value, show it.
-    bigNum.setValue(result.toPrecision(3));
+    bigNum.setValue(result.toPrecision(2));
   });
   //  
   return numPan;
@@ -209,7 +217,12 @@ print(red)
 var chart = ui.Chart.image.regions(img, geometry, ee.Reducer.mean(), 100)
 print(chart)
 
-var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')}) 
+var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true), 
+  style: {maxWidth: '400px'}
+}) 
 pan.add(coc_mean_conc(data.cocs[concentration_objects[4]],geometry,100)).add(
-  coc_mean_conc(data.cocs[concentration_objects[1]],geometry,100))
+  coc_mean_conc(data.cocs[concentration_objects[1]],geometry,100)).add(
+    coc_mean_conc(data.cocs[concentration_objects[2]],geometry,100)).add(
+    coc_mean_conc(data.cocs[concentration_objects[3]],geometry,100)).add(
+      coc_mean_conc(data.cocs[concentration_objects[0]],geometry,100))
 Map.add(pan)
