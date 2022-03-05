@@ -345,11 +345,12 @@ function coc_mean_conc(layerObj, region, scale) {
 
 
   //if(reducerType == 'mean') {
-  var reduced = ee.Number((layerObj.layer.eeObject)
+  var reduced = ee.Number((layerObj.layer.eeObject.select(0))
     .reduceRegion({
       reducer: ee.Reducer.mean(),
       geometry: region,
       scale: scale,
+      maxPixels: 100000,
       bestEffort: true
     })
     .get(layerObj.layer.eeObject.bandNames()
