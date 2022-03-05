@@ -565,7 +565,7 @@ function coc_mean_conc(layerObj, region, scale) {
       textAlign: 'right',
       padding: 2,
       margin: 4,
-      minWidth: '100px',
+      //minWidth: '100px',
             border: '1px solid red'
 
     }
