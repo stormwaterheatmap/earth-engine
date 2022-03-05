@@ -1,17 +1,64 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #d63000 */ee.Geometry.Point([-122.05868163496143, 47.53760459472781]);
+var geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "marker"
+      },
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry({
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Point",
+          "coordinates": [
+            -122.05868163496143,
+            47.53760459472781
+          ]
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.2029815351526,
+                47.924780735833785
+              ],
+              [
+                -122.2029815351526,
+                47.81423283325169
+              ],
+              [
+                -121.9832549726526,
+                47.81423283325169
+              ],
+              [
+                -121.9832549726526,
+                47.924780735833785
+              ]
+            ]
+          ],
+          "geodesic": false,
+          "evenOdd": true
+        }
+      ],
+      "coordinates": []
+    });
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
 var data  = require('users/stormwaterheatmap/apps:data/data_dict_v4')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
-
+var style = Style
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 
 var shed = data.vector_dict["Puget Sound Assessment Units"].filterBounds(geometry)
-Map.addLayer(shed)
+//Map.addLayer(shed)
 
-var stacked_cocs = 
+
 
 function coc_mean_conc(layerObj, region, scale) {
   //text for loading whil calucations happen 
@@ -102,11 +149,11 @@ function coc_mean_conc(layerObj, region, scale) {
       //      border: '1px solid pink', 
       fontSize: '10px',
     });
-  labelText2.setValue('Source: ' + layerObj.sourceName);
-  labelText2.setUrl(layerObj.sourceUrl);
-  infoLabel.setValue(labelText);
-  numPan //.add(infoLabel)
-    .add(labelText2); //.add(labelText2)
+  //labelText2.setValue('Source: ' + layerObj.sourceName);
+  //labelText2.setUrl(layerObj.sourceUrl);
+  //infoLabel.setValue(labelText);
+  //numPan //.add(infoLabel)
+    //.add(labelText2); //.add(labelText2)
 
 
 
@@ -162,3 +209,7 @@ print(red)
 var chart = ui.Chart.image.regions(img, geometry, ee.Reducer.mean(), 100)
 print(chart)
 
+var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal')}) 
+pan.add(coc_mean_conc(data.cocs[concentration_objects[4]],geometry,100)).add(
+  coc_mean_conc(data.cocs[concentration_objects[1]],geometry,100))
+Map.add(pan)
