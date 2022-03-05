@@ -365,11 +365,13 @@ var makeReports = function () {
     print('done with impcard')
     
     
-    
-    var concentration_card = cards('Stormwater Concentrations', [
-      charts.coc_mean_conc(data.cocs["Total Copper Concentration"],clicked_basin_geom, report_scale)
-      
-      ])
+    var concentration_panel = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',false),
+    style:{width:'100%'}}) 
+    concentration_panel.add(
+            charts.coc_mean_conc(data.cocs["Total Copper Concentration"],clicked_basin_geom, report_scale).add(
+      charts.coc_mean_conc(data.cocs["Total Zinc Concentration"],clicked_basin_geom, report_scale)
+      ))
+    var concentration_card = cards('Stormwater Concentrations', [concentration_panel])
       
      analyzePanel.add(concentration_card)
     // //To Do this is a temporary fix. 
