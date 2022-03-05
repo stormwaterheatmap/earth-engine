@@ -77,3 +77,21 @@ var what = conc.layer.eeObject.multiply(ee.Image.pixelArea()).reduceRegion({
   
   
 print('total load:', what )  
+
+var get_load = function(layer_object,region){
+  var load = layer_object.layer.eeObject.multiply(ee.Image.pixelArea()).reduceRegion(
+    {
+  reducer: ee.Reducer.sum(), 
+  geometry:shed, 
+  scale: 10, 
+  bestEffort:true, 
+  maxPixels:1000000
+})}
+
+var cc = get_load(data.cocs["Total Copper Load"],shed)
+print(cc)
+
+var cc_num = charts.littleNum(
+  data.cocs["Total Copper Load"], shed, 100, 'sum')
+  
+print(cc_num)
