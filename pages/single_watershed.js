@@ -286,23 +286,23 @@ var makeMainSubPanel = function () {
     var mainSubPanel = ui.Panel({
         style: {
             width: '100%',
-            border: '1px solid darkgray',
+           // border: '1px solid darkgray',
             backgroundColor: 'white'
         }
     })
 
     return mainSubPanel
 };
-var makeFooter = function () {
-    var footer = ui.Panel({
-        style: {
-            width: '100%',
-            border: '1px solid darkgray',
-            backgroundColor: 'white'
-        }
-    })
-    return footer
-}
+// var makeFooter = function () {
+//     var footer = ui.Panel({
+//         style: {
+//             width: '100%',
+//             border: '1px solid darkgray',
+//             backgroundColor: 'white'
+//         }
+//     })
+//     return footer
+// }
 
 var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
 
