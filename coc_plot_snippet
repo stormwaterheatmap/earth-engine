@@ -19,8 +19,8 @@ function conc_plot(layer_object,region){
   
 
 
-var percentiles =  ee.List.sequence(2.5,97.5,2.5);
-var percentiles_100 = ee.List.sequence(0.025,0.97500001,0.025);
+var percentiles =  ee.List.sequence(2.5,97.5,10);
+var percentiles_100 = ee.List.sequence(0.025,0.97500001,0.1);
 var img = layer_object.layer.eeObject.select(0)
 
 var hist = img
@@ -31,7 +31,7 @@ ee.Reducer.percentile(percentiles),
 geometry: region, 
 maxPixels: 1000000,
 bestEffort:true,
-scale: 30
+scale: 10
 }) 
 
 
@@ -50,7 +50,7 @@ var histchart = ui.Chart.array.values(dataArray,0,percentiles_100.reverse())
 histchart.setOptions({
    legend: {position: 'none'}, 
     title: conc.layer.name,
- // theme: "maximized",
+ //theme: "maximized",
  //linewidth: 1,
  
   //pointSize: 10,
@@ -58,21 +58,21 @@ histchart.setOptions({
   pointSize: 1,
   hAxis: {title: "Percent Exceedance in Watershed",format: 'percent'},
   vAxis: {title: "Concentration ("+(conc.units)+")", 
-    logScale: true
+    //logScale: true
   } 
 
 }).setSeriesNames(['Concentration'])
 return(histchart.setChartType('ColumnChart'))
 }
-var conc = data.cocs["Total Copper Concentration"]
+var conc = data.cocs["Total Copper Load"]
 //loads 
 var cc = conc_plot(conc,shed)
 print(cc)
 
-var what = conc.layer.eeObject.reduceRegion({
+var what = conc.layer.eeObject.multiply(ee.Image.pixelArea()).reduceRegion({
   reducer: ee.Reducer.sum(), 
   geometry:shed, 
-  scale: 100
+  scale: 10
 })//total load 
   
   
