@@ -384,7 +384,10 @@ var makeReports = function () {
       var concentration_panel = ui.Panel(
         {widgets: concentrations,
           layout:ui.Panel.Layout.flow('horizontal',true),
-    style:{minWidth:'300px',margin:2, padding:2,stretch:'both',border: '1px solid blue'}}) 
+    style:{margin:2, padding:2,stretch:'horizontal'
+    //,border: '1px solid blue'
+      
+    }}) 
      
   var concentration_card = cards('Stormwater Concentrations',concentration_panel)//.add(concentration_panel)
      
