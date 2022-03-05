@@ -331,29 +331,42 @@ var legendPanel = ui.Panel({
 var makeReports = function () {
     print('Making reports...')
     var report_scale = mapPanel.getScale() 
+    print(clicked_basin_geom.area())
     
-    var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
+    var area = clicked_basin_geom.area().divide(4046.86)
+    var area_chart = ui.Label('...loading') 
+    var area_card = cards('Area',[area_chart])
+    analyzePanel.add(area_card)
+    
+    area.evaluate(function (result) {
+      // When the server returns the value, show it.
+      area_chart.setValue(result.toFixed(0))});
+      
+    var qchart = charts.littleNum(layerProperties["Runoff (mm)"],
         clicked_basin_geom, report_scale, 'mean')
-    var pchart2 = charts.histogramImage(
-        layerProperties["Precipitation (mm)"], clicked_basin_geom,
-        report_scale
-    )
+    
+    // var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
+    //     clicked_basin_geom, report_scale, 'mean')
+    // var pchart2 = charts.histogramImage(
+    //     layerProperties["Precipitation (mm)"], clicked_basin_geom,
+    //     report_scale
+    // )
 
 
-    var laybut = layerButton(layerProperties["Precipitation (mm)"])
-    var precipCard = cards('Precipitation',
+    // var laybut = layerButton(layerProperties["Precipitation (mm)"])
+    // var precipCard = cards('Precipitation',
 
-        [hline(), subtitle('Watershed Mean'),
-            pchart,
-            hline(),
-            subtitle('Histogram of Values'),
-            pchart2,
-            laybut
-        ]
-    )
-    analyzePanel.add(precipCard)
+    //     [hline(), subtitle('Watershed Mean'),
+    //         pchart,
+    //         hline(),
+    //         subtitle('Histogram of Values'),
+    //         pchart2,
+    //         laybut
+    //     ]
+    // )
+    // analyzePanel.add(precipCard)
 
-    print('done with precip_card')
+    // print('done with precip_card')
     //var impChart = charts.stackedBar(layerProperties.Imperviousness, report_scale, clicked_basin_geom)
     //impChart.setOptions(Style.charts.singleBar)
 
@@ -389,7 +402,8 @@ var makeReports = function () {
       
     }}) 
      
-  var concentration_card = cards('Stormwater Concentrations',concentration_panel)//.add(concentration_panel)
+  var concentration_card = cards('Predicted Stormwater Concentrations',[hline(),
+  concentration_panel])//.add(concentration_panel)
      
      analyzePanel.add(concentration_card)
      
