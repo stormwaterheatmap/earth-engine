@@ -308,6 +308,8 @@ var makeFooter = function () {
 
 var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
 
+mainPanel.style().set({height:"75%"})
+
 var watershedSelectLabel = ui.Label({
     value: 'Select a watershed dataset to aggregate data:',
     style: Style.fonts.Caption2
