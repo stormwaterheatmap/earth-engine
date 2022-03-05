@@ -16,7 +16,7 @@ var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 
-//var cocs = data.cocs
+var cocs = data.cocs
 
 var layerProperties = data.rasters
 
@@ -327,11 +327,13 @@ var legendPanel = ui.Panel({
 
 var makeReports = function () {
     print('Making reports...')
+    var report_scale = mapPanel.getScale() 
+    
     var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
-        clicked_basin_geom, mapPanel.getScale(), 'mean')
+        clicked_basin_geom, report_scale, 'mean')
     var pchart2 = charts.histogramImage(
         layerProperties["Precipitation (mm)"], clicked_basin_geom,
-        mapPanel.getScale()
+        report_scale
     )
 
 
@@ -349,10 +351,10 @@ var makeReports = function () {
     analyzePanel.add(precipCard)
 
     print('done with precip_card')
-    //var impChart = charts.stackedBar(layerProperties.Imperviousness, mapPanel.getScale(), clicked_basin_geom)
+    //var impChart = charts.stackedBar(layerProperties.Imperviousness, report_scale, clicked_basin_geom)
     //impChart.setOptions(Style.charts.singleBar)
 
-    var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, mapPanel.getScale(), 'percent')
+    var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, report_scale, 'percent')
 
     var impcard = cards('Imperviousness', [
         //   impChart, 
@@ -361,12 +363,21 @@ var makeReports = function () {
     analyzePanel.add(impcard)
 
     print('done with impcard')
+    
+    
+    
+    var concentration_card = cards('Stormwater Concentrations', [
+      charts.coc_mean_conc(data.cocs["Total Copper Concentration"],clicked_basin_geom, report_scale)
+      
+      ])
+      
+     analyzePanel.add(concentration_card)
     // //To Do this is a temporary fix. 
-    //     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,mapPanel.getScale() ); 
+    //     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,report_scale ); 
 
 
     //     luchart.setOptions(Style.charts.imageBar)
-    //     var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, mapPanel.getScale())
+    //     var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, report_scale)
     //     lcchart.setOptions(Style.charts.imageBar)
     //     var luCard = cards('Land Use & Land Cover', [subtitle('Imperviousness'), impNum, //impChart, 
     //         layerButton(layerProperties.Imperviousness),
@@ -379,16 +390,16 @@ var makeReports = function () {
 
     // ///img_class_chart(layer_object, region, scale){
     //     //var ageChart = charts.img_class_chart(
-    //     var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,mapPanel.getScale() )
-    //     //pieChart(clicked_basin_geom, layerProperties['Age of Development'], mapPanel.getScale())
+    //     var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,report_scale )
+    //     //pieChart(clicked_basin_geom, layerProperties['Age of Development'], report_scale)
     //     //ageCard.setChartType('BarChart')
     //     //ageCard.setOptions(Style.charts.imageBar)
     //     var ageCard = cards('Age of Imperviousness', [ageChart, layerButton(layerProperties['Age of Imperviousness'])])
     //     analyzePanel.add(ageCard)
 
-    //     var soilsChart = charts.img_class_chart(layerProperties['Soils'],clicked_basin_geom,mapPanel.getScale() )
+    //     var soilsChart = charts.img_class_chart(layerProperties['Soils'],clicked_basin_geom,report_scale )
 
-    //     //charts.pieChart(clicked_basin_geom, layerProperties.Soils, mapPanel.getScale()) //soils and lithology 
+    //     //charts.pieChart(clicked_basin_geom, layerProperties.Soils, report_scale) //soils and lithology 
     //     //soilsChart.setChartType('BarChart');
     //     //soilsChart.setOptions(Style.charts.imageBar)
 
@@ -397,7 +408,7 @@ var makeReports = function () {
     //     analyzePanel.add(soilsCard)
 
     //     //Make a panel for topography 
-    //     var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, mapPanel.getScale())
+    //     var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, report_scale)
 
     //     // var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
     //     // topoCats.setChartType('ColumnChart')
