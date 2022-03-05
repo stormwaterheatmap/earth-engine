@@ -522,7 +522,7 @@ function coc_mean_conc(layerObj, region, scale) {
       margin: 2,
       padding: 2,
       width: '100%',
-      fontSize: '30px',
+      fontSize: '24px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
       ],
