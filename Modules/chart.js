@@ -250,7 +250,7 @@ exports.pieChart = makePieChart
 
 var littleNum = function (layerObj, region, scale, reducerType) {
 //text for loading whil calucations happen 
-  var units = 'units'
+  var units = layerObj.units
   var loading = 'loading...'
   var bigNum = ui.Label({
     value: loading,
