@@ -353,11 +353,11 @@ function make_concentration_panel(region, scale){
 
       
       pan.add(
-            charts.coc_load(data.cocs[concentration_objects[0]]),region,100).add(
-            charts.coc_load(data.cocs[concentration_objects[1]],region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[2]],region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[3]],region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[4]],region,100))
+            charts.coc_mean_conc(data.cocs[concentration_objects[0]]),region,100).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[1]],region,100)).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[2]],region,100)).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[3]],region,100)).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[4]],region,100))
 
             return(pan)
 
@@ -695,6 +695,7 @@ var analyzePanel = ui.Panel({
 function mapInit() {
 ui.root.clear();
 //mainSubPanel.add(infoPanel)
+mainSubPanel.clear()
 mainSubPanel.add(analyzePanel)
 
 
