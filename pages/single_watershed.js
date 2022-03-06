@@ -435,7 +435,7 @@ function makeReports() {
 
 
 
-    var concentration_card = cards('Predicted Stormwater Concentrations', [
+    var concentration_card = cards('Predicted Stormwater Concentrations', [hline(),
         make_concentration_panel(clicked_basin_geom, report_scale)
     ])
 
