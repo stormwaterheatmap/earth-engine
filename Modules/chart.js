@@ -2,16 +2,20 @@
 
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
-var histByClass = function (layerObject, scale, geom) {
+
+function sigFigs(n, sig) {
+  var mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
+  return Math.round(n * mult) / mult;
+}
+
+function histByClass(layerObject, scale, geom) {
   //get values that are in the roi 
-  
-  
   var area = ee.Image.pixelArea()
-    .divide(4046.86) //area in acres 
-  var image = ee.Image.cat(area, layerObject.layer.eeObject)
+    .divide(4046.86); //area in acres 
+  var image = ee.Image.cat(area, layerObject.layer.eeObject);
   // Define chart customization options.
   var options = {
-    titleTextStyle: style.fonts.LegendTitle, 
+    titleTextStyle: style.fonts.LegendTitle,
     // chartArea: {width: '100%', height: '80%'},
     legend: {
       position: 'in'
@@ -24,20 +28,20 @@ var histByClass = function (layerObject, scale, geom) {
     }
   };
   var histChart = (ui.Chart.image.byClass({
-      image: image, //
-      reducer: ee.Reducer.sum(),
-      classBand: 1,
-      region: geom,
-      scale: scale,
-      classLabels: layerObject.labels,
-      xLabels: layerObject.units, 
-      //titleTextStyle: style.fonts.LegendTitle
-      //     xLabels: layerObject.labels
-    })
+    image: image,
+    reducer: ee.Reducer.sum(),
+    classBand: 1,
+    region: geom,
+    scale: scale,
+    classLabels: layerObject.labels,
+    xLabels: layerObject.units,
+    //titleTextStyle: style.fonts.LegendTitle
+    //     xLabels: layerObject.labels
+  })
     .setOptions(options)
-  )
+  );
   // var stacked = histChart.setOptions({isStacked:true})
-  return histChart
+  return histChart;
 }
 
 function stackedBar(layerObject, scale, geom) {
@@ -458,7 +462,7 @@ function coc_load(layerObj, region, scale) {
     
   total_load.evaluate(function (result) {
     // When the server returns the value, show it.
-    bigNum.setValue(helpers.sigFigs(result,3).toLocaleString("en-US"));
+    bigNum.setValue(sigFigs(result,3).toLocaleString("en-US"));
   });
   //  
   return numPan;
