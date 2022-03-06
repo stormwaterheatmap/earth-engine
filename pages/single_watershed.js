@@ -400,7 +400,7 @@ function makeReports() {
 
 
 
-    var concentration_card = cards('Stormwater Concentrations', [
+    var concentration_card = cards('Predicted Stormwater Concentrations', [
         charts.coc_mean_conc(data.cocs["Total Copper Concentration"], clicked_basin_geom, report_scale)
     ])
 
@@ -409,7 +409,7 @@ function makeReports() {
 
     //make the load panel 
 
-    var load_card = cards('Stormwater Loads', [
+    var load_card = cards('Predicted Stormwater Loads', [hline(),
         make_load_panel(clicked_basin_geom, report_scale)
     ])
     analyzePanel.add(load_card)
