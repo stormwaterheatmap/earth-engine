@@ -49,7 +49,7 @@ var geometry =
     });
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
-var data  = require('users/stormwaterheatmap/apps:data/data_dict_v4')
+var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
 var style = Style
@@ -58,11 +58,11 @@ var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var shed = data.vector_dict["Puget Sound Assessment Units"].filterBounds(geometry)
 //Map.addLayer(shed)
 
+print(data.cocs)
 
-
-function coc_load(layerObj, region, scale,units) {
+function coc_load(layerObj, region, scale) {
   //text for loading whil calucations happen 
- 
+  var units = layerObj.units
   var loading = 'loading...';
   var bigNum = ui.Label({
     value: loading,
@@ -135,6 +135,7 @@ function coc_load(layerObj, region, scale,units) {
   
   //calculations 
   
+
   var total_load_per_m2 = ee.Number((layerObj.layer.eeObject.select(0))
     .reduceRegion({
       reducer: ee.Reducer.mean(),
@@ -146,8 +147,9 @@ function coc_load(layerObj, region, scale,units) {
     .get(layerObj.layer.eeObject.bandNames()
       .get(0)));
     var ws_area = region.area(2) 
+  var conversion_factor = (layerObj.units == 'g/m² per year') ? 1e-3 : 1e-6;
  
-    var total_load = total_load_per_m2.multiply(ws_area).multiply(1e-6) // do this for sigfigs
+    var total_load = total_load_per_m2.multiply(ws_area).multiply(conversion_factor) // do this for sigfigs
     
     
   total_load.evaluate(function (result) {
