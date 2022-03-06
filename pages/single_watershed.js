@@ -597,7 +597,7 @@ var watershedSelect = ui.Select({
         mapPanel.layers().reset()
         print(selected)
         var WS = vectors_dict[selected]
-        mapPanel.layers.set(0,WS.style(featureStyle))
+        mapPanel.layers().set(0,WS.style(featureStyle))
         //oct
        
 
@@ -694,10 +694,12 @@ var analyzePanel = ui.Panel({
 
 function mapInit() {
 ui.root.clear();
+mainPanel.clear()
 //mainSubPanel.add(infoPanel)
 mainSubPanel.clear()
 mainSubPanel.add(analyzePanel)
-
+mapPanel.clear()
+mapPanel = makeMapPanel()
 
 //header.add(ui.Label('header'))
 // var footer = makeFooter();
@@ -705,6 +707,7 @@ mainSubPanel.add(analyzePanel)
 ui.root.setLayout(ui.Panel.Layout.flow(
     'vertical'))
 // blankPanel.add(ui.Label('blankPanel'))
+
 mainPanel.add(mainSubPanel)
 //mainSubPanel.add(ui.Label('mainSubPanel'))
 ui.root.add(
@@ -712,7 +715,7 @@ ui.root.add(
     mapPanel);
 // mapPanel.add(mapInfoPanel);
 mapPanel.add(mainPanel);
-
+analyzePanel.clear()
 analyzePanel.add(watershedSelectLabel)
 analyzePanel.add(watershedSelect)
 analyzePanel.add((buttonPanel))
