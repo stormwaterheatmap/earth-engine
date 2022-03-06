@@ -842,7 +842,8 @@ exports.img_class_chart = img_class_chart
 // }
 
 // exports.coc_mean_conc = coc_mean_conc
-
+/**
+ * 
 //testing 
  var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 // var layerProperties = data.rasters
@@ -872,3 +873,4 @@ print(chart)
 // var testPan = ui.Panel()
 // testPan.add(chart2)
 // Map.add(testPan)
+**/
