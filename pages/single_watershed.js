@@ -273,7 +273,7 @@ var layerButton = function (layerObject) {
 
 var reset_button = ui.Button({label: 'Reset', onClick: function(){
 print('Reset')
-
+mapInit()
 
 }})
 
@@ -353,11 +353,11 @@ function make_concentration_panel(region, scale){
 
       
       pan.add(
-            charts.coc_load(data.cocs[concentration_objects[0]].select(0),region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[1]].select(0),region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[2]].select(0),region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[3]].select(0),region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[4]].select(0),region,100))
+            charts.coc_load(data.cocs[concentration_objects[0]]),region,100).add(
+            charts.coc_load(data.cocs[concentration_objects[1]],region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[2]],region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[3]],region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[4]],region,100))
 
             return(pan)
 
@@ -597,8 +597,9 @@ var watershedSelect = ui.Select({
         mapPanel.layers().reset()
         print(selected)
         var WS = vectors_dict[selected]
-        mapPanel.addLayer(WS.style(featureStyle)) //oct
-        analyzePanel.add((buttonPanel))
+        mapPanel.layers.set(0,WS.style(featureStyle))
+        //oct
+       
 
     }
 });
@@ -619,7 +620,7 @@ Set up User Interface
 //redraw()
 
 // Clear the default UI 
-ui.root.clear();
+
 // Create the app's two panels and add them to the ui.root as a split panel
 var mapPanel = makeMapPanel();
 var mainSubPanel = makeMainSubPanel();
@@ -686,6 +687,13 @@ var analyzePanel = ui.Panel({
 
 
 
+
+// ui.root.add(footer)
+//---------------- set the initial view
+
+
+function mapInit() {
+ui.root.clear();
 //mainSubPanel.add(infoPanel)
 mainSubPanel.add(analyzePanel)
 
@@ -706,22 +714,20 @@ mapPanel.add(mainPanel);
 
 analyzePanel.add(watershedSelectLabel)
 analyzePanel.add(watershedSelect)
-
-// ui.root.add(footer)
-//---------------- set the initial view
-
-
-function mapInit() {
-//clear layers 
-mapPanel.layers().reset()
+analyzePanel.add((buttonPanel))
 // reset view 
 
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
 
+WS = vectors_dict["Puget Sound Assessment Units"]
+watershedSelect.setValue("Puget Sound Assessment Units")
+mapPanel.layers().set(0,WS.style(featureStyle))
 // reset dialogs 
 
 
 }
+
+mapInit() 
 
