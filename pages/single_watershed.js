@@ -353,11 +353,11 @@ function make_concentration_panel(region, scale){
 
       
       pan.add(
-            charts.coc_load(data.cocs[concentration_objects[0]].select(0),region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[1]].select(0),region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[2]].select(0),region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[3]].select(0),region,100)).add(
-            charts.coc_load(data.cocs[concentration_objects[4]].select(0),region,100))
+            charts.coc_load(data.cocs[concentration_objects[0]]),region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[1]],region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[2]],region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[3]],region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[4]],region,100))
 
             return(pan)
 
@@ -720,7 +720,10 @@ analyzePanel.add((buttonPanel))
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
-mapPanel.layers.set(0,WS.style(featureStyle))
+
+WS = vectors_dict["Puget Sound Assessment Units"]
+watershedSelect.setValue("Puget Sound Assessment Units")
+mapPanel.layers().set(0,WS.style(featureStyle))
 // reset dialogs 
 
 
