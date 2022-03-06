@@ -725,10 +725,17 @@ mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
 
 WS = vectors_dict["Puget Sound Assessment Units"]
 watershedSelect.setValue("Puget Sound Assessment Units")
-mapPanel.layers().set(0,WS.style(featureStyle))
 // reset dialogs 
+update_raster_img(data.cocs["Total Suspended Solids Concentration"])
+mapPanel.layers().set(1,WS.style(featureStyle))
+  
 
+//helpers.make_tnc_map()
 
+}
+
+function update_raster_img(layerObj){
+  mapPanel.layers().set(0,layerObj.layer)
 }
 
 function reset_panels() {
@@ -744,7 +751,7 @@ var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
 
-  
+update_raster_img(data.cocs["Total Suspended Solids Concentration"])
 }
 
 
