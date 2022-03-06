@@ -434,7 +434,7 @@ function makeReports() {
     //impChart.setOptions(Style.charts.singleBar)
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, report_scale, 'percent')
 
-    var impcard = cards('Imperviousness', [
+    var impcard = cards('Watershed Info', [hline(),
         //   impChart, 
         impNum //layerButton(layerProperties["Imperviousness"])
     ])
