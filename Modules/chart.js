@@ -1,20 +1,11 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = 
-    /* color: #d63000 */
-    /* displayProperties: [
-      {
-        "type": "rectangle"
-      }
-    ] */
-    ee.Geometry.Polygon(
+var geometry = /* color: #d63000 */ee.Geometry.Polygon(
         [[[-122.20747010339869, 48.15170220889509],
           [-122.20747010339869, 48.1379572829303],
           [-122.17176453699244, 48.1379572829303],
           [-122.17176453699244, 48.15170220889509]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
 
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
 function sigFigs(n, sig) {
@@ -276,7 +267,7 @@ function coc_mean_conc(layerObj, region, scale) {
   var loading = 'loading...';
   var bigNum = ui.Label({
     value: loading,
-    style: style.fonts.Body3
+    //style: style.fonts.Body3
   });
   bigNum.style()
     .set({
@@ -287,7 +278,7 @@ function coc_mean_conc(layerObj, region, scale) {
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
       ],
-      fontWeight: 500,
+      //fontWeight: 500,
       //  border: '1px solid blue', 
       backgroundColor: style.colors.transparent,
       textAlign: 'right',
