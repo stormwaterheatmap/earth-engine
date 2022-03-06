@@ -860,7 +860,10 @@ var vector_dict = {
 }
 
 
-
+var display_imgs = {"psau": data.psau_shed_img
+  
+}
+exports.display_imgs = display_imgs 
 
 exports.vector_dict = vector_dict
 exports.rasters = rasters
