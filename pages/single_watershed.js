@@ -1,10 +1,11 @@
 /**
- * @ Author: Christian Nilsen
- * @ Create Time: 2022-03-04 20:26:44
+ * @ Author: Your name
+ * @ Create Time: 2022-03-04 22:01:53
  * @ Modified by: Your name
- * @ Modified time: 2022-03-04 21:01:44
+ * @ Modified time: 2022-03-05 21:21:08
  * @ Description:
  */
+
 
 /*Load modules 
 ---------------------------------------------------------------------------------------------------- 
@@ -16,7 +17,7 @@ var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts
 
-var cocs = data.cocs
+
 
 var layerProperties = data.rasters
 
@@ -324,11 +325,39 @@ var legendPanel = ui.Panel({
 }).setLayout(ui.Panel.Layout.flow('vertical'));
 
 
+function make_load_panel(region, scale){
+       
+    var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true), 
+        style: {stretch:'horizontal'}
+      }) 
 
-var makeReports = function () {
-    print('Making reports...')
-    var report_scale = mapPanel.getScale() 
+      var Load_objects = [
+        'Total Copper Load',
+        'Total Kjeldahl Nitrogen Load',
+        'Total Phosphorus Load',
+        'Total Suspended Solids Load',
+        'Total Zinc Load']
+
+      
+      pan.add(
+          data.cocs[Load_objects[0]],region,100).add(
+            data.cocs[Load_objects[0]],region,100).add(
+            data.cocs[Load_objects[0]],region,100).add(
+            data.cocs[Load_objects[0]],region,100).add(
+            data.cocs[Load_objects[0]],region,100)
+
+            return(pan)
+
+      
+
     
+}
+
+
+function makeReports() {
+    
+    var report_scale = mapPanel.getScale()
+
     var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
         clicked_basin_geom, report_scale, 'mean')
     var pchart2 = charts.histogramImage(
@@ -342,8 +371,8 @@ var makeReports = function () {
 
         [hline(), subtitle('Watershed Mean'),
             pchart,
-            hline(),
-            subtitle('Histogram of Values'),
+        hline(),
+        subtitle('Histogram of Values'),
             pchart2,
             laybut
         ]
@@ -353,7 +382,6 @@ var makeReports = function () {
     print('done with precip_card')
     //var impChart = charts.stackedBar(layerProperties.Imperviousness, report_scale, clicked_basin_geom)
     //impChart.setOptions(Style.charts.singleBar)
-
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, report_scale, 'percent')
 
     var impcard = cards('Imperviousness', [
@@ -363,19 +391,25 @@ var makeReports = function () {
     analyzePanel.add(impcard)
 
     print('done with impcard')
-    
-    
-    
+
+
+
     var concentration_card = cards('Stormwater Concentrations', [
-      charts.coc_mean_conc(data.cocs["Total Copper Concentration"],clicked_basin_geom, report_scale)
-      
-      ])
-      
-     analyzePanel.add(concentration_card)
+        charts.coc_mean_conc(data.cocs["Total Copper Concentration"], clicked_basin_geom, report_scale)
+    ])
+
+    analyzePanel.add(concentration_card)
+
+
+    //make the load panel 
+
+    var load_card = cards('Stormwater Loads', [
+        make_load_panel(clicked_basin_geom, report_scale)
+    ])
+    analyzePanel.add(load_card)
+
     // //To Do this is a temporary fix. 
     //     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,report_scale ); 
-
-
     //     luchart.setOptions(Style.charts.imageBar)
     //     var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, report_scale)
     //     lcchart.setOptions(Style.charts.imageBar)
@@ -387,7 +421,6 @@ var makeReports = function () {
     //         subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties['Land Cover'])
     //     ])
     //     analyzePanel.add(luCard)
-
     // ///img_class_chart(layer_object, region, scale){
     //     //var ageChart = charts.img_class_chart(
     //     var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,report_scale )
@@ -396,20 +429,15 @@ var makeReports = function () {
     //     //ageCard.setOptions(Style.charts.imageBar)
     //     var ageCard = cards('Age of Imperviousness', [ageChart, layerButton(layerProperties['Age of Imperviousness'])])
     //     analyzePanel.add(ageCard)
-
     //     var soilsChart = charts.img_class_chart(layerProperties['Soils'],clicked_basin_geom,report_scale )
-
     //     //charts.pieChart(clicked_basin_geom, layerProperties.Soils, report_scale) //soils and lithology 
     //     //soilsChart.setChartType('BarChart');
     //     //soilsChart.setOptions(Style.charts.imageBar)
-
     //     var soilsCard = cards('Soils', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(),
     //     ])
     //     analyzePanel.add(soilsCard)
-
     //     //Make a panel for topography 
     //     var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, report_scale)
-
     //     // var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
     //     // topoCats.setChartType('ColumnChart')
     //     var topoCats =  charts.img_class_chart(layerProperties['Slope Categories'],clicked_basin_geom,mapPanel.getScale() )
@@ -428,12 +456,8 @@ var makeReports = function () {
     //     });
     //     var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties['Runoff (inches)'])])
     //     analyzePanel.add(qCard)
-
-
-
     //     //Make a panel for topography 
     //     var TSSchart = charts.histogramImage(cocs['Total Suspended Solids Concentration'], clicked_basin_geom, mapPanel.getScale())
-
     //     var TSSloadchart = charts.histogramImage(cocs['Total Suspended Solids Load'], clicked_basin_geom, mapPanel.getScale())
     //     var pollutantCard = cards('Pollutant Concentration', 
     //     [

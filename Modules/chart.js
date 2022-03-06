@@ -362,7 +362,109 @@ function coc_mean_conc(layerObj, region, scale) {
   //  
   return numPan;
 }
-  exports.coc_mean_conc = coc_mean_conc
+exports.coc_mean_conc = coc_mean_conc
+
+function coc_load(layerObj, region, scale) {
+  //text for loading whil calucations happen 
+  var units = layerObj.units
+  var loading = 'loading...';
+  var bigNum = ui.Label({
+    value: loading,
+    style: style.fonts.Body3
+  });
+  bigNum.style()
+    .set({
+      margin: 2,
+      padding: 2,
+      width: '95%',
+      fontSize: '30px',
+      fontFamily: ['Roboto', 'Helvetica Neue',
+        'Arial', 'sans-serif'
+      ],
+      fontWeight: 500,
+    //   border: '1px solid blue', 
+      backgroundColor: style.colors.transparent,
+      textAlign: 'right',
+    });
+
+  var title_value = layerObj.layer.name;
+
+
+  var titleLabel = ui.Label({
+    value: title_value,
+    style: style.fonts.H4
+  });
+  titleLabel.style()
+    .set({
+      margin: '2px',
+      padding: '2px',
+      stretch: 'both',
+      width: '98%',
+      //height: "50px",
+      textAlign: 'right',
+      //   border: '1px solid red'
+    });
+  units = ui.Label({
+    value: units,
+    style: style.fonts.Caption2
+  });
+  units.style()
+    .set({
+      textAlign: 'right',
+      width: '100%',
+      margin:2
+    });
+
+  var numPan = ui.Panel({
+    layout: ui.Panel.Layout.flow('vertical',true),
+    style: {
+      textAlign: 'right',
+     // stretch: 'horizontal',
+      //padding: 2,
+      //margin: 14,
+      width: '180px',
+      //border: '1px solid orange'
+    }
+  }); //height: '200px'}}); 
+  numPan.add(titleLabel); //.add(infoLabel)
+  
+    
+    var num_unit_panel = ui.Panel({widgets:[bigNum],
+    layout:ui.Panel.Layout.flow('horizontal'),
+      style:{width: '100%',stretch:'both'}
+    })
+  numPan.add(num_unit_panel);
+
+  numPan.add(units);
+  
+  //calculations 
+  
+
+  var total_load_per_m2 = ee.Number((layerObj.layer.eeObject.select(0))
+    .reduceRegion({
+      reducer: ee.Reducer.mean(),
+      geometry: region,
+      scale: scale,
+      maxPixels: 100000,
+      bestEffort: true
+    })
+    .get(layerObj.layer.eeObject.bandNames()
+      .get(0)));
+    var ws_area = region.area(2) 
+  var conversion_factor = (layerObj.units == 'g/m² per year') ? 1e-3 : 1e-6;
+ 
+    var total_load = total_load_per_m2.multiply(ws_area).multiply(conversion_factor) // do this for sigfigs
+    
+    
+  total_load.evaluate(function (result) {
+    // When the server returns the value, show it.
+    bigNum.setValue(helpers.sigFigs(result,3).toLocaleString("en-US"));
+  });
+  //  
+  return numPan;
+}
+
+exports.coc_load = coc_load
 
 function littleNum(layerObj, region, scale, reducerType) {
   //text for loading whil calucations happen 
