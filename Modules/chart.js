@@ -1,4 +1,18 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-122.20747010339869, 48.15170220889509],
+          [-122.20747010339869, 48.1379572829303],
+          [-122.17176453699244, 48.1379572829303],
+          [-122.17176453699244, 48.15170220889509]]], null, false);
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
 
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
@@ -837,15 +851,20 @@ function coc_mean_conc(layerObj, region, scale) {
 
 exports.coc_mean_conc = coc_mean_conc
 
-// //testing 
-// var data = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+//testing 
+ var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 // var layerProperties = data.rasters
 
 // print(Object.keys(layerProperties))
 // print(layerProperties)
 
 // //
-// var layerObject = layerProperties["Age of Imperviousness"] 
+var layerObject = data.cocs["Total Copper Concentration"]
+
+var chart = coc_mean_conc(layerObject,geometry,100)
+
+print(chart)
+//print(layerObject)
 // var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
 // var imageBar = (  {chartArea: {left: '50%'},
 //   hAxis: {
