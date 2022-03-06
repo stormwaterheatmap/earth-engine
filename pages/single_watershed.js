@@ -273,7 +273,7 @@ var layerButton = function (layerObject) {
 
 var reset_button = ui.Button({label: 'Reset', onClick: function(){
 print('Reset')
-
+mapInit()
 
 }})
 
@@ -353,7 +353,7 @@ function make_concentration_panel(region, scale){
 
       
       pan.add(
-            charts.coc_load(data.cocs[concentration_objects[0]]),region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[0]]),region,100).add(
             charts.coc_load(data.cocs[concentration_objects[1]],region,100)).add(
             charts.coc_load(data.cocs[concentration_objects[2]],region,100)).add(
             charts.coc_load(data.cocs[concentration_objects[3]],region,100)).add(
