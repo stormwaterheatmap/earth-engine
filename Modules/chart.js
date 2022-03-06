@@ -370,7 +370,7 @@ exports.coc_mean_conc = coc_mean_conc
 
 function coc_load(layerObj, region, scale) {
   //text for loading whil calucations happen 
-  var units = layerObj.units
+  var units = 'kg/yr'
   var loading = 'loading...';
   var bigNum = ui.Label({
     value: loading,
@@ -408,11 +408,11 @@ function coc_load(layerObj, region, scale) {
       textAlign: 'right',
       //   border: '1px solid red'
     });
-  units = ui.Label({
+  units_label = ui.Label({
     value: units,
     style: style.fonts.Caption2
   });
-  units.style()
+  units_label.style()
     .set({
       textAlign: 'right',
       width: '100%',
@@ -439,7 +439,7 @@ function coc_load(layerObj, region, scale) {
     })
   numPan.add(num_unit_panel);
 
-  numPan.add(units);
+  numPan.add(units_label);
   
   //calculations 
   
