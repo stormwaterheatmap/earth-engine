@@ -403,6 +403,16 @@ function make_load_panel(region, scale) {
 
 }
 
+//function to return watershed area 
+
+function get_ws_area(ws_geometry){}
+
+//function to return mean annual precip 
+
+// function to return mean annual runoff 
+
+//function to return percent as surface runoff 
+
 
 function makeReports() {
 
