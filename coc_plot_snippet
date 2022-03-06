@@ -72,13 +72,13 @@ function coc_load(layerObj, region, scale,units) {
     .set({
       margin: 2,
       padding: 2,
-      width: '100%',
+      width: '95%',
       fontSize: '30px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
       ],
       fontWeight: 500,
-       border: '1px solid blue', 
+    //   border: '1px solid blue', 
       backgroundColor: style.colors.transparent,
       textAlign: 'right',
     });
@@ -95,7 +95,8 @@ function coc_load(layerObj, region, scale,units) {
       margin: '2px',
       padding: '2px',
       stretch: 'both',
-      width: '100%',
+      width: '98%',
+      //height: "50px",
       textAlign: 'right',
       //   border: '1px solid red'
     });
@@ -114,10 +115,11 @@ function coc_load(layerObj, region, scale,units) {
     layout: ui.Panel.Layout.flow('vertical',true),
     style: {
       textAlign: 'right',
-      padding: 2,
-      margin: 4,
-      minWidth: '100px',
-      border: '1px solid orange'
+     // stretch: 'horizontal',
+      //padding: 2,
+      //margin: 14,
+      width: '180px',
+      //border: '1px solid orange'
     }
   }); //height: '200px'}}); 
   numPan.add(titleLabel); //.add(infoLabel)
@@ -130,7 +132,10 @@ function coc_load(layerObj, region, scale,units) {
   numPan.add(num_unit_panel);
 
   numPan.add(units);
-  var reduced = ee.Number((layerObj.layer.eeObject.select(0))
+  
+  //calculations 
+  
+  var total_load_per_m2 = ee.Number((layerObj.layer.eeObject.select(0))
     .reduceRegion({
       reducer: ee.Reducer.mean(),
       geometry: region,
@@ -140,9 +145,14 @@ function coc_load(layerObj, region, scale,units) {
     })
     .get(layerObj.layer.eeObject.bandNames()
       .get(0)));
-  reduced.evaluate(function (result) {
+    var ws_area = region.area(2) 
+ 
+    var total_load = total_load_per_m2.multiply(ws_area).multiply(1e-6) // do this for sigfigs
+    
+    
+  total_load.evaluate(function (result) {
     // When the server returns the value, show it.
-    bigNum.setValue(result.toPrecision(2));
+    bigNum.setValue(helpers.sigFigs(result,3).toLocaleString("en-US"));
   });
   //  
   return numPan;
@@ -182,7 +192,7 @@ var chart = ui.Chart.image.regions(img, geometry, ee.Reducer.mean(), 100)
 print(chart)
 
 var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true), 
-  style: {maxWidth: '400px'}
+  style: {maxWidth: '400px',stretch:'horizontal'}
 }) 
 pan.add(coc_load(data.cocs[Load_objects[4]],geometry,100,'kg/yr')).add(
   coc_load(data.cocs[Load_objects[1]],geometry,100,'kg/yr')).add(
