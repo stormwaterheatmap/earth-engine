@@ -340,8 +340,8 @@ var legendPanel = ui.Panel({
 
 function make_concentration_panel(region, scale){
        
-    var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true), 
-        style: {stretch:'horizontal'}
+    var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true),
+        //style: {stretch:'horizontal'}
       }) 
 
       var concentration_objects = [
@@ -353,11 +353,12 @@ function make_concentration_panel(region, scale){
 
       
       pan.add(
-            charts.coc_mean_conc(data.cocs[concentration_objects[0]]),region,100).add(
-            charts.coc_mean_conc(data.cocs[concentration_objects[1]],region,100)).add(
-            charts.coc_mean_conc(data.cocs[concentration_objects[2]],region,100)).add(
-            charts.coc_mean_conc(data.cocs[concentration_objects[3]],region,100)).add(
-            charts.coc_mean_conc(data.cocs[concentration_objects[4]],region,100))
+            //charts.coc_mean_conc(data.cocs["Total Copper Concentration"]),region,scale).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[1]],region,scale)).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[2]],region,scale)).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[3]],region,scale)).add(
+            charts.coc_mean_conc(data.cocs["Total Copper Concentration"]),region,scale).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[4]],region,scale))
 
             return(pan)
 
@@ -449,69 +450,10 @@ function makeReports() {
     ])
     analyzePanel.add(load_card)
 
-    // //To Do this is a temporary fix. 
-    //     var luchart =  charts.img_class_chart(layerProperties['Land Use'],clicked_basin_geom,report_scale ); 
-    //     luchart.setOptions(Style.charts.imageBar)
-    //     var lcchart = charts.img_class_chart(layerProperties['Land Cover'],clicked_basin_geom, report_scale)
-    //     lcchart.setOptions(Style.charts.imageBar)
-    //     var luCard = cards('Land Use & Land Cover', [subtitle('Imperviousness'), impNum, //impChart, 
-    //         layerButton(layerProperties.Imperviousness),
-    //         hline(), subtitle('Land Use Classifications'), luchart,
-    //         layerButton(layerProperties['Land Use']),
-    //         hline(),
-    //         subtitle('Land Cover Classifications'), lcchart, layerButton(layerProperties['Land Cover'])
-    //     ])
-    //     analyzePanel.add(luCard)
-    // ///img_class_chart(layer_object, region, scale){
-    //     //var ageChart = charts.img_class_chart(
-    //     var ageChart = charts.img_class_chart(layerProperties['Age of Imperviousness'],clicked_basin_geom,report_scale )
-    //     //pieChart(clicked_basin_geom, layerProperties['Age of Development'], report_scale)
-    //     //ageCard.setChartType('BarChart')
-    //     //ageCard.setOptions(Style.charts.imageBar)
-    //     var ageCard = cards('Age of Imperviousness', [ageChart, layerButton(layerProperties['Age of Imperviousness'])])
-    //     analyzePanel.add(ageCard)
-    //     var soilsChart = charts.img_class_chart(layerProperties['Soils'],clicked_basin_geom,report_scale )
-    //     //charts.pieChart(clicked_basin_geom, layerProperties.Soils, report_scale) //soils and lithology 
-    //     //soilsChart.setChartType('BarChart');
-    //     //soilsChart.setOptions(Style.charts.imageBar)
-    //     var soilsCard = cards('Soils', [subtitle('Hydrologic Soil Groups'), soilsChart, layerButton(layerProperties.Soils), hline(),
-    //     ])
-    //     analyzePanel.add(soilsCard)
-    //     //Make a panel for topography 
-    //     var topoChart = charts.histogramImage(layerProperties.Slope, clicked_basin_geom, report_scale)
-    //     // var topoCats = charts.pieChart(clicked_basin_geom, layerProperties['Slope Categories'], mapPanel.getScale())
-    //     // topoCats.setChartType('ColumnChart')
-    //     var topoCats =  charts.img_class_chart(layerProperties['Slope Categories'],clicked_basin_geom,mapPanel.getScale() )
-    //     //topoCats.setOptions(Style.charts.imageBar)
-    //     var topoCard = cards('Topography', [subtitle('Slope Histogram'), topoChart, layerButton(layerProperties['Slope Categories']), hline(),
-    //         subtitle('Slope Categories'), topoCats, layerButton(layerProperties['Slope Categories'])
-    //     ])
-    //     print('topcard ok')
-    //     analyzePanel.add(topoCard)
-    //     //Make a panel for runoff 
-    //     var MeanQ = charts.histogramImage(layerProperties["Runoff (in)"], clicked_basin_geom, mapPanel.getScale())
-    //     MeanQ.setOptions({
-    //         vAxis: {
-    //             logScale: true
-    //         }
-    //     });
-    //     var qCard = cards('Stormwater Runoff', [subtitle('Mean Annual Stormwater Runoff'), MeanQ, layerButton(layerProperties['Runoff (inches)'])])
-    //     analyzePanel.add(qCard)
-    //     //Make a panel for topography 
-    //     var TSSchart = charts.histogramImage(cocs['Total Suspended Solids Concentration'], clicked_basin_geom, mapPanel.getScale())
-    //     var TSSloadchart = charts.histogramImage(cocs['Total Suspended Solids Load'], clicked_basin_geom, mapPanel.getScale())
-    //     var pollutantCard = cards('Pollutant Concentration', 
-    //     [
-    //       subtitle('Total Suspended Solids Concentation'), 
-    //       TSSchart, layerButton(cocs['Total Suspended Solids Concentration']), 
-    //       subtitle('Total Suspended Solids Load'), 
-    //       TSSloadchart, layerButton(cocs['Total Suspended Solids Load'])
-    //       ]
-    //       )
-    // analyzePanel.add(pollutantCard)
+
 }
 
-//cards function 
+
 
 var subtitle = function (label) {
     return ui.Label({
