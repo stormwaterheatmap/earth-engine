@@ -1,5 +1,5 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var image = ee.Image("projects/ee-stormwaterheatmap/assets/pasu_painted");
+//var image = ee.Image("projects/ee-stormwaterheatmap/assets/pasu_painted");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
 /**
@@ -271,6 +271,13 @@ var layerButton = function (layerObject) {
 }
 
 
+var reset_button = ui.Button({label: 'Reset', onClick: function(){
+print('Reset')
+
+
+}})
+
+print(reset_button)
 
 
 /** Returns a ui.Map with some UI configuration in place */
@@ -331,6 +338,34 @@ var legendPanel = ui.Panel({
 }).setLayout(ui.Panel.Layout.flow('vertical'));
 
 
+function make_concentration_panel(region, scale){
+       
+    var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true), 
+        style: {stretch:'horizontal'}
+      }) 
+
+      var concentration_objects = [
+        'Total Copper Concentration',
+        'Total Kjeldahl Nitrogen Concentration',
+        'Total Phosphorus Concentration',
+        'Total Suspended Solids Concentration',
+        'Total Zinc Concentration']
+
+      
+      pan.add(
+            charts.coc_load(data.cocs[concentration_objects[0]].select(0),region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[1]].select(0),region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[2]].select(0),region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[3]].select(0),region,100)).add(
+            charts.coc_load(data.cocs[concentration_objects[4]].select(0),region,100))
+
+            return(pan)
+
+      
+
+    
+}
+
 function make_load_panel(region, scale){
        
     var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true), 
@@ -364,28 +399,28 @@ function makeReports() {
     
     var report_scale = mapPanel.getScale()
 
-    var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
-        clicked_basin_geom, report_scale, 'mean')
-    var pchart2 = charts.histogramImage(
-        layerProperties["Precipitation (mm)"], clicked_basin_geom,
-        report_scale
-    )
+    // var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
+    //     clicked_basin_geom, report_scale, 'mean')
+    // var pchart2 = charts.histogramImage(
+    //     layerProperties["Precipitation (mm)"], clicked_basin_geom,
+    //     report_scale
+    // )
 
 
-    var laybut = layerButton(layerProperties["Precipitation (mm)"])
-    var precipCard = cards('Precipitation',
+    // var laybut = layerButton(layerProperties["Precipitation (mm)"])
+    // var precipCard = cards('Precipitation',
 
-        [hline(), subtitle('Watershed Mean'),
-            pchart,
-        hline(),
-        subtitle('Histogram of Values'),
-            pchart2,
-            laybut
-        ]
-    )
-    analyzePanel.add(precipCard)
+    //     [hline(), subtitle('Watershed Mean'),
+    //         pchart,
+    //     hline(),
+    //     subtitle('Histogram of Values'),
+    //         pchart2,
+    //         laybut
+    //     ]
+    // )
+    // analyzePanel.add(precipCard)
 
-    print('done with precip_card')
+    // print('done with precip_card')
     //var impChart = charts.stackedBar(layerProperties.Imperviousness, report_scale, clicked_basin_geom)
     //impChart.setOptions(Style.charts.singleBar)
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, report_scale, 'percent')
@@ -401,7 +436,7 @@ function makeReports() {
 
 
     var concentration_card = cards('Predicted Stormwater Concentrations', [
-        charts.coc_mean_conc(data.cocs["Total Copper Concentration"], clicked_basin_geom, report_scale)
+        make_concentration_panel(clicked_basin_geom, report_scale)
     ])
 
     analyzePanel.add(concentration_card)
@@ -556,8 +591,8 @@ var watershedSelect = ui.Select({
         "NHDPlus High Resolution Watershed Dataset",
         "HUC12: USGS Watershed Boundary Dataset"
     ],
-    placeholder: 'Select a value',
-    //value: 'HUC 12'
+    //placeholder: 'Select a value',
+    value:  "Puget Sound Assessment Units",
     onChange: function (selected) {
         mapPanel.layers().reset()
         print(selected)
@@ -674,10 +709,19 @@ analyzePanel.add(watershedSelect)
 
 // ui.root.add(footer)
 //---------------- set the initial view
+
+
+function mapInit() {
+//clear layers 
+mapPanel.layers().reset()
+// reset view 
+
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
 
-var default_shed_img = data.display_imgs.psau 
-print(data.display_imgs)
-mapPanel.addLayer(default_shed_img.focal_min(0.5),{palette: 'white',opacity:0.5})
+// reset dialogs 
+
+
+}
+

@@ -346,10 +346,11 @@ function coc_mean_conc(layerObj, region, scale) {
   numPan //.add(infoLabel)
     .add(labelText2); //.add(labelText2)
 
+    /**
+     * Calculations 
+     */
 
-
-  //if(reducerType == 'mean') {
-  var reduced = ee.Number((layerObj.layer.eeObject.select(0))
+    var reduced = ee.Number((layerObj.layer.eeObject.select(0))
     .reduceRegion({
       reducer: ee.Reducer.mean(),
       geometry: region,
@@ -358,14 +359,22 @@ function coc_mean_conc(layerObj, region, scale) {
       bestEffort: true
     })
     .get(layerObj.layer.eeObject.bandNames()
-      .get(0)));
-  reduced.evaluate(function (result) {
+    .get(0)));
+    
+    var conversion_factor = (layerObj.units == "mg/L") ? 1e-3 : 1;
+  
+    var concentration = reduced.multiply(conversion_factor) // do this for sigfigs
+    
+    concentration.evaluate(function (result) {
+
     // When the server returns the value, show it.
-    bigNum.setValue(result.toPrecision(3));
+    bigNum.setValue(sigFigs(result,3).toLocaleString("en-US"));
   });
+
   //  
   return numPan;
 }
+
 exports.coc_mean_conc = coc_mean_conc
 
 function coc_load(layerObj, region, scale) {
@@ -441,7 +450,9 @@ function coc_load(layerObj, region, scale) {
 
   numPan.add(units_label);
   
-  //calculations 
+  /**
+   * calculations 
+   */
   
 
   var total_load_per_m2 = ee.Number((layerObj.layer.eeObject.select(0))
