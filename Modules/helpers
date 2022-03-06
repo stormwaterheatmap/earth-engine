@@ -6,6 +6,7 @@ var barLegend = legends.barLegend
 //var barLegend_log_xform = legends.barLegend_log_xform
 
 
+
 function make_docs_link(layer_object){
   var docs_url = "http://stormwaterheatmap.dev/docs/Data%20Layers/"
   return(
@@ -278,6 +279,13 @@ function warning_panel(title,text) {
 return(panel)
     
 }
+
+function sigFigs(n, sig) {
+    var mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
+    return Math.round(n * mult) / mult;
+}
+exports.sigFigs = sigFigs
+
 
 
 // //var chart = make_chart(layer_object.Imperviousness,geometry,30)//,"percent")
