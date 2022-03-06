@@ -822,7 +822,7 @@ function coc_mean_conc(layerObj, region, scale) {
       reducer: ee.Reducer.mean(),
       geometry: region,
       scale: scale,
-      maxPixels: 100000,
+      //maxPixels: 100000,
       bestEffort: true
     })
     .get(layerObj.layer.eeObject.bandNames()
