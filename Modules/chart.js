@@ -368,7 +368,7 @@ function coc_mean_conc(layerObj, region, scale) {
     concentration.evaluate(function (result) {
 
     // When the server returns the value, show it.
-    bigNum.setValue(sigFigs(result,3).toLocaleString("en-US"));
+    bigNum.setValue(sigFigs(result,3))//.toLocaleString("en-US"));
   });
 
   //  
