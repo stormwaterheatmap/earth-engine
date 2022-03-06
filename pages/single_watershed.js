@@ -695,6 +695,7 @@ var analyzePanel = ui.Panel({
 function mapInit() {
 ui.root.clear();
 //mainSubPanel.add(infoPanel)
+mainSubPanel.clear()
 mainSubPanel.add(analyzePanel)
 
 
