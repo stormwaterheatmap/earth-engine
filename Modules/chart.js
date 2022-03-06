@@ -417,7 +417,7 @@ function coc_load(layerObj, region, scale) {
       textAlign: 'right',
       //   border: '1px solid red'
     });
-  units_label = ui.Label({
+  var units_label = ui.Label({
     value: units,
     style: style.fonts.Caption2
   });
