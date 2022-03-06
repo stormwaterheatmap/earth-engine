@@ -196,9 +196,9 @@ print(chart)
 var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true), 
   style: {maxWidth: '400px',stretch:'horizontal'}
 }) 
-pan.add(coc_load(data.cocs[Load_objects[4]],geometry,100,'kg/yr')).add(
-  coc_load(data.cocs[Load_objects[1]],geometry,100,'kg/yr')).add(
-    coc_load(data.cocs[Load_objects[2]],geometry,100,'kg/yr')).add(
-    coc_load(data.cocs[Load_objects[3]],geometry,100,'kg/yr')).add(
-      coc_load(data.cocs[Load_objects[0]],geometry,100,'kg/yr'))
+pan.add(charts.coc_mean_conc(data.cocs[Load_objects[4]],geometry,100 )).add(
+  charts.coc_mean_conc(data.cocs[Load_objects[1]],geometry,100 )).add(
+    charts.coc_mean_conc(data.cocs[Load_objects[2]],geometry,100 )).add(
+    charts.coc_mean_conc(data.cocs[Load_objects[3]],geometry,100 )).add(
+      charts.coc_mean_conc(data.cocs[Load_objects[0]],geometry,100 ))
 Map.add(pan)
