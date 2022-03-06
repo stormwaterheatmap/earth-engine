@@ -275,6 +275,7 @@ var reset_button = ui.Button({
     onClick: function() {
         print('Reset')
         reset_panels()
+        analyzePanel.clear()
 
     }
 })
@@ -299,7 +300,7 @@ var makeMainSubPanel = function() {
     var mainSubPanel = ui.Panel({
         style: {
             width: '100%',
-            border: '9px solid purple',
+            //border: '9px solid purple',
             backgroundColor: 'white'
         }
     })
@@ -493,11 +494,11 @@ var accept = ui.Button({
     },
     onClick: function() {
         mapPanel.unlisten()
-        // mainPanel.style().set({
-        //     shown: true,
+        mainPanel.style().set({
+             shown: true,
         //     height: '85%',
-        //     width: '32.8%',
-        // }); //show the side panel
+             maxWidth: '32.8%',
+         }); //show the side panel
         //mapPanel.add(legendPanel) //add legend panel to the map
         makeReports() //also clear side panel todo
         // buttonPanel.style().set({
@@ -520,12 +521,14 @@ var inspect_helper_text = ui.Label({
 })
 //function to add user layer to the map
 var buttonPanel = ui.Panel({
-    widgets: [ui.Label('buttonPanel'), inspect_helper_text, inspect_button, accept],
+    widgets: [inspect_helper_text, inspect_button, accept],
     layout: ui.Panel.Layout.flow('vertical'),
     style: {
-        position: 'top-left',
-        stretch: 'both',
-        border: '1px solid green'
+        //position: 'top-left',
+        stretch: 'horizontal',
+       // border: '1px solid green', 
+        margin: '0px',
+        padding: '0px'
     }
 });
 
@@ -635,7 +638,7 @@ mainPanel.style().set({height:"75%"})
 
 var analyzePanel = ui.Panel({
     style: {
-        shown: true
+        shown: true//, border: '3px solid green'
     }
 })
 
@@ -647,8 +650,8 @@ function mapInit() {
 ui.root.clear();
 //mainPanel.clear()
 //mainSubPanel.add(infoPanel)
-mainSubPanel.clear()
-mainSubPanel.add(analyzePanel)
+//mainSubPanel.clear()
+
 mapPanel.clear()
 mapPanel = makeMapPanel()
 
@@ -659,7 +662,7 @@ ui.root.setLayout(ui.Panel.Layout.flow(
     'vertical'))
 // blankPanel.add(ui.Label('blankPanel'))
 
-mainPanel.add(mainSubPanel)
+
 //mainSubPanel.add(ui.Label('mainSubPanel'))
 ui.root.add(
 
@@ -667,11 +670,13 @@ ui.root.add(
 // mapPanel.add(mapInfoPanel);
 mapPanel.add(mainPanel);
 analyzePanel.clear()
-analyzePanel.add(watershedSelectLabel)
-analyzePanel.add(watershedSelect)
-analyzePanel.add((buttonPanel))
+mainPanel.add(watershedSelectLabel)
+mainPanel.add(watershedSelect)
+mainPanel.add((buttonPanel))
 // reset view 
 
+mainSubPanel.add(analyzePanel)
+mainPanel.add(mainSubPanel)
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
@@ -691,7 +696,8 @@ function reset_panels() {
     })
   //hide reports and cards, etc 
   // reset view 
-
+//clear layers 
+mapPanel.layers().reset([ WS.style(featureStyle)])//[vectors_dict["Puget Sound Assessment Units"]])
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
