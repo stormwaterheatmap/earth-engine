@@ -320,6 +320,33 @@ var makeFooter = function() {
 }
 
 
+function make_intro_text_panel(){
+var psau = ui.Label({
+  style: {//border: '1px solid red',
+ margin: '0px 8px', 
+    //padding: '0px, 0px, 0px, 0px'},
+  },
+  value: 
+"Puget Sound Watershed Characterization Project ↗",
+targetUrl:"https://apps.ecology.wa.gov/coastalatlas/wc/landingpage.html"})
+
+var description = ui.Label({value: 
+  "Explore watershed data by selecting a watershed from the map."+
+  "\nBy default, watersheds shown are Assessment Units from the", 
+style:{//border: '1px solid blue',
+whiteSpace: 'pre',//margin: '0px',
+margin: '8px 8px 0px 8px'}})
+
+var description2 = ui.Label({value: "To select a different watershed data set, select one below:"})
+var panel = ui.Panel({
+  widgets:[description,psau,description2],
+  style:{
+  padding: '0px'}})
+return panel
+}
+
+
+
 
 var watershedSelectLabel = ui.Label({
     value: 'Select a watershed dataset to aggregate data:',
@@ -364,7 +391,7 @@ function make_concentration_panel(region, scale) {
         charts.coc_mean_conc(data.cocs["Total Copper Concentration"]), region, scale).add(
         charts.coc_mean_conc(data.cocs[concentration_objects[4]], region, scale))
 
-    return (pan)
+    return (pan) 
 
 
 
@@ -658,7 +685,7 @@ var analyzePanel = ui.Panel({
 // ui.root.add(footer)
 //---------------- set the initial view
 
-
+var intro_text_panel = make_intro_text_panel()
 function mapInit() {
 ui.root.clear();
 //mainPanel.clear()
@@ -683,6 +710,7 @@ ui.root.add(
 // mapPanel.add(mapInfoPanel);
 mapPanel.add(mainPanel);
 analyzePanel.clear()
+mainPanel.add(intro_text_panel)
 mainPanel.add(watershedSelectLabel)
 mainPanel.add(watershedSelect)
 mainPanel.add(inspect_helper_text)
