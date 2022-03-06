@@ -465,7 +465,7 @@ function coc_load(layerObj, region, scale) {
     })
     .get(layerObj.layer.eeObject.bandNames()
       .get(0)));
-    var ws_area = region.area(2) 
+    var ws_area = ee.Geometry(region).area(2) 
   var conversion_factor = (layerObj.units == 'g/m² per year') ? 1e-3 : 1e-6;
  
     var total_load = total_load_per_m2.multiply(ws_area).multiply(conversion_factor) // do this for sigfigs
