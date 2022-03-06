@@ -346,7 +346,8 @@ var makeReports = function () {
     var qval = layerProperties['Runoff (mm)'].layer.eeObject.reduceRegion({reducer: 
       ee.Reducer.mean(),geometry: clicked_basin_geom, scale: report_scale})//.multiply(area)
     var calced_Q = qval.values().get(0)//.multiply(area)
-    var calced_annual_q = ee.Number(calced_Q).multiply(area).multiply(0.001)
+    var calced_annual_q = 
+    ee.Number(calced_Q).multiply(area).multiply(0.001).round()
     
     
     var qchart = ui.Label('...loading')
@@ -694,3 +695,7 @@ analyzePanel.add(watershedSelect)
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
+
+var default_shed_img = data.display_imgs.psau 
+print(data.display_imgs)
+mapPanel.addLayer(default_shed_img.focal_min(0.5),{palette: 'white',opacity:0.5})
