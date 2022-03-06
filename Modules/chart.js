@@ -4,9 +4,13 @@
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
 function sigFigs(n, sig) {
+  if(n <= 0){
+    return 0
+  }else{
   var mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
   return Math.round(n * mult) / mult;
-}
+}}
+
 
 function histByClass(layerObject, scale, geom) {
   //get values that are in the roi 
