@@ -272,15 +272,16 @@ UI Functions
 
 var reset_button = ui.Button({
     label: 'Reset',
+    style: {shown: false},
     onClick: function() {
         print('Reset')
         reset_panels()
         analyzePanel.clear()
-
+       reset_button.style().set({shown: false})
     }
 })
 
-print(reset_button)
+//print(reset_button)
 
 
 /** Returns a ui.Map with some UI configuration in place */
@@ -494,6 +495,7 @@ var accept = ui.Button({
     },
     onClick: function() {
         mapPanel.unlisten()
+        reset_button.style().set({shown: true})
         mainPanel.style().set({
              shown: true,
         //     height: '85%',
@@ -521,8 +523,9 @@ var inspect_helper_text = ui.Label({
 })
 //function to add user layer to the map
 var buttonPanel = ui.Panel({
-    widgets: [inspect_helper_text, inspect_button, accept],
-    layout: ui.Panel.Layout.flow('vertical'),
+    widgets: [//inspect_helper_text, 
+    inspect_button, accept],
+    layout: ui.Panel.Layout.flow('horizontal',true),
     style: {
         //position: 'top-left',
         stretch: 'horizontal',
@@ -672,9 +675,10 @@ mapPanel.add(mainPanel);
 analyzePanel.clear()
 mainPanel.add(watershedSelectLabel)
 mainPanel.add(watershedSelect)
+mainPanel.add(inspect_helper_text)
 mainPanel.add((buttonPanel))
 // reset view 
-
+mainSubPanel.add(reset_button)
 mainSubPanel.add(analyzePanel)
 mainPanel.add(mainSubPanel)
 var mapCenterLon = -122.423145;
