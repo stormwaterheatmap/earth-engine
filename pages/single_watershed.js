@@ -619,7 +619,7 @@ Set up User Interface
 //redraw()
 
 // Clear the default UI 
-ui.root.clear();
+
 // Create the app's two panels and add them to the ui.root as a split panel
 var mapPanel = makeMapPanel();
 var mainSubPanel = makeMainSubPanel();
@@ -686,6 +686,13 @@ var analyzePanel = ui.Panel({
 
 
 
+
+// ui.root.add(footer)
+//---------------- set the initial view
+
+
+function mapInit() {
+ui.root.clear();
 //mainSubPanel.add(infoPanel)
 mainSubPanel.add(analyzePanel)
 
@@ -706,14 +713,6 @@ mapPanel.add(mainPanel);
 
 analyzePanel.add(watershedSelectLabel)
 analyzePanel.add(watershedSelect)
-
-// ui.root.add(footer)
-//---------------- set the initial view
-
-
-function mapInit() {
-//clear layers 
-mapPanel.layers().reset()
 // reset view 
 
 var mapCenterLon = -122.423145;
@@ -724,4 +723,6 @@ mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
 
 
 }
+
+mapInit() 
 
