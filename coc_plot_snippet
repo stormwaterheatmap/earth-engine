@@ -1,21 +1,68 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = /* color: #d63000 */ee.Geometry.Point([-122.05868163496143, 47.53760459472781]);
+var geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "marker"
+      },
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry({
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Point",
+          "coordinates": [
+            -122.05868163496143,
+            47.53760459472781
+          ]
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.2029815351526,
+                47.924780735833785
+              ],
+              [
+                -122.2029815351526,
+                47.81423283325169
+              ],
+              [
+                -121.9832549726526,
+                47.81423283325169
+              ],
+              [
+                -121.9832549726526,
+                47.924780735833785
+              ]
+            ]
+          ],
+          "geodesic": false,
+          "evenOdd": true
+        }
+      ],
+      "coordinates": []
+    });
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
-var data  = require('users/stormwaterheatmap/apps:data/data_dict_v4')
+var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
-
+var style = Style
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 
 var shed = data.vector_dict["Puget Sound Assessment Units"].filterBounds(geometry)
-Map.addLayer(shed)
+//Map.addLayer(shed)
 
-var stacked_cocs = 
+print(data.cocs)
 
-function coc_mean_conc(layerObj, region, scale) {
+function coc_load(layerObj, region, scale) {
   //text for loading whil calucations happen 
-  var units = layerObj.units;
+  var units = layerObj.units
   var loading = 'loading...';
   var bigNum = ui.Label({
     value: loading,
@@ -25,13 +72,13 @@ function coc_mean_conc(layerObj, region, scale) {
     .set({
       margin: 2,
       padding: 2,
-      width: '80%',
+      width: '95%',
       fontSize: '30px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
       ],
       fontWeight: 500,
-      //  border: '1px solid blue', 
+    //   border: '1px solid blue', 
       backgroundColor: style.colors.transparent,
       textAlign: 'right',
     });
@@ -45,73 +92,51 @@ function coc_mean_conc(layerObj, region, scale) {
   });
   titleLabel.style()
     .set({
-      margin: 0,
-      padding: 0,
-      width: '80%',
+      margin: '2px',
+      padding: '2px',
+      stretch: 'both',
+      width: '98%',
+      //height: "50px",
       textAlign: 'right',
       //   border: '1px solid red'
     });
   units = ui.Label({
     value: units,
-    style: style.fonts.Caption3
+    style: style.fonts.Caption2
   });
   units.style()
     .set({
       textAlign: 'right',
-      width: '80%',
+      width: '100%',
+      margin:2
     });
 
   var numPan = ui.Panel({
-    layout: ui.Panel.Layout.flow('vertical'),
+    layout: ui.Panel.Layout.flow('vertical',true),
     style: {
       textAlign: 'right',
-      padding: 2,
-      margin: 2,
+     // stretch: 'horizontal',
+      //padding: 2,
+      //margin: 14,
+      width: '180px',
+      //border: '1px solid orange'
     }
   }); //height: '200px'}}); 
   numPan.add(titleLabel); //.add(infoLabel)
-  numPan.add(bigNum);
+  
+    
+    var num_unit_panel = ui.Panel({widgets:[bigNum],
+    layout:ui.Panel.Layout.flow('horizontal'),
+      style:{width: '100%',stretch:'both'}
+    })
+  numPan.add(num_unit_panel);
 
   numPan.add(units);
-  var infoLabel = ui.Label({
-    style: style.fonts.Caption3
-  });
-  infoLabel.style()
-    .set({
-      margin: 0,
-      padding: 2,
-      fontSize: '10px',
-      textAlign: 'right',
-      //   border: '1px solid green',
-      //width: '80%',
-      color: style.colors.sDark,
-    });
-  var labelText = (
-    'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
-  var labelText2 = ui.Label({
-    style: style.fonts.Caption3
-  });
-  labelText2.style()
-    .set({
-      //   margin: 0, //fontSize: '10px',
-      //color:style.colors.sDark,
-      margin: 2,
-      padding: 2,
-      textAlign: 'right',
-      width: '80%',
-      //      border: '1px solid pink', 
-      fontSize: '10px',
-    });
-  labelText2.setValue('Source: ' + layerObj.sourceName);
-  labelText2.setUrl(layerObj.sourceUrl);
-  infoLabel.setValue(labelText);
-  numPan //.add(infoLabel)
-    .add(labelText2); //.add(labelText2)
+  
+  //calculations 
+  
 
-
-
-  //if(reducerType == 'mean') {
-  var reduced = ee.Number((layerObj.layer.eeObject.select(0))
+  var total_load_per_m2 = ee.Number((layerObj.layer.eeObject.select(0))
     .reduceRegion({
       reducer: ee.Reducer.mean(),
       geometry: region,
@@ -121,9 +146,15 @@ function coc_mean_conc(layerObj, region, scale) {
     })
     .get(layerObj.layer.eeObject.bandNames()
       .get(0)));
-  reduced.evaluate(function (result) {
+    var ws_area = region.area(2) 
+  var conversion_factor = (layerObj.units == 'g/m² per year') ? 1e-3 : 1e-6;
+ 
+    var total_load = total_load_per_m2.multiply(ws_area).multiply(conversion_factor) // do this for sigfigs
+    
+    
+  total_load.evaluate(function (result) {
     // When the server returns the value, show it.
-    bigNum.setValue(result.toPrecision(3));
+    bigNum.setValue(helpers.sigFigs(result,3).toLocaleString("en-US"));
   });
   //  
   return numPan;
@@ -133,22 +164,22 @@ var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 
 print(data.cocs)
 
-var concentration_objects = [
-  'Total Copper Concentration',
-  'Total Kjeldahl Nitrogen Concentration',
-  'Total Phosphorus Concentration',
-  'Total Suspended Solids Concentration',
-  'Total Zinc Concentration']
+var Load_objects = [
+  'Total Copper Load',
+  'Total Kjeldahl Nitrogen Load',
+  'Total Phosphorus Load',
+  'Total Suspended Solids Load',
+  'Total Zinc Load']
 
-var stacked = ee.Dictionary(data.cocs).select(concentration_objects) 
+var stacked = ee.Dictionary(data.cocs).select(Load_objects) 
 print(stacked)
 
 var img = ee.Image.cat(
-  data.cocs[concentration_objects[0]].layer.eeObject.select(0),
-  data.cocs[concentration_objects[1]].layer.eeObject.select(0),
-  data.cocs[concentration_objects[2]].layer.eeObject.select(0),
- // data.cocs[concentration_objects[3]].layer.eeObject.select(0),
-  data.cocs[concentration_objects[4]].layer.eeObject.select(0)
+  data.cocs[Load_objects[0]].layer.eeObject.select(0),
+  data.cocs[Load_objects[1]].layer.eeObject.select(0),
+  data.cocs[Load_objects[2]].layer.eeObject.select(0),
+ // data.cocs[Load_objects[3]].layer.eeObject.select(0),
+  data.cocs[Load_objects[4]].layer.eeObject.select(0)
   )
 
 
@@ -162,3 +193,12 @@ print(red)
 var chart = ui.Chart.image.regions(img, geometry, ee.Reducer.mean(), 100)
 print(chart)
 
+var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true), 
+  style: {maxWidth: '400px',stretch:'horizontal'}
+}) 
+pan.add(coc_load(data.cocs[Load_objects[4]],geometry,100,'kg/yr')).add(
+  coc_load(data.cocs[Load_objects[1]],geometry,100,'kg/yr')).add(
+    coc_load(data.cocs[Load_objects[2]],geometry,100,'kg/yr')).add(
+    coc_load(data.cocs[Load_objects[3]],geometry,100,'kg/yr')).add(
+      coc_load(data.cocs[Load_objects[0]],geometry,100,'kg/yr'))
+Map.add(pan)

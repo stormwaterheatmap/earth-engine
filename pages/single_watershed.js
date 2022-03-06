@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("projects/ee-stormwaterheatmap/assets/pasu_painted");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * @ Author: Your name
  * @ Create Time: 2022-03-04 22:01:53
@@ -305,6 +308,8 @@ var makeFooter = function () {
 }
 
 var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
+
+mainPanel.style().set({height:"75%"})
 
 var watershedSelectLabel = ui.Label({
     value: 'Select a watershed dataset to aggregate data:',
@@ -671,3 +676,7 @@ analyzePanel.add(watershedSelect)
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
+
+var default_shed_img = data.display_imgs.psau 
+print(data.display_imgs)
+mapPanel.addLayer(default_shed_img.focal_min(0.5),{palette: 'white',opacity:0.5})

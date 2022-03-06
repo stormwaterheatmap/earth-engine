@@ -1,29 +1,81 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var imageCollection = ee.ImageCollection("NOAA/PERSIANN-CDR"),
-    table = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units");
+    table = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units"),
+    PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
-var data  = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 
 print(data)
 
 var simplify_vectors = function (fc){
-  var fc2 = (fc.simplify(2))
-  return(fc2.set({"Watershed Name": ee.String(fc2.get('Watershed Name'))}))
+  var fc2 = (fc.simplify(20))
+  return(fc2.set({"Watershed Name": ee.String('ID-'+fc2.get('AU_ID')).getInfo()}))
   
 }
 //"NHDPlus High Resolution Watershed Dataset"
-var to_export = data.vector_dict["HUC12: USGS Watershed Boundary Dataset"].map(simplify_vectors)
+var to_export = table.map(simplify_vectors)
 print(to_export.first())
 Export.table.toAsset({collection:to_export, 
 assetId: "HUC12:_USGS_Watershed_Boundary_Dataset_string",
 description:"HUC12:_USGS_Watershed_Boundary_Dataset_string"
   
 })
+Map.addLayer(to_export)
+// Style(color, pointSize, pointShape, width, fillColor, styleProperty, neighborhood, lineType)
+// ⨯
+// Draw a vector collection for visualization using a simple style language.
+
+// Arguments:
+// this:collection (FeatureCollection):
+// The collection to draw.
+
+// color (String, default: "black"):
+// A default color (CSS 3.0 color value e.g. 'FF0000' or 'red') to use for drawing the features. Supports opacity (e.g.: 'FF000088' for 50% transparent red).
+
+// pointSize (Integer, default: 3):
+// The default size in pixels of the point markers.
+
+// pointShape (String, default: "circle"):
+// The default shape of the marker to draw at each point location. One of: `circle`, `square`, `diamond`, `cross`, `plus`, `pentagram`, `hexagram`, `triangle`, `triangle_up`, `triangle_down`, `triangle_left`, `triangle_right`, `pentagon`, `hexagon`, `star5`, `star6`. This argument also supports the following Matlab marker abbreviations: `o`, `s`, `d`, `x`, `+`, `p`, `h`, `^`, `v`, `<`, `>`.
+
+// width (Float, default: 2):
+// The default line width for lines and outlines for polygons and point shapes.
+
+// fillColor (String, default: null):
+// The color for filling polygons and point shapes. Defaults to 'color' at 0.66 opacity.
+
+// styleProperty (String, default: null):
+// A per-feature property expected to contain a dictionary. Values in the dictionary override any default values for that feature.
+
+// neighborhood (Integer, default: 5):
+// If styleProperty is used and any feature has a pointSize or width larger than the defaults, tiling artifacts can occur. Specifies the maximum neighborhood (pointSize + width) needed for any feature.
+
+// lineType (String, default: "solid"):
+// The default line style for lines and outlines of polygons and point shapes. Defaults to 'solid'. One of: solid, dotted, dashed.
+
 
 var simplifiedtest = data.vectors.WRIA.map(simplify_vectors)
 
-Map.addLayer(to_export)
+//Map.addLayer(to_export)
+//Map.addLayer(to_export.draw({color: 'white', strokeWidth: 5}), {}, 'drawn');
 
+var empty = ee.Image().byte()  
+// Paint the interior of the polygons with different colors.
+var fills = empty.paint({
+  featureCollection: to_export
+});
 
+var style = {'color': '#541F3F', 'width': 1, 'lineType': 'solid', 'fillColor': '00000000'}
+var style2 = {'color': 'DFC1A180', 'width': 5, 'lineType': 'solid', 'fillColor': '00000000'}
 
+var blended = table.style(style2).blend(table.style(style))
+Map.addLayer(blended, {}, 'colored fills');
+
+Export.image.toAsset({
+  image:blended, 
+  region: PugetSound, 
+  scale: 1, 
+  maxPixels: 1e13, 
+  description: "pasu"
+})
