@@ -38,7 +38,7 @@ var fonts = Style.fonts
 var featureStyle = {
     color: 'white',
     fillColor: '00000000',
-    width: 1
+    width: 0.5
 }
 // var imageVisParam = {
 //     "opacity": 0.81,
@@ -686,6 +686,51 @@ var analyzePanel = ui.Panel({
 //---------------- set the initial view
 
 var intro_text_panel = make_intro_text_panel()
+
+
+
+function make_layer_dropdown() {
+    var layers_list = data.cocs
+
+    var select_layer = ui.Select({
+        items: Object.keys(layers_list),
+        onChange: function(value) {
+            update_img(value)
+        }
+    })
+
+    var layer_panel = ui.Panel({widgets: [
+        ui.Label('Select Layer to Display'),
+        select_layer
+    ], 
+    //layout: ui.Panel.Layout.absolute(), 
+    style: {position: 'middle-right'}
+    })
+
+    mapPanel.add(layer_panel)
+
+    var legendPanel = ui.Panel({
+        style: {
+            shown: true
+        }
+    })
+    mapPanel.add(legendPanel)
+
+    
+}
+
+var layers_list = data.cocs
+
+function update_img(value) {
+
+        var layerObject = layers_list[value]
+        var legend = helpers.makeLegend(layerObject)
+        mapPanel.layers().set(0, layerObject.layer)
+        legend.style().set({
+            position: "bottom-right"
+        });
+        legendPanel.clear().add(legend)
+    }
 function mapInit() {
 ui.root.clear();
 //mainPanel.clear()
@@ -723,20 +768,24 @@ var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
 
+mapPanel.layers().set(0,data.cocs["Total Suspended Solids Concentration"].layer)
+
 WS = vectors_dict["Puget Sound Assessment Units"]
 watershedSelect.setValue("Puget Sound Assessment Units")
 // reset dialogs 
-update_raster_img(data.cocs["Total Suspended Solids Concentration"])
+//update_raster_img(data.cocs["Total Suspended Solids Concentration"])
 mapPanel.layers().set(1,WS.style(featureStyle))
   
 
-//helpers.make_tnc_map()
+helpers.make_tnc_map(mapPanel)
+
+make_layer_dropdown()
 
 }
 
-function update_raster_img(layerObj){
-  mapPanel.layers().set(0,layerObj.layer)
-}
+
+
+
 
 function reset_panels() {
   //hide analyze button
@@ -747,6 +796,7 @@ function reset_panels() {
   // reset view 
 //clear layers 
 mapPanel.layers().reset([ WS.style(featureStyle)])//[vectors_dict["Puget Sound Assessment Units"]])
+
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
