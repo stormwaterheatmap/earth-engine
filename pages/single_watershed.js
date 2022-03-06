@@ -1,6 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image = ee.Image("projects/ee-stormwaterheatmap/assets/pasu_painted");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+
 /**
  * @ Author: Your name
  * @ Create Time: 2022-03-04 22:01:53
@@ -345,11 +346,11 @@ function make_load_panel(region, scale){
 
       
       pan.add(
-          data.cocs[Load_objects[0]],region,100).add(
-            data.cocs[Load_objects[0]],region,100).add(
-            data.cocs[Load_objects[0]],region,100).add(
-            data.cocs[Load_objects[0]],region,100).add(
-            data.cocs[Load_objects[0]],region,100)
+            charts.coc_load(data.cocs[Load_objects[0]],region,100)).add(
+            charts.coc_load(data.cocs[Load_objects[1]],region,100)).add(
+            charts.coc_load(data.cocs[Load_objects[2]],region,100)).add(
+            charts.coc_load(data.cocs[Load_objects[3]],region,100)).add(
+            charts.coc_load(data.cocs[Load_objects[4]],region,100))
 
             return(pan)
 
@@ -399,7 +400,7 @@ function makeReports() {
 
 
 
-    var concentration_card = cards('Stormwater Concentrations', [
+    var concentration_card = cards('Predicted Stormwater Concentrations', [
         charts.coc_mean_conc(data.cocs["Total Copper Concentration"], clicked_basin_geom, report_scale)
     ])
 
@@ -408,7 +409,7 @@ function makeReports() {
 
     //make the load panel 
 
-    var load_card = cards('Stormwater Loads', [
+    var load_card = cards('Predicted Stormwater Loads', [hline(),
         make_load_panel(clicked_basin_geom, report_scale)
     ])
     analyzePanel.add(load_card)
