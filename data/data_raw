@@ -168,6 +168,8 @@ exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
   'hspf_landcover_categories')
   
 var lc_watermask =  ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2").select('MSK').mode().unmask().neq(3)
+var psau_shed_img = ee.Image("projects/ee-stormwaterheatmap/assets/pasuv2").select(0).gt(0).byte().focal_max(1) 
+exports.psau_shed_img = psau_shed_img 
 
 // //
 // // Pollutant Concentrations 
