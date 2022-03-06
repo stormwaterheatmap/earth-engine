@@ -597,8 +597,9 @@ var watershedSelect = ui.Select({
         mapPanel.layers().reset()
         print(selected)
         var WS = vectors_dict[selected]
-        mapPanel.addLayer(WS.style(featureStyle)) //oct
-        analyzePanel.add((buttonPanel))
+        mapPanel.layers.set(0,WS.style(featureStyle))
+        //oct
+       
 
     }
 });
@@ -713,12 +714,13 @@ mapPanel.add(mainPanel);
 
 analyzePanel.add(watershedSelectLabel)
 analyzePanel.add(watershedSelect)
+analyzePanel.add((buttonPanel))
 // reset view 
 
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
-
+mapPanel.layers.set(0,WS.style(featureStyle))
 // reset dialogs 
 
 
