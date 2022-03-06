@@ -825,7 +825,7 @@ function coc_mean_conc(layerObj, region, scale) {
       .get(0)));
   reduced.evaluate(function (result) {
     // When the server returns the value, show it.
-    bigNum.setValue(result.toPrecision(2));
+    bigNum.setValue(sigFigs(result,3).toLocaleString("en-US"));
   });
   //  
   return numPan;
