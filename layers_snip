@@ -36,7 +36,7 @@ print(test_list)
 
 var select_layer = ui.Select({
   items: Object.keys(layers_list), 
-  onChange: update_img()
+  onChange: update_img(data.cocs[select_layer.getValue()])
 })
 
 Map.add(select_layer)
