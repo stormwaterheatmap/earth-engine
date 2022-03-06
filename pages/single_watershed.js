@@ -801,7 +801,7 @@ var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
 
-update_raster_img(data.cocs["Total Suspended Solids Concentration"])
+update_img(data.cocs["Total Suspended Solids Concentration"])
 }
 
 
