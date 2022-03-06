@@ -274,7 +274,7 @@ function coc_mean_conc(layerObj, region, scale) {
       margin: 2,
       padding: 2,
       width: '80%',
-      fontSize: '30px',
+      fontSize: '24px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
       ],
@@ -400,11 +400,11 @@ function coc_load(layerObj, region, scale) {
       margin: 2,
       padding: 2,
       width: '95%',
-      fontSize: '30px',
+      fontSize: '24px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
       ],
-      fontWeight: 500,
+      //fontWeight: 500,
     //   border: '1px solid blue', 
       backgroundColor: style.colors.transparent,
       textAlign: 'right',
