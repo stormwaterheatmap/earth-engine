@@ -367,7 +367,7 @@ function coc_mean_conc(layerObj, region, scale) {
     
     var conversion_factor = (layerObj.units == "mg/L") ? 1e-3 : 1;
   
-    var concentration = reduced.multiply(conversion_factor) // do this for sigfigs
+    var concentration = reduced//.multiply(conversion_factor) // do this for sigfigs
     
     concentration.evaluate(function (result) {
 
