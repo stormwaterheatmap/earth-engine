@@ -26,11 +26,11 @@ function sigFigs(n, sig) {
 }}
 
 
-function histByClass(layerObject, scale, geom) {
+function histByClass(layerObj, scale, geom) {
   //get values that are in the roi 
   var area = ee.Image.pixelArea()
     .divide(4046.86); //area in acres 
-  var image = ee.Image.cat(area, layerObject.layer.eeObject);
+  var image = ee.Image.cat(area, layerObj.layer.eeObject);
   // Define chart customization options.
   var options = {
     titleTextStyle: style.fonts.LegendTitle,
@@ -51,10 +51,10 @@ function histByClass(layerObject, scale, geom) {
     classBand: 1,
     region: geom,
     scale: scale,
-    classLabels: layerObject.labels,
-    xLabels: layerObject.units,
+    classLabels: layerObj.labels,
+    xLabels: layerObj.units,
     //titleTextStyle: style.fonts.LegendTitle
-    //     xLabels: layerObject.labels
+    //     xLabels: layerObj.labels
   })
     .setOptions(options)
   );
@@ -62,10 +62,10 @@ function histByClass(layerObject, scale, geom) {
   return histChart;
 }
 
-function stackedBar(layerObject, scale, geom) {
+function stackedBar(layerObj, scale, geom) {
   var area = ee.Image.pixelArea()
     .divide(4046.856) //area in acres 
-  var image = ee.Image.cat(area, layerObject.layer.eeObject)
+  var image = ee.Image.cat(area, layerObj.layer.eeObject)
   // Define chart customization options.
   var options = {
     isStacked: true,
@@ -85,9 +85,9 @@ function stackedBar(layerObject, scale, geom) {
       classBand: 1,
       region: geom,
       scale: scale,
-      classLabels: layerObject.labels,
+      classLabels: layerObj.labels,
       //titleTextStyle: style.fonts.LegendTitle
-      //     xLabels: layerObject.labels
+      //     xLabels: layerObj.labels
     })
     .setOptions(options)
   )
@@ -111,11 +111,11 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
   return chart;
 };
 
-function histogramImage(layerObject, WS, scale) {
+function histogramImage(layerObj, WS, scale) {
   
   
   var chart = ui.Chart.image.histogram({
-    image: layerObject.layer.eeObject,
+    image: layerObj.layer.eeObject,
     region: WS,
     scale: scale,
     minBucketWidth: 0.5,
@@ -126,9 +126,9 @@ function histogramImage(layerObject, WS, scale) {
   //     width: '90%',
   //     height: '185px'
   //   })
-  var units = layerObject.units
+  var units = layerObj.units
   chart.setSeriesNames(
-    (layerObject.layer.name + ' (' + units + ')'), 0)
+    (layerObj.layer.name + ' (' + units + ')'), 0)
   chart.setOptions({
     legend: {
       position: 'none'
@@ -161,7 +161,7 @@ function histogramImage(layerObject, WS, scale) {
         color: 'white',
         //  count: 4,
       },
-      title: (layerObject.layer.name + ' (' + units + ' )')
+      title: (layerObj.layer.name + ' (' + units + ' )')
       //textPosition:'in',
       // format:'short',
       // viewWindowMode: 'maximized',
@@ -269,9 +269,10 @@ var makePieChart = function (
 //
 exports.pieChart = makePieChart
 
-function coc_mean_conc(layerObj, region, scale) {
+function coc_mean_conc(layerObj, region, scale, conversion_factor) {
   //text for loading whil calucations happen 
   var units = layerObj.units;
+  print('conversion_factor',conversion_factor)
   var loading = 'loading...';
   var bigNum = ui.Label({
     value: loading,
@@ -367,7 +368,7 @@ function coc_mean_conc(layerObj, region, scale) {
     /**
      * Calculations 
      */
-
+print(layerObj.units)
     var reduced = ee.Number((layerObj.layer.eeObject.select(0))
     .reduceRegion({
       reducer: ee.Reducer.mean(),
@@ -379,9 +380,9 @@ function coc_mean_conc(layerObj, region, scale) {
     .get(layerObj.layer.eeObject.bandNames()
     .get(0)));
     
-    var conversion_factor = (layerObj.units == "mg/L") ? 1e-3 : 1;
+    //var conversion_factor = (ee.String(layerObj.units) == "mg/L") ? 1e-3 : 1;
   
-    var concentration = reduced//.multiply(conversion_factor) // do this for sigfigs
+    var concentration = reduced.multiply(conversion_factor) // do this for sigfigs
     
     concentration.evaluate(function (result) {
 
@@ -762,7 +763,7 @@ exports.img_class_chart = img_class_chart
 
 function coc_mean_conc(layerObj, region, scale) {
   //text for loading whil calucations happen 
-  var units = layerObj.units;
+  var units = ee.String(layerObj.units);
   var loading = 'loading...';
   var bigNum = ui.Label({
     value: loading,
@@ -800,7 +801,7 @@ function coc_mean_conc(layerObj, region, scale) {
       //   border: '1px solid red'
     });
   units = ui.Label({
-    value: units,
+    value: layerObj.units,
     style: style.fonts.Caption2
   });
   units.style()
@@ -859,13 +860,13 @@ exports.coc_mean_conc = coc_mean_conc
 // print(layerProperties)
 
 // //
-var layerObject = data.cocs["Total Copper Concentration"]
-
-var chart = coc_mean_conc(layerObject,geometry,100)
+var layerObj = data.cocs["Total Suspended Solids Concentration"]
+print(layerObj.units)
+var chart = coc_mean_conc(layerObj,geometry,100,1e-3)
 
 print(chart)
-//print(layerObject)
-// var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
+//print(layerObj)
+// var chart2 = makePieChart(geometry, layerObj, 100).setChartType('BarChart') 
 // var imageBar = (  {chartArea: {left: '50%'},
 //   hAxis: {
 //           title: 'Area (acres)',
@@ -873,7 +874,7 @@ print(chart)
 //         }, 
 //         legend: {position: 'none'}, 
 //         }) 
-// var chart = histByClass(layerObject, 100, geometry); 
+// var chart = histByClass(layerObj, 100, geometry); 
 // chart.setChartType('BarChart')
 // chart2.setOptions(imageBar)
 // //var options = 
