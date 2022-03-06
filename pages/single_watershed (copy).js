@@ -274,7 +274,7 @@ var reset_button = ui.Button({
     label: 'Reset',
     onClick: function() {
         print('Reset')
-        mapInit()
+        reset_panels()
 
     }
 })
@@ -627,71 +627,77 @@ var mainSubPanel = makeMainSubPanel();
 
 
 
+var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
+
+mainPanel.style().set({height:"75%"})
+
+
+
+var analyzePanel = ui.Panel({
+    style: {
+        shown: true
+    }
+})
 
 // ui.root.add(footer)
 //---------------- set the initial view
 
 
-
-
 function mapInit() {
+ui.root.clear();
+//mainPanel.clear()
+//mainSubPanel.add(infoPanel)
+mainSubPanel.clear()
+mainSubPanel.add(analyzePanel)
+mapPanel.clear()
+mapPanel = makeMapPanel()
 
-var analyzePanel = ui.Panel({
-    widgets: [ui.Label('analyzePanel_ui')],
-    style: {
-        border: '1px solid orange',
-        shown: true
-    }
-})
-    //mainPanel.clear()
-    mainSubPanel.clear()
-    //analyzePanel.clear()
+//header.add(ui.Label('header'))
+// var footer = makeFooter();
 
-    //mainSubPanel.add(analyzePanel)
-    mapPanel.clear()
-    //mapPanel = makeMapPanel()
+ui.root.setLayout(ui.Panel.Layout.flow(
+    'vertical'))
+// blankPanel.add(ui.Label('blankPanel'))
 
-    //header.add(ui.Label('header'))
-    // var footer = makeFooter();
+mainPanel.add(mainSubPanel)
+//mainSubPanel.add(ui.Label('mainSubPanel'))
+ui.root.add(
 
-    ui.root.setLayout(ui.Panel.Layout.flow(
-        'vertical'))
-    // blankPanel.add(ui.Label('blankPanel'))
-    var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
+    mapPanel);
+// mapPanel.add(mapInfoPanel);
+mapPanel.add(mainPanel);
+analyzePanel.clear()
+analyzePanel.add(watershedSelectLabel)
+analyzePanel.add(watershedSelect)
+analyzePanel.add((buttonPanel))
+// reset view 
 
-    mainPanel.style().set({
-        border: '1px solid red',
-        height: "75%"
-    })
-    
-    //mainPanel.clear([analyzePanel,buttonPanel])
-    mainPanel.add(ui.Label('mainPanel'))
-    //mainPanel.add(mainSubPanel)
-    //mainSubPanel.add(ui.Label('mainSubPanel'))
-    //ui.root.add(
+var mapCenterLon = -122.423145;
+var mapCenterLat = 47.612410;
+mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
 
-    //  mapPanel);
-    // mapPanel.add(mapInfoPanel);
-    //analyzePanel.clear()
-    //analyzePanel.add(watershedSelectLabel)
-    //analyzePanel.add(watershedSelect)
-    //analyzePanel.add((buttonPanel))
-    mainPanel.add(analyzePanel)
-    mapPanel.add(mainPanel);
-
-    // reset view 
-
-    var mapCenterLon = -122.423145;
-    var mapCenterLat = 47.612410;
-    mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
-
-    WS = vectors_dict["Puget Sound Assessment Units"]
-    watershedSelect.setValue("Puget Sound Assessment Units")
-    mapPanel.layers().set(0, WS.style(featureStyle))
-    // reset dialogs 
+WS = vectors_dict["Puget Sound Assessment Units"]
+watershedSelect.setValue("Puget Sound Assessment Units")
+mapPanel.layers().set(0,WS.style(featureStyle))
+// reset dialogs 
 
 
 }
-ui.root.clear()
-ui.root.add(mapPanel)
-mapInit()
+
+function reset_panels() {
+  //hide analyze button
+  accept.style().set({
+        shown: false
+    })
+  //hide reports and cards, etc 
+  // reset view 
+
+var mapCenterLon = -122.423145;
+var mapCenterLat = 47.612410;
+mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
+
+  
+}
+
+
+mapInit() 
