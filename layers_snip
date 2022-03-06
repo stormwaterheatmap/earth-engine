@@ -35,7 +35,8 @@ print(test_list)
 // layer_types["Pollutant Loading"]=Object.keys(coc_data)
 
 var select_layer = ui.Select({
-  items: Object.keys(layers_list)
+  items: Object.keys(layers_list), 
+  onChange: update_img()
 })
 
 Map.add(select_layer)
