@@ -2,7 +2,7 @@
  * @ Author: Your name
  * @ Create Time: 2022-03-06 17:12:38
  * @ Modified by: Your name
- * @ Modified time: 2022-03-06 17:14:21
+ * @ Modified time: 2022-03-06 17:26:56
  * @ Description:
  */
 
@@ -407,7 +407,7 @@ function coc_load(layerObj, region, scale) {
     .set({
       margin: 2,
       padding: 2,
-      width: '95%',
+      width: '80%',
       fontSize: '24px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
@@ -430,7 +430,7 @@ function coc_load(layerObj, region, scale) {
       margin: '2px',
       padding: '2px',
       stretch: 'both',
-      width: '98%',
+      width: '80%',
       //height: "50px",
       textAlign: 'right',
       //   border: '1px solid red'
