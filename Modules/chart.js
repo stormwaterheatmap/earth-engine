@@ -524,9 +524,7 @@ function littleNum(layerObj, region, scale, reducerType) {
 
   var title_value = layerObj.layer.name;
 
-  if (layerObj.layer.name == "Population Density") {
-    title_value = "Total Population"; //need this to make the reducer sum work out. 
-  }
+  
   var titleLabel = ui.Label({
     value: title_value,
     style: style.fonts.H4
@@ -606,6 +604,7 @@ function littleNum(layerObj, region, scale, reducerType) {
       })
       .get(layerObj.layer.eeObject.bandNames()
         .get(0)));
+        print('mean')
     reduced.evaluate(function (result) {
       // When the server returns the value, show it.
       bigNum.setValue(result.toFixed(0));
@@ -861,8 +860,10 @@ exports.img_class_chart = img_class_chart
 
 // //
 var layerObj = data.rasters["Runoff (mm)"]
-//print(layerObj.units)
-var chart = littleNum(layerObj,geometry,100)//,1e-3)
+
+
+print(layerObj)
+var chart = littleNum(layerObj,geometry,100,'mean')//,1e-3)
 
 print(chart)
 //print(layerObj)
