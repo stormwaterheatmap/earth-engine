@@ -496,7 +496,7 @@ function makeReports() {
       {widgets: [pchart, runoff_num, impNum],
       layout: ui.Panel.Layout.flow('horizontal', false),  
       
-      style: {margin: 0, padding: 0,stretch:'both}//',border:'1px solid green'}
+      style: {margin: 0, padding: 0,stretch:'both'}//',border:'1px solid green'}
     })
     
 
@@ -708,7 +708,7 @@ var mainSubPanel = makeMainSubPanel();
 
 var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
 
-mainPanel.style().set({height:"75%"})
+//mainPanel.style().set({height:"75%"})
 
 
 
