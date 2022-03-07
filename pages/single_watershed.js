@@ -68,7 +68,7 @@ function handle_map_click(location) {
     accept.style().set({
         shown: true
     })
-    mapPanel.layers().reset()
+    //mapPanel.layers().reset()
     mapPanel.style().set({
         cursor: 'hand'
     });
@@ -78,39 +78,16 @@ function handle_map_click(location) {
     var opacityMask = shade.where(shade.eq(con), 0).selfMask()
     var empty = ee.Image().byte()
     var outline = empty.paint(clicked_basin_fc, 1, 2);
-    mapPanel.layers().set(2,opacityMask, {
+    mapPanel.addLayer(opacityMask, {
         palette: '000000',
         opacity: 0.6
-    });
-    mapPanel.layers().set(3,outline, {
+    },'opacity mask');
+    mapPanel.addLayer(outline, {
         palette: 'whitesmoke'
     }, 'Watershed Outline')
 
     mapPanel.centerObject(clicked_basin)
-    // var featureinfo = ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
-    // var infoTab = ui.Panel({
-    //     style: {
-    //         position: 'bottom-center',
-    //         stretch: 'both',
-    //         width: '80%',
-    //         shown: false
-    //     }
-    // })
-    // var closeTab = ui.Button({
-    //     label: 'Close Table',
-    //     onClick: function () {
-    //         infoTab.style().set({
-    //             shown: false
-    //         })
-    //     }
-    // })
-    // // infoTab.add(ui.Panel(ui.Label('⌧')))
-    // infoTab.add(ui.Label({
-    //     value: 'Watershed Info Table',
-    //     style: fonts.H3
-    // }))
-    // infoTab.add(featureinfo)
-    // infoTab.add(closeTab)
+  
 
     return clicked_basin
 }
@@ -708,7 +685,7 @@ var mainSubPanel = makeMainSubPanel();
 
 var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
 
-//mainPanel.style().set({height:"75%"})
+mainPanel.style().set({height:"75%"})
 
 
 
@@ -844,7 +821,7 @@ var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
 
-update_img(data.cocs["Total Suspended Solids Concentration"])
+//update_img(data.cocs["Total Suspended Solids Concentration"])
 }
 
 
