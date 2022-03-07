@@ -3,7 +3,7 @@
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
 /**
- * @ Author: Your name
+ * @ Author: Christian Nilsen 
  * @ Create Time: 2022-03-04 22:01:53
  * @ Modified by: Your name
  * @ Modified time: 2022-03-05 21:21:08
@@ -275,9 +275,17 @@ var reset_button = ui.Button({
     style: {shown: false},
     onClick: function() {
         print('Reset')
-        reset_panels()
+        //reset_panels()
         analyzePanel.clear()
+        helpers.clear_map_add_layer(data.cocs["Total Suspended Solids Concentration"],
+        legendPanel,mapPanel)
        reset_button.style().set({shown: false})
+       
+       var mapCenterLon = -122.423145;
+var mapCenterLat = 47.612410;
+mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
+
+//update_img(data.cocs["Total Suspended Solids Concentration"])
     }
 })
 
@@ -354,17 +362,19 @@ var watershedSelectLabel = ui.Label({
 });
 
 
+
 var legendPanel = ui.Panel({
     style: {
         position: 'bottom-right',
         padding: '12 px',
         backgroundColor: colors.transparent,
         stretch: 'both',
-        shown: false,
+        shown: true,
         // position: 'top-right'
     },
 
 }).setLayout(ui.Panel.Layout.flow('vertical'));
+
 
 
 function make_concentration_panel(region, scale) {
@@ -479,16 +489,18 @@ function makeReports() {
     //var impChart = charts.stackedBar(layerProperties.Imperviousness, report_scale, clicked_basin_geom)
     //impChart.setOptions(Style.charts.singleBar)
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, report_scale, 'percent')
-    var runoff_num = charts.littleNum(layerProperties["Runoff (mm)"], clicked_basin_geom, report_scale)
+    var runoff_num = charts.littleNum(layerProperties["Runoff (mm)"], clicked_basin_geom, report_scale,'mean')
     
     
-    var horizontal_panel = ui.Panel({widgets: [pchart, impNum],
-      layout: ui.Panel.Layout.flow('horizontal', true),  
-      style: {margin: 0, padding: 0}
+    var horizontal_panel = ui.Panel(
+      {widgets: [pchart, runoff_num, impNum],
+      layout: ui.Panel.Layout.flow('horizontal', false),  
+      
+      style: {margin: 0, padding: 0,stretch:'both}//',border:'1px solid green'}
     })
     
 
-    var impcard = cards('Watershed Info', [hline(), horizontal_panel,
+    var impcard = cards('Hydrology Info', [hline(), horizontal_panel,
         //   impChart, 
          //layerButton(layerProperties["Imperviousness"])
     ])
@@ -514,7 +526,7 @@ var load_label = ui.Label({value: "more info ↗",
     })
     //make the load panel 
 
-    var load_card = cards('Predicted Stormwater Loads', [hline(),
+    var load_card = cards('Predicted Stormwater Loads', [load_label, hline(),
         make_load_panel(clicked_basin_geom, report_scale)
     ])
     analyzePanel.add(load_card)
@@ -711,10 +723,17 @@ var analyzePanel = ui.Panel({
 
 var intro_text_panel = make_intro_text_panel()
 
-
+ 
 
 function make_layer_dropdown() {
     var layers_list = data.cocs
+    
+    layers_list["Flow Duration Index"] = data.rasters["Flow Duration Index"]
+ 
+ layers_list["Imperviousness"] = data.rasters["Imperviousness"]
+ layers_list["Population Density"] = data.rasters["Population Density"]
+ layers_list["Precipitation (mm)"] = data.rasters["Precipitation (mm)"]
+ layers_list["Runoff (mm)"] = data.rasters["Runoff (mm)"]
 
     var select_layer = ui.Select({
         items: Object.keys(layers_list),
@@ -733,12 +752,7 @@ function make_layer_dropdown() {
 
     mapPanel.add(layer_panel)
 
-    var legendPanel = ui.Panel({
-        style: {
-            shown: true
-        }
-    })
-    mapPanel.add(legendPanel)
+
 
     
 }
@@ -784,10 +798,13 @@ mainPanel.add(watershedSelectLabel)
 mainPanel.add(watershedSelect)
 mainPanel.add(inspect_helper_text)
 mainPanel.add((buttonPanel))
+mapPanel.add(legendPanel)
 // reset view 
 mainSubPanel.add(reset_button)
 mainSubPanel.add(analyzePanel)
 mainPanel.add(mainSubPanel)
+
+helpers.clear_map_add_layer(data.cocs["Total Suspended Solids Concentration"],legendPanel,mapPanel)
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
@@ -819,7 +836,9 @@ function reset_panels() {
   //hide reports and cards, etc 
   // reset view 
 //clear layers 
-mapPanel.layers().reset([ WS.style(featureStyle)])//[vectors_dict["Puget Sound Assessment Units"]])
+mapPanel.clear()
+//layers().clear([ WS.style(featureStyle)])//[vectors_dict["Puget Sound Assessment Units"]])
+mapPanel.add(mainPanel)
 
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
