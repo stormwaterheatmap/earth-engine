@@ -261,7 +261,7 @@ var rasters = {
         "discrete": "FALSE",
         "sourceName": "Salathé et al 2019",
         "sourceUrl": "https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/",
-        "units": "in/year",
+        "units": "mm/year",
         "default_reduction": "mean",
         "description": "Mean annual precipitation (1970-1999)",
         "safe_name": "precipitation_mm",
