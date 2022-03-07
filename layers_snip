@@ -4,7 +4,7 @@ var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts 
-// print(data)
+print(data)
 // var legendPanel = ui.Panel() 
 // Map.add(legendPanel)
 // var rasters = data.rasters 
@@ -49,6 +49,8 @@ select_layer]
 Map.add(layer_panel)
 
 var legendPanel = ui.Panel({style: {shown: true}})
+Map.add(legendPanel)
+
 function update_img(value){ 
   
   var layerObject = layers_list[value]
