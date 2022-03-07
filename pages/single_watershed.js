@@ -78,13 +78,13 @@ function handle_map_click(location) {
     var opacityMask = shade.where(shade.eq(con), 0).selfMask()
     var empty = ee.Image().byte()
     var outline = empty.paint(clicked_basin_fc, 1, 2);
-    mapPanel.addLayer(opacityMask, {
+    mapPanel.layers().set(2,opacityMask, {
         palette: '000000',
         opacity: 0.6
     });
-    mapPanel.addLayer(outline, {
+    mapPanel.layers().set(3,outline, {
         palette: 'whitesmoke'
-    }, 'edges')
+    }, 'Watershed Outline')
 
     mapPanel.centerObject(clicked_basin)
     // var featureinfo = ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
