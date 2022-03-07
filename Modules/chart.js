@@ -9,7 +9,7 @@ var geometry = /* color: #d63000 */ee.Geometry.Polygon(
  * @ Author: Your name
  * @ Create Time: 2022-03-06 17:12:38
  * @ Modified by: Your name
- * @ Modified time: 2022-03-06 17:26:56
+ * @ Modified time: 2022-03-06 17:14:21
  * @ Description:
  */
 
@@ -309,7 +309,7 @@ function coc_mean_conc(layerObj, region, scale) {
     });
   units = ui.Label({
     value: units,
-    style: style.fonts.Caption2
+    style: style.fonts.Caption3
   });
   units.style()
     .set({
@@ -407,7 +407,7 @@ function coc_load(layerObj, region, scale) {
     .set({
       margin: 2,
       padding: 2,
-      width: '80%',
+      width: '95%',
       fontSize: '24px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
@@ -430,7 +430,7 @@ function coc_load(layerObj, region, scale) {
       margin: '2px',
       padding: '2px',
       stretch: 'both',
-      width: '80%',
+      width: '98%',
       //height: "50px",
       textAlign: 'right',
       //   border: '1px solid red'
@@ -541,7 +541,7 @@ function littleNum(layerObj, region, scale, reducerType) {
     });
   units = ui.Label({
     value: units,
-    style: style.fonts.Caption2
+    style: style.fonts.Caption3
   });
   units.style()
     .set({
@@ -850,38 +850,36 @@ exports.img_class_chart = img_class_chart
 // }
 
 // exports.coc_mean_conc = coc_mean_conc
-/**
- * 
+
+ 
 //testing 
-*/
-// var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
-// // var layerProperties = data.rasters
+ var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
+ var layerProperties = data.rasters
 
-// // print(Object.keys(layerProperties))
-// // print(layerProperties)
+// print(Object.keys(layerProperties))
+// print(layerProperties)
 
-// // //
-// var layerObj = data.cocs["Total Suspended Solids Concentration"]
-// print(layerObj.units)
-// var chart = coc_mean_conc(layerObj,geometry,100)//,1e-3)
+// //
+var layerObj = data.rasters["Runoff (mm)"]
+//print(layerObj.units)
+var chart = littleNum(layerObj,geometry,100)//,1e-3)
 
-// print(chart)
-// /*
-// //print(layerObj)
-// // var chart2 = makePieChart(geometry, layerObj, 100).setChartType('BarChart') 
-// // var imageBar = (  {chartArea: {left: '50%'},
-// //   hAxis: {
-// //           title: 'Area (acres)',
-// //           minValue: 0,
-// //         }, 
-// //         legend: {position: 'none'}, 
-// //         }) 
-// // var chart = histByClass(layerObj, 100, geometry); 
-// // chart.setChartType('BarChart')
-// // chart2.setOptions(imageBar)
-// // //var options = 
-// // var testPan = ui.Panel()
-// // testPan.add(chart2)
-// // Map.add(testPan)
-// **/
+print(chart)
+//print(layerObj)
+// var chart2 = makePieChart(geometry, layerObj, 100).setChartType('BarChart') 
+// var imageBar = (  {chartArea: {left: '50%'},
+//   hAxis: {
+//           title: 'Area (acres)',
+//           minValue: 0,
+//         }, 
+//         legend: {position: 'none'}, 
+//         }) 
+// var chart = histByClass(layerObj, 100, geometry); 
+// chart.setChartType('BarChart')
+// chart2.setOptions(imageBar)
+// //var options = 
+// var testPan = ui.Panel()
+// testPan.add(chart2)
+// Map.add(testPan)
+
  
