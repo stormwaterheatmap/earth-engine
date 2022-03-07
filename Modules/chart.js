@@ -1,3 +1,11 @@
+/**
+ * @ Author: Your name
+ * @ Create Time: 2022-03-06 17:12:38
+ * @ Modified by: Your name
+ * @ Modified time: 2022-03-06 17:14:21
+ * @ Description:
+ */
+
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var geometry = /* color: #d63000 */ee.Geometry.Polygon(
         [[[-122.20747010339869, 48.15170220889509],
