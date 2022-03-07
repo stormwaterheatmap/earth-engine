@@ -511,7 +511,8 @@ function littleNum(layerObj, region, scale, reducerType) {
     .set({
       margin: 2,
       padding: 2,
-      //width: '95%',
+      width: '95%',
+      minWidth: '150px',
       fontSize: '24px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
