@@ -430,11 +430,23 @@ function make_load_panel(region, scale) {
 
 }
 
-//function to return watershed area 
 
-function get_ws_area(ws_geometry){}
+
+
 
 //function to return mean annual precip 
+function get_mean_P(region, scale){
+  
+  var mean_p = layerProperties["Precipitation (mm)"].layer.eeObject.reduceRegion({
+    reducer: ee.Reducer.mean(), 
+    region: region, 
+    scale: scale 
+  })
+
+ return mean_p 
+  
+}
+
 
 // function to return mean annual runoff 
 
@@ -445,12 +457,9 @@ function makeReports() {
 
     var report_scale = mapPanel.getScale()
 
-    // var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
-    //     clicked_basin_geom, report_scale, 'mean')
-    // var pchart2 = charts.histogramImage(
-    //     layerProperties["Precipitation (mm)"], clicked_basin_geom,
-    //     report_scale
-    // )
+    var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
+        clicked_basin_geom, report_scale, 'mean')
+    
 
 
     // var laybut = layerButton(layerProperties["Precipitation (mm)"])
@@ -465,15 +474,23 @@ function makeReports() {
     //     ]
     // )
     // analyzePanel.add(precipCard)
-
+    
     // print('done with precip_card')
     //var impChart = charts.stackedBar(layerProperties.Imperviousness, report_scale, clicked_basin_geom)
     //impChart.setOptions(Style.charts.singleBar)
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, report_scale, 'percent')
+    var runoff_num = charts.littleNum(layerProperties["Runoff (mm)"], clicked_basin_geom, report_scale)
+    
+    
+    var horizontal_panel = ui.Panel({widgets: [pchart, impNum],
+      layout: ui.Panel.Layout.flow('horizontal', true),  
+      style: {margin: 0, padding: 0}
+    })
+    
 
-    var impcard = cards('Watershed Info', [hline(),
+    var impcard = cards('Watershed Info', [hline(), horizontal_panel,
         //   impChart, 
-        impNum //layerButton(layerProperties["Imperviousness"])
+         //layerButton(layerProperties["Imperviousness"])
     ])
     analyzePanel.add(impcard)
 
@@ -481,13 +498,20 @@ function makeReports() {
 
 
 
-    var concentration_card = cards('Predicted Stormwater Concentrations', [hline(),
+    var concentration_label = ui.Label({value: "more info ↗",
+    targetUrl: "https://www.stormwaterheatmap.org/docs/Data%20Layers/pollutant_concentration", 
+      style: fonts.Caption3
+    })
+    var concentration_card = cards('Predicted Stormwater Concentrations', [concentration_label, hline(),
         make_concentration_panel(clicked_basin_geom, report_scale)
     ])
 
     analyzePanel.add(concentration_card)
 
-
+var load_label = ui.Label({value: "more info ↗",
+    targetUrl: "https://www.stormwaterheatmap.org/docs/Data%20Layers/pollutant_load", 
+      style: fonts.Caption3
+    })
     //make the load panel 
 
     var load_card = cards('Predicted Stormwater Loads', [hline(),
