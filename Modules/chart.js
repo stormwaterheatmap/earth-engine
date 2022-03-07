@@ -309,7 +309,7 @@ function coc_mean_conc(layerObj, region, scale) {
     });
   units = ui.Label({
     value: units,
-    style: style.fonts.Caption3
+    style: style.fonts.Caption2
   });
   units.style()
     .set({
@@ -541,7 +541,7 @@ function littleNum(layerObj, region, scale, reducerType) {
     });
   units = ui.Label({
     value: units,
-    style: style.fonts.Caption3
+    style: style.fonts.Caption2
   });
   units.style()
     .set({
