@@ -321,19 +321,19 @@ function coc_mean_conc(layerObj, region, scale) {
   numPan.add(bigNum);
 
   numPan.add(units);
-  var infoLabel = ui.Label({
-    style: style.fonts.Caption3
-  });
-  infoLabel.style()
-    .set({
-      margin: 0,
-      padding: 2,
-      fontSize: '10px',
-      textAlign: 'right',
-      //   border: '1px solid green',
-      //width: '80%',
-      color: style.colors.sDark,
-    });
+  // var infoLabel = ui.Label({
+  //   style: style.fonts.Caption3
+  // });
+  // infoLabel.style()
+  //   .set({
+  //     margin: 0,
+  //     padding: 2,
+  //     fontSize: '10px',
+  //     textAlign: 'right',
+  //     //   border: '1px solid green',
+  //     //width: '80%',
+  //     color: style.colors.sDark,
+  //   });
   // var labelText = (
   //   'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
   // var labelText2 = ui.Label({
