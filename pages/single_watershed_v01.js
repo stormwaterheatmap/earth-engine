@@ -14,6 +14,7 @@
 /*Load modules 
 ---------------------------------------------------------------------------------------------------- 
 */
+
 var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart.js')
@@ -38,7 +39,7 @@ var fonts = Style.fonts
 var featureStyle = {
     color: 'white',
     fillColor: '00000000',
-    width: 0.5
+    width: 1
 }
 // var imageVisParam = {
 //     "opacity": 0.81,
@@ -87,30 +88,30 @@ function handle_map_click(location) {
     }, 'edges')
 
     mapPanel.centerObject(clicked_basin)
-    // var featureinfo = ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
-    // var infoTab = ui.Panel({
-    //     style: {
-    //         position: 'bottom-center',
-    //         stretch: 'both',
-    //         width: '80%',
-    //         shown: false
-    //     }
-    // })
-    // var closeTab = ui.Button({
-    //     label: 'Close Table',
-    //     onClick: function () {
-    //         infoTab.style().set({
-    //             shown: false
-    //         })
-    //     }
-    // })
-    // // infoTab.add(ui.Panel(ui.Label('⌧')))
-    // infoTab.add(ui.Label({
-    //     value: 'Watershed Info Table',
-    //     style: fonts.H3
-    // }))
-    // infoTab.add(featureinfo)
-    // infoTab.add(closeTab)
+    var featureinfo = ui.Chart.feature.byFeature(clicked_basin).setChartType('Table')
+    var infoTab = ui.Panel({
+        style: {
+            position: 'bottom-center',
+            stretch: 'both',
+            width: '80%',
+            shown: false
+        }
+    })
+    var closeTab = ui.Button({
+        label: 'Close Table',
+        onClick: function () {
+            infoTab.style().set({
+                shown: false
+            })
+        }
+    })
+    // infoTab.add(ui.Panel(ui.Label('⌧')))
+    infoTab.add(ui.Label({
+        value: 'Watershed Info Table',
+        style: fonts.H3
+    }))
+    infoTab.add(featureinfo)
+    infoTab.add(closeTab)
 
     return clicked_basin
 }
@@ -123,7 +124,7 @@ function handle_inspect_click() {
     })
     var WSname = watershedSelect.getValue();
     WS = vectors_dict[WSname];
-    mapPanel.onClick(function(location) {
+    mapPanel.onClick(function (location) {
         (handle_map_click(location))
     })
 
@@ -144,7 +145,7 @@ function hline() {
 
 
 
-var makeLegend = function(layerObject) {
+var makeLegend = function (layerObject) {
     var legend = helpers.makeLegend(layerObject)
     legendPanel.clear()
     legendPanel.add(legend)
@@ -226,62 +227,57 @@ UI Functions
 
 
 //**function for buttons to display layers on map
-// var layerButton = function (layerObject) {
+var layerButton = function (layerObject) {
 
-//     return ui.Panel([
-//         ui.Button({
-//             label: 'Show Layer',
-//             onClick: function () {
+    return ui.Panel([
+        ui.Button({
+            label: 'Show Layer',
+            onClick: function () {
 
-//                 mapPanel.layers().insert(0, layerObject.layer)
+                mapPanel.layers().insert(0, layerObject.layer)
 
-//                 legendPanel.style().set({
-//                     shown: true
-//                 })
-//                 makeLegend(layerObject)
-//             }
+                legendPanel.style().set({
+                    shown: true
+                })
+                makeLegend(layerObject)
+            }
 
-//         }),
-//         ui.Button({
-//             label: 'Remove Layer',
-//             onClick: function () {
-//                 legendPanel.style().set({
-//                     shown: false
-//                 })
-//                 var eeobject = layerObject.layer.eeObject
-//                 var layers = mapPanel.layers()
-//                 var layersJS = layers.getJsArray()
-//                 var removedIndexes = []
-//                 for (var i in layersJS) {
-//                     var layer = layersJS[i]
-//                     var object = layer.getEeObject()
-//                     if (object === eeobject) {
-//                         mapPanel.remove(layer)
-//                         removedIndexes.push(Number(i))
-//                     }
-//                 }
-//                 return removedIndexes
-//             }
-//         })
-
-
-//     ]).setLayout(ui.Panel.Layout.flow('horizontal'))
-
-// }
+        }),
+        ui.Button({
+            label: 'Remove Layer',
+            onClick: function () {
+                legendPanel.style().set({
+                    shown: false
+                })
+                var eeobject = layerObject.layer.eeObject
+                var layers = mapPanel.layers()
+                var layersJS = layers.getJsArray()
+                var removedIndexes = []
+                for (var i in layersJS) {
+                    var layer = layersJS[i]
+                    var object = layer.getEeObject()
+                    if (object === eeobject) {
+                        mapPanel.remove(layer)
+                        removedIndexes.push(Number(i))
+                    }
+                }
+                return removedIndexes
+            }
+        })
 
 
-var reset_button = ui.Button({
-    label: 'Reset',
-    style: {shown: false},
-    onClick: function() {
-        print('Reset')
-        reset_panels()
-        analyzePanel.clear()
-       reset_button.style().set({shown: false})
-    }
-})
+    ]).setLayout(ui.Panel.Layout.flow('horizontal'))
 
-//print(reset_button)
+}
+
+
+var reset_button = ui.Button({label: 'Reset', onClick: function(){
+print('Reset')
+mapInit()
+
+}})
+
+print(reset_button)
 
 
 /** Returns a ui.Map with some UI configuration in place */
@@ -297,18 +293,18 @@ function makeMapPanel() {
     });
     return map;
 }
-var makeMainSubPanel = function() {
+var makeMainSubPanel = function () {
     var mainSubPanel = ui.Panel({
         style: {
             width: '100%',
-            //border: '9px solid purple',
+            border: '1px solid darkgray',
             backgroundColor: 'white'
         }
     })
 
     return mainSubPanel
 };
-var makeFooter = function() {
+var makeFooter = function () {
     var footer = ui.Panel({
         style: {
             width: '100%',
@@ -319,34 +315,9 @@ var makeFooter = function() {
     return footer
 }
 
+var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
 
-function make_intro_text_panel(){
-var psau = ui.Label({
-  style: {//border: '1px solid red',
- margin: '0px 8px', 
-    //padding: '0px, 0px, 0px, 0px'},
-  },
-  value: 
-"Puget Sound Watershed Characterization Project ↗",
-targetUrl:"https://apps.ecology.wa.gov/coastalatlas/wc/landingpage.html"})
-
-var description = ui.Label({value: 
-  "Explore watershed data by selecting a watershed from the map."+
-  "\nBy default, watersheds shown are Assessment Units from the", 
-style:{//border: '1px solid blue',
-whiteSpace: 'pre',//margin: '0px',
-margin: '8px 8px 0px 8px'}})
-
-var description2 = ui.Label({value: "To select a different watershed data set, select one below:"})
-var panel = ui.Panel({
-  widgets:[description,psau,description2],
-  style:{
-  padding: '0px'}})
-return panel
-}
-
-
-
+mainPanel.style().set({height:"75%"})
 
 var watershedSelectLabel = ui.Label({
     value: 'Select a watershed dataset to aggregate data:',
@@ -367,82 +338,66 @@ var legendPanel = ui.Panel({
 }).setLayout(ui.Panel.Layout.flow('vertical'));
 
 
-function make_concentration_panel(region, scale) {
-
-    var pan = ui.Panel({
-        layout: ui.Panel.Layout.flow('horizontal', true),
+function make_concentration_panel(region, scale){
+       
+    var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true),
         //style: {stretch:'horizontal'}
-    })
+      }) 
 
-    var concentration_objects = [
+      var concentration_objects = [
         'Total Copper Concentration',
         'Total Kjeldahl Nitrogen Concentration',
         'Total Phosphorus Concentration',
         'Total Suspended Solids Concentration',
-        'Total Zinc Concentration'
-    ]
+        'Total Zinc Concentration']
 
+      
+      pan.add(
+            //charts.coc_mean_conc(data.cocs["Total Copper Concentration"]),region,scale).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[1]],region,scale)).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[2]],region,scale)).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[3]],region,scale)).add(
+            charts.coc_mean_conc(data.cocs["Total Copper Concentration"]),region,scale).add(
+            charts.coc_mean_conc(data.cocs[concentration_objects[4]],region,scale))
 
-    pan.add(
-        //charts.coc_mean_conc(data.cocs["Total Copper Concentration"]),region,scale).add(
-        charts.coc_mean_conc(data.cocs[concentration_objects[1]], region, scale)).add(
-        charts.coc_mean_conc(data.cocs[concentration_objects[2]], region, scale)).add(
-        charts.coc_mean_conc(data.cocs[concentration_objects[3]], region, scale)).add(
-        charts.coc_mean_conc(data.cocs["Total Copper Concentration"]), region, scale).add(
-        charts.coc_mean_conc(data.cocs[concentration_objects[4]], region, scale))
+            return(pan)
 
-    return (pan) 
+      
 
-
-
-
+    
 }
 
-function make_load_panel(region, scale) {
+function make_load_panel(region, scale){
+       
+    var pan = ui.Panel({layout:ui.Panel.Layout.flow('horizontal',true), 
+        style: {stretch:'horizontal'}
+      }) 
 
-    var pan = ui.Panel({
-        layout: ui.Panel.Layout.flow('horizontal', true),
-        style: {
-            stretch: 'horizontal'
-        }
-    })
-
-    var Load_objects = [
+      var Load_objects = [
         'Total Copper Load',
         'Total Kjeldahl Nitrogen Load',
         'Total Phosphorus Load',
         'Total Suspended Solids Load',
-        'Total Zinc Load'
-    ]
+        'Total Zinc Load']
 
+      
+      pan.add(
+            charts.coc_load(data.cocs[Load_objects[0]],region,100)).add(
+            charts.coc_load(data.cocs[Load_objects[1]],region,100)).add(
+            charts.coc_load(data.cocs[Load_objects[2]],region,100)).add(
+            charts.coc_load(data.cocs[Load_objects[3]],region,100)).add(
+            charts.coc_load(data.cocs[Load_objects[4]],region,100))
 
-    pan.add(
-        charts.coc_load(data.cocs[Load_objects[0]], region, 100)).add(
-        charts.coc_load(data.cocs[Load_objects[1]], region, 100)).add(
-        charts.coc_load(data.cocs[Load_objects[2]], region, 100)).add(
-        charts.coc_load(data.cocs[Load_objects[3]], region, 100)).add(
-        charts.coc_load(data.cocs[Load_objects[4]], region, 100))
+            return(pan)
 
-    return (pan)
+      
 
-
-
-
+    
 }
-
-//function to return watershed area 
-
-function get_ws_area(ws_geometry){}
-
-//function to return mean annual precip 
-
-// function to return mean annual runoff 
-
-//function to return percent as surface runoff 
 
 
 function makeReports() {
-
+    
     var report_scale = mapPanel.getScale()
 
     // var pchart = charts.littleNum(layerProperties["Precipitation (mm)"],
@@ -471,7 +426,7 @@ function makeReports() {
     //impChart.setOptions(Style.charts.singleBar)
     var impNum = charts.littleNum(layerProperties.Imperviousness, clicked_basin_geom, report_scale, 'percent')
 
-    var impcard = cards('Watershed Info', [hline(),
+    var impcard = cards('Imperviousness', [
         //   impChart, 
         impNum //layerButton(layerProperties["Imperviousness"])
     ])
@@ -500,14 +455,14 @@ function makeReports() {
 
 
 
-var subtitle = function(label) {
+var subtitle = function (label) {
     return ui.Label({
         value: label,
         style: fonts.H3
     })
 }
 
-var cards = function(title, widgetItems) {
+var cards = function (title, widgetItems) {
     var cardTitle = ui.Label({
         value: title,
         style: fonts.H2
@@ -530,19 +485,18 @@ var accept = ui.Button({
     style: {
         shown: false
     },
-    onClick: function() {
+    onClick: function () {
         mapPanel.unlisten()
-        reset_button.style().set({shown: true})
         mainPanel.style().set({
-             shown: true,
-        //     height: '85%',
-             maxWidth: '32.8%',
-         }); //show the side panel
-        //mapPanel.add(legendPanel) //add legend panel to the map
+            shown: true,
+            height: '85%',
+            width: '32.8%',
+        }); //show the side panel
+        mapPanel.add(legendPanel) //add legend panel to the map
         makeReports() //also clear side panel todo
-        // buttonPanel.style().set({
-        //     shown: false
-        // })
+        buttonPanel.style().set({
+            shown: false
+        })
     }
 });
 
@@ -560,15 +514,11 @@ var inspect_helper_text = ui.Label({
 })
 //function to add user layer to the map
 var buttonPanel = ui.Panel({
-    widgets: [//inspect_helper_text, 
-    inspect_button, accept],
-    layout: ui.Panel.Layout.flow('horizontal',true),
+    widgets: [inspect_helper_text, inspect_button, accept],
+    layout: ui.Panel.Layout.flow('vertical'),
     style: {
-        //position: 'top-left',
-        stretch: 'horizontal',
-       // border: '1px solid green', 
-        margin: '0px',
-        padding: '0px'
+        position: 'top-left',
+        stretch: 'both'
     }
 });
 
@@ -584,17 +534,21 @@ var watershedSelect = ui.Select({
         "HUC12: USGS Watershed Boundary Dataset"
     ],
     //placeholder: 'Select a value',
-    value: "Puget Sound Assessment Units",
-    onChange: function(selected) {
+    value:  "Puget Sound Assessment Units",
+    onChange: function (selected) {
         mapPanel.layers().reset()
         print(selected)
         var WS = vectors_dict[selected]
-        mapPanel.layers().set(0, WS.style(featureStyle))
+        mapPanel.layers().set(0,WS.style(featureStyle))
         //oct
-
+       
 
     }
 });
+
+
+
+
 
 
 
@@ -667,76 +621,25 @@ var mainSubPanel = makeMainSubPanel();
 
 
 
-
-
-
-var mainPanel = helpers.makeMainPanel("Analyze a Watershed");
-
-mainPanel.style().set({height:"75%"})
-
-
-
 var analyzePanel = ui.Panel({
     style: {
-        shown: true//, border: '3px solid green'
+        shown: true
     }
 })
+
+
+
 
 // ui.root.add(footer)
 //---------------- set the initial view
 
-var intro_text_panel = make_intro_text_panel()
 
-
-
-function make_layer_dropdown() {
-    var layers_list = data.cocs
-
-    var select_layer = ui.Select({
-        items: Object.keys(layers_list),
-        onChange: function(value) {
-            update_img(value)
-        }
-    })
-
-    var layer_panel = ui.Panel({widgets: [
-        ui.Label('Select Layer to Display'),
-        select_layer
-    ], 
-    //layout: ui.Panel.Layout.absolute(), 
-    style: {position: 'middle-right'}
-    })
-
-    mapPanel.add(layer_panel)
-
-    var legendPanel = ui.Panel({
-        style: {
-            shown: true
-        }
-    })
-    mapPanel.add(legendPanel)
-
-    
-}
-
-var layers_list = data.cocs
-
-function update_img(value) {
-
-        var layerObject = layers_list[value]
-        var legend = helpers.makeLegend(layerObject)
-        mapPanel.layers().set(0, layerObject.layer)
-        legend.style().set({
-            position: "bottom-right"
-        });
-        legendPanel.clear().add(legend)
-    }
 function mapInit() {
 ui.root.clear();
-//mainPanel.clear()
+mainPanel.clear()
 //mainSubPanel.add(infoPanel)
-//mainSubPanel.clear()
-
+mainSubPanel.clear()
+mainSubPanel.add(analyzePanel)
 mapPanel.clear()
 mapPanel = makeMapPanel()
 
@@ -747,7 +650,7 @@ ui.root.setLayout(ui.Panel.Layout.flow(
     'vertical'))
 // blankPanel.add(ui.Label('blankPanel'))
 
-
+mainPanel.add(mainSubPanel)
 //mainSubPanel.add(ui.Label('mainSubPanel'))
 ui.root.add(
 
@@ -755,54 +658,22 @@ ui.root.add(
 // mapPanel.add(mapInfoPanel);
 mapPanel.add(mainPanel);
 analyzePanel.clear()
-mainPanel.add(intro_text_panel)
-mainPanel.add(watershedSelectLabel)
-mainPanel.add(watershedSelect)
-mainPanel.add(inspect_helper_text)
-mainPanel.add((buttonPanel))
+analyzePanel.add(watershedSelectLabel)
+analyzePanel.add(watershedSelect)
+analyzePanel.add((buttonPanel))
 // reset view 
-mainSubPanel.add(reset_button)
-mainSubPanel.add(analyzePanel)
-mainPanel.add(mainSubPanel)
+
 var mapCenterLon = -122.423145;
 var mapCenterLat = 47.612410;
 mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
-
-mapPanel.layers().set(0,data.cocs["Total Suspended Solids Concentration"].layer)
 
 WS = vectors_dict["Puget Sound Assessment Units"]
 watershedSelect.setValue("Puget Sound Assessment Units")
+mapPanel.layers().set(0,WS.style(featureStyle))
 // reset dialogs 
-//update_raster_img(data.cocs["Total Suspended Solids Concentration"])
-mapPanel.layers().set(1,WS.style(featureStyle))
-  
 
-helpers.make_tnc_map(mapPanel)
-
-make_layer_dropdown()
 
 }
-
-
-
-
-
-function reset_panels() {
-  //hide analyze button
-  accept.style().set({
-        shown: false
-    })
-  //hide reports and cards, etc 
-  // reset view 
-//clear layers 
-mapPanel.layers().reset([ WS.style(featureStyle)])//[vectors_dict["Puget Sound Assessment Units"]])
-
-var mapCenterLon = -122.423145;
-var mapCenterLat = 47.612410;
-mapPanel.setCenter(mapCenterLon, mapCenterLat, 7)
-
-update_img(data.cocs["Total Suspended Solids Concentration"])
-}
-
 
 mapInit() 
+

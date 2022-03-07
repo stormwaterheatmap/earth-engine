@@ -1,0 +1,59 @@
+
+// data 
+var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
+var fonts = Style.fonts 
+// print(data)
+// var legendPanel = ui.Panel() 
+// Map.add(legendPanel)
+// var rasters = data.rasters 
+// print(rasters)
+// //var layer_types = {"Input Data Layers": {}, "Hydrology Data Layers": {}}; 
+// var layers_list = {
+//   "Soils": rasters.Soils, 
+//   "Age of Imperviousness": rasters["Age of Imperviousness"], 
+//   //"HSPF Land Cover Type": rasters["HSPF Land Cover Type"], 
+//   "Imperviousness": rasters["Imperviousness"], 
+//   "Land Cover": rasters["Land Cover"], 
+//   "Land Use": rasters["Land Use"], 
+//   //"Population": rasters["Population"], 
+//   "Population Density": rasters["Population Density"], 
+//   //"Precipitation (in)": rasters["Precipitation (in)"], 
+//   "Precipitation": rasters["Precipitation"], 
+// //  "Runoff (in)": rasters["Runoff (in)"], 
+// // "Runoff (mm)": rasters["Runoff (mm)"], 
+//   "Slope": rasters["Slope"], 
+//   "Slope Categories": rasters["Slope Categories"], 
+//   "Traffic": rasters["Traffic"]}
+  
+// print(layers_list,'layers_list')
+
+var layers_list = data.cocs
+var test_list = (Object.keys(layers_list))
+print(test_list)
+// layer_types["Pollutant Loading"]=Object.keys(coc_data)
+
+var select_layer = ui.Select({
+  items: Object.keys(layers_list), 
+  onChange: 
+  function(value){
+  update_img(value)
+}})
+
+var layer_panel = ui.Panel([
+  ui.Label('Select Layer'), 
+select_layer]
+)
+
+Map.add(layer_panel)
+
+var legendPanel = ui.Panel({style: {shown: true}})
+function update_img(value){ 
+  
+  var layerObject = layers_list[value]
+var legend = helpers.makeLegend(layerObject)  
+ Map.layers().set(0,layerObject.layer)
+  legend.style().set({position: "bottom-right"}); 
+  legendPanel.clear().add(legend)}
+ 

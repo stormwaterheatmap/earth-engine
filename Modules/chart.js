@@ -1,18 +1,27 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-
+var geometry = /* color: #d63000 */ee.Geometry.Polygon(
+        [[[-122.20747010339869, 48.15170220889509],
+          [-122.20747010339869, 48.1379572829303],
+          [-122.17176453699244, 48.1379572829303],
+          [-122.17176453699244, 48.15170220889509]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
 function sigFigs(n, sig) {
+  if(n <= 0){
+    return 0
+  }else{
   var mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
   return Math.round(n * mult) / mult;
-}
+}}
 
-function histByClass(layerObject, scale, geom) {
+
+function histByClass(layerObj, scale, geom) {
   //get values that are in the roi 
   var area = ee.Image.pixelArea()
     .divide(4046.86); //area in acres 
-  var image = ee.Image.cat(area, layerObject.layer.eeObject);
+  var image = ee.Image.cat(area, layerObj.layer.eeObject);
   // Define chart customization options.
   var options = {
     titleTextStyle: style.fonts.LegendTitle,
@@ -33,10 +42,10 @@ function histByClass(layerObject, scale, geom) {
     classBand: 1,
     region: geom,
     scale: scale,
-    classLabels: layerObject.labels,
-    xLabels: layerObject.units,
+    classLabels: layerObj.labels,
+    xLabels: layerObj.units,
     //titleTextStyle: style.fonts.LegendTitle
-    //     xLabels: layerObject.labels
+    //     xLabels: layerObj.labels
   })
     .setOptions(options)
   );
@@ -44,10 +53,10 @@ function histByClass(layerObject, scale, geom) {
   return histChart;
 }
 
-function stackedBar(layerObject, scale, geom) {
+function stackedBar(layerObj, scale, geom) {
   var area = ee.Image.pixelArea()
     .divide(4046.856) //area in acres 
-  var image = ee.Image.cat(area, layerObject.layer.eeObject)
+  var image = ee.Image.cat(area, layerObj.layer.eeObject)
   // Define chart customization options.
   var options = {
     isStacked: true,
@@ -67,9 +76,9 @@ function stackedBar(layerObject, scale, geom) {
       classBand: 1,
       region: geom,
       scale: scale,
-      classLabels: layerObject.labels,
+      classLabels: layerObj.labels,
       //titleTextStyle: style.fonts.LegendTitle
-      //     xLabels: layerObject.labels
+      //     xLabels: layerObj.labels
     })
     .setOptions(options)
   )
@@ -93,11 +102,11 @@ exports.histogramFeature = function (region, propName, buckwidth, title) {
   return chart;
 };
 
-function histogramImage(layerObject, WS, scale) {
+function histogramImage(layerObj, WS, scale) {
   
   
   var chart = ui.Chart.image.histogram({
-    image: layerObject.layer.eeObject,
+    image: layerObj.layer.eeObject,
     region: WS,
     scale: scale,
     minBucketWidth: 0.5,
@@ -108,9 +117,9 @@ function histogramImage(layerObject, WS, scale) {
   //     width: '90%',
   //     height: '185px'
   //   })
-  var units = layerObject.units
+  var units = layerObj.units
   chart.setSeriesNames(
-    (layerObject.layer.name + ' (' + units + ')'), 0)
+    (layerObj.layer.name + ' (' + units + ')'), 0)
   chart.setOptions({
     legend: {
       position: 'none'
@@ -143,7 +152,7 @@ function histogramImage(layerObject, WS, scale) {
         color: 'white',
         //  count: 4,
       },
-      title: (layerObject.layer.name + ' (' + units + ' )')
+      title: (layerObj.layer.name + ' (' + units + ' )')
       //textPosition:'in',
       // format:'short',
       // viewWindowMode: 'maximized',
@@ -254,21 +263,22 @@ exports.pieChart = makePieChart
 function coc_mean_conc(layerObj, region, scale) {
   //text for loading whil calucations happen 
   var units = layerObj.units;
+  print('conversion_factor',conversion_factor)
   var loading = 'loading...';
   var bigNum = ui.Label({
     value: loading,
-    style: style.fonts.Body3
+    //style: style.fonts.Body3
   });
   bigNum.style()
     .set({
       margin: 2,
       padding: 2,
       width: '80%',
-      fontSize: '30px',
+      fontSize: '24px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
       ],
-      fontWeight: 500,
+      //fontWeight: 500,
       //  border: '1px solid blue', 
       backgroundColor: style.colors.transparent,
       textAlign: 'right',
@@ -324,27 +334,27 @@ function coc_mean_conc(layerObj, region, scale) {
       //width: '80%',
       color: style.colors.sDark,
     });
-  var labelText = (
-    'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
-  var labelText2 = ui.Label({
-    style: style.fonts.Caption3
-  });
-  labelText2.style()
-    .set({
-      //   margin: 0, //fontSize: '10px',
-      //color:style.colors.sDark,
-      margin: 2,
-      padding: 2,
-      textAlign: 'right',
-      width: '80%',
-      //      border: '1px solid pink', 
-      fontSize: '10px',
-    });
-  labelText2.setValue('Source: ' + layerObj.sourceName);
-  labelText2.setUrl(layerObj.sourceUrl);
-  infoLabel.setValue(labelText);
-  numPan //.add(infoLabel)
-    .add(labelText2); //.add(labelText2)
+  // var labelText = (
+  //   'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
+  // var labelText2 = ui.Label({
+  //   style: style.fonts.Caption3
+  // });
+  // labelText2.style()
+  //   .set({
+  //     //   margin: 0, //fontSize: '10px',
+  //     //color:style.colors.sDark,
+  //     margin: 2,
+  //     padding: 2,
+  //     textAlign: 'right',
+  //     width: '80%',
+  //     //      border: '1px solid pink', 
+  //     fontSize: '10px',
+  //   });
+  // labelText2.setValue('Source: ' + layerObj.sourceName);
+  // labelText2.setUrl(layerObj.sourceUrl);
+  // infoLabel.setValue(labelText);
+  // numPan //.add(infoLabel)
+  //   .add(labelText2); //.add(labelText2)
 
     /**
      * Calculations 
@@ -390,11 +400,11 @@ function coc_load(layerObj, region, scale) {
       margin: 2,
       padding: 2,
       width: '95%',
-      fontSize: '30px',
+      fontSize: '24px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
       ],
-      fontWeight: 500,
+      //fontWeight: 500,
     //   border: '1px solid blue', 
       backgroundColor: style.colors.transparent,
       textAlign: 'right',
@@ -543,40 +553,40 @@ function littleNum(layerObj, region, scale, reducerType) {
   numPan.add(bigNum);
 
   numPan.add(units);
-  var infoLabel = ui.Label({
-    style: style.fonts.Caption3
-  });
-  infoLabel.style()
-    .set({
-      margin: 0,
-      padding: 2,
-      fontSize: '10px',
-      textAlign: 'right',
-      //   border: '1px solid green',
-      //width: '80%',
-      color: style.colors.sDark,
-    });
-  var labelText = (
-    'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
-  var labelText2 = ui.Label({
-    style: style.fonts.Caption3
-  });
-  labelText2.style()
-    .set({
-      //   margin: 0, //fontSize: '10px',
-      //color:style.colors.sDark,
-      margin: 2,
-      padding: 2,
-      textAlign: 'right',
-      width: '80%',
-      //      border: '1px solid pink', 
-      fontSize: '10px',
-    });
-  labelText2.setValue('Source: ' + layerObj.sourceName);
-  labelText2.setUrl(layerObj.sourceUrl);
-  infoLabel.setValue(labelText);
-  numPan //.add(infoLabel)
-    .add(labelText2); //.add(labelText2)
+  // var infoLabel = ui.Label({
+  //   style: style.fonts.Caption3
+  // });
+  // infoLabel.style()
+  //   .set({
+  //     margin: 0,
+  //     padding: 2,
+  //     fontSize: '10px',
+  //     textAlign: 'right',
+  //     //   border: '1px solid green',
+  //     //width: '80%',
+  //     color: style.colors.sDark,
+  //   });
+  // var labelText = (
+  //   'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
+  // var labelText2 = ui.Label({
+  //   style: style.fonts.Caption3
+  // });
+  // labelText2.style()
+  //   .set({
+  //     //   margin: 0, //fontSize: '10px',
+  //     //color:style.colors.sDark,
+  //     margin: 2,
+  //     padding: 2,
+  //     textAlign: 'right',
+  //     width: '80%',
+  //     //      border: '1px solid pink', 
+  //     fontSize: '10px',
+  //   });
+  // labelText2.setValue('Source: ' + layerObj.sourceName);
+  // labelText2.setUrl(layerObj.sourceUrl);
+  // infoLabel.setValue(labelText);
+  // numPan //.add(infoLabel)
+  //   .add(labelText2); //.add(labelText2)
 
   if (reducerType == 'mean') {
     var reduced = ee.Number((layerObj.layer.eeObject)
@@ -742,107 +752,113 @@ function cat_chart(layer_object, regions, scale) {
 exports.cat_chart = cat_chart
 exports.img_class_chart = img_class_chart
 
-function coc_mean_conc(layerObj, region, scale) {
-  //text for loading whil calucations happen 
-  var units = layerObj.units;
-  var loading = 'loading...';
-  var bigNum = ui.Label({
-    value: loading,
-    style: style.fonts.Body3
-  });
-  bigNum.style()
-    .set({
-      margin: 2,
-      padding: 2,
-      width: '100%',
-      fontSize: '24px',
-      fontFamily: ['Roboto', 'Helvetica Neue',
-        'Arial', 'sans-serif'
-      ],
-      fontWeight: 500,
-      //  border: '1px solid blue', 
-      backgroundColor: style.colors.transparent,
-      textAlign: 'right',
-    });
+// function coc_mean_conc(layerObj, region, scale) {
+//   //text for loading whil calucations happen 
+//   var units = ee.String(layerObj.units);
+//   var loading = 'loading...';
+//   var bigNum = ui.Label({
+//     value: loading,
+//     style: style.fonts.Body3
+//   });
+//   bigNum.style()
+//     .set({
+//       margin: 2,
+//       padding: 2,
+//       width: '100%',
+//       fontSize: '24px',
+//       fontFamily: ['Roboto', 'Helvetica Neue',
+//         'Arial', 'sans-serif'
+//       ],
+//       fontWeight: 500,
+//       //  border: '1px solid blue', 
+//       backgroundColor: style.colors.transparent,
+//       textAlign: 'right',
+//     });
 
-  var title_value = layerObj.layer.name;
+//   var title_value = layerObj.layer.name;
 
 
-  var titleLabel = ui.Label({
-    value: title_value,
-    style: style.fonts.H4
-  });
-  titleLabel.style()
-    .set({
-      margin: '2px',
-      padding: '2px',
-      stretch: 'both',
-      width: '100%',
-      textAlign: 'right',
-      //   border: '1px solid red'
-    });
-  units = ui.Label({
-    value: units,
-    style: style.fonts.Caption2
-  });
-  units.style()
-    .set({
-      textAlign: 'right',
-      width: '100%',
-      margin:2
-    });
+//   var titleLabel = ui.Label({
+//     value: title_value,
+//     style: style.fonts.H4
+//   });
+//   titleLabel.style()
+//     .set({
+//       margin: '2px',
+//       padding: '2px',
+//       stretch: 'both',
+//       width: '100%',
+//       textAlign: 'right',
+//       //   border: '1px solid red'
+//     });
+//   units = ui.Label({
+//     value: layerObj.units,
+//     style: style.fonts.Caption2
+//   });
+//   units.style()
+//     .set({
+//       textAlign: 'right',
+//       width: '100%',
+//       margin:2
+//     });
 
-  var numPan = ui.Panel({
-    layout: ui.Panel.Layout.flow('vertical',true),
-    style: {
-      textAlign: 'right',
-      padding: '2px',
-      margin: '2px',
-      //minWidth: '100px',
-          //  border: '1px solid red'
+//   var numPan = ui.Panel({
+//     layout: ui.Panel.Layout.flow('vertical',true),
+//     style: {
+//       textAlign: 'right',
+//       padding: '2px',
+//       margin: '2px',
+//       //minWidth: '100px',
+//           //  border: '1px solid red'
 
-    }
-  }); //height: '200px'}}); 
-  numPan.add(titleLabel); //.add(infoLabel)
+//     }
+//   }); //height: '200px'}}); 
+//   numPan.add(titleLabel); //.add(infoLabel)
   
     
-    var num_unit_panel = ui.Panel({widgets:[bigNum],
-    layout:ui.Panel.Layout.flow('horizontal'),
-      style:{width: '100%'}//,stretch:'both'}
-    })
-  numPan.add(num_unit_panel);
+//     var num_unit_panel = ui.Panel({widgets:[bigNum],
+//     layout:ui.Panel.Layout.flow('horizontal'),
+//       style:{width: '100%'}//,stretch:'both'}
+//     })
+//   numPan.add(num_unit_panel);
 
-  numPan.add(units);
-  var reduced = ee.Number((layerObj.layer.eeObject.select(0))
-    .reduceRegion({
-      reducer: ee.Reducer.mean(),
-      geometry: region,
-      scale: scale,
-      maxPixels: 100000,
-      bestEffort: true
-    })
-    .get(layerObj.layer.eeObject.bandNames()
-      .get(0)));
-  reduced.evaluate(function (result) {
-    // When the server returns the value, show it.
-    bigNum.setValue(sigFigs(result,3).toLocaleString("en-US"));
-  });
-  //  
-  return numPan;
-}
+//   numPan.add(units);
+//   var reduced = ee.Number((layerObj.layer.eeObject.select(0))
+//     .reduceRegion({
+//       reducer: ee.Reducer.mean(),
+//       geometry: region,
+//       scale: scale,
+//       //maxPixels: 100000,
+//       bestEffort: true
+//     })
+//     .get(layerObj.layer.eeObject.bandNames()
+//       .get(0)));
+//   reduced.evaluate(function (result) {
+//     // When the server returns the value, show it.
+//     bigNum.setValue(sigFigs(result,3).toLocaleString("en-US"));
+//   });
+//   //  
+//   return numPan;
+// }
 
-exports.coc_mean_conc = coc_mean_conc
-
-// //testing 
-// var data = require('users/stormwaterheatmap/apps:data/data_dict_v3')
+// exports.coc_mean_conc = coc_mean_conc
+/**
+ * 
+//testing 
+ var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 // var layerProperties = data.rasters
 
 // print(Object.keys(layerProperties))
 // print(layerProperties)
 
 // //
-// var layerObject = layerProperties["Age of Imperviousness"] 
-// var chart2 = makePieChart(geometry, layerObject, 100).setChartType('BarChart') 
+var layerObj = data.cocs["Total Suspended Solids Concentration"]
+print(layerObj.units)
+var chart = coc_mean_conc(layerObj,geometry,100)//,1e-3)
+
+print(chart)
+//print(layerObj)
+// var chart2 = makePieChart(geometry, layerObj, 100).setChartType('BarChart') 
 // var imageBar = (  {chartArea: {left: '50%'},
 //   hAxis: {
 //           title: 'Area (acres)',
@@ -850,10 +866,12 @@ exports.coc_mean_conc = coc_mean_conc
 //         }, 
 //         legend: {position: 'none'}, 
 //         }) 
-// var chart = histByClass(layerObject, 100, geometry); 
+// var chart = histByClass(layerObj, 100, geometry); 
 // chart.setChartType('BarChart')
 // chart2.setOptions(imageBar)
 // //var options = 
 // var testPan = ui.Panel()
 // testPan.add(chart2)
 // Map.add(testPan)
+**/
+ 
