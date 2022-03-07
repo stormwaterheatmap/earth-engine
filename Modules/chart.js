@@ -334,32 +334,32 @@ function coc_mean_conc(layerObj, region, scale) {
       //width: '80%',
       color: style.colors.sDark,
     });
-  var labelText = (
-    'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
-  var labelText2 = ui.Label({
-    style: style.fonts.Caption3
-  });
-  labelText2.style()
-    .set({
-      //   margin: 0, //fontSize: '10px',
-      //color:style.colors.sDark,
-      margin: 2,
-      padding: 2,
-      textAlign: 'right',
-      width: '80%',
-      //      border: '1px solid pink', 
-      fontSize: '10px',
-    });
-  labelText2.setValue('Source: ' + layerObj.sourceName);
-  labelText2.setUrl(layerObj.sourceUrl);
-  infoLabel.setValue(labelText);
-  numPan //.add(infoLabel)
-    .add(labelText2); //.add(labelText2)
+  // var labelText = (
+  //   'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
+  // var labelText2 = ui.Label({
+  //   style: style.fonts.Caption3
+  // });
+  // labelText2.style()
+  //   .set({
+  //     //   margin: 0, //fontSize: '10px',
+  //     //color:style.colors.sDark,
+  //     margin: 2,
+  //     padding: 2,
+  //     textAlign: 'right',
+  //     width: '80%',
+  //     //      border: '1px solid pink', 
+  //     fontSize: '10px',
+  //   });
+  // labelText2.setValue('Source: ' + layerObj.sourceName);
+  // labelText2.setUrl(layerObj.sourceUrl);
+  // infoLabel.setValue(labelText);
+  // numPan //.add(infoLabel)
+  //   .add(labelText2); //.add(labelText2)
 
     /**
      * Calculations 
      */
-print(layerObj.units)
+
     var reduced = ee.Number((layerObj.layer.eeObject.select(0))
     .reduceRegion({
       reducer: ee.Reducer.mean(),
@@ -553,40 +553,40 @@ function littleNum(layerObj, region, scale, reducerType) {
   numPan.add(bigNum);
 
   numPan.add(units);
-  var infoLabel = ui.Label({
-    style: style.fonts.Caption3
-  });
-  infoLabel.style()
-    .set({
-      margin: 0,
-      padding: 2,
-      fontSize: '10px',
-      textAlign: 'right',
-      //   border: '1px solid green',
-      //width: '80%',
-      color: style.colors.sDark,
-    });
-  var labelText = (
-    'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
-  var labelText2 = ui.Label({
-    style: style.fonts.Caption3
-  });
-  labelText2.style()
-    .set({
-      //   margin: 0, //fontSize: '10px',
-      //color:style.colors.sDark,
-      margin: 2,
-      padding: 2,
-      textAlign: 'right',
-      width: '80%',
-      //      border: '1px solid pink', 
-      fontSize: '10px',
-    });
-  labelText2.setValue('Source: ' + layerObj.sourceName);
-  labelText2.setUrl(layerObj.sourceUrl);
-  infoLabel.setValue(labelText);
-  numPan //.add(infoLabel)
-    .add(labelText2); //.add(labelText2)
+  // var infoLabel = ui.Label({
+  //   style: style.fonts.Caption3
+  // });
+  // infoLabel.style()
+  //   .set({
+  //     margin: 0,
+  //     padding: 2,
+  //     fontSize: '10px',
+  //     textAlign: 'right',
+  //     //   border: '1px solid green',
+  //     //width: '80%',
+  //     color: style.colors.sDark,
+  //   });
+  // var labelText = (
+  //   'Scale of Analysis: ' + scale + ' sq.m/pixel' + /n/ + scale);
+  // var labelText2 = ui.Label({
+  //   style: style.fonts.Caption3
+  // });
+  // labelText2.style()
+  //   .set({
+  //     //   margin: 0, //fontSize: '10px',
+  //     //color:style.colors.sDark,
+  //     margin: 2,
+  //     padding: 2,
+  //     textAlign: 'right',
+  //     width: '80%',
+  //     //      border: '1px solid pink', 
+  //     fontSize: '10px',
+  //   });
+  // labelText2.setValue('Source: ' + layerObj.sourceName);
+  // labelText2.setUrl(layerObj.sourceUrl);
+  // infoLabel.setValue(labelText);
+  // numPan //.add(infoLabel)
+  //   .add(labelText2); //.add(labelText2)
 
   if (reducerType == 'mean') {
     var reduced = ee.Number((layerObj.layer.eeObject)
