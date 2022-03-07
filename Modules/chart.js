@@ -851,21 +851,21 @@ exports.img_class_chart = img_class_chart
 // exports.coc_mean_conc = coc_mean_conc
 
  
-//testing 
- var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
- var layerProperties = data.rasters
+// //testing 
+// var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
+// var layerProperties = data.rasters
 
-// print(Object.keys(layerProperties))
-// print(layerProperties)
+// // print(Object.keys(layerProperties))
+// // print(layerProperties)
 
-// //
-var layerObj = data.rasters["Runoff (mm)"]
+// // //
+// var layerObj = data.rasters["Runoff (mm)"]
 
 
-print(layerObj)
-var chart = littleNum(layerObj,geometry,100,'mean')//,1e-3)
+// print(layerObj)
+// var chart = littleNum(layerObj,geometry,100,'mean')//,1e-3)
 
-print(chart)
+// print(chart)
 //print(layerObj)
 // var chart2 = makePieChart(geometry, layerObj, 100).setChartType('BarChart') 
 // var imageBar = (  {chartArea: {left: '50%'},
