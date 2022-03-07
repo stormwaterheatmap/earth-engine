@@ -512,11 +512,11 @@ function littleNum(layerObj, region, scale, reducerType) {
       margin: 2,
       padding: 2,
       width: '80%',
-      fontSize: '30px',
+      fontSize: '24px',
       fontFamily: ['Roboto', 'Helvetica Neue',
         'Arial', 'sans-serif'
       ],
-      fontWeight: 500,
+      //fontWeight: 500,
       //  border: '1px solid blue', 
       backgroundColor: style.colors.transparent,
       textAlign: 'right',
@@ -852,14 +852,14 @@ exports.img_class_chart = img_class_chart
 
  
 // //testing 
-// var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
-// var layerProperties = data.rasters
+var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
+//var layerProperties = data.rasters
 
 // // print(Object.keys(layerProperties))
 // // print(layerProperties)
 
 // // //
-// var layerObj = data.rasters["Runoff (mm)"]
+var layerObj = data.rasters["Runoff (mm)"]
 
 
 // print(layerObj)
@@ -882,5 +882,4 @@ exports.img_class_chart = img_class_chart
 // var testPan = ui.Panel()
 // testPan.add(chart2)
 // Map.add(testPan)
-
  
