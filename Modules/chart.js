@@ -22,7 +22,7 @@ var geometry = /* color: #d63000 */ee.Geometry.Polygon(
  * @returns simple bar chart showing value from 0 to 10 
  */
  function simpleBar(val) {
- 
+  var list =  ee.List([val])
   var chart = ui.Chart.array.values({array: list,axis: 0})
     
   
