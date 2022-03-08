@@ -496,6 +496,9 @@ function makeReports() {
         report_scale,
         "mean"
     );
+    
+ 
+    
 
     //panel to hold watershed info 
     var watershed_info_panel = ui.Panel({
@@ -509,14 +512,59 @@ function makeReports() {
         }, //',border:'1px solid green'}
     });
 
+
+    
+    
+       //flow duration index 
+    
+    var fdr = layerProperties["Flow Duration Index"].layer.eeObject.
+    reduceRegion({
+      reducer: ee.Reducer.mean(), 
+      geometry: clicked_basin_geom, 
+      scale: report_scale, 
+      bestEffort: true, 
+    })
+    
+    var fdr_value = ee.Number(fdr.get("flow_duration_index")).format('%.2f')
+    
+    //make the fdr panel 
+    var fdr_chart = charts.simpleBar(fdr.get("flow_duration_index"))
+    
+    var fdr_panel = ui.Panel({
+      widgets: [
+        ui.Label({
+          value: 'Flow Duration Index', 
+          style: fonts.H3}), 
+        fdr_chart, 
+        ui.Label({value: 'Degree to which the hydrology has changed due to urbanization. '+ 
+          '1 = Forested hydrology; 10 = Most severe urbanized change', 
+          style: fonts.Caption2}), 
+        ui.Label({
+        
+         value: "more info ↗",
+        targetUrl: "https://www.stormwaterheatmap.org/docs/Data%20Layers/flow_duration_index",
+        style: fonts.Caption3
+        }),
+        ] 
+     // layout: 
+      //style: 
+    })
+    
+    fdr_value.evaluate(function(result) {
+      // Display the bands of the selected image.
+      fdr_panel.insert(1,ui.Label({value:result, 
+      style: fonts.Body2}))})
+      
     var watershed_info_card = cards("Hydrology Info", [
         hline(),
         watershed_info_panel,
+        hline(), 
+        fdr_panel
     ]);
 
     // add it to the analyzePanel
     analyzePanel.add(watershed_info_card);
-
+  
     // ========================================================================== //
     //   Pollutant Concentrations 
 
