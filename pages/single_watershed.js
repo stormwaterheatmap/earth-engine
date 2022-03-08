@@ -166,13 +166,16 @@ var watershedSelect = ui.Select({
     //placeholder: 'Select a value',
     value: "Puget Sound Assessment Units",
     onChange: function (selected) {
-        mapPanel.layers().reset();
-        print(selected);
-        var WS = vectors_dict[selected];
-        mapPanel.layers().set(0, WS.style(featureStyle));
-        //oct
-    },
-});
+        
+        WS = vectors_dict[selected];
+       
+      mapPanel.layers().set(1,{
+      eeObject:WS.style(featureStyle),
+      name: selected})
+    }
+    
+       //oct
+    });
 
 // Widgets 
 
@@ -192,6 +195,12 @@ var reset_button = ui.Button({
         function () {
             print("Reset");
             analyzePanel.clear();
+            clicked_basin = null; // user clicked basin 
+            clicked_basin_geom = null; // geometry of user clicked basin 
+            clicked_basin_fc = ee.FeatureCollection([]); 
+           
+            mapPanel.layers().set(2,{shown:false})
+            mapPanel.layers().set(3,{shown:false})
             //mapPanel.layers().set(0, data.cocs["Total Suspended Solids Concentration"])  
             reset_button.style().set({
                 shown: false
@@ -326,14 +335,21 @@ function make_layer_dropdown() {
         onChange: function (value) {
           var layerImg = layers_list[value].layer 
            mapPanel.layers().set(0,layerImg)
+           //mapPanel.add(
+             legendPanel.clear().add(
+             helpers.makeLegend(layers_list[value]))
         },
     });
 
     var layer_panel = ui.Panel({
-        widgets: [ui.Label("Select Layer to Display"), select_layer],
-        //layout: ui.Panel.Layout.absolute(),
+        widgets: [ui.Label({
+          value: "Select Layer to Display:",
+          style: fonts.H4
+        }
+          ), select_layer],
+        layout: ui.Panel.Layout.flow('vertical',true),
         style: {
-            position: "middle-right"
+            position: "bottom-right"
         },
     });
 
@@ -598,7 +614,8 @@ function mapInit() {
     
     watershedSelect.setValue("Puget Sound Assessment Units");
     
-
+    legendPanel.clear().add(
+             helpers.makeLegend(data.cocs["Total Suspended Solids Concentration"]))
     helpers.make_tnc_map(mapPanel);
 
     make_layer_dropdown();
