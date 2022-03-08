@@ -393,33 +393,27 @@ function make_concentration_panel(region, scale) {
     });
 
     var concentration_objects = [
-        "Total Copper Concentration",
-        "Total Kjeldahl Nitrogen Concentration",
-        "Total Phosphorus Concentration",
-        "Total Suspended Solids Concentration",
-        "Total Zinc Concentration",
-    ];
+        'Total Copper Concentration',
+        'Total Kjeldahl Nitrogen Concentration',
+        'Total Phosphorus Concentration',
+        'Total Suspended Solids Concentration',
+        'Total Zinc Concentration'
+    ]
 
-    pan
-        .add(
-            charts.coc_mean_conc(data.cocs[concentration_objects[1]], region, scale)
-        )
-        .add(
-            charts.coc_mean_conc(data.cocs[concentration_objects[2]], region, scale)
-        )
-        .add(
-            charts.coc_mean_conc(data.cocs[concentration_objects[3]], region, scale)
-        )
-        .add(
-            charts.coc_mean_conc(data.cocs["Total Copper Concentration"]),
-            region,
-            scale
-        )
-        .add(
-            charts.coc_mean_conc(data.cocs[concentration_objects[4]], region, scale)
-        );
 
-    return pan;
+    pan.add(
+        //charts.coc_mean_conc(data.cocs["Total Copper Concentration"]),region,scale).add(
+        charts.coc_mean_conc(data.cocs[concentration_objects[1]], region, scale)).add(
+        charts.coc_mean_conc(data.cocs[concentration_objects[2]], region, scale)).add(
+        charts.coc_mean_conc(data.cocs[concentration_objects[3]], region, scale)).add(
+       // charts.coc_mean_conc(data.cocs["Total Copper Concentration"]), region, scale).add(
+        charts.coc_mean_conc(data.cocs[concentration_objects[4]], region, scale))
+
+    return (pan) 
+
+
+
+
 }
 
 /**
