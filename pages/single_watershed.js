@@ -170,6 +170,8 @@ var watershedSelect = ui.Select({
         print(selected);
         var WS = vectors_dict[selected];
         mapPanel.layers().set(0, WS.style(featureStyle));
+        mapPanel.layers().set(2,{shown:false})
+        mapPanel.layers().set(3,{shown:false})
         //oct
     },
 });
@@ -192,6 +194,8 @@ var reset_button = ui.Button({
         function () {
             print("Reset");
             analyzePanel.clear();
+            mapPanel.layers().set(2,{shown:false})
+            mapPanel.layers().set(3,{shown:false})
             //mapPanel.layers().set(0, data.cocs["Total Suspended Solids Concentration"])  
             reset_button.style().set({
                 shown: false
