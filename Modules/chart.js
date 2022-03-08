@@ -14,6 +14,43 @@ var geometry = /* color: #d63000 */ee.Geometry.Polygon(
  */
 
 
+
+
+/**
+ * 
+ * @param {numeric} val 
+ * @returns simple bar chart showing value from 0 to 10 
+ */
+ function simpleBar(val) {
+ 
+  var chart = ui.Chart.array.values({array: list,axis: 0})
+    
+  
+    var options = {
+  
+      isStacked: true,
+      legend: {
+        position: 'none'
+      },
+      axisTitlesPosition: 'in',
+      vAxis: {  gridlines: {
+          color: 'transparent'
+        },  baselineColor:
+          'transparent',
+        textPosition: 'none'
+      }, 
+      hAxis: {
+        
+         ticks: [2, 4, 6, 8, 10]
+      }
+    };
+  return chart.setOptions(options).setChartType('BarChart')
+}
+
+exports.simpleBar = simpleBar
+
+
+
 var style = require('users/stormwaterheatmap/apps:Modules/Style')
 
 function sigFigs(n, sig) {
