@@ -194,6 +194,10 @@ var reset_button = ui.Button({
         function () {
             print("Reset");
             analyzePanel.clear();
+            clicked_basin = null; // user clicked basin 
+            clicked_basin_geom = null; // geometry of user clicked basin 
+            clicked_basin_fc = ee.FeatureCollection([]); 
+           
             mapPanel.layers().set(2,{shown:false})
             mapPanel.layers().set(3,{shown:false})
             //mapPanel.layers().set(0, data.cocs["Total Suspended Solids Concentration"])  
