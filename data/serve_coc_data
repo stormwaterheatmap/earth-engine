@@ -175,40 +175,40 @@ print(tss)
 // Map.addLayer(copper_load,{palette: load_pal,min:0,max:40},"copper_load ")
 
 
-function test_data(){
-  var pal = ["00204c", "213d6b", "555b6c", "7b7a77", "a59c74", "d3c064", "ffe945",
-    "ffffff"
-]
-  var p4 = p.log()
-var p3 = (convolve_neighborhood(p.log())) 
-var p2 = (convolve_circle(p.log())) 
-Map.addLayer(p2, {
-    palette: pal,
-    min: 1.73,
-    max: 5.52
-}, 'circle')
-Map.addLayer(p3.multiply(25).round().divide(25).focal_min().focal_max(), {
-    palette: pal,
-    min: 1.73,
-    max: 5.52
-}, 'nhood')
-Map.addLayer(p4, {
-    palette: pal,
-    min: 1.73,
-    max: 5.52
-}, 'orignial')
-Map.addLayer(p, {
-    bands: ["log_phosphorus_concentration_ug_per_L"],
-    palette: pal,
-    min: 1.73,
-    max: 5.52
-}, 'p')
-}
+// function test_data(){
+//   var pal = ["00204c", "213d6b", "555b6c", "7b7a77", "a59c74", "d3c064", "ffe945",
+//     "ffffff"
+// ]
+//   var p4 = p.log()
+// var p3 = (convolve_neighborhood(p.log())) 
+// var p2 = (convolve_circle(p.log())) 
+// Map.addLayer(p2, {
+//     palette: pal,
+//     min: 1.73,
+//     max: 5.52
+// }, 'circle')
+// Map.addLayer(p3.multiply(25).round().divide(25).focal_min().focal_max(), {
+//     palette: pal,
+//     min: 1.73,
+//     max: 5.52
+// }, 'nhood')
+// Map.addLayer(p4, {
+//     palette: pal,
+//     min: 1.73,
+//     max: 5.52
+// }, 'orignial')
+// Map.addLayer(p, {
+//     bands: ["log_phosphorus_concentration_ug_per_L"],
+//     palette: pal,
+//     min: 1.73,
+//     max: 5.52
+// }, 'p')
+// }
 
-Export.image.toAsset({
-  image: ee.Image.cat(tss,tss_load),
-  scale:10,
-  maxPixels:1e13,
-  region:PugetSound
-})
-test_data()
+// Export.image.toAsset({
+//   image: ee.Image.cat(tss,tss_load),
+//   scale:10,
+//   maxPixels:1e13,
+//   region:PugetSound
+// })
+// test_data()
