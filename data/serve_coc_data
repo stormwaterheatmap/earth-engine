@@ -17,7 +17,8 @@ var imageVisParam = {"opacity":1,"bands":["copper_concentration_ug_per_L"],"max"
     tkn = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/tkn_5m"),
     copper = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/total_copper_5m"),
     tss = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/tss_5m"),
-    p = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/total_p_15m");
+    p = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/total_p_15m"),
+    PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * Script to convolve and log transform coc data for data_dict
@@ -100,7 +101,7 @@ var pal = ["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"];
 //Map.addLayer(tkn.select(1).resample(),{palette: pal,min:5.27,max:6.5},'tkn resamp')
 //Map.addLayer(tkn.select(1),{palette: pal,min:5.27,max:6.5},'tkn')
 
-var PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask")
+
 
 p = p.rename(['p_concentration_ug_per_L', 'log_p_concentration_ug_per_L']);
 tss = tss.rename(['tss_concentration_ug_per_L', 'log_tss_concentration_mg_per_L']);
