@@ -707,7 +707,7 @@ var cocs = {
             "eeObject": coc_layers.p,
             "name": "Total Phosphorus",
             "visParams": {
-                "bands": "log_phosphorus_concentration_ug_per_L",
+                "bands": "log_p_concentration_ug_per_L",
                 "min": 0,
                 "max": 5.298,
                 "palette": coc_pal,
@@ -868,3 +868,7 @@ exports.display_imgs = display_imgs
 exports.vector_dict = vector_dict
 exports.rasters = rasters
 exports.cocs = cocs
+
+print(cocs)
+
+Map.addLayer(cocs["Total Phosphorus Concentration"].layer)
