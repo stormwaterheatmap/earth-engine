@@ -870,5 +870,3 @@ exports.rasters = rasters
 exports.cocs = cocs
 
 print(cocs)
-
-Map.addLayer(cocs["Total Phosphorus Concentration"].layer)
