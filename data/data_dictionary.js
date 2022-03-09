@@ -595,7 +595,7 @@ for (var i = 0; i < layNames.length; i++) {
  * Bring in coc data and create a seperate data dictionary 
  */
 
-var coc_layers = require("users/stormwaterheatmap/coc_layers:serve_coc_data")
+var coc_layers = require("users/stormwaterheatmap/apps:data/serve_coc_data")
 
 //Common palette for all cocs: 
 var coc_pal = ["042333", "2c3395", "744992", "b15f82", "eb7958", "fbb43d", "e8fa5b", "ffffff"]
