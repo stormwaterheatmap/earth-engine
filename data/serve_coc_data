@@ -113,7 +113,7 @@ exports.copper = copper
 exports.zinc = zinc
 exports.tkn = tkn
 
-Map.addLayer(p.multiply(100).round().divide(100))
+//Map.addLayer(p.multiply(100).round().divide(100))
 
 //print(ui.Chart.image.histogram({image:tkn.select(1),scale:100,region:geometry}))
 //print(zinc.reduce('max'))
