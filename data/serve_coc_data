@@ -158,10 +158,10 @@ var zinc_load = zinc.select(0).unmask()
 //Map.addLayer(tkn_load)
 
 exports.p_load = p_load
-exports.tss_load = tss_load.ren
-exports.copper_load = copper_load.rename(['
-exports.tkn_load = tkn_load.ren
-exports.zinc_load = zinc_load.renam
+exports.tss_load = tss_load
+exports.copper_load = copper_load
+exports.tkn_load = tkn_load
+exports.zinc_load = zinc_load
 //Map.addLayer(tss_load).r
 
 print(tss)
