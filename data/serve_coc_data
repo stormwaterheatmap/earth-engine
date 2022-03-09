@@ -102,12 +102,17 @@ var pal = ["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"];
 
 var PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask")
 
+p = p.rename(['p_concentration_ug_per_L', 'log_p_concentration_ug_per_L']);
+tss = tss.rename(['tss_concentration_ug_per_L', 'log_tss_concentration_mg_per_L']);
+copper = copper.reaname(['copper_concentration_ug_per_L', 'log_copper_concentration_ug_per_L']);
+tkn = tkn.rename(['tkn_concentration_ug_per_L', 'log_tkn_concentration_ug_per_L']);
+zinc = zinc.rename(['zinc_concentration_ug_per_L', 'log_zinc_concentration_ug_per_L']);
+
 exports.p = p
 exports.tss = tss
 exports.copper = copper
-exports.zinc = zinc
 exports.tkn = tkn
-
+exports.zinc =zinc 
 //Map.addLayer(p.multiply(100).round().divide(100))
 
 //print(ui.Chart.image.histogram({image:tkn.select(1),scale:100,region:geometry}))
@@ -152,12 +157,12 @@ var zinc_load = zinc.select(0).unmask()
 
 //Map.addLayer(tkn_load)
 
-exports.p_load = p_load.rename(['p_concentration_ug_per_L', 'log_p_concentration_ug_per_L']);
-exports.tss_load = tss_load.rename(['tss_concentration_ug_per_L', 'log_tss_concentration_mg_per_L']);
-exports.copper_load = copper_load.rename(['copper_concentration_ug_per_L', 'log_copper_concentration_ug_per_L']);
-exports.tkn_load = tkn_load.rename(['tkn_concentration_ug_per_L', 'log_tkn_concentration_ug_per_L']);
-exports.zinc_load = zinc_load.rename(['zinc_concentration_ug_per_L', 'log_zinc_concentration_ug_per_L']);
-//Map.addLayer(tss_load).rename(['tss_concentration_ug_peran), 'log_tss_concentration_ug_per']);
+exports.p_load = p_load
+exports.tss_load = tss_load.ren
+exports.copper_load = copper_load.rename(['
+exports.tkn_load = tkn_load.ren
+exports.zinc_load = zinc_load.renam
+//Map.addLayer(tss_load).r
 
 print(tss)
 
