@@ -4,7 +4,7 @@
 ui.root.setLayout(ui.Panel.Layout.absolute());
 
 // data 
-var data = require('users/stormwaterheatmap/apps:data/data_dictionary')
+var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts 
