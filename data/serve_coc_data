@@ -31,12 +31,10 @@ var imageVisParam = {"opacity":1,"bands":["copper_concentration_ug_per_L"],"max"
  
 //import cocs image 
 var PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask")
-//var image = ee.Image("projects/ee-stormwaterheatmap/assets/all_cocs_feb22")
-//zinc and tkn are on a seperate layer
-//var zinc_tkn = ee.Image("projects/ee-stormwaterheatmap/assets/zinc_tkn_feb22") 
+
 var water_areas = water_mask.neq(1)
 //image = image.where(water_mask.neq(1),0) //sets water to zero concentrations 
-//zinc_tkn = zinc_tkn.where(water_mask.neq(1),0)//sets water to zero concentrations 
+
 var copper = copper.select(0)
 var p = p.select(0)
 var tss =tss // image.select(2)
@@ -96,11 +94,11 @@ tkn = convolve_circle(tkn.addBands(
     )) 
     
     
-//map.addLayer(p.focal_mode())
-//map.addLayer(copper)
-//map.addLayer(zinc)
-//map.addLayer(tss)
-//map.addLayer(tkn)
+// Map.addLayer(p.focal_mode())
+// Map.addLayer(copper)
+// Map.addLayer(zinc)
+// Map.addLayer(tss)
+// Map.addLayer(tkn)
 
 var pal = ["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"];
 //Map.addLayer(zinc.select(1),{palette: pal,min:1.75,max:5.75},'zinc')
@@ -177,40 +175,40 @@ print(tss)
 // Map.addLayer(copper_load,{palette: load_pal,min:0,max:40},"copper_load ")
 
 
-// function test_data(){
-//   var pal = ["00204c", "213d6b", "555b6c", "7b7a77", "a59c74", "d3c064", "ffe945",
-//     "ffffff"
-// ]
-//   var p4 = p.log()
-// var p3 = (convolve_neighborhood(p.log())) 
-// var p2 = (convolve_circle(p.log())) 
-// Map.addLayer(p2, {
-//     palette: pal,
-//     min: 1.73,
-//     max: 5.52
-// }, 'circle')
-// Map.addLayer(p3.multiply(25).round().divide(25).focal_min().focal_max(), {
-//     palette: pal,
-//     min: 1.73,
-//     max: 5.52
-// }, 'nhood')
-// Map.addLayer(p4, {
-//     palette: pal,
-//     min: 1.73,
-//     max: 5.52
-// }, 'orignial')
-// Map.addLayer(p, {
-//     bands: ["log_phosphorus_concentration_ug_per_L"],
-//     palette: pal,
-//     min: 1.73,
-//     max: 5.52
-// }, 'p')
-// }
+function test_data(){
+  var pal = ["00204c", "213d6b", "555b6c", "7b7a77", "a59c74", "d3c064", "ffe945",
+    "ffffff"
+]
+  var p4 = p.log()
+var p3 = (convolve_neighborhood(p.log())) 
+var p2 = (convolve_circle(p.log())) 
+Map.addLayer(p2, {
+    palette: pal,
+    min: 1.73,
+    max: 5.52
+}, 'circle')
+Map.addLayer(p3.multiply(25).round().divide(25).focal_min().focal_max(), {
+    palette: pal,
+    min: 1.73,
+    max: 5.52
+}, 'nhood')
+Map.addLayer(p4, {
+    palette: pal,
+    min: 1.73,
+    max: 5.52
+}, 'orignial')
+Map.addLayer(p, {
+    bands: ["log_phosphorus_concentration_ug_per_L"],
+    palette: pal,
+    min: 1.73,
+    max: 5.52
+}, 'p')
+}
 
-// Export.image.toAsset({
-//   image: ee.Image.cat(tss,tss_load),
-//   scale:10,
-//   maxPixels:1e13,
-//   region:PugetSound
-// })
-//test_data()
+Export.image.toAsset({
+  image: ee.Image.cat(tss,tss_load),
+  scale:10,
+  maxPixels:1e13,
+  region:PugetSound
+})
+test_data()
