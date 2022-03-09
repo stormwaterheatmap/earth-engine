@@ -1,0 +1,216 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var imageVisParam = {"opacity":1,"bands":["copper_concentration_ug_per_L"],"max":4.739789376042651,"palette":["00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","ffffff"]},
+    imageVisParam2 = {"opacity":1,"bands":["p_concentration_ug_per_L"],"min":-1.8267353490226679,"max":5.821792908253501,"palette":["00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","ffffff"]},
+    imageVisParam3 = {"opacity":1,"bands":["tss_load_kg_m2_yr"],"min":-3.018483190510181e-63,"max":1.444929978277535e-62,"palette":["440154","433982","30678d","218f8b","36b677","8ed542","fde725"]},
+    imageVisParam4 = {"opacity":1,"bands":["p_load_mg_m2_yr"],"max":120,"palette":["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"]},
+    geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-122.08183061556645, 47.80259519144119],
+          [-122.08183061556645, 47.55387096575602],
+          [-121.63139116244145, 47.55387096575602],
+          [-121.63139116244145, 47.80259519144119]]], null, false),
+    PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound"),
+    water_mask = ee.Image("projects/ee-stormwaterheatmap/assets/water_mask"),
+    zinc = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/zinc_5m"),
+    tkn = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/tkn_5m"),
+    copper = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/total_copper_5m"),
+    tss = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/tss_5m"),
+    p = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/total_p_15m");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+/**
+ * Script to convolve and log transform coc data for data_dict
+ * @package
+ */
+ 
+//import cocs image 
+var PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask")
+//var image = ee.Image("projects/ee-stormwaterheatmap/assets/all_cocs_feb22")
+//zinc and tkn are on a seperate layer
+//var zinc_tkn = ee.Image("projects/ee-stormwaterheatmap/assets/zinc_tkn_feb22") 
+var water_areas = water_mask.neq(1)
+//image = image.where(water_mask.neq(1),0) //sets water to zero concentrations 
+//zinc_tkn = zinc_tkn.where(water_mask.neq(1),0)//sets water to zero concentrations 
+var copper = copper.select(0)
+var p = p.select(0)
+var tss =tss // image.select(2)
+var tkn = tkn//zinc_tkn.select('tkn_concentration_ug_per_L')
+var zinc = zinc// zinc_tkn.select('zinc_concentration_ug_per_L')
+
+function convolve_circle(image) {
+    var kernel = ee.Kernel.square({
+        radius: 100 //,sigma:50
+            ,
+        units: 'meters',
+        normalize: true
+    })
+    image = image.reduceNeighborhood({
+        reducer: ee.Reducer.mean(),
+        kernel: kernel,
+        skipMasked: true, 
+        optimization: 'boxcar'
+    })
+    
+    return (image)
+}
+
+var PugetSound = ee.FeatureCollection("users/stormwaterheatmap/tables/PugetSound")
+var lc_watermask =  ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2").select('MSK').mode().unmask().neq(3)
+var states = ee.FeatureCollection("TIGER/2018/States")
+var WA = (states.filterBounds(ee.Geometry.Point([-121.88744707683945, 48.53868378420125])))
+
+p = convolve_circle(p.addBands(
+  (p).log().rename(
+    "log_phosphorus_concentration_ug_per_L")
+  ))
+
+
+tss = convolve_circle(tss.addBands(
+  (tss.divide(1000)).log().rename(
+    "log_tss_concentration_mg_per_L")
+    ))
+    
+
+    
+copper = convolve_circle(copper.addBands(
+  copper.log().rename(
+    "log_copper_concentration_ug_per_L")
+    ))
+    
+
+
+zinc = convolve_circle(zinc.addBands(
+  zinc.log().rename(
+    "log_zinc_concentration_ug_per_L")
+    ))
+    
+tkn = convolve_circle(tkn.addBands(
+  (tkn).log().rename(
+    "log_tkn_concentration_ug_per_L")
+    )) 
+    
+    
+//map.addLayer(p.focal_mode())
+//map.addLayer(copper)
+//map.addLayer(zinc)
+//map.addLayer(tss)
+//map.addLayer(tkn)
+
+var pal = ["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"];
+//Map.addLayer(zinc.select(1),{palette: pal,min:1.75,max:5.75},'zinc')
+//Map.addLayer(tkn.select(1).resample(),{palette: pal,min:5.27,max:6.5},'tkn resamp')
+//Map.addLayer(tkn.select(1),{palette: pal,min:5.27,max:6.5},'tkn')
+
+var PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask")
+
+exports.p = p
+exports.tss = tss
+exports.copper = copper
+exports.zinc = zinc
+exports.tkn = tkn
+
+Map.addLayer(p.multiply(100).round().divide(100))
+
+//print(ui.Chart.image.histogram({image:tkn.select(1),scale:100,region:geometry}))
+//print(zinc.reduce('max'))
+//get runoff data from raw_data
+
+var data_raw = require("users/stormwaterheatmap/apps:data/data_raw")
+
+var q_mm = data_raw.mean_annual_runoff.rename(
+    'mean_annual_runoff_mm').unmask()//.resample()
+
+//print(tss)
+var tss_load = tss.select(0)//.unmask()
+    .multiply(q_mm).multiply(1e-6)
+    .rename(
+        'tss_load_g_m2_yr').focal_mean(
+        1).clip(PugetSound).clip(WA).mask(PugetSound_mask)
+        
+var copper_load = copper.select(0)
+    .unmask().multiply(q_mm).multiply(
+        1e-3)
+    .rename('copper_load_mg_m2_yr')
+    .focal_mean(1).mask(PugetSound_mask)////.water_mask)
+    
+var p_load = p.select(0).unmask()
+    .multiply(q_mm).multiply(1e-3)
+    .rename(
+        'p_load_mg_m2_yr').focal_mean(1).mask(PugetSound_mask)
+    ////.water_mask)
+    
+var tkn_load = tkn.select(0).unmask()
+    .multiply(q_mm).multiply(1e-3)
+    .rename(
+        'tkn_load_mg_m2_yr').focal_mean(1).mask(PugetSound_mask)
+    ////.water_mask)
+
+var zinc_load = zinc.select(0).unmask()
+    .multiply(q_mm).multiply(1e-3)
+    .rename(
+        'zinc_load_mg_m2_yr').focal_mean(1).mask(PugetSound_mask)
+   // //.water_mask)
+
+//Map.addLayer(tkn_load)
+
+exports.p_load = p_load
+exports.tss_load = tss_load
+exports.copper_load = copper_load
+exports.tkn_load = tkn_load
+exports.zinc_load = zinc_load
+//Map.addLayer(tss_load)
+
+print(tss)
+
+// print(tss_load)
+// //var palettes = require('users/gena/packages:palettes');
+// var load_pal = ["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"];
+
+// Map.addLayer(tss_load,{palette: load_pal,min:0,max:40},"tss load")
+// Map.addLayer(p_load,{palette: load_pal,min:0,max:120}," p_load")
+// Map.addLayer(copper_load,{palette: load_pal,min:0,max:40},"copper_load ")
+
+
+// function test_data(){
+//   var pal = ["00204c", "213d6b", "555b6c", "7b7a77", "a59c74", "d3c064", "ffe945",
+//     "ffffff"
+// ]
+//   var p4 = p.log()
+// var p3 = (convolve_neighborhood(p.log())) 
+// var p2 = (convolve_circle(p.log())) 
+// Map.addLayer(p2, {
+//     palette: pal,
+//     min: 1.73,
+//     max: 5.52
+// }, 'circle')
+// Map.addLayer(p3.multiply(25).round().divide(25).focal_min().focal_max(), {
+//     palette: pal,
+//     min: 1.73,
+//     max: 5.52
+// }, 'nhood')
+// Map.addLayer(p4, {
+//     palette: pal,
+//     min: 1.73,
+//     max: 5.52
+// }, 'orignial')
+// Map.addLayer(p, {
+//     bands: ["log_phosphorus_concentration_ug_per_L"],
+//     palette: pal,
+//     min: 1.73,
+//     max: 5.52
+// }, 'p')
+// }
+
+// Export.image.toAsset({
+//   image: ee.Image.cat(tss,tss_load),
+//   scale:10,
+//   maxPixels:1e13,
+//   region:PugetSound
+// })
+//test_data()
