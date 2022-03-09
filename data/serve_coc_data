@@ -104,7 +104,7 @@ var PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundM
 
 p = p.rename(['p_concentration_ug_per_L', 'log_p_concentration_ug_per_L']);
 tss = tss.rename(['tss_concentration_ug_per_L', 'log_tss_concentration_mg_per_L']);
-copper = copper.reaname(['copper_concentration_ug_per_L', 'log_copper_concentration_ug_per_L']);
+copper = copper.rename(['copper_concentration_ug_per_L', 'log_copper_concentration_ug_per_L']);
 tkn = tkn.rename(['tkn_concentration_ug_per_L', 'log_tkn_concentration_ug_per_L']);
 zinc = zinc.rename(['zinc_concentration_ug_per_L', 'log_zinc_concentration_ug_per_L']);
 
