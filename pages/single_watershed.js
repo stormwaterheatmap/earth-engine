@@ -624,7 +624,8 @@ function makeReports() {
         make_load_panel(clicked_basin_geom, report_scale),
     ]);
     //add it to the analyzePanel 
-    analyzePanel.add(load_card);
+    //need to check on units here
+    //analyzePanel.add(load_card);
 }
 
 /* 
