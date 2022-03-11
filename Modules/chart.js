@@ -260,7 +260,7 @@ var reduction_results = area_image_with_landcover_class.reduceRegion({
     groupName: 'landcover_class_value',
   }),
   geometry: geometry,
-  scale: 30,
+  scale: scale,
   bestEffort: true,
 });
 print('reduction_results', reduction_results);
