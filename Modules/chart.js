@@ -296,7 +296,7 @@ exports.pieChart = makePieChart
 function coc_mean_conc(layerObj, region, scale) {
   //text for loading whil calucations happen 
   var units = layerObj.units;
-  print('conversion_factor',conversion_factor)
+  //print('conversion_factor',conversion_factor)
   var loading = 'loading...';
   var bigNum = ui.Label({
     value: loading,
@@ -630,7 +630,7 @@ function littleNum(layerObj, region, scale, reducerType) {
       })
       .get(layerObj.layer.eeObject.bandNames()
         .get(0)));
-        print('mean')
+        //print('mean')
     reduced.evaluate(function (result) {
       // When the server returns the value, show it.
       bigNum.setValue(result.toFixed(0));
@@ -653,7 +653,7 @@ function littleNum(layerObj, region, scale, reducerType) {
     });
   } else if (reducerType == 'percent') {
     //reduced = reduced.toFixed()
-    print('percent');
+    //print('percent');
     reduced = ee.Number((layerObj.layer.eeObject)
       .multiply(ee.Image(100))
       .reduceRegion({
