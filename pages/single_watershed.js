@@ -323,7 +323,8 @@ function makeMapPanel() {
 // layer drop down
 function make_layer_dropdown() {
     var layers_list = data.cocs;
-
+    
+    layers_list["Land Cover"] = data.rasters["Land Cover"];
     layers_list["Flow Duration Index"] = data.rasters["Flow Duration Index"];
     layers_list["Imperviousness"] = data.rasters["Imperviousness"];
     layers_list["Population Density"] = data.rasters["Population Density"];
@@ -546,7 +547,7 @@ function makeReports() {
     
     //make the fdr panel 
     var fdr_chart = charts.simpleBar(fdr.get("flow_duration_index"))
-    
+    fdr_chart.style().set({height: '120px'})
     var fdr_panel = ui.Panel({
       widgets: [
         ui.Label({
@@ -588,6 +589,8 @@ function makeReports() {
     var landcover_card = cards("Land Cover", 
     [hline(), landcover_chart
     ]);
+    
+    analyzePanel.add(landcover_card)
   
     // ========================================================================== //
     //   Pollutant Concentrations 
