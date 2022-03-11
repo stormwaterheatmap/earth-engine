@@ -283,7 +283,7 @@ var landcover_summary_chart = ui.Chart.feature.byFeature({
     slices: createPieChartSliceDictionary(landcover_fc),
     sliceVisibilityThreshold: 0 // Don't group small slices.
   });
-//print(landcover_summary_chart);
+return landcover_summary_chart
 
 function toString(number) {
   return ee.Number(number).format('%d')
