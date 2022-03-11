@@ -279,9 +279,10 @@ var landcover_summary_chart = ui.Chart.feature.byFeature({
   .setChartType('PieChart')
   .setOptions({
     //pieHole: 0.3,
+    legend: {position: 'labeled'}, 
     title: 'Summary of landcover class areas (sq.km)',
     slices: createPieChartSliceDictionary(landcover_fc),
-    sliceVisibilityThreshold: 0 // Don't group small slices.
+    sliceVisibilityThreshold: 0.05 // Don't group small slices.
   });
 return landcover_summary_chart
 
