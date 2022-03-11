@@ -210,98 +210,86 @@ function histogramImage(layerObj, WS, scale) {
   return chart;
 }
 exports.histogramImage = histogramImage;
-var makePieChart = function (
-  geometry, properties, scale, holeSize) {
-  var AOI = geometry;
-  var image = properties.layer.eeObject
-  var withArea = (ee.Image.pixelArea()
-      .divide(4046.86))
-    .addBands(image); //acres
-  //var clipImage = withArea.clip(AOI)
-  //////////////////////////////////////////////////////////////
-  // Calculations
-  //////////////////////////////////////////////////////////////
-  var lookup_names = ee.Dictionary.fromLists(
-    ee.List(properties.values)
-    .map(ee.String),
-    properties.labels
-  );
-  // print('lookup names', lookup_names)
-  var lookup_palette = ee.Dictionary.fromLists(
-    ee.List(properties.values)
-    .map(ee.String),
-    properties.layer.visParams.palette
-  );
-  // print(ee.List(lookup_palette))
-  //////////////////////////////////////////////////////////////   // Helper functions    //////////////////////////////////////////////////////////////
-  function createFeature(transition_class_stats) {
-    transition_class_stats = ee.Dictionary(transition_class_stats);
-    var class_number = transition_class_stats.get('class value');
-    var result = {
-      transition_class_number: class_number,
-      Class: lookup_names.get(class_number),
-      transition_class_palette: lookup_palette.get(class_number),
-      Area: transition_class_stats.get('sum')
-    };
-    return ee.Feature(null,
-      result); // Creates a feature without a geometry.
-  }
-  // Create a JSON dictionary that defines piechart colors based on thetransition class palette.
-  // https://developers.google.com/chart/interactive/docs/gallery/piechart
-  function createPieChartSliceDictionary(fc) {
-    return ee.List(fc.aggregate_array("transition_class_palette"))
-    // .map(function (p) {
-    //return {
-    //   'color': p
-    //};
-  }
-  //var classValue = image.get('system:title')
-  //print(classValue)
-  var reduction_results = withArea.reduceRegion({
-    reducer: ee.Reducer.sum()
-      .group({
-        groupField: 1,
-        groupName: 'class value',
-      }),
-    geometry: AOI,
-    scale: scale,
-    bestEffort: true,
+
+function makePieChart(landcover_dict,geometry,scale){
+// Create a feature for a landcover class that includes the area covered.
+function createFeature(landcover_class_stats) {
+  landcover_class_stats = ee.Dictionary(landcover_class_stats);
+  var class_number = landcover_class_stats.get('landcover_class_value');
+  var result = {
+    landcover_class_number: class_number,
+    landcover_class_name: lookup_names.get(class_number),
+    landcover_class_palette: lookup_palette.get(class_number),
+    area_km2: ee.Number(landcover_class_stats.get('sum')).divide(1000*1000)
+  };
+  return ee.Feature(null, result); // Creates a feature without a geometry.
+}
+
+// Create a JSON dictionary that defines piechart colors based on the
+// landcover class palette.
+// https://developers.google.com/chart/interactive/docs/gallery/piechart
+function createPieChartSliceDictionary(fc) {
+  return ee.List(fc.aggregate_array("landcover_class_palette"))
+    .map(function(p) {
+      return {
+        'color': p
+      };
+    }).getInfo();
+}
+
+//////////////////////////////////////////////////////////////
+// Calculations
+//////////////////////////////////////////////////////////////
+
+// Create a dictionary for looking up names of landcover classes.
+var lookup_names = ee.Dictionary.fromLists(
+  ee.List(landcover_dict['values']),//.map(toString),
+  landcover_dict['labels']
+);
+// Create a dictionary for looking up colors of landcover classes.
+var lookup_palette = ee.Dictionary.fromLists(
+  ee.List(landcover_dict['values']),//.map(toString),
+  ee.List(landcover_dict.layer.visParams.palette)
+);
+print('lookup_palette', lookup_palette)
+// Summarize landcover classes in a region of interest.
+var area_image_with_landcover_class = ee.Image.pixelArea().addBands(landcover);
+var reduction_results = area_image_with_landcover_class.reduceRegion({
+  reducer: ee.Reducer.sum().group({
+    groupField: 1,
+    groupName: 'landcover_class_value',
+  }),
+  geometry: geometry,
+  scale: 30,
+  bestEffort: true,
+});
+print('reduction_results', reduction_results);
+
+var roi_stats = ee.List(reduction_results.get('groups'));
+print('roi_stats', roi_stats)
+var landcover_fc = ee.FeatureCollection(roi_stats.map(createFeature));
+print('landcover_fc', landcover_fc);
+
+// Add a summary chart.
+var landcover_summary_chart = ui.Chart.feature.byFeature({
+    features: landcover_fc,
+    xProperty: 'landcover_class_name',
+    yProperties: ['area_km2', 'landcover_class_number']
+  })
+  .setChartType('PieChart')
+  .setOptions({
+    //pieHole: 0.3,
+    title: 'Summary of landcover class areas (sq.km)',
+    slices: createPieChartSliceDictionary(landcover_fc),
+    sliceVisibilityThreshold: 0 // Don't group small slices.
   });
-  //   print('reduction_results', reduction_results);
-  var roi_stats = ee.List(reduction_results.get('groups'));
-  //    print('roi stats', roi_stats)
-  var transition_fc = ee.FeatureCollection(roi_stats.map(createFeature))
-    .
-  sort('Area', false);
-  //  print('transition_fc', transition_fc);
-  // Add a summary chart.
-  var transition_summary_chart =
-    ui.Chart.feature.byFeature({
-      features: transition_fc,
-      xProperty: 'Class',
-      yProperties: ['Area'] // 'transition_class_number']
-    })
-    .setChartType('PieChart') //le')
-  //.evaluate(function(result) {
-  // When the server returns the value, show it.
-  return transition_summary_chart.setOptions({
-    pieHole: holeSize,
-    is3D: true,
-    //   legend: {
-    //       position: 'none'
-    //    },
-    //     chartArea: {
-    //      height: '100%',
-    //     width: '100%'
-    //   },
-    pieSliceText: 'label',
-    title: properties.layer.name,
-    //  pieStartAngle: 100,
-    slices: createPieChartSliceDictionary(transition_fc)
-      .evaluate,
-    sliceVisibilityThreshold: 0.05
-  });
-};
+print(landcover_summary_chart);
+
+function toString(number) {
+  return ee.Number(number).format('%d')
+}
+}
+
 //
 exports.pieChart = makePieChart
 
