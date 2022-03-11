@@ -30,7 +30,4 @@ var lc = data.rasters["Land Cover"]
 
 var chart = charts.pieChart(lc,geometry,100)
 
-chart.setOptions({
-  legend: {position: 'none'}
-})
 print(chart)
