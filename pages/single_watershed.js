@@ -397,6 +397,20 @@ function make_intro_text_panel() {
 // ========================================================================== //
 // Report functions 
 
+
+/**
+ * 
+ * @param {geometry} region 
+ * @param {integer} scale 
+ * @returns ui.chart with landcover summary 
+ */
+function make_landcover_chart(region, scale){
+  var landcover_object = data.rasters["Land Cover"]
+  var chart = charts.pieChart(landcover_object,region,scale)
+  return(chart)
+}
+
+
 /**
  * 
  * @param {geometry} region 
@@ -482,6 +496,14 @@ function makeReports() {
         report_scale,
         "mean"
     );
+        // Runoff 
+        var runoff_num = charts.littleNum(
+        layerProperties["Runoff (mm)"],
+        clicked_basin_geom,
+        report_scale,
+        "mean"
+    );
+    
     // Imperviousness 
     var impNum = charts.littleNum(
         layerProperties.Imperviousness,
@@ -489,13 +511,8 @@ function makeReports() {
         report_scale,
         "percent"
     );
-    // Runoff 
-    var runoff_num = charts.littleNum(
-        layerProperties["Runoff (mm)"],
-        clicked_basin_geom,
-        report_scale,
-        "mean"
-    );
+    // Land cover 
+   
     
  
     
@@ -557,6 +574,7 @@ function makeReports() {
       
     var watershed_info_card = cards("Hydrology Info", [
         hline(),
+        //landcover_chart, 
         watershed_info_panel,
         hline(), 
         fdr_panel
@@ -564,6 +582,12 @@ function makeReports() {
 
     // add it to the analyzePanel
     analyzePanel.add(watershed_info_card);
+    
+    // Landcover 
+     var landcover_chart = make_landcover_chart(clicked_basin_geom,report_scale)
+    var landcover_card = cards("Land Cover", 
+    [hline(), landcover_chart
+    ]);
   
     // ========================================================================== //
     //   Pollutant Concentrations 
