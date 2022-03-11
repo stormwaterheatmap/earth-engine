@@ -263,12 +263,12 @@ var reduction_results = area_image_with_landcover_class.reduceRegion({
   scale: scale,
   bestEffort: true,
 });
-print('reduction_results', reduction_results);
+//print('reduction_results', reduction_results);
 
 var roi_stats = ee.List(reduction_results.get('groups'));
-print('roi_stats', roi_stats)
+//print('roi_stats', roi_stats)
 var landcover_fc = ee.FeatureCollection(roi_stats.map(createFeature));
-print('landcover_fc', landcover_fc);
+//print('landcover_fc', landcover_fc);
 
 // Add a summary chart.
 var landcover_summary_chart = ui.Chart.feature.byFeature({
@@ -283,7 +283,7 @@ var landcover_summary_chart = ui.Chart.feature.byFeature({
     slices: createPieChartSliceDictionary(landcover_fc),
     sliceVisibilityThreshold: 0 // Don't group small slices.
   });
-print(landcover_summary_chart);
+//print(landcover_summary_chart);
 
 function toString(number) {
   return ee.Number(number).format('%d')
