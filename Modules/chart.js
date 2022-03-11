@@ -253,7 +253,7 @@ var lookup_palette = ee.Dictionary.fromLists(
 );
 print('lookup_palette', lookup_palette)
 // Summarize landcover classes in a region of interest.
-var area_image_with_landcover_class = ee.Image.pixelArea().addBands(landcover);
+var area_image_with_landcover_class = ee.Image.pixelArea().addBands(landcover_dict.layer.eeObject);
 var reduction_results = area_image_with_landcover_class.reduceRegion({
   reducer: ee.Reducer.sum().group({
     groupField: 1,
