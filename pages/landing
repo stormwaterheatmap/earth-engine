@@ -22,7 +22,7 @@ layer_types["Input Data Layers"] = {
   //"Population": rasters["Population"], 
   "Population Density": rasters["Population Density"], 
   //"Precipitation (in)": rasters["Precipitation (in)"], 
-  "Precipitation": rasters["Precipitation"], 
+  "Precipitation (mm)": rasters["Precipitation (mm)"], 
  //  "Runoff (in)": rasters["Runoff (in)"], 
  // "Runoff (mm)": rasters["Runoff (mm)"], 
   "Slope": rasters["Slope"], 
@@ -34,7 +34,7 @@ layer_types["Hydrology Data Layers"]={
   "Flow Duration Index": rasters["Flow Duration Index"], 
   "Hydrologic Response Units": rasters["Hydrologic Response Units"], 
  // "Runoff (in)": rasters["Runoff (in)"], 
-  "Runoff": rasters["Runoff"]
+  "Runoff (mm)": rasters["Runoff (mm)"]
   
 }
 
@@ -83,8 +83,8 @@ var legendPanel = ui.Panel({style:{position:'bottom-right',shown:false, minWidth
 Map.add(legendPanel)
 var select_layer_type = ui.Select({
   items: Object.keys(layer_types),
-  placeholder: "Select Layer Type", 
-  //value: Object.keys(layer_types)[0], 
+  //placeholder: "Select Layer Type", 
+  value: Object.keys(layer_types)[2], 
   onChange: function() {
     var layer_dict = layer_types[select_layer_type.getValue()]; 
     //print(layer_dict)
@@ -104,14 +104,16 @@ var select_layer_type = ui.Select({
   }
   
   });
-//select_layer_type.setValue("Pollutant Loading")
 
 
+print(layer_types,'layer_types')
 
 var secondname_select = ui.Select({items: 
   Object.keys(layer_types["Pollutant Loading"]),
   onChange: function(result) {
-          var layer_obj = data.rasters[result]
+        var layer_type = select_layer_type.getValue()
+        print(layer_type)
+          var layer_obj = layer_types[layer_type][result]
           legendPanel.style().set({shown:true})
           helpers.clear_map_add_layer(layer_obj,legendPanel)
         }
