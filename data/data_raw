@@ -6,7 +6,11 @@ var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds"),
     imageVisParam2 = {"opacity":1,"bands":["tss_mg_m2_yr"],"min":2572.7889242624424,"max":25450.068148609607,"palette":["0000ff","ffff00","ffffff"]},
     imageVisParam3 = {"opacity":1,"bands":["tss_mg_m2_yr"],"max":50000,"palette":["352a87","056ede","089bce","33b7a0","a3bd6a","f9bd3f","f9fb0e"]},
     table2 = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits"),
-    cityLimits = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits");
+    cityLimits = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits"),
+    table3 = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
+    table4 = ee.FeatureCollection("USGS/WBD/2017/HUC10"),
+    table5 = ee.FeatureCollection("USGS/WBD/2017/HUC02"),
+    table6 = ee.FeatureCollection("USGS/WBD/2017/HUC04");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
 * Author: Christian Nilsen, Geosyntec Consultants 
@@ -30,7 +34,7 @@ exports.counties = ee.FeatureCollection(
   .filterBounds(
     PugetSound)
 exports.HUC12 = ee.FeatureCollection(
-   "projects/ee-stormwaterheatmap/assets/HUC12");
+   "projects/ee-stormwaterheatmap/assets/huc12");
 exports.HUC10 = ee.FeatureCollection(
     "USGS/WBD/2017/HUC10")
   .filterBounds(
