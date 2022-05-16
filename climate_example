@@ -1,6 +1,9 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image = ee.Image("projects/ee-stormwaterheatmap/assets/production/Mean_Annual_Q_8_epochs"),
-    geometry = /* color: #d63000 */ee.Geometry.Point([-122.07017343864267, 47.54032480863896]);
+    geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    ee.Geometry.Point([-122.07017343864267, 47.54032480863896]);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
 var water = ee.Image("JRC/GSW1_3/GlobalSurfaceWater").select('occurrence')
@@ -25,9 +28,32 @@ Map.addLayer(Runoff)
 
 // Get Red and SWIR value lists; to be plotted along x and y axes, respectively.
 // Note that the pixelVals object is defined in the previous code block.
-var pixelVals = Runoff.eeObject.reduceRegion(
-    {reducer: ee.Reducer.mean(), geometry: geometry, scale: 10});
-print(pixelVals)
+
+
+var chartPanel = ui.Panel()
+
+
+// Create the title label.
+var title = ui.Label('Click to inspect');
+title.style().set('position', 'top-center');
+Map.add(title);
+
+// Create a panel to hold the chart.
+var panel = ui.Panel();
+panel.style().set({
+  width: '400px',
+  position: 'bottom-right'
+});
+Map.add(panel);
+
+// Register a function to draw a chart when a user clicks on the map.
+Map.onClick(function(coords) {
+  panel.clear();
+  var point = ee.Geometry.Point(coords.lon, coords.lat);
+  
+  var pixelVals = Runoff.eeObject.reduceRegion(
+    {reducer: ee.Reducer.mean(), geometry: point, scale: 10});
+
 var x = ee.List([1980,2030,2040,2050,2060,2070,2080]);
 var y = ee.List(pixelVals.values());
 
@@ -38,9 +64,11 @@ var chart = ui.Chart.array.values({array: y, axis: 0, xLabels: x})
 chart.setOptions({
    title: 'Estimated runoff over time',
   vAxis: {title: 'Mean Annual Runoff (mm)', 
-    //  viewWindow: {min: 0}
+   
   },
-  hAxis: {title: 'year', format: ''},
+  hAxis: {title: 'year',  format: '####',
+      viewWindow: {min: 1970,max:2100}
+  },
   pointSize: 4,
   
  // explorer: {},
@@ -56,6 +84,8 @@ chart.setOptions({
     }
   }
 })
-Map.add(chart);
+
+  panel.add(chart);
+});
 
 
