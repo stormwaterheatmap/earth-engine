@@ -88,4 +88,4 @@ chart.setOptions({
   panel.add(chart);
 });
 
-
+Map.setCenter(-122.158,47.6023,12)
