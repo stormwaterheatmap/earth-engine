@@ -683,7 +683,7 @@ function mapInit() {
   //   3. Selected watershed outline 
     
     WS = vectors_dict["Puget Sound Assessment Units"];
-   
+   //to do -> update this to a 
     mapPanel.layers().set(1,{
       eeObject:WS.style(featureStyle),
       name: "Puget Sound Assessment Units"})
