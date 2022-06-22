@@ -25,7 +25,7 @@ function map_click_callback(coords){
   
   var pt = (ee.Geometry.Point([coords.lon,coords.lat]))
   var shed = psau.filterBounds(pt)
-  Map.layers().set(1,shed)
+  Map.layers().set(2,shed)
   var chart = make_chart(shed)
   panel.style().set({shown:true})
   panel.widgets().set(0,chart)
