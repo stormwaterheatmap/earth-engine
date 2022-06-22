@@ -1,0 +1,74 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("projects/ee-stormwaterheatmap/assets/production/Mean_Annual_Q_8_epochs"),
+    table = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fc"),
+    psau_fv = ui.Map.FeatureViewLayer("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fv", null, "puget_LL_hydrology_bounds_fv"),
+    psau = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fc"),
+    runoff = ee.Image("projects/ee-stormwaterheatmap/assets/production/Mean_Annual_Q_8_epochs");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+Map.addLayer(runoff.select(0).clip(psau))
+// Set visualization properties for the defined layer.
+psau_fv.setVisParams({
+//polygonStrokeType: 'dashed',
+  polygonStrokeColor: 'white',
+  polygonStrokeOpacity: 1,
+  polygonFillColor: 'cadetBlue',
+  polygonFillOpacity: 0.2,
+  width: 1.5,
+});
+
+Map.add(psau_fv)
+
+var panel = ui.Panel({style:{shown:false}})
+Map.add(panel)
+
+function map_click_callback(coords){
+  
+  var pt = (ee.Geometry.Point([coords.lon,coords.lat]))
+  var shed = psau.filterBounds(pt)
+  Map.layers().set(1,shed)
+  var chart = make_chart(shed)
+  panel.style().set({shown:true})
+  panel.widgets().set(0,chart)
+}
+Map.onClick(map_click_callback)
+
+function make_chart(region){
+
+var chart  = ui.Chart.image.regions({
+  image: runoff, 
+  regions: region, 
+  reducer: ee.Reducer.mean(),
+  scale:10,
+  xLabels: [1980,2030,2040,2050,2060,2070,2080]
+  })
+  
+  // Set chart style properties.
+var chartStyle = {
+  hAxis: {
+    title: 'Year',
+    titleTextStyle: {italic: false, bold: true},
+    gridlines: {color: 'FFFFFF'}
+  },
+  vAxis: {
+    title: 'runoff (mm)',
+    format: 'short',
+    baselineColor: 'FFFFFF'
+  },
+  
+  series: {
+    0: {lineWidth: 0, color: 'E37D05', pointSize: 7}
+  },
+  chartArea: {backgroundColor: 'EBEBEB'}, 
+
+  trendlines: {
+    0: {  // add a trend line to the 1st series
+      type: 'linear',  // or 'polynomial', 'exponential'
+      color: 'green',
+      lineWidth: 5,
+     opacity: 0.2,
+      visibleInLegend: true,
+    }
+  }
+};
+  return(chart.setOptions(chartStyle))
+}
