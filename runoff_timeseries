@@ -5,7 +5,19 @@ var image = ee.Image("projects/ee-stormwaterheatmap/assets/production/Mean_Annua
     psau = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fc"),
     runoff = ee.Image("projects/ee-stormwaterheatmap/assets/production/Mean_Annual_Q_8_epochs");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-Map.addLayer(runoff.select(0).clip(psau))
+var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
+var Style = require('users/stormwaterheatmap/apps:Modules/Style')
+var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
+var fonts = Style.fonts 
+var mask_all = ee.Image(1).add(ee.Image(5).clip(table))
+
+Map.addLayer(table.union())
+var runoff_base = data.rasters['Runoff (mm)']
+var runoff_img = runoff_base.layer.eeObject.clip(table.union())
+Export.image.toAsset({image:runoff_img,scale:5,region:table,maxPixels:1e12})
+Export.table.toDrive(table)
+
+Map.addLayer(runoff_base.layer)
 // Set visualization properties for the defined layer.
 psau_fv.setVisParams({
 //polygonStrokeType: 'dashed',
@@ -72,3 +84,8 @@ var chartStyle = {
 };
   return(chart.setOptions(chartStyle))
 }
+
+
+helpers.make_tnc_map()
+
+Map.addLayer(mask_all.unmask().neq(1))
