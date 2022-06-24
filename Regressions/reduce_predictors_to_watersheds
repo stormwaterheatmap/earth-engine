@@ -1,0 +1,27 @@
+/** This script generates average values for all predictors used in the stormwater heatmap 
+ * It will be used as input to the credibility interval calculation script.
+ */
+
+// Import predicter images 
+var predictors = ee.ImageCollection("users/jmcclurg/predictors_v2")
+ 
+print(predictors) 
+
+var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
+predictors = predictors.scaled_predictors
+
+print(scaled_predictors)
+
+// make a reducer to average predictors in a featureCollection 
+
+var fc = ee.FeatureCollection(predictors)
+
+var reduced_predictors = predictors.reduceRegions({
+    reducer: ee.Reducer.mean(),
+    scale: 10,
+    maxPixels: 1e12,
+    geometry: fc, // featureCollection of watersheds 
+    bestEffort: true
+}) 
+
+print(reduced_predictors)
