@@ -90,9 +90,9 @@ helpers.make_tnc_map()
 //Add side panel 
 var side_panel = ui.Panel({layout:ui.Panel.Layout.flow(),
 style:{width:"20%",height:'75%',position:'bottom-left',
-backgroundColor: "#006A7A87",color:"006A7A87"}})
+backgroundColor: "#4B5D6Ce6",color:"4B5D6C"}})
 var title = ui.Label({value:"How will runoff change in  Puget Sound?", 
-style:{color:'white',fontSize:'25px', fontWeight:700,
-backgroundColor:'#006A7A87'}})
+style:{color:'white',fontSize:'30px', fontWeight:700,
+backgroundColor:'#4B5D6C00'}})
 side_panel.add(title)
 Map.add(side_panel)
