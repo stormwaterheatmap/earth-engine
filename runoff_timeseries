@@ -9,13 +9,12 @@ var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts 
-var mask_all = ee.Image(1).add(ee.Image(5).clip(table))
 
-Map.addLayer(table.union())
+print(Style)
 var runoff_base = data.rasters['Runoff (mm)']
 var runoff_img = runoff_base.layer.eeObject.clip(table.union())
-Export.image.toAsset({image:runoff_img,scale:5,region:table,maxPixels:1e12})
-Export.table.toDrive(table)
+//Export.image.toAsset({image:runoff_img,scale:5,region:table,maxPixels:1e12})
+//Export.table.toDrive(table)
 
 Map.addLayer(runoff_base.layer)
 // Set visualization properties for the defined layer.
@@ -76,7 +75,7 @@ var chartStyle = {
     0: {  // add a trend line to the 1st series
       type: 'linear',  // or 'polynomial', 'exponential'
       color: 'green',
-      lineWidth: 5,
+      lineWidth: 50,
      opacity: 0.2,
       visibleInLegend: true,
     }
@@ -88,4 +87,9 @@ var chartStyle = {
 
 helpers.make_tnc_map()
 
-Map.addLayer(mask_all.unmask().neq(1))
+//Add side panel 
+var side_panel = ui.Panel({layout:ui.Panel.Layout.flow(),style:{width:"20%",height:'75%',position:'bottom-left'}})
+var title = ui.Label({value:"How will runoff change in  Puget Sound?", 
+style:Style.fonts.H1})
+side_panel.add(title)
+Map.add(side_panel)
