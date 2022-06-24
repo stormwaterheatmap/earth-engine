@@ -1,30 +1,21 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var image = ee.Image(
-    "projects/ee-stormwaterheatmap/assets/production/Mean_Annual_Q_8_epochs"
-  ),
-  table = ee.FeatureCollection(
-    "projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fc"
-  ),
-  psau_fv = ui.Map.FeatureViewLayer(
-    "projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fv",
-    null,
-    "puget_LL_hydrology_bounds_fv"
-  ),
-  psau = ee.FeatureCollection(
-    "projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fc"
-  ),
-  runoff = ee.Image(
-    "projects/ee-stormwaterheatmap/assets/production/Mean_Annual_Q_8_epochs"
-  );
+var image = ee.Image("projects/ee-stormwaterheatmap/assets/production/Mean_Annual_Q_8_epochs"),
+    table = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fc"),
+    psau_fv = ui.Map.FeatureViewLayer("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fv", null, "puget_LL_hydrology_bounds_fv"),
+    psau = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fc"),
+    runoff = ee.Image("projects/ee-stormwaterheatmap/assets/production/Mean_Annual_Q_8_epochs"),
+    mask = ee.Image("projects/ee-stormwaterheatmap/assets/pugetLL_mask");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var data = require("users/stormwaterheatmap/apps:data/data_dictionary.js");
 var Style = require("users/stormwaterheatmap/apps:Modules/Style");
 var helpers = require("users/stormwaterheatmap/apps:Modules/helpers");
 var fonts = Style.fonts;
 
-print(Style);
+
 var runoff_base = data.rasters["Runoff (mm)"];
-var runoff_img = {eeObject:runoff_base.layer.eeObject, name:runoff_base.name, visParams: runoff_base.visParams};
+
+var runoff_img = {eeObject:runoff_base.layer.eeObject.mask(mask), name:runoff_base.layer.name, 
+visParams: runoff_base.layer.visParams};
 
 //Export.image.toAsset({image:runoff_img,scale:5,region:table,maxPixels:1e12})
 //Export.table.toDrive(table)
@@ -36,7 +27,7 @@ psau_fv.setVisParams({
   polygonStrokeColor: "white",
   polygonStrokeOpacity: 1,
   polygonFillColor: "cadetBlue",
-  polygonFillOpacity: 0.2,
+  polygonFillOpacity: 0,
   width: 1.5,
 });
 
@@ -45,6 +36,7 @@ Map.add(psau_fv);
 var panel = ui.Panel({
   style: {
     shown: false,
+    position: 'bottom-left'
   },
 });
 Map.add(panel);
@@ -73,6 +65,7 @@ function make_chart(region) {
   // Set chart style properties.
   var chartStyle = {
     title: "Estimated runoff over time",
+    position: 'bottom-right', 
     vAxis: {
       title: "Mean Annual Runoff (mm)",
     },
@@ -89,12 +82,13 @@ function make_chart(region) {
 
     trendlines: {
       0: {
+        
         // add a trend line to the 1st series
         type: "linear", // or 'polynomial', 'exponential'
         color: "green",
-        lineWidth: 1,
-        lineDashStyle: [4, 4],
-        opacity: 0.8,
+        lineWidth: 5,
+        //lineDashStyle: [4, 4],
+        opacity: 0.2,
         //visibleInLegend: true,
       },
     },
@@ -110,7 +104,8 @@ var side_panel = ui.Panel({
   style: {
     width: "20%",
     height: "75%",
-    position: "bottom-left",
+    position: "top-left",
+    
     backgroundColor: "#4B5D6Ce6",
     color: "4B5D6C",
   },
@@ -124,5 +119,7 @@ var title = ui.Label({
     backgroundColor: "#4B5D6C00",
   },
 });
+ui.root.setLayout(ui.Panel.Layout.flow('horizontal'))
+
 side_panel.add(title);
 Map.add(side_panel);
