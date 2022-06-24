@@ -1,7 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image = ee.Image("projects/ee-stormwaterheatmap/assets/production/Mean_Annual_Q_8_epochs"),
     psau_fv = ui.Map.FeatureViewLayer("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fv", null, "puget_LL_hydrology_bounds_fv"),
-    psau = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fc"),
+    psau = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/puget_LL_hydrology_bounds_fc")
 
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
@@ -16,7 +16,7 @@ psau_fv.setVisParams({
     polygonStrokeOpacity: 1,
     polygonFillColor: 'cadetBlue',
     polygonFillOpacity: 0.2,
-    width: 1.5,
+    width: 1.5
   });
   
   Map.add(psau_fv)
