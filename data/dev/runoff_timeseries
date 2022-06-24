@@ -55,29 +55,24 @@ var chart  = ui.Chart.image.regions({
   
   // Set chart style properties.
 var chartStyle = {
-  hAxis: {
-    title: 'Year',
-    titleTextStyle: {italic: false, bold: true},
-    gridlines: {color: 'FFFFFF'}
+  title: 'Estimated runoff over time',
+  vAxis: {title: 'Mean Annual Runoff (mm)', 
   },
-  vAxis: {
-    title: 'runoff (mm)',
-    format: 'short',
-    baselineColor: 'FFFFFF'
+  hAxis: {title: 'year',  format: '####',
+      viewWindow: {min: 1970,max:2100}
   },
+  pointSize: 4,
   
-  series: {
-    0: {lineWidth: 0, color: 'E37D05', pointSize: 7}
-  },
-  chartArea: {backgroundColor: 'EBEBEB'}, 
+
 
   trendlines: {
     0: {  // add a trend line to the 1st series
       type: 'linear',  // or 'polynomial', 'exponential'
       color: 'green',
-      lineWidth: 50,
-     opacity: 0.2,
-      visibleInLegend: true,
+      lineWidth: 2,
+      lineDashStyle: [4, 4],
+      opacity: 0.8,
+      //visibleInLegend: true,
     }
   }
 };
