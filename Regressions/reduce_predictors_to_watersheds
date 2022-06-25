@@ -1,27 +1,36 @@
-/** This script generates average values for all predictors used in the stormwater heatmap 
+
+var PS_AU = ee.FeatureCollection(
+ "projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units_string")
+var NHDPlus = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/NHDPlus_High_Resolution_Watershed_Dataset_string"
+)
+
+var HUC12 = ee.FeatureCollection(
+   "projects/ee-stormwaterheatmap/assets/huc12")
+/** 
+ * This script generates average values for all predictors 
+ * used in the stormwater heatmap 
  * It will be used as input to the credibility interval calculation script.
  */
 
 // Import predicter images 
-var predictors = ee.ImageCollection("users/jmcclurg/predictors_v2")
- 
-print(predictors) 
+
 
 var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
 predictors = predictors.scaled_predictors
 
-print(scaled_predictors)
+
 
 // make a reducer to average predictors in a featureCollection 
 
-var fc = ee.FeatureCollection(predictors)
-
+var fc = ee.FeatureCollection(HUC12)//ee.FeatureCollection(predictors)
+print(fc.first())
 var reduced_predictors = predictors.reduceRegions({
     reducer: ee.Reducer.mean(),
     scale: 10,
-    maxPixels: 1e12,
-    geometry: fc, // featureCollection of watersheds 
-    bestEffort: true
+    collection: fc, // featureCollection of watersheds 
 }) 
+var feat_out = reduced_predictors.select({propertySelectors: ['huc12','devAge2','grass',
+'paved','pm25_na','sqrt_CO2_road','traffic'],retainGeometry:false})
 
-print(reduced_predictors)
+Export.table.toDrive(feat_out,'huc12-csv','ee','huc12-predictors','csv')
+print(feat_out.first())
