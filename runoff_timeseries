@@ -111,7 +111,7 @@ var side_panel = ui.Panel({
   },
 });
 var title = ui.Label({
-  value: "How will runoff change in  Puget Sound?",
+  value: "How will runoff change in  Puget Sound watersheds??",
   style: {
     color: "white",
     fontSize: "30px",
