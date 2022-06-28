@@ -195,6 +195,11 @@ var fonts = {
         fontWeight: 400, 
         color: colors.text
     },
+    Caption0: {
+      fontFamily:['Roboto',"Helvetica Neue",'sans-serif'], 
+      fontSize: '13px', 
+      color: colors.sText
+    }, 
     Caption1: {
         fontFamily:  [
             'Noto Sans', 'sans-serif'
