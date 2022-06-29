@@ -60,6 +60,7 @@ function make_chart(region) {
     reducer: ee.Reducer.mean(),
     scale: 10,
     xLabels: [1980, 2030, 2040, 2050, 2060, 2070, 2080],
+ 
   });
 
   // Set chart style properties.
@@ -79,7 +80,7 @@ function make_chart(region) {
     },
     pointSize: 4,
     lineWidth: 0, 
-
+   legend: {position: 'none'}, 
     trendlines: {
       0: {
         
@@ -96,14 +97,15 @@ function make_chart(region) {
   return chart.setOptions(chartStyle);
 }
 
-//helpers.make_tnc_map();
+helpers.make_tnc_map();
 
 //Add side panel
 var side_panel = ui.Panel({
   layout: ui.Panel.Layout.flow(),
   style: {
-    width: "20%",
-  //  height: "75%",
+    minWidth: "20%",
+    maxWidth: "30%",
+  maxHeight: "75%",
     position: "top-left",
     
     //backgroundColor: "#4B5D6Ce6",
@@ -114,7 +116,8 @@ var title = ui.Label({
   value: "How will runoff change in  Puget Sound watersheds?",
   style: {
     //color: "white",
-    fontSize: "30px",
+    //fontSize: "30px",
+    fontSize:"1.5rem",
     fontWeight: 700,
    // backgroundColor: "#4B5D6C00",
   },
@@ -152,8 +155,14 @@ var text4 = ui.Label({value:
 var text5 = ui.Label({
 value: "READ RUNOFF METHODOLOGY", targetUrl: "https://www.stormwaterheatmap.org/docs/Technical%20Reference/Components/Hydrology"})
 
+
+var text6 = ui.Label({value: "acknowledgements here: TNC, CIG, "+
+"Eva, City of Tacoma, Google?",style:{
+  backgroundColor:"#F9E79F"}})
 ui.root.setLayout(ui.Panel.Layout.flow('horizontal'))
 Map.style().set({cursor:'crosshair'})
+Map.setOptions("HYBRID")
+
 side_panel.add(title) 
 .add(text)
 .add(text05)
@@ -161,6 +170,7 @@ side_panel.add(title)
 .add(text2)
 .add(text3)
 .add(text4)
-.add(text5);
+.add(text5)
+.add(text6);
 Map.add(side_panel);
  
