@@ -321,7 +321,7 @@ var s8_predictions = generate_coc_layer("copper", s8_predictors_image).unmask()
 //           }});
 // print(chart)
 
-all_cocs
+exports.convolved_predictors = convolved_clamped
 Export.image.toAsset({
     image: all_cocs,
     region: PugetSound,
