@@ -5,10 +5,11 @@ ui.root.setLayout(ui.Panel.Layout.absolute());
 
 // data 
 var data = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
+print(data)
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var helpers = require('users/stormwaterheatmap/apps:Modules/helpers')
 var fonts = Style.fonts 
-
+print(fonts)
 var rasters = data.rasters 
 print(rasters)
 var layer_types = {"Input Data Layers": {}, "Hydrology Data Layers": {}}; 
@@ -148,3 +149,53 @@ mainPanel.style().set({maxWidth:'100px'})
 mainPanel.add(panel)
 Map.add(mainPanel)
 
+var WRIA_bounds = data.vector_dict['Ecology Water Resource Inventory Area (WRIA)']
+var WRIA_names = WRIA_bounds.reduceColumns({reducer:ee.Reducer.toList(),selectors:['WRIA_NM']})
+function handleImageExport(){
+print(WRIA_names.get('list'))
+}
+
+//add an export to bucket layer 
+
+
+var WRIA_bounds = data.vector_dict['Ecology Water Resource Inventory Area (WRIA)']
+var WRIA_names = WRIA_bounds.reduceColumns({reducer:ee.Reducer.toList(),selectors:['WRIA_NM']})
+var names_list = ee.List((ee.Dictionary(WRIA_names).get('list'))).sort()
+
+function handleImageExport(){
+//var names_list = WRIA_names
+var layer = Map.layers().get(0)
+print(layer)
+}
+
+var button = ui.Button({label:'OK',onClick:handleImageExport})
+Map.add(button)
+
+
+
+
+
+var export_panel = ui.Panel({
+  widgets: [
+  ui.Label(
+    {
+      value: 'Export this layer to Google Cloud Platform', 
+      style: fonts.LegendTitle
+    }),
+  ui.Label({value:'Bucket Name:',style:fonts.Body1}),
+  ui.Textbox({value: 'tnc-data-v1-bucket/image-exports',style:{width:'90%'}}),
+
+
+  
+  ]
+  
+}
+  )
+  
+var dropdowns = ui.Select({placeholder:'WRIA Name', 
+  items:names_list.getInfo()
+})
+export_panel.add(dropdowns)
+export_panel.add(ui.Button({label:'Export',onClick:handleImageExport}))
+export_panel.style().set({position:'top-right'})
+Map.add(export_panel)
