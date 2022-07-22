@@ -195,9 +195,9 @@ var dropdowns = ui.Select({placeholder:'WRIA Name',
 })
 
 var bounds = ui.Map.FeatureViewLayer('projects/ee-stormwaterheatmap/assets/wria_fv').setVisParams({opacity:0})
-  Map.layers().set(1,bounds)
-function zoomAndClip(shed){
 
+function zoomAndClip(shed){
+  Map.layers().set(1,bounds)
 bounds.setVisParams({color:'white', 
   
   rules: [
