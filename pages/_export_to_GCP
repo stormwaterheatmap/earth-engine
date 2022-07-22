@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var featureViewLayer = ui.Map.FeatureViewLayer("projects/ee-stormwaterheatmap/assets/wria_fv", null, "wria_fv");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 //ui.root.clear();
 
  
@@ -162,14 +165,6 @@ var WRIA_bounds = data.vector_dict['Ecology Water Resource Inventory Area (WRIA)
 var WRIA_names = WRIA_bounds.reduceColumns({reducer:ee.Reducer.toList(),selectors:['WRIA_NM']})
 var names_list = ee.List((ee.Dictionary(WRIA_names).get('list'))).sort()
 
-function handleImageExport(){
-//var names_list = WRIA_names
-var layer = Map.layers().get(0)
-print(layer)
-}
-
-var button = ui.Button({label:'OK',onClick:handleImageExport})
-Map.add(button)
 
 
 
@@ -191,10 +186,43 @@ var export_panel = ui.Panel({
   
 }
   )
-  
+  Export.table.toFeatureView({
+    collection:WRIA_bounds})
+
 var dropdowns = ui.Select({placeholder:'WRIA Name', 
-  items:names_list.getInfo()
+  items:names_list.getInfo(), 
+  onChange: zoomAndClip
 })
+
+var bounds = ui.Map.FeatureViewLayer('projects/ee-stormwaterheatmap/assets/wria_fv').setVisParams({opacity:0})
+  Map.layers().set(1,bounds)
+function zoomAndClip(shed){
+
+bounds.setVisParams({color:'white', 
+  
+  rules: [
+          {
+        filter: ee.Filter.neq('WRIA_NM', dropdowns.getValue()),
+        isVisible: true, 
+      polygonStrokeWidth: 0,
+      polygonFillColor: 'white'
+      },
+      {
+        filter: ee.Filter.eq('WRIA_NM', dropdowns.getValue()),
+        isVisible: true, 
+              polygonStrokeWidth: 2,
+      polygonFillColor: 'white', 
+      polygonFillOpacity:0, 
+      polygonStrokeOpacity:1
+      }
+      ]
+})
+  
+  
+  var shed_fc = WRIA_bounds.filter(ee.Filter.eq('WRIA_NM',shed))
+  Map.centerObject(shed_fc,10)
+}
+
 export_panel.add(dropdowns)
 export_panel.add(ui.Button({label:'Export',onClick:handleImageExport}))
 export_panel.style().set({position:'top-right'})
