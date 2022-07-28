@@ -154,17 +154,26 @@ Map.add(mainPanel)
 
 var WRIA_bounds = data.vector_dict['Ecology Water Resource Inventory Area (WRIA)'].filterBounds(data.vectors.PugetSound)
 var WRIA_names = WRIA_bounds.reduceColumns({reducer:ee.Reducer.toList(),selectors:['WRIA_NM']})
+print('Folder names: ', WRIA_names)
+
 function handleImageExport(){
 var img_lay = Map.layers().get(0)
+var region = shed_fc
+print(region)
 print(img_lay)
+
 var img_out = img_lay.get("eeObject")
+var vis = img_lay.get("visParams")
+var band = vis.bands
+print(band)
+
 Export.image.toCloudStorage({
   image: img_out, 
-  description: img_lay.name, 
-  bucket: ee.String(bucket_input.getValue()), 
+  description: img_lay.get("name").split(" ").join(""), //removes spaces
+  bucket: 'tnc-data-v1-bucket/image-exports', 
   scale: 10, 
-  //region: , 
-  fileNamePrefix: img_lay.visParams.bands, 
+  region:region , 
+  fileNamePrefix: band, 
     fileFormat: 'GeoTIFF',
   formatOptions: {
     cloudOptimized: true
@@ -185,7 +194,11 @@ var names_list = ee.List((ee.Dictionary(WRIA_names).get('list'))).sort()
 
 
 
-var bucket_input =  ui.Textbox({value: 'tnc-data-v1-bucket/image-exports',style:{width:'90%'}})
+var bucket_input =  ui.Textbox({
+  value: 'tnc-data-v1-bucket/image-exports',
+  style:{width:'90%'}, 
+  disabled: true
+})
 
 
 var export_panel = ui.Panel({
@@ -207,13 +220,15 @@ bucket_input
     collection:WRIA_bounds})
 
 var dropdowns = ui.Select({placeholder:'WRIA Name', 
-  items:names_list.getInfo(), 
+  value: 'Duwamish - Green',
+  items: (names_list).getInfo(), 
   onChange: zoomAndClip
 })
 
 var bounds = ui.Map.FeatureViewLayer('projects/ee-stormwaterheatmap/assets/wria_fv').setVisParams({opacity:0})
 
 function zoomAndClip(shed){
+ Map.remove(bounds)
   Map.layers().set(1,bounds)
 bounds.setVisParams({color:'white', 
   
@@ -236,10 +251,10 @@ bounds.setVisParams({color:'white',
 })
   
   
-  var shed_fc = WRIA_bounds.filter(ee.Filter.eq('WRIA_NM',shed))
+  shed_fc = WRIA_bounds.filter(ee.Filter.eq('WRIA_NM',shed))
   Map.centerObject(shed_fc,10)
 }
-
+var shed_fc //global value for shed
 export_panel.add(dropdowns)
 export_panel.add(ui.Button({label:'Export',onClick:handleImageExport}))
 export_panel.style().set({position:'top-right'})
