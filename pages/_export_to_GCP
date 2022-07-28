@@ -166,14 +166,14 @@ var img_out = img_lay.get("eeObject")
 var vis = img_lay.get("visParams")
 var band = vis.bands
 print(band)
-
+var layer_description = img_lay.get("name").split(" ").join("")
 Export.image.toCloudStorage({
   image: img_out, 
-  description: img_lay.get("name").split(" ").join(""), //removes spaces
-  bucket: 'tnc-data-v1-bucket/image-exports', 
+  description: layer_description, //removes spaces
+  bucket: 'tnc-data-v1-bucket', 
   scale: 10, 
   region:region , 
-  fileNamePrefix: band, 
+  fileNamePrefix: "image-exports/Duwamish-Green/"+layer_description,//band.getInfo(), 
     fileFormat: 'GeoTIFF',
   formatOptions: {
     cloudOptimized: true
