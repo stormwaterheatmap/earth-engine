@@ -152,22 +152,40 @@ mainPanel.style().set({maxWidth:'100px'})
 mainPanel.add(panel)
 Map.add(mainPanel)
 
-var WRIA_bounds = data.vector_dict['Ecology Water Resource Inventory Area (WRIA)']
+var WRIA_bounds = data.vector_dict['Ecology Water Resource Inventory Area (WRIA)'].filterBounds(data.vectors.PugetSound)
 var WRIA_names = WRIA_bounds.reduceColumns({reducer:ee.Reducer.toList(),selectors:['WRIA_NM']})
 function handleImageExport(){
-print(WRIA_names.get('list'))
+var img_lay = Map.layers().get(0)
+print(img_lay)
+var img_out = img_lay.get("eeObject")
+Export.image.toCloudStorage({
+  image: img_out, 
+  description: img_lay.name, 
+  bucket: ee.String(bucket_input.getValue()), 
+  scale: 10, 
+  //region: , 
+  fileNamePrefix: img_lay.visParams.bands, 
+    fileFormat: 'GeoTIFF',
+  formatOptions: {
+    cloudOptimized: true
+  }
+})
+
 }
 
 //add an export to bucket layer 
 
 
-var WRIA_bounds = data.vector_dict['Ecology Water Resource Inventory Area (WRIA)']
+var WRIA_bounds = data.vector_dict['Ecology Water Resource Inventory Area (WRIA)'].filterBounds(
+  data.vectors.PugetSound)
 var WRIA_names = WRIA_bounds.reduceColumns({reducer:ee.Reducer.toList(),selectors:['WRIA_NM']})
 var names_list = ee.List((ee.Dictionary(WRIA_names).get('list'))).sort()
 
 
 
 
+
+var bucket_input =  ui.Textbox({value: 'tnc-data-v1-bucket/image-exports',style:{width:'90%'}})
 
 
 var export_panel = ui.Panel({
@@ -178,8 +196,7 @@ var export_panel = ui.Panel({
       style: fonts.LegendTitle
     }),
   ui.Label({value:'Bucket Name:',style:fonts.Body1}),
-  ui.Textbox({value: 'tnc-data-v1-bucket/image-exports',style:{width:'90%'}}),
-
+bucket_input
 
   
   ]
