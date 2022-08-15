@@ -1,6 +1,10 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var featureViewLayer = ui.Map.FeatureViewLayer("projects/ee-stormwaterheatmap/assets/wria_fv", null, "wria_fv");
+var featureViewLayer = ui.Map.FeatureViewLayer("projects/ee-stormwaterheatmap/assets/wria_fv", null, "wria_fv"),
+    table = ee.FeatureCollection("projects/ee-kingco-sws/assets/kc_watersheds");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+var kingCo = table.union()
+Map.addLayer(kingCo)
+
 //ui.root.clear();
 ui.root.setLayout(ui.Panel.Layout
     .absolute()); 
@@ -239,16 +243,14 @@ function handleImageExport() {
             "name")
         .split(" ")
         .join("")
-    var folder_name = dropdowns.getValue()
-        .split(" ")
-        .join("")
+    var folder_name = "KingCounty"
     Export.image.toCloudStorage({
         image: img_out,
         description: layer_description, //removes spaces
         bucket: 'tnc-data-v1-bucket',
-        scale: 10,
+        scale: 30,
         region: region,
-        fileNamePrefix: "image-exports/"+folder_name+"/" +
+        fileNamePrefix: "image-exports/byCounty/"+folder_name+"/" +
             layer_description, //band.getInfo(), 
         fileFormat: 'GeoTIFF',
         formatOptions: {
@@ -295,57 +297,47 @@ var export_panel = ui.Panel({
 })
 var dropdowns = ui.Select({
     placeholder: 'WRIA Name',
-    value: 'Duwamish - Green',
-    items: (names_list)
-        .getInfo(),
+    value: 'King County',
+    items: ["King County"],
     onChange: zoomAndClip
 })
-var bounds = ui.Map.FeatureViewLayer(
-        'projects/ee-stormwaterheatmap/assets/wria_fv'
-    )
-    .setVisParams({
-        opacity: 0
-    })
+var bounds = ee.Geometry({
+  "geodesic": false,
+  "type": "Polygon",
+  "coordinates": [
+    [
+      [
+        -122.682662083241,
+        47.100907447959464
+      ],
+      [
+        -120.9303427473035,
+        47.100907447959464
+      ],
+      [
+        -120.9303427473035,
+        47.950314733187994
+      ],
+      [
+        -122.682662083241,
+        47.950314733187994
+      ],
+      [
+        -122.682662083241,
+        47.100907447959464
+      ]
+    ]
+  ]
+}) 
 
 function zoomAndClip(shed) {
-    Map.remove(bounds)
-    Map.layers()
-        .set(1, bounds)
-    bounds.setVisParams({
-        color: 'white',
-        rules: [{
-                filter: ee
-                    .Filter
-                    .neq(
-                        'WRIA_NM',
-                        dropdowns
-                        .getValue()
-                    ),
-                isVisible: true,
-                polygonStrokeWidth: 0,
-                polygonFillColor: 'white'
-            },
-            {
-                filter: ee
-                    .Filter
-                    .eq('WRIA_NM',
-                        dropdowns
-                        .getValue()
-                    ),
-                isVisible: true,
-                polygonStrokeWidth: 2,
-                polygonFillColor: 'white',
-                polygonFillOpacity: 0,
-                polygonStrokeOpacity: 1
-            }
-        ]
-    })
-    shed_fc = WRIA_bounds.filter(ee
-        .Filter.eq('WRIA_NM', shed))
+    
+    shed_fc = bounds
     Map.centerObject(shed_fc, 10)
 }
 
-var shed_fc //global value for shed
+var shed_fc = bounds
+Map.addLayer(shed_fc)//global value for shed
 export_panel.add(dropdowns)
 export_panel.add(ui.Button({
     label: 'Export',
