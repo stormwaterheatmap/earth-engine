@@ -8,7 +8,7 @@ var barLegend = legends.barLegend
 
 
 function make_docs_link(layer_object){
-  var docs_url = "http://stormwaterheatmap.dev/docs/Data%20Layers/"
+  var docs_url = "http://stormwaterheatmap.org/docs/Data%20Layers/"
   return(
     ui.Label({value: "more info ↗", style:Style.fonts.Capton3, targetUrl:docs_url+layer_object.safe_name })
     )
