@@ -250,6 +250,7 @@ function handleImageExport() {
         //.join("")
     Export.image.toCloudStorage({
         image: img_out,
+        maxPixels: 1e12,
         description: layer_description, //removes spaces
         bucket: 'tnc-data-v1-bucket',
         scale: 10,
@@ -301,9 +302,8 @@ var export_panel = ui.Panel({
 })
 var dropdowns = ui.Select({
     placeholder: 'WRIA Name',
-    value: 'Duwamish - Green',
-    items: (names_list)
-        .getInfo(),
+    value: 'PugetSound',
+    items: ['PugetSound'],
     onChange: zoomAndClip
 })
 var bounds = ui.Map.FeatureViewLayer(
