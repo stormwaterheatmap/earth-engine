@@ -22,17 +22,17 @@ var clamped_img_max = ee.Image.constant(
         //"0_intercept":
         99,
         //"devAge2":
-        2,
+        3,
         //"grass":
-        2,
+        3,
         //"paved":
-        2,
+        3,
         //"pm25_na":
-        2,
+        3,
         //"sqrt_CO2_road":
-        2,
+        3,
         //"traffic":
-        2
+        3
     ]
 
     //1.59
