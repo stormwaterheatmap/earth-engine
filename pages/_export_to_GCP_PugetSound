@@ -10,8 +10,8 @@ ui.root.setLayout(ui.Panel.Layout
 var data = require(
     'users/stormwaterheatmap/apps:data/data_dictionary.js'
 )
-
-var PugetSound = data.vectors.PugetSound
+var PugetSound = ee.FeatureCollection('projects/ee-stormwaterheatmap/assets/PugetSound_WA')
+//var PugetSound = data.vectors.PugetSound
 
 print(data)
 var Style = require(
@@ -253,7 +253,7 @@ function handleImageExport() {
         maxPixels: 1e12,
         description: layer_description, //removes spaces
         bucket: 'tnc-data-v1-bucket',
-        scale: 10,
+        scale: 30,
         region: region,
         fileNamePrefix: "image-exports/"+folder_name+"/" +
             layer_description, //band.getInfo(), 
@@ -352,6 +352,7 @@ function zoomAndClip(shed) {
 }
 
 var shed_fc = PugetSound//global value for shed
+Map.addLayer(shed_fc)
 export_panel.add(dropdowns)
 export_panel.add(ui.Button({
     label: 'Export',
