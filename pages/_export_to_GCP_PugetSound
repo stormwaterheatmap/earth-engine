@@ -353,6 +353,7 @@ function zoomAndClip(shed) {
 
 var shed_fc = PugetSound//global value for shed
 Map.addLayer(shed_fc)
+export_panel.add(ui.Label('Region to Export:'))
 export_panel.add(dropdowns)
 export_panel.add(ui.Button({
     label: 'Export',
