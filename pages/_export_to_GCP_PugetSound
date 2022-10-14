@@ -235,9 +235,10 @@ function handleImageExport() {
         .get(0)
     var region = shed_fc
     var img_out = img_lay.get(
-        "eeObject")
+        "eeObject").selfMask()
     var vis = img_lay.get("visParams")
     var band = vis.bands
+    Map.addLayer(img_out,{},'img_out')
     
 
     var layer_description = img_lay.get(
@@ -250,14 +251,15 @@ function handleImageExport() {
         //.join("")
     Export.image.toCloudStorage({
         image: img_out,
-        maxPixels: 1e12,
+        maxPixels: 1e13,
         description: layer_description, //removes spaces
         bucket: 'tnc-data-v1-bucket',
-        scale: 30,
+        scale: 5,
         region: region,
         fileNamePrefix: "image-exports/"+folder_name+"/" +
             layer_description, //band.getInfo(), 
         fileFormat: 'GeoTIFF',
+        skipEmptyTiles: true, 
         formatOptions: {
             cloudOptimized: true
         }
