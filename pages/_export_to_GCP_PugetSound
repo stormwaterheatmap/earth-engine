@@ -235,7 +235,8 @@ function handleImageExport() {
         .get(0)
     var region = shed_fc
     var img_out = img_lay.get(
-        "eeObject").selfMask()
+        "eeObject").selfMask().byte() //!warning - need 
+        //to set the correct layer type here
     var vis = img_lay.get("visParams")
     var band = vis.bands
     Map.addLayer(img_out,{},'img_out')
@@ -254,7 +255,7 @@ function handleImageExport() {
         maxPixels: 1e13,
         description: layer_description, //removes spaces
         bucket: 'swhm-ee-exports',
-        scale: 30,
+        scale: 10,
         region: region,
         fileNamePrefix: "image-exports/"+folder_name+"/" +
             layer_description+"/"+layer_description, //band.getInfo(), 
