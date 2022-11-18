@@ -10,8 +10,8 @@ var data = require("users/stormwaterheatmap/apps:data/data_dictionary.js");
 var Style = require("users/stormwaterheatmap/apps:Modules/Style");
 var helpers = require("users/stormwaterheatmap/apps:Modules/helpers");
 var fonts = Style.fonts;
-Map.addLayer(mask,{opacity:0.3,palette:['black']})
-print(fonts)
+//Map.addLayer(mask,{opacity:0.3,palette:['black']})
+//print(fonts)
 var runoff_base = data.rasters["Runoff (mm)"];
 
 var runoff_img = {eeObject:runoff_base.layer.eeObject.mask(mask), name:runoff_base.layer.name, 
@@ -20,7 +20,7 @@ visParams: runoff_base.layer.visParams};
 //Export.image.toAsset({image:runoff_img,scale:5,region:table,maxPixels:1e12})
 //Export.table.toDrive(table)
 
-//Map.addLayer(runoff_img);
+Map.addLayer(runoff_img);
 // Set visualization properties for the defined layer.
 psau_fv.setVisParams({
   //polygonStrokeType: 'dashed',
@@ -44,7 +44,9 @@ Map.add(panel);
 function map_click_callback(coords) {
   var pt = ee.Geometry.Point([coords.lon, coords.lat]);
   var shed = psau.filterBounds(pt);
-  Map.layers().set(2, shed);
+  Map.layers().set(3, shed.style({color:'yellow', 
+    fillColor: "00000000"
+  }));
   var chart = make_chart(shed);
   panel.style().set({
     shown: true,
