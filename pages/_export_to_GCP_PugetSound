@@ -253,11 +253,11 @@ function handleImageExport() {
         image: img_out,
         maxPixels: 1e13,
         description: layer_description, //removes spaces
-        bucket: 'tnc-data-v1-bucket',
-        scale: 5,
+        bucket: 'swhm-ee-exports',
+        scale: 30,
         region: region,
         fileNamePrefix: "image-exports/"+folder_name+"/" +
-            layer_description, //band.getInfo(), 
+            layer_description+"/"+layer_description, //band.getInfo(), 
         fileFormat: 'GeoTIFF',
         skipEmptyTiles: true, 
         formatOptions: {
@@ -281,7 +281,7 @@ var names_list = ee.List((ee.Dictionary(
         .get('list')))
     .sort()
 var bucket_input = ui.Textbox({
-    value: 'tnc-data-v1-bucket/image-exports',
+    value: 'swhm-ee-exports',
     style: {
         width: '90%'
     },
