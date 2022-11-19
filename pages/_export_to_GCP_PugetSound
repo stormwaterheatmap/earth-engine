@@ -252,10 +252,11 @@ function handleImageExport() {
         //.join("")
     Export.image.toCloudStorage({
         image: img_out,
-        maxPixels: 1e13,
+        maxPixels: 1e14,
         description: layer_description, //removes spaces
         bucket: 'swhm-ee-exports',
         scale: 10,
+        crs: 'ESPG:4326',
         region: region,
         fileNamePrefix: "image-exports/"+folder_name+"/" +
             layer_description+"/"+layer_description, //band.getInfo(), 
