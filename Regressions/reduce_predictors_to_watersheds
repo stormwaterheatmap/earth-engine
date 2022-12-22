@@ -13,24 +13,27 @@ var HUC12 = ee.FeatureCollection(
  */
 
 // Import predicter images 
-
-
 var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
 predictors = predictors.scaled_predictors
 
-
-
-// make a reducer to average predictors in a featureCollection 
-
-var fc = ee.FeatureCollection(HUC12)//ee.FeatureCollection(predictors)
-print(fc.first())
+// make a reducer function to average predictors in a featureCollection 
+function reduce_to_sheds(shedFc){
 var reduced_predictors = predictors.reduceRegions({
     reducer: ee.Reducer.mean(),
     scale: 10,
-    collection: fc, // featureCollection of watersheds 
+    collection: shedFc, // featureCollection of watersheds 
 }) 
-var feat_out = reduced_predictors.select({propertySelectors: ['huc12','devAge2','grass',
-'paved','pm25_na','sqrt_CO2_road','traffic'],retainGeometry:false})
+//var feat_out = reduced_predictors.select({propertySelectors: ['huc12','devAge2','grass',
+//'paved','pm25_na','sqrt_CO2_road','traffic'],retainGeometry:false})
+return reduced_predictors
+}
 
-Export.table.toDrive(feat_out,'huc12-csv','ee','huc12-predictors','csv')
+var feat_out = reduce_to_sheds(PS_AU)
+
+Export.table.toCloudStorage({
+  collection:feat_out, 
+  bucket:'swhm-ee-exports/table-exports/predictors', fileFormat:'SHP', 
+  fileNamePrefix: 'PSAU'
+})
+
 print(feat_out.first())
