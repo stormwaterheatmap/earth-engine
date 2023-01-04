@@ -22,6 +22,7 @@ for (var i = 0; i < layers.length; i++) {
         description: layer_description, 
         bucket:'swhm-image-exports',
         maxPixels: 1e13,
+        shardSize: 128, 
         scale: scale,
         region: PugetSound,
         fileNamePrefix: layer_description+"/" +
