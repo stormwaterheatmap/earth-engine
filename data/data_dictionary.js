@@ -10,6 +10,7 @@ var rasters = {
         "sourceName": "The Nature Conservancy; Columbia University,  Center for International Earth Science Information Network",
         "sourceUrl": "http://doi.org/10.2905/jrc-ghsl-10007",
         "units": "epoch",
+        "scale": 30,
         "values": ["3", "4", "5"],
         "vizType": "barChart",
         "default_reduction": "Category",
@@ -26,14 +27,13 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "Age of Imperviousness"
             }
-
         }
-
     },
     "Flow Duration Index": {
         "discrete": "FALSE",
         "sourceName": "The Nature Conservancy",
         "units": "index",
+        "scale": 10,
         "vizType": "bigNumberMean",
         "default_reduction": "mean",
         "description": "Dimensionless index indicating level of flow control needed to match forest hydrology.",
@@ -49,15 +49,14 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "Flow Duration Index"
             }
-
         }
-
     },
     "HSPF Land Cover Type": {
         "discrete": "TRUE",
         "labels": ["Forest/Trees", "Pasture", "Grass", "Water", "Impervious-roof", "Impervious-nonRoof"],
         "sourceName": "The Nature Conservancy",
         "units": "Land Cover Type",
+        "scale": 10,
         "values": ["0", "1", "2", "3", "4", "5"],
         "vizType": "barChart",
         "default_reduction": "Category",
@@ -73,15 +72,14 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "HSPF Land Cover Type"
             }
-
         }
-
     },
     "Hydrologic Response Units": {
         "discrete": "TRUE",
         "labels": ["Outwash, Forest, Flat", "Outwash,  Forest,  Moderate", "Outwash, Forest,  Steep", "Outwash,  Pasture,  Flat", "Outwash,  Pasture,  Moderate", "Outwash,  Pasture,  Steep", "Outwash,  Lawn ,  Flat", "Outwash,  Lawn ,  Moderate", "Outwash,  Lawn ,  Steep", "Till,  Forest,  Flat", "Till,  Forest,  Moderate", "Till,  Forest,  Steep", "Till,  Pasture,  Flat", "Till,  Pasture,  Moderate", "Till,  Pasture,  Steep", "Till,  Lawn ,  Flat", "Till,  Lawn ,  Moderate", "Till,  Lawn ,  Steep", "Saturated,  Forest,  Flat", "Saturated,  Forest,  Moderate", "Saturated,  Forest,  Steep", "Saturated,  Pasture,  Flat", "Saturated,  Pasture,  Moderate", "Saturated,  Pasture,  Steep", "Saturated,  Lawn ,  Flat", "Saturated,  Lawn ,  Moderate", "Saturated,  Lawn ,  Steep", "Impervious,   Flat", "Impervious,  Moderate", "Impervious,  Steep"],
         "sourceName": "The Nature Conservancy",
         "units": "HRU",
+        "scale": 10,
         "values": ["0", "1", "2", "10", "11", "12", "20", "21", "22", "100", "101", "102", "110", "111", "112", "120", "121", "122", "200", "201", "202", "210", "211", "212", "220", "221", "222", "250", "251", "252"],
         "vizType": "bigNumberMean",
         "default_reduction": "Category",
@@ -98,14 +96,13 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "Hydrologic Response Units"
             }
-
         }
-
     },
     "Imperviousness": {
         "discrete": "FALSE",
         "sourceName": "The Nature Conservancy",
         "units": "Percent",
+        "scale": 1,
         "values": ["0", "1"],
         "vizType": "bigNumberPercent",
         "default_reduction": "mean",
@@ -121,15 +118,14 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "Imperviousness"
             }
-
         }
-
     },
     "Land Cover": {
         "discrete": "TRUE",
         "labels": ["No data", "Grass/Low Vegetation", "Shrub/Medium Vegetation", "Trees/Forest", "Bare soil", "Water", "Impervious", "Impervious - Roofs "],
         "sourceName": "The Nature Conservancy",
         "units": "Land Cover Type",
+        "scale": 1,
         "values": ["0", "1", "2", "3", "4", "5", "6", "7"],
         "default_reduction": "Category",
         "description": "1-meter resolution land cover classification",
@@ -144,9 +140,7 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "Land Cover"
             }
-
         }
-
     },
     "Land Use": {
         "discrete": "TRUE",
@@ -154,6 +148,7 @@ var rasters = {
         "sourceName": "Puget Sound Mapping Project",
         "sourceUrl": "https://www.commerce.wa.gov/serving-communities/growth-management/puget-sound-mapping-project/",
         "units": "Land Use type",
+        "scale": 5,
         "values": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"],
         "default_reduction": "Category",
         "description": "Department of Commerce Master Land Use Category",
@@ -164,46 +159,20 @@ var rasters = {
             "visParams": {
                 "min": 0,
                 "max": 14,
-                "palette": ["#394B59", "#669C42", "#EFD09E", "#14774C", "#9E2B0E", "#F4A691", "#2778AC", "#6E8387", "#8EB8B3", "#D17257", "#7C497B", "#554180", "#66CDAB", "#9FABA2", "#BF93BE"],
+                "palette": ["#394B59", "#669C42", "#EFD09E", "#14774C", "#9E2B0E", "#F4A691", 
+                "#2778AC", "#6E8387", "#8EB8B3", "#D17257", "#7C497B", "#554180", "#66CDAB", 
+                "#9FABA2", "#BF93BE"],
                 "opacity": 0.8,
                 "_row": "Land Use"
             }
-
         }
-
-    }
-    //,
-    // "Population": 
-    //     {
-    //         "discrete": "FALSE",
-    //         "sourceName": "2010 US Census Blocks",
-    //         "sourceUrl": "https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2010/TGRSHP10SF1.pdf",
-    //         "units": "Total Population",
-    //         "default_reduction": "sum",
-    //         "description": "2010 Census, population total",
-    //         "safe_name": "population",
-    //         "layer": 
-    //             {
-    //                 "eeObject": "eeObject",
-    //                 "name": "Population",
-    //                 "visParams": 
-    //                     {
-    //                         "min": 0,
-    //                         "max": 300,
-    //                         "palette": ["#FFC5D4", "#FFB3D0", "#EF98B6", "#DE7C9C", "#CC6184", "#BB446C", "#A82255", "#672941"],
-    //                         "opacity": 0.8,
-    //                         "_row": "Population"
-    //                     }
-
-    //             }
-
-    //     }
-    ,
+    },
     "Population Density": {
         "discrete": "FALSE",
         "sourceName": "2010 US Census Blocks",
         "sourceUrl": "https://www2.census.gov/geo/pdfs/maps-data/data/tiger/tgrshp2010/TGRSHP10SF1.pdf",
         "units": "Population per ha",
+        "scale": 100,
         "default_reduction": "mean",
         "description": "2010 Census, population density",
         "safe_name": "population_density",
@@ -211,7 +180,6 @@ var rasters = {
             "eeObject": "eeObject",
             "name": "Population Density",
             "visParams": {
-
                 "min": 0,
                 "max": 50,
                 "palette": [
@@ -223,45 +191,17 @@ var rasters = {
                     "e8fa5b",
                     "ffffff"
                 ],
-
                 "opacity": 0.8,
                 "_row": "Population Density"
             }
-
         }
-
     },
-    // "Precipitation (in)": 
-    //     {
-    //         "discrete": "FALSE",
-    //         "sourceName": "Salathé et al 2019",
-    //         "sourceUrl": "https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/",
-    //         "units": "in/year",
-    //         "default_reduction": "mean",
-    //         "description": "Mean annual precipitation (1970-1999)",
-    //         "safe_name": "precipitation_in",
-    //         "layer": 
-    //             {
-    //                 "eeObject": "eeObject",
-    //                 "name": "Precipitation (in)",
-    //                 "visParams": 
-    //                     {
-    //                         "min": 20,
-    //                         "max": 120,
-    //                         "palette": ["#781c81", "#3f60ae", "#539eb6", "#6db388", "#cab843", "#e78532", "#d92120"],
-    //                         "opacity": 0.8,
-    //                         "_row": "Precipitation (in)"
-    //                     }
-
-    //             }
-
-    //     }
-    // ,
     "Precipitation (mm)": {
         "discrete": "FALSE",
         "sourceName": "Salathé et al 2019",
         "sourceUrl": "https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/",
         "units": "mm/year",
+        "scale": 2500,
         "default_reduction": "mean",
         "description": "Mean annual precipitation (1970-1999)",
         "safe_name": "precipitation_mm",
@@ -272,9 +212,7 @@ var rasters = {
                 "min": 500,
                 "max": 3800,
                 "palette":
-
                     //["#781c81", "#3f60ae", "#539eb6", "#6db388", "#cab843", "#e78532", "#d92120"],
-
                     ["ffffff",
                         "fdef9a",
                         "aad85c",
@@ -290,45 +228,16 @@ var rasters = {
                         " bcbddc",
                         " dadaeb"
                     ],
-
-
                 "opacity": 0.8,
                 "_row": "Precipitation (mm)"
             }
-
         }
-
-    }
-    // ,
-    // "Runoff (in)": 
-    //     {
-    //         "discrete": "FALSE",
-    //         "sourceName": "The Nature Conservancy",
-    //         "units": "in/year",
-    //         "default_reduction": "mean",
-    //         "description": "Mean annual runoff calculated through continuous simulation for the period 1970-1999.",
-    //         "safe_name": "runoff_in",
-    //         "layer": 
-    //             {
-    //                 "eeObject": "eeObject",
-    //                 "name": "Runoff (in)",
-    //                 "visParams": 
-    //                     {
-    //                         "min": 1,
-    //                         "max": 40,
-    //                         "palette": ["eafdfd","9cd4da","61a8c7","427bb7","3f4b96","292851","040613"],
-    //                         "opacity": 0.8,
-    //                         "_row": "Runoff (in)"
-    //                     }
-
-    //             }
-
-    //     }
-    ,
+    },
     "Runoff (mm)": {
         "discrete": "FALSE",
         "sourceName": "The Nature Conservancy",
         "units": "mm/year",
+        "scale": 10,
         "default_reduction": "mean",
         "description": "Mean annual runoff calculated through continuous simulation for the period 1970-1999.",
         "safe_name": "runoff_mm",
@@ -342,15 +251,14 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "Runoff (mm)"
             }
-
         }
-
     },
     "Slope": {
         "discrete": "FALSE",
         "sourceName": "USGS National Elevation Dataset 1/3 Arc-Second",
         "sourceUrl": "https://nationalmap.gov/elevation.html",
         "units": "Percent",
+        "scale": 10,
         "default_reduction": "mean",
         "description": "Continuous ground surface slope in degrees",
         "safe_name": "slope",
@@ -364,15 +272,14 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "Slope"
             }
-
         }
-
     },
     "Slope Categories": {
         "discrete": "TRUE",
         "labels": ["Flat", "Moderate", "Steep"],
         "sourceName": "The Nature Conservancy",
         "units": "Category",
+        "scale": 10,
         "values": ["0", "1", "2"],
         "vizType": "barChart",
         "default_reduction": "Category",
@@ -388,15 +295,14 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "Slope Categories"
             }
-
         }
-
     },
     "Soils": {
         "discrete": "TRUE",
         "labels": ["Outwash", "Till", "Saturated", "Water"],
         "sourceName": "The Nature Conservancy",
         "units": "Hydrologic Soil Group",
+        "scale": 5,
         "values": ["1", "2", "3", "4"],
         "vizType": "barChart",
         "default_reduction": "Category",
@@ -412,14 +318,13 @@ var rasters = {
                 "opacity": 0.8,
                 "_row": "Soils"
             }
-
         }
-
     },
     "Traffic": {
         "discrete": "FALSE",
         "sourceName": "The Nature Conservancy",
-        "units": "Average Annual Daily Trips",
+        "units": "Average Annual Daily Trips",
+        "scale": 10,
         "vizType": "bigNumberMean",
         "default_reduction": "mean",
         "description": "Mean Annual Average Daily Trips",
@@ -431,129 +336,36 @@ var rasters = {
                 "min": 0,
                 "max": 100000,
                 "palette":
-
-                    //["000000","3f60ae","539eb6","6db388","cab843","e78532","d92120"],
                     [
                         "1A3399",
-
-
-
-
-
-
-
-
                         "3B7CB8",
-
-
-
-
-
-
                         "5EBAD1",
-
-
-
-
-
                         "ABE5D4",
-
-
-
-
                         "DEEAB4",
-
-
-
                         "E0DD86",
-
-
-
                         "CBB64D",
-
                         "BF9D39",
                         "B99333",
-
                         "AF7E28",
                         "AB7424",
                         "A5691F",
-
                         "9B5516",
                         "964B12",
                         "91400E",
                         "8A3308",
                         "842705",
                         "7F1900"
-
                     ],
-
-                //["#000004", "#320A5A", "#781B6C", "#BB3654", "#EC6824", "#FBB41A", "#FCFFA4"],
                 "opacity": 0.8,
                 "_row": "Traffic"
             }
-
         }
-
     }
-    // ,
-    // "Total Suspended Solids Concentration": 
-    //     {
-    //         "discrete": "FALSE",
-    //         "sourceName": "The Nature Conservancy",
-    //         "units": "µg/L",
-    //         "default_reduction": "mean",
-    //         "description": "Total Suspended Solids Concentration",
-    //         "safe_name": "total_suspended_solids_concentration",
-    //         "layer": 
-    //             {
-    //                 "eeObject": "eeObject",
-    //                 "name": "Total Suspended Solids Concentration",
-    //                 "visParams": 
-    //                     {
-    //                         "min": 10000,
-    //                         "max": 60000,
-    //                         "palette":["440154","433e85","25858e","1e9b8a","2ab07f","52c569","86d549","c2df23","fde725"],
-    //                         "opacity": 0.9,
-    //                         "_row": "Total Suspended Solids Concentration"
-    //                     }
-
-    //             }
-
-    //     }
-    // ,
-    // "Total Suspended Solids Load": 
-    //     {
-    //         "discrete": "FALSE",
-    //         "sourceName": "The Nature Conservancy",
-    //         "units": "mg/m²/year",
-    //         "default_reduction": "mean",
-    //         "description": "Total Suspended Solids Load",
-    //         "safe_name": "total_suspended_solids_load",
-    //         "layer": 
-    //             {
-    //                 "eeObject": "eeObject",
-    //                 "name": "Total Suspended Solids Load",
-    //                 "visParams": 
-    //                     {
-    //                         "min": 0,
-    //                         "max": 50000,
-    //                         "palette": ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"],
-    //                         "opacity": 0.9,
-    //                         "_row": "Total Suspended Solids Load"
-    //                     }
-
-    //             }
-
-    //     }
-
 }
-
 /**
  * Bring in data, renam and add sources to dictionary  
  */
-
 var data = require('users/stormwaterheatmap/apps:data/data_raw')
-
 var layerSources = {
     "Age of Imperviousness": data.age_of_development.rename('age_of_impervious_surface'),
     "HSPF Land Cover Type": data.hspf_landcover.rename('hspf_landcover_categories'),
@@ -566,7 +378,6 @@ var layerSources = {
     //                ee.Image(25.4)),
     "Precipitation (mm)": data.precip,
     //"Runoff (in)":data.mean_annual_runoff.divide(ee.Image(25.4)).rename('mean_annual_runoff_inches'),
-
     "Runoff (mm)": data.mean_annual_runoff.rename(
         'mean_annual_runoff_mm'),
     "Slope Categories": data.slope.rename('slope_categories'),
@@ -577,33 +388,23 @@ var layerSources = {
     "Hydrologic Response Units": data.hrus
     //"Total Suspended Solids Concentration": data.tss_concentration, 
     //"Total Suspended Solids Load": data.tss_load
-
 }
-
 var layNames = Object.keys(layerSources)
-
 /**
  * add data to layer dictionary
  */
-
 for (var i = 0; i < layNames.length; i++) {
     var thisLayer = (layNames[i]);
     rasters[thisLayer].layer.eeObject = layerSources[thisLayer]
 }
-
 /**
  * Bring in coc data and create a seperate data dictionary 
  */
-
 var coc_layers = require("users/stormwaterheatmap/apps:data/serve_coc_data")
-
 //Common palette for all cocs: 
 var coc_pal = ["042333", "2c3395", "744992", "b15f82", "eb7958", "fbb43d", "e8fa5b", "ffffff"]
 
-//["042333","2c3395","744992","b15f82","eb7958","fbb43d","e8fa5b","ffffff"]
-//["00204c","213d6b","555b6c","7b7a77","a59c74","d3c064","ffe945","ffffff"]
 var load_pal = ["000000", "440154", "433982", "30678d", "218f8b", "36b677", "8ed542", "fde725"]
-//["000004","711f81","b63679","ee605e","fdae78","fcfdbf","ffffff"]
 
 //Coc data dictionary 
 var cocs = {
@@ -613,6 +414,7 @@ var cocs = {
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_concentration",
         "units": "mg/L",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Total Suspended Solids Concentration",
         "safe_name": "pollutant_concentration",
@@ -634,6 +436,7 @@ var cocs = {
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_load",
         "units": "g/m² per year",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Total Suspended Solids Load",
         "safe_name": "pollutant_load",
@@ -641,7 +444,6 @@ var cocs = {
             "eeObject": coc_layers.tss_load,
             "name": "Total Suspended Solids Load",
             "visParams": {
-
                 "min": 0,
                 "max": 30,
                 "palette": load_pal,
@@ -649,13 +451,13 @@ var cocs = {
             }
         }
     },
-
     "Total Copper Concentration": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE",
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_concentration",
         "units": "mcg/L",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Total Copper Concentration",
         "safe_name": "pollutant_concentration",
@@ -671,13 +473,13 @@ var cocs = {
             }
         }
     },
-
     "Total Copper Load": {
         "discrete": "FALSE",
         "log_transformed_viz": "FALSE",
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_load",
         "units": "mg/m² per year",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Total Copper Load",
         "safe_name": "pollutant_load",
@@ -692,14 +494,13 @@ var cocs = {
             }
         }
     },
-
-
     "Total Phosphorus Concentration": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE",
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_concentration",
         "units": "mcg/L",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Total Phosphorus Concentration",
         "safe_name": "pollutant_concentration",
@@ -715,13 +516,13 @@ var cocs = {
             }
         }
     },
-
     "Total Phosphorus Load": {
         "discrete": "FALSE",
         "log_transformed_viz": "FALSE",
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_load",
         "units": "mg/m² per year",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Total Phosphorus Load",
         "safe_name": "pollutant_load",
@@ -729,7 +530,6 @@ var cocs = {
             "eeObject": coc_layers.p_load,
             "name": "Total Phosphorus Load",
             "visParams": {
-
                 "min": 0,
                 "max": 100,
                 "palette": load_pal,
@@ -743,6 +543,7 @@ var cocs = {
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_zinc_concentration",
         "units": "mcg/L",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Total Zinc Concentration",
         "safe_name": "pollutant_concentration",
@@ -764,6 +565,7 @@ var cocs = {
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_zinc_load",
         "units": "mg/m² per year",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Total Zinc Load",
         "safe_name": "pollutant_load",
@@ -771,7 +573,6 @@ var cocs = {
             "eeObject": coc_layers.zinc_load,
             "name": "Total Zinc Load",
             "visParams": {
-
                 "min": 0,
                 "max": 100,
                 "palette": load_pal,
@@ -785,6 +586,7 @@ var cocs = {
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/tkn_concentration",
         "units": "mcg/L",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Total Kjeldahl Nitrogen Concentration",
         "safe_name": "pollutant_concentration",
@@ -806,6 +608,7 @@ var cocs = {
         "sourceName": "The Nature Conservancy",
         "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/tkn_load",
         "units": "mg/m² per year",
+        "scale": 30,
         "default_reduction": "mean",
         "description": "Predicted Kjeldahl Nitrogen Load",
         "safe_name": "pollutant_load",
@@ -813,7 +616,6 @@ var cocs = {
             "eeObject": coc_layers.tkn_load,
             "name": "Total Kjeldahl Nitrogen Load",
             "visParams": {
-
                 "min": 0,
                 "max": 800,
                 "palette": load_pal,
