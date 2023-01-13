@@ -207,7 +207,7 @@ var rasters = {
         "safe_name": "precipitation_mm",
         "layer": {
             "eeObject": "eeObject",
-            "name": "Precipitation (mm)",
+            "name": "Precipitation",
             "visParams": {
                 "min": 500,
                 "max": 3800,
@@ -229,7 +229,7 @@ var rasters = {
                         " dadaeb"
                     ],
                 "opacity": 0.8,
-                "_row": "Precipitation (mm)"
+                "_row": "Precipitation"
             }
         }
     },
