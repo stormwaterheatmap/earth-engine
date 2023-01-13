@@ -196,7 +196,7 @@ var rasters = {
             }
         }
     },
-    "Precipitation (mm)": {
+    "Precipitation": {
         "discrete": "FALSE",
         "sourceName": "Salathé et al 2019",
         "sourceUrl": "https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/",
