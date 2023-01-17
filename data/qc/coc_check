@@ -1,126 +1,216 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image2 = ee.Image("users/stormwaterheatmap/landcover"),
+    landcover = ee.Image("users/stormwaterheatmap/hspf_landCover"),
+    s8_sheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/s8_watersheds_v5"),
+    PugetSound = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/PugetSound_WA");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
+predictors = predictors.scaled_predictors
 
-///For Tacoma - conversion from tss to pahs 
+var traffic_band = predictors.select('sqrt_traffic')
+Map.addLayer(traffic_band)
 
-// 	Calibrated Sediment Potencies in mg/kg							
-// 	Basin 235		Basin 237B		Basin 245		Low	High 
-// 	Low	High	Low	High	Low	High		
-// Phenanthrene	0.5	1.1	0.5	1.1	0.4	0.7	0.5	1.0
-// Pyrene	1.5	3.0	1.8	3.5	0.5	1.0	1.3	2.5
-// DEHP	10.4	20.8	5.4	10.8	13.2	26.4	9.7	19.3
-
-//tss is in ug/L conversion of 1e-6
+var pred_bands = predictors.bandNames()
+print('band names', pred_bands)
+//intercept,      devage2,     grass,     paved,  pm25_na,  sqrt_CO2_road,  traffic
 
 
-//Map.addLayer(Phenanthrene)
+var clamped_img_max = ee.Image.constant(
+    [
+        //"0_intercept":
+        99,
+        //"devAge2":
+        3,
+        //"grass":
+        3,
+        //"paved":
+        3,
+        //"pm25_na":
+        3,
+        //"sqrt_CO2_road":
+        3,
+        //"traffic":
+        3
+    ]
 
-//////Map.addLayer(tkn,{},'tkn')
-////////Map.addLayer(copper.reduce('sum'),{},'copper sum')
+    //1.59
+)
 
-var PugetSound = ee.FeatureCollection(
-    "users/stormwaterheatmap/tables/PugetSound")
+var predictors = predictors.where(
+    predictors.gt(clamped_img_max), clamped_img_max)
+
+
+var soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
+var water_mask = ee.Image(0).blend(soils.neq(4).byte())
+
+//var watermask = landcover.neq(9) 
+//predictors = predictors.mask(water_mask)
+/** Total Zinc:
+ln(total zinc) = 4.10 + 
+0.36 * sqrt_traffic + 
+0.69 * paved
+**/
+/** TSS 
+ln(TSS) = 10.17 
++ 0.19*rain 
++ 0.26*sqrt_traffic 
++ 0.30*paved
+**/ 
+
+/** P 
+ln(phosphorus) = 
+4.38 
+– 0.09*rain 
++ 0.60*summer 
++ 0.83*grass 
++ 0.97*paved 
++ 0.20*sqrt_CO2_road)
+**/ 
+/** 
+ * Copper 
+ * 
+ln(copper) = 
+2.22 
+– 0.14*rain 
++ 0.41*summer 
++ 0.34*sqrt_traffic 
++ 0.56*devAge2 
++ 0.75*pm25_na 
+– 0.07*rain:pm25_na
+
+**/ 
+
+var regression_coefficients = {
+    //            intercept,      devage2,     grass,   
+    //paved,  pm25_na,  sqrt_CO2_road,  sqrt traffic
+    'copper': [2.22, 0.56, 0,
+        0, 0.75, 0, 0.34
+    ],
+    'tss': [10.17, 0, 0,
+        0.30, 0, 0, 0.26
+    ],
+    'p': [4.38, 0, 0.83,
+        0.97, 0, 0.2, 0
+    ],
+    'tkn': [6.52, 0.22, 0,
+        0, 0, 0.28, 0
+    ],
+    'zinc': [4.10, 0, 0,
+        0.69, 0, 0, 0.36
+    ]
+}
+
+
+
+
+var bandNames = [
+    "intercept",
+    "devage2",
+    "grass",
+    "paved",
+    "pm25_na",
+    "sqrt_CO2_road",
+    "traffic"
+]
+
+
+
 
 /**
- * Test results against Tacoma vals 
- * 
- * 
+ * Applies a convolution to a scaled and centered image. Clamps values to 
+ * +/- 3 standard deviations (assuming dataset is scaled by sd)
+ * Takes a coc name and generates a single band image. 
  */
+function convolve_clamp_predictors(image) {
+    var convolved_predictors = image.focal_mean() //.//unmask().
+    // reduceNeighborhood({
+    //     skipMasked: true,
+    //     inputWeight: "min",
+    //     reducer: ee.Reducer.mean(),
+    //     kernel: ee.Kernel.gaussian({
+    //         radius: 200,
+    //         sigma: 70,
+    //         units: 'meters'
+    //     })
+    // })
 
-//var ws = ee.FeatureCollection("projects/ee-tacoma-watershed/assets/vector/Tacoma_SWPolys_swOutfallAreas")
+    var convolved_clamped = convolved_predictors.where(
+        convolved_predictors.gt(clamped_img_max), clamped_img_max)
 
-//var ws = s8_sheds
-//Cocs
-//var wsdotMask = wsdot.unmask().lt(25000)
-////Map.addLayer(wsdotMask,{},'wsdotmask')
+    //.clamp(-2, 2) //clamp to 3 standard deviations 
+    return convolved_clamped
+}
 
 /**
- * Set coc value  
- * 
- * 
+ * Main function. Generates heatmap layer for a specific coc. 
+ * Takes a coc name and generates a single band image. 
  */
+function generate_coc_layer(coc_name, predictor_image) {
+    // var regression_dict = ee.Dictionary.fromLists({
+    //     keys: pred_bands,
+    //     values: regression_coefficients[coc_name]
+    // })
 
-var coc = zinc
+    //Get the regression parameters 
+    var coc_parameters = ee.Image.constant(regression_coefficients[coc_name]).rename(bandNames)
 
+    // calculate the concentration 
+    var coc_ug_L_scaled = coc_parameters.multiply(predictor_image)
+        .reduce('sum')
+        .rename(coc_name + "_concentration_ug_per_L")
 
+    //transform back from log values  
+    var coc_ug_L = coc_ug_L_scaled.exp() //.setDefaultProjection({
+    //     crs: 'EPSG:3857'
+    // }).reduceResolution({
+    //     reducer: ee.Reducer.mean(),
+    //     bestEffort: true
+    // }).reproject({
+    //     scale: 30,
+    //     crs: 'EPSG:3857'
+    // }) //reproject at a 30m scale to smooth out image 
 
-// predictors are imported above
+    return (coc_ug_L)
+}
 
-////Map.addLayer(coeffs)
-//Map.addLayer(coc,{},'cocs')
-//Map.addLayer(convolved_clamped.select('traffic_mean'), {}, 'convolved_clamped')
+var convolved_clamped = convolve_clamp_predictors(predictors)
+var copper = generate_coc_layer("copper", convolved_clamped)
+var p = generate_coc_layer("p", convolved_clamped)
+var tss = generate_coc_layer("tss", convolved_clamped)
+var tkn = generate_coc_layer("tkn", convolved_clamped)
+var zinc = generate_coc_layer("zinc", convolved_clamped)
 
+var all_cocs = copper.addBands(p).addBands(tss).addBands(zinc).addBands(tkn) //.addBands(zinc).addBands(tkn)
+print(all_cocs.toDictionary())
 
+var zinc_tkn = zinc.addBands(tkn)
 
-var coc_reduction =
-    ui.Chart.image.byRegion({
-        image: coc,
-        regions: ws,
-        reducer: ee.Reducer.mean(),
-        scale: 15,
-        xProperty: "OUTFALLID"
-    })
-
-print(coc_reduction.setChartType("ColumnChart").setOptions({
-    title: 'coc_reduction'
-}))
-
-
-var predictor_reduction =
-    ui.Chart.image.byRegion({
-        image: convolved_clamped,
-        regions: ws,
-        reducer: ee.Reducer.mean(),
-        scale: 30,
-        xProperty: "OUTFALLID"
-    })
-
-print(predictor_reduction.setChartType("ColumnChart"))
-
-
-var s8_predictors = convolved_clamped.reduceRegions({
-    reducer: ee.Reducer.mean(),
-    collection: s8_sheds,
-    scale: 30
-}) //.reduceToImage(['mean'], ee.Reducer.first())
+var palettes = require('users/gena/packages:palettes');
+var pal = palettes.kovesi.linear_bgyw_15_100_c67[7]
 
 
+exports.convolved_predictors = convolved_clamped
+Export.image.toAsset({
+    image: all_cocs,
+    region: PugetSound,
+    scale: 30,
+    maxPixels: 1e13,
+    description: 'all_cocs_feb22',
+    assetId: 'all_cocs_feb22'
+})
+Export.image.toAsset({
+    image: zinc_tkn,
+    region: PugetSound,
+    scale: 30,
+    maxPixels: 1e13,
+    description: 'zinc_tkn_jan22',
+    assetId: 'zinc_tkn_jan22'
+})
 
 
-var s8_predictors_image = s8_predictors.reduceToImage(
-
-    {
-        properties: pred_bands,
-        reducer: ee.Reducer.firstNonNull().forEach(pred_bands)
-    })
-
-print(s8_predictors_image)
-
-var s8_predictions = generate_coc_layer("copper", s8_predictors_image).unmask()
-
-//////Map.addLayer(s8_predictions)
-
-//Predict using average value for watersheds - this should produce the same results as the monitoring data 
-
-// //////Map.addLayer(combined)
-//   var options_lines = {
-//             title: 'Line intervals, default',
-//             curveType: 'function',
-//             lineWidth: 4,
-//             intervals: { 'style':'line' },
-//             legend: 'none'
-//         };
-// // try an image series 
-// var chart = ui.Chart.image.byRegion({
-//   image: combined,
-//   regions: watersheds,
-//   reducer: ee.Reducer.mean(),
-//   xProperty: "Location_N",
-//   scale: 200
-// }).setChartType('ComboChart')
-//   .setOptions({
-//           series: {
-//           0: {type: 'bars'}, 
-//           1: {type: 'steppedArea',color:'#f5f5f5'}, 
-//           2: {type:'steppedArea',color:'#f5f5f5'},
-//           3: {type:'bars'} 
-//           }});
-// print(chart)
+// Apply a non-linear stretch to the population data for visualization.
+function colorStretch(image) {
+    return image.log();
+}
+var PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask")
+Map.addLayer(all_cocs.mask(PugetSound_mask))
