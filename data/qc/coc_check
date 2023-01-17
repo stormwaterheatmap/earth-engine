@@ -190,6 +190,9 @@ var pal = palettes.kovesi.linear_bgyw_15_100_c67[7]
 
 
 exports.convolved_predictors = convolved_clamped
+
+
+
 Export.image.toAsset({
     image: all_cocs,
     region: PugetSound,
