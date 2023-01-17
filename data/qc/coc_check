@@ -1,0 +1,126 @@
+
+///For Tacoma - conversion from tss to pahs 
+
+// 	Calibrated Sediment Potencies in mg/kg							
+// 	Basin 235		Basin 237B		Basin 245		Low	High 
+// 	Low	High	Low	High	Low	High		
+// Phenanthrene	0.5	1.1	0.5	1.1	0.4	0.7	0.5	1.0
+// Pyrene	1.5	3.0	1.8	3.5	0.5	1.0	1.3	2.5
+// DEHP	10.4	20.8	5.4	10.8	13.2	26.4	9.7	19.3
+
+//tss is in ug/L conversion of 1e-6
+
+
+//Map.addLayer(Phenanthrene)
+
+//////Map.addLayer(tkn,{},'tkn')
+////////Map.addLayer(copper.reduce('sum'),{},'copper sum')
+
+var PugetSound = ee.FeatureCollection(
+    "users/stormwaterheatmap/tables/PugetSound")
+
+/**
+ * Test results against Tacoma vals 
+ * 
+ * 
+ */
+
+//var ws = ee.FeatureCollection("projects/ee-tacoma-watershed/assets/vector/Tacoma_SWPolys_swOutfallAreas")
+
+//var ws = s8_sheds
+//Cocs
+//var wsdotMask = wsdot.unmask().lt(25000)
+////Map.addLayer(wsdotMask,{},'wsdotmask')
+
+/**
+ * Set coc value  
+ * 
+ * 
+ */
+
+var coc = zinc
+
+
+
+// predictors are imported above
+
+////Map.addLayer(coeffs)
+//Map.addLayer(coc,{},'cocs')
+//Map.addLayer(convolved_clamped.select('traffic_mean'), {}, 'convolved_clamped')
+
+
+
+var coc_reduction =
+    ui.Chart.image.byRegion({
+        image: coc,
+        regions: ws,
+        reducer: ee.Reducer.mean(),
+        scale: 15,
+        xProperty: "OUTFALLID"
+    })
+
+print(coc_reduction.setChartType("ColumnChart").setOptions({
+    title: 'coc_reduction'
+}))
+
+
+var predictor_reduction =
+    ui.Chart.image.byRegion({
+        image: convolved_clamped,
+        regions: ws,
+        reducer: ee.Reducer.mean(),
+        scale: 30,
+        xProperty: "OUTFALLID"
+    })
+
+print(predictor_reduction.setChartType("ColumnChart"))
+
+
+var s8_predictors = convolved_clamped.reduceRegions({
+    reducer: ee.Reducer.mean(),
+    collection: s8_sheds,
+    scale: 30
+}) //.reduceToImage(['mean'], ee.Reducer.first())
+
+
+
+
+var s8_predictors_image = s8_predictors.reduceToImage(
+
+    {
+        properties: pred_bands,
+        reducer: ee.Reducer.firstNonNull().forEach(pred_bands)
+    })
+
+print(s8_predictors_image)
+
+var s8_predictions = generate_coc_layer("copper", s8_predictors_image).unmask()
+
+//////Map.addLayer(s8_predictions)
+
+//Predict using average value for watersheds - this should produce the same results as the monitoring data 
+
+// //////Map.addLayer(combined)
+//   var options_lines = {
+//             title: 'Line intervals, default',
+//             curveType: 'function',
+//             lineWidth: 4,
+//             intervals: { 'style':'line' },
+//             legend: 'none'
+//         };
+// // try an image series 
+// var chart = ui.Chart.image.byRegion({
+//   image: combined,
+//   regions: watersheds,
+//   reducer: ee.Reducer.mean(),
+//   xProperty: "Location_N",
+//   scale: 200
+// }).setChartType('ComboChart')
+//   .setOptions({
+//           series: {
+//           0: {type: 'bars'}, 
+//           1: {type: 'steppedArea',color:'#f5f5f5'}, 
+//           2: {type:'steppedArea',color:'#f5f5f5'},
+//           3: {type:'bars'} 
+//           }});
+// print(chart)
