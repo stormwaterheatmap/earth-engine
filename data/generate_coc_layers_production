@@ -1,8 +1,11 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image2 = ee.Image("users/stormwaterheatmap/landcover"),
     landcover = ee.Image("users/stormwaterheatmap/hspf_landCover"),
-    s8_sheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/s8_watersheds_v5");
+    s8_sheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/s8_watersheds_v5"),
+    PugetSound = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/PugetSound_WA");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+
 var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
 predictors = predictors.scaled_predictors
 
@@ -215,4 +218,30 @@ function colorStretch(image) {
     return image.log();
 }
 var PugetSound_mask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask")
-Map.addLayer(all_cocs.mask(PugetSound_mask))
+//Map.addLayer(all_cocs.mask(PugetSound_mask))
+print(all_cocs)
+
+var bands = all_cocs.bandNames() 
+var numBands = bands.length().getInfo()
+for (var i = 0; i < numBands; i++) {
+  print(i)
+  var nm = bands.get(i).getInfo()
+  var img = all_cocs.select([nm])
+  export_img(img,nm)
+}
+
+function export_img(img,nm){
+Export.image.toCloudStorage({
+        image: img.toFloat(),
+        description: nm, //removes spaces
+        bucket: 'swhm-image-exports',
+        scale: 30,
+        maxPixels: 1e13, 
+        crs: 'EPSG:3857', 
+        region: PugetSound,
+        fileNamePrefix: nm, 
+        fileFormat: 'GeoTIFF',
+        formatOptions: {
+            cloudOptimized: true
+        }
+    })}
