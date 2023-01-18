@@ -41,11 +41,11 @@ var feat_out = reduce_to_sheds(fc)
 Export.table.toCloudStorage({
   collection:feat_out, 
   description: name, 
-  bucket:'gs://swhm-table-exports', fileFormat:'CSV', 
+  bucket:'swhm-table-exports', fileFormat:'CSV', 
   fileNamePrefix: name
 })
 }
-var i = 1
+var i = 4
 //var sheds_selectors = ['Watershed Name']
 
 var sheds = data.vector_dict[nms[i]]
