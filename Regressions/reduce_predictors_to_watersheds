@@ -1,3 +1,8 @@
+var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
+
+var nms = Object.keys(data.vector_dict)
+print(nms)
+
 
 var PS_AU = ee.FeatureCollection(
  "projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units_string")
@@ -18,6 +23,8 @@ predictors = predictors.scaled_predictors
 
 // make a reducer function to average predictors in a featureCollection 
 function reduce_to_sheds(shedFc){
+ 
+  
 var reduced_predictors = predictors.reduceRegions({
     reducer: ee.Reducer.mean(),
     scale: 10,
@@ -28,12 +35,22 @@ var reduced_predictors = predictors.reduceRegions({
 return reduced_predictors
 }
 
-var feat_out = reduce_to_sheds(PS_AU)
+function export_tables(fc,name){
+var feat_out = reduce_to_sheds(fc)
 
 Export.table.toCloudStorage({
   collection:feat_out, 
-  bucket:'swhm-ee-exports/table-exports/predictors', fileFormat:'SHP', 
-  fileNamePrefix: 'PSAU'
+  description: name, 
+  bucket:'gs://swhm-table-exports', fileFormat:'CSV', 
+  fileNamePrefix: name
 })
+}
+var i = 1
+//var sheds_selectors = ['Watershed Name']
 
-print(feat_out.first())
+var sheds = data.vector_dict[nms[i]]
+var filename = nms[i].replace(/[^a-z0-9]/gi, '_').toLowerCase();
+print(filename)
+var feat_out_test = reduce_to_sheds(sheds)
+print(feat_out_test)
+export_tables(sheds,filename)
