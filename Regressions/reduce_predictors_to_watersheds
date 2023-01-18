@@ -20,11 +20,12 @@ print(nms)
 // Import predicter images 
 var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
 predictors = predictors.scaled_predictors
+var bands = predictors.bandNames()
+var predictor_bands = bands.remove('0_intercept')
 
+predictors = predictors.select(predictor_bands)
 // make a reducer function to average predictors in a featureCollection 
 function reduce_to_sheds(shedFc){
- 
-  
 var reduced_predictors = predictors.reduceRegions({
     reducer: ee.Reducer.mean(),
     scale: 10,
@@ -50,7 +51,7 @@ Export.table.toCloudStorage({
   fileNamePrefix: name
 })
 }
-var i = 1
+var i = 4
 //var sheds_selectors = ['Watershed Name']
 
 var sheds = data.vector_dict[nms[i]]
