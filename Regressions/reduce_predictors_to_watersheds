@@ -4,13 +4,13 @@ var nms = Object.keys(data.vector_dict)
 print(nms)
 
 
-var PS_AU = ee.FeatureCollection(
- "projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units_string")
-var NHDPlus = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/NHDPlus_High_Resolution_Watershed_Dataset_string"
-)
+// var PS_AU = ee.FeatureCollection(
+// "projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units_string")
+// var NHDPlus = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/NHDPlus_High_Resolution_Watershed_Dataset_string"
+// )
 
-var HUC12 = ee.FeatureCollection(
-   "projects/ee-stormwaterheatmap/assets/huc12")
+// var HUC12 = ee.FeatureCollection(
+//   "projects/ee-stormwaterheatmap/assets/huc12")
 /** 
  * This script generates average values for all predictors 
  * used in the stormwater heatmap 
@@ -35,17 +35,22 @@ var reduced_predictors = predictors.reduceRegions({
 return reduced_predictors
 }
 
+/**
+ * EXPORT TO CLOUD
+ **/ 
+ 
+
 function export_tables(fc,name){
 var feat_out = reduce_to_sheds(fc)
 
 Export.table.toCloudStorage({
   collection:feat_out, 
   description: name, 
-  bucket:'swhm-table-exports', fileFormat:'CSV', 
+  bucket:'swhm-table-exports', fileFormat:'SHP', 
   fileNamePrefix: name
 })
 }
-var i = 4
+var i = 1
 //var sheds_selectors = ['Watershed Name']
 
 var sheds = data.vector_dict[nms[i]]
