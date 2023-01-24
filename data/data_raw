@@ -81,8 +81,8 @@ exports.slope_cont = ee.Terrain
 //   .reduce('sum')
 //   .clip(PugetSound);
 
-/* 
-/ 
+
+
 var Slope_Categories = ee.Image.loadGeoTIFF('gs://live_data_layers/rasters/Slope_Categories.tif')
 exports.slope = Slope_Categories;
 
