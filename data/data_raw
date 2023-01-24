@@ -102,7 +102,7 @@ Stormwaterheatmap Image Assets
 
 var storage_bucket = 'gs://live_data_layers/rasters/'
 
-exports.landuse_img = ee.Image(
+exports.landuse_img = ee.Image.loadGeoTIFF(
   storage_bucket+'Land_Use.tif'
   )
   
