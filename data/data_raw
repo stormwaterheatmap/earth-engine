@@ -25,7 +25,7 @@ Vector Exports
 var PugetSound = ee.FeatureCollection(
   "users/stormwaterheatmap/tables/PugetSound");
 exports.PugetSound = PugetSound
-exports.hrus = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode")
+
 
 exports.cityLimits = cityLimits.filterBounds(
   PugetSound)
@@ -175,7 +175,7 @@ exports.mean_annual_runoff = ee.Image.loadGeoTIFF('gs://live_data_layers/rasters
 //Flow Duration Index 
 exports.fdr = ee.Image.loadGeoTIFF('gs://live_data_layers/rasters/Flow_Duration_Index.tif')
 exports.hspf_landcover = ee.Image.loadGeoTIFF('gs://live_data_layers/rasters/HSPF_Land_Cover_Type.tif')
-
+exports.hrus = ee.Image.loadGeoTIFF('gs://live_data_layers/rasters/Hydrologic_Response_Units.tif')
 //var lc_watermask = ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2").select('MSK').mode().unmask().neq(3)
 exports.psau_shed_img = ee.Image("projects/ee-stormwaterheatmap/assets/pasuv2").select(0).gt(0).byte().focal_max(1)
 
