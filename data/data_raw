@@ -171,10 +171,10 @@ exports.age_of_development = Age_of_Imperviousness
 // var hspfLayers = require('users/stormwaterheatmap/source_data:hspfLayers');
 // //runoff 
 // var mean_annual_runoff = 
-exports.mean_annual_runoff = ee.loadGeoTIFF('gs://live_data_layers/rasters/Runoff.tif')
+exports.mean_annual_runoff = ee.Image.loadGeoTIFF('gs://live_data_layers/rasters/Runoff.tif')
 //Flow Duration Index 
-exports.fdr = ee.loadGeoTIFF('gs://live_data_layers/rasters/Flow_Duration_Index.tif')
-exports.hspf_landcover = ee.loadGeoTIFF('gs://live_data_layers/rasters/HSPF_Land_Cover_Type.tif')
+exports.fdr = ee.Image.loadGeoTIFF('gs://live_data_layers/rasters/Flow_Duration_Index.tif')
+exports.hspf_landcover = ee.Image.loadGeoTIFF('gs://live_data_layers/rasters/HSPF_Land_Cover_Type.tif')
 
 //var lc_watermask = ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2").select('MSK').mode().unmask().neq(3)
 exports.psau_shed_img = ee.Image("projects/ee-stormwaterheatmap/assets/pasuv2").select(0).gt(0).byte().focal_max(1)
