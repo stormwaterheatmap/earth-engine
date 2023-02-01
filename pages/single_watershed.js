@@ -328,7 +328,7 @@ function make_layer_dropdown() {
     layers_list["Flow Duration Index"] = data.rasters["Flow Duration Index"];
     layers_list["Imperviousness"] = data.rasters["Imperviousness"];
     layers_list["Population Density"] = data.rasters["Population Density"];
-    layers_list["Precipitation (mm)"] = data.rasters["Precipitation (mm)"];
+    layers_list["Precipitation"] = data.rasters["Precipitation"];
     layers_list["Runoff (mm)"] = data.rasters["Runoff (mm)"];
 
     var select_layer = ui.Select({
@@ -492,7 +492,7 @@ function makeReports() {
     // Watershed info
     //Precipitation 
     var pchart = charts.littleNum(
-        layerProperties["Precipitation (mm)"],
+        layerProperties["Precipitation"],
         clicked_basin_geom,
         report_scale,
         "mean"
