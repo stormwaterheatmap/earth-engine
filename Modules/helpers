@@ -1,6 +1,6 @@
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
-var charts = require('users/stormwaterheatmap/apps:Modules/chart')
+//var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var barLegend = legends.barLegend
 
 function make_docs_link (layer_object) {
@@ -305,7 +305,7 @@ function sigFigs (n, sig) {
 exports.sigFigs = sigFigs
 
 // //var chart = make_chart(layer_object.Imperviousness,geometry,30)//,"percent")
-exports.make_chart = make_chart
+//exports.make_chart = make_chart
 exports.make_docs_link = make_docs_link
 exports.make_tnc_map = make_tnc_map
 exports.clear_map_add_layer = clear_map_add_layer
