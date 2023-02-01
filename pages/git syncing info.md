@@ -5,11 +5,17 @@ Github is used as a mirror for this repo.
 
 # For stormwaterheatmap developers 
 To clone the primary repository: 
+
 ```git clone https://earthengine.googlesource.com/users/stormwaterheatmap/apps```
 
-To push changes to the primary repository 
+To pull latest changes from the primary repository: 
+
+```git pull orgin```
+
+To push changes to the primary repository: 
+
 ```git push orgin```
 
-To write changes from the googlesource repo, 
+To write changes from the googlesource repo: 
 
-git push --mirror https://github.com/stormwaterheatmap/earth-engine.git
+```git push --mirror https://github.com/stormwaterheatmap/earth-engine.git```
