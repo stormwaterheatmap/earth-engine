@@ -1,20 +1,20 @@
-# Important 
-The primary repositpory for these scripts is: https://earthengine.googlesource.com/users/stormwaterheatmap/apps/
+# Github mirror info
+The primary repository for these scripts is: https://earthengine.googlesource.com/users/stormwaterheatmap/apps/
 
 Github is used as a mirror for this repo. 
 
-# For stormwaterheatmap developers 
+## For stormwaterheatmap developers 
 To clone the primary repository: 
 
 ```git clone https://earthengine.googlesource.com/users/stormwaterheatmap/apps```
 
 To pull latest changes from the primary repository: 
 
-```git pull orgin```
+```git pull origin```
 
 To push changes to the primary repository: 
 
-```git push orgin```
+```git push origin```
 
 To write changes from the googlesource repo: 
 
