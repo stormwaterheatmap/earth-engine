@@ -18,7 +18,7 @@ layer_types["Input Data Layers"] = {
   "Land Cover": rasters["Land Cover"],
   "Land Use": rasters["Land Use"],
   "Population Density": rasters["Population Density"],
-  "Precipitation (mm)": rasters["Precipitation (mm)"],
+  "Precipitation": rasters["Precipitation"],
   Slope: rasters["Slope"],
   "Slope Categories": rasters["Slope Categories"],
   Traffic: rasters["Traffic"],
