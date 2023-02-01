@@ -1,298 +1,314 @@
-
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
 var legends = require('users/stormwaterheatmap/apps:Modules/legends')
 var charts = require('users/stormwaterheatmap/apps:Modules/chart')
 var barLegend = legends.barLegend
-//var barLegend_log_xform = legends.barLegend_log_xform
 
-
-
-function make_docs_link(layer_object){
-  var docs_url = "http://stormwaterheatmap.org/docs/Data%20Layers/"
-  return(
-    ui.Label({value: "more info ↗", style:Style.fonts.Capton3, targetUrl:docs_url+layer_object.safe_name })
-    )
+function make_docs_link (layer_object) {
+  var docs_url = 'http://stormwaterheatmap.org/docs/Data%20Layers/'
+  return ui.Label({
+    value: 'more info ↗',
+    style: Style.fonts.Capton3,
+    targetUrl: docs_url + layer_object.safe_name
+  })
 }
 
 var makeLegend = function (layerObject) {
-    var legend
-    if (layerObject.discrete == "TRUE") {
-        legend = (legends.discreteLegend(layerObject)) //gets the first band of the image
-        // call the histogram function print('histogram')
-    } else {
-        legend = (barLegend(layerObject))
-    } //add reports  
-    //legend.insert(0,ui.Label({value: "Legend", style:Style.fonts.H3}))
+  var legend
+  if (layerObject.discrete == 'TRUE') {
+    legend = legends.discreteLegend(layerObject) //gets the first band of the image
+    // call the histogram function print('histogram')
+  } else {
+    legend = barLegend(layerObject)
+  } //add reports
+  //legend.insert(0,ui.Label({value: "Legend", style:Style.fonts.H3}))
 
-
-var docs_link = make_docs_link(layerObject)
-return(legend.add(docs_link))
+  var docs_link = make_docs_link(layerObject)
+  return legend.add(docs_link)
 }
-
 
 var removeObject = function (eeObject, map) {
-    var m = map || Map
-    var layers = m.layers()
-    var layersJS = layers.getJsArray()
-    var removedIndexes = []
-    for (var i in layersJS) {
-        var layer = layersJS[i]
-        var object = layer.getEeObject()
-        if (object === eeobject) {
-            m.remove(layer)
-            removedIndexes.push(Number(i))
-        }
+  var m = map || Map
+  var layers = m.layers()
+  var layersJS = layers.getJsArray()
+  var removedIndexes = []
+  for (var i in layersJS) {
+    var layer = layersJS[i]
+    var object = layer.getEeObject()
+    if (object === eeobject) {
+      m.remove(layer)
+      removedIndexes.push(Number(i))
     }
-    return removedIndexes
+  }
+  return removedIndexes
 }
 var addObject = function (layerObject, map) {
-    // var pobj = ui.mapPanel.Layer({eeObject: layerProperties.Precipitation.layer.eeObject}).getEeObject()//redefine inputs as ui.mapPanel.layer
-    // mapPanel.add(layerObject.uiLayer)
-    var m = map || Map
-    m.layers().add(layerObject.layer)
-    // mapPanel.layers().add(layerObject.layer)
+  // var pobj = ui.mapPanel.Layer({eeObject: layerProperties.Precipitation.layer.eeObject}).getEeObject()//redefine inputs as ui.mapPanel.layer
+  // mapPanel.add(layerObject.uiLayer)
+  var m = map || Map
+  m.layers().add(layerObject.layer)
+  // mapPanel.layers().add(layerObject.layer)
 }
 
-var clear_map_add_layer = function(layerObject,legendPanel,map){ 
+var clear_map_add_layer = function (layerObject, legendPanel, map) {
   var m = map || Map
-  
-  m.layers().reset() //reset all layers
- // m.widgets().remove(legend)//remove legend if exists 
-  m.layers().add(layerObject.layer)
-var legend = makeLegend(layerObject)  
 
-  legend.style().set({position: "bottom-right"}); 
+  m.layers().reset() //reset all layers
+  // m.widgets().remove(legend)//remove legend if exists
+  m.layers().add(layerObject.layer)
+  var legend = makeLegend(layerObject)
+
+  legend.style().set({
+    position: 'bottom-right'
+  })
   legendPanel.clear().add(legend)
 }
 
+var info_panel = function (label, link) {
+  var panel_label = ui.Label({
+    value: label,
+    style: {
+      margin: '8px',
+      padding: '0px'
+    }
+  })
 
-var info_panel = function(label,link){
-  var panel_label = ui.Label({value:label,style:{margin: "8px", padding: "0px"}}); 
-
-var combined_panel = ui.Panel({widgets:[panel_label//,info_label
-], layout:ui.Panel.Layout.flow('horizontal')}); 
-return(combined_panel)
+  var combined_panel = ui.Panel({
+    widgets: [
+      panel_label //,info_label
+    ],
+    layout: ui.Panel.Layout.flow('horizontal')
+  })
+  return combined_panel
 }
 
-
-function make_tnc_map(map) {
-    var m = map || Map
-    m.setControlVisibility({
-        all: false,
-        zoomControl: true,
-        mapTypeControl: true,
-        layerList: true,
-        fullscreenControl: true
-    });
-    m.setCenter(-122.3077440902171, 47.6043996364779, 9)
-    m.setOptions('Light', Style.mapStyles)
+function make_tnc_map (map) {
+  var m = map || Map
+  m.setControlVisibility({
+    all: false,
+    zoomControl: true,
+    mapTypeControl: true,
+    layerList: true,
+    fullscreenControl: true
+  })
+  m.setCenter(-122.3077440902171, 47.6043996364779, 9)
+  m.setOptions('Light', Style.mapStyles)
 }
-
 
 var Style = require('users/stormwaterheatmap/apps:Modules/Style')
-
 
 var fonts = Style.fonts
 var colors = Style.colors
 
+function makeMainPanel (title) {
+  //function that makes the main control panel; returns a panel with title
 
+  var title_label = title || 'Analyze a Watershed'
 
-function makeMainPanel(title) { //function that makes the main control panel; returns a panel with title 
-    
-   var title_label = title || "Analyze a Watershed"
-    
-    var panelColors = {
-        primary: '#004d40',
-        dPrimary: '#002419', // 
-        lPrimary: '#38786a',
-        text: '#212121', //light black
-        sText: '#757575', //secondary text 
-        divider: '#BDBDBD',
-        secondary: '512ca8',
-        dSecondary: '140078',
-        lSecondary: '8558da',
+  var panelColors = {
+    primary: '#004d40',
+    dPrimary: '#002419', //
+    lPrimary: '#38786a',
+    text: '#212121', //light black
+    sText: '#757575', //secondary text
+    divider: '#BDBDBD',
+    secondary: '512ca8',
+    dSecondary: '140078',
+    lSecondary: '8558da'
+  } //divder text
 
+  var mainPanel = ui.Panel({
+    style: {
+      minWidth: '300px', //main panel is white
+      //height: '70%',
+      // padding: 0,
+      position: 'top-left'
+      //border: '1px solid black'
+    }
+  })
 
-    } //divder text 
+  var head = ui.Panel({
+    //header panel holds priority stuff
+    style: {
+      //backgroundColor: panelColors.lPrimary,
+      width: '100%',
+      margin: 0
+    },
+    layout: ui.Panel.Layout.flow('horizontal')
+  })
 
+  //buttons at the top
 
-    var mainPanel = ui.Panel({
-        style: {
-            minWidth: '300px', //main panel is white 
-            //height: '70%',
-           // padding: 0,
-            position: 'top-left',
-            //border: '1px solid black'
-        }
+  ///buttons for tabs at the top
+
+  //var
+
+  var topP = ui.Panel({
+    //topPanel holds title
+    style: {
+      //backgroundColor: panelColors.primary, //height:'8px'
+    }
+  })
+  topP.add(
+    ui.Label({
+      value: title_label,
+      style: {
+        fontFamily: fonts.H1.fontFamily,
+        fontSize: fonts.H1.fontSize,
+        fontWeight: fonts.H1.fontWeight
+        // backgroundColor: colors.transparent,
+        // color: 'white'
+      }
     })
-   
+  )
 
-    var head = ui.Panel({ //header panel holds priority stuff 
+  mainPanel.add(topP)
+
+  var subPan = ui.Panel({
+    style: {
+      margin: 0
+      //padding:0,
+      //backgroundColor: '087f23', //height:'8px' //subpanel holds xx
+    }
+  })
+  /*    topP.add(ui.Label('Beta testing; version 0.2', {
+            backgroundColor: '00000000', //fontWeight:400,
+            margin: '0px 8px 4px 8px',
+            //padding: 0, 
+            fontSize: '12px',
+            fontWeight: 300,
+            fontFamily: fonts.Caption2.fontFamily,
+            color: 'white'
+        }))*/
+  mainPanel.add(subPan)
+
+  var bar = ui.Panel({
+    style: {
+      height: '4px',
+      stretch: 'both'
+      //backgroundColor: panelColors.lPrimary //bar above buttons
+    }
+  })
+  //add(ui.Label('bar'))
+  mainPanel.add(bar)
+
+  mainPanel.add(head)
+
+  return mainPanel
+}
+
+function make_chart (layer_object, ws, scale) {
+  //read chart type from layer object
+  if (layer_object.vizType == 'histogram') {
+    return charts.histogramImage(layer_object, ws, scale)
+  } else if (layer_object.vizType == 'bigNumberPercent') {
+    return charts.littleNum(layer_object, ws, scale, 'percent')
+  } else if (layer_object.vizType == 'barChart') {
+    return charts.histByClass(layer_object, scale, ws)
+  }
+}
+
+function hline () {
+  //Makes a horizontal line
+  return ui.Label({
+    value: 'null',
+    style: {
+      //width:'100%',
+      height: '0px',
+      padding: '0px ',
+      margin: '0px 0px 0px 0px',
+      border: '0.5px solid whitesmoke',
+      stretch: 'horizontal'
+    }
+  })
+}
+
+function warning_panel (title, text) {
+  var warningcolor = '#FFF8E6'
+  var warningborder = '#E6A700'
+  var warningtextcolor = '#4D3800'
+  var line = ui.Label({
+    value: 'null',
+    style: {
+      //width:'100%',
+      // height: '100%',
+      width: '0px',
+      padding: '0px ',
+      margin: '0px 0px 0px 0px',
+      backgroundColor: '#E6A700',
+      border: '3.5px solid #E6A700',
+      stretch: 'vertical'
+    }
+  })
+
+  var panel = ui.Panel({
+    layout: ui.Panel.Layout.flow('horizontal'),
+    style: {
+      padding: '0px ',
+      margin: '0px 0px 0px 0px',
+      backgroundColor: warningcolor,
+      border: '0.2px solid' + warningborder
+    }
+  })
+
+  //Title
+  // var symbol = ui.Label({value:"⚠",style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px",
+  // fontSize :'24px'}})
+
+  var title = ui.Label({
+    value: title,
+    style: {
+      backgroundColor: warningcolor,
+      color: warningtextcolor,
+      fontWeight: '600',
+      padding: '0px',
+      fontSize: '18px'
+    }
+  })
+  var textbox = ui.Label({
+    value: text,
+    style: {
+      backgroundColor: warningcolor,
+      color: warningtextcolor,
+      padding: '0px'
+    }
+  })
+
+  var textPanel = ui
+    .Panel({
+      style: {
+        stretch: 'both',
+        backgroundColor: warningcolor
+      }
+    })
+    .add(
+      ui.Panel({
+        // widgets:[symbol,title],
+        widgets: title,
         style: {
-            //backgroundColor: panelColors.lPrimary,
-            width: '100%',
-            margin: 0
+          stretch: 'both',
+          backgroundColor: warningcolor
         },
         layout: ui.Panel.Layout.flow('horizontal')
-    })
+      })
+    )
+    .add(textbox)
 
-    //buttons at the top 
-
-
-    ///buttons for tabs at the top 
-
-
-    //var
-
-    var topP = ui.Panel({ //topPanel holds title 
-        style: {
-            //backgroundColor: panelColors.primary, //height:'8px'
-        }
-    })
-    topP.add(ui.Label({
-        value: title_label,
-        style: {
-            fontFamily: fonts.H1.fontFamily,
-            fontSize: fonts.H1.fontSize,
-            fontWeight: fonts.H1.fontWeight,
-           // backgroundColor: colors.transparent,
-           // color: 'white'
-        }
-    }))
-
-
-
-
-    mainPanel.add(topP)
-
-    var subPan = ui.Panel({
-        style: {
-            margin: 0,
-            //padding:0,  
-            //backgroundColor: '087f23', //height:'8px' //subpanel holds xx 
-        }
-    })
-/*    topP.add(ui.Label('Beta testing; version 0.2', {
-        backgroundColor: '00000000', //fontWeight:400,
-        margin: '0px 8px 4px 8px',
-        //padding: 0, 
-        fontSize: '12px',
-        fontWeight: 300,
-        fontFamily: fonts.Caption2.fontFamily,
-        color: 'white'
-    }))*/
-    mainPanel.add(subPan)
-
-    var bar = ui.Panel({
-        style: {
-            height: '4px',
-            stretch: 'both',
-            //backgroundColor: panelColors.lPrimary //bar above buttons 
-        }
-    })
-    //add(ui.Label('bar'))
-    mainPanel.add(bar)
-
-
-
-
-  
-
-    mainPanel.add(head)
-
-    return mainPanel
-}
-
-function make_chart(layer_object,ws,scale) {
-//read chart type from layer object 
-if(layer_object.vizType == "histogram"){
-  return(charts.histogramImage(layer_object,ws,scale))
-} else if 
-  (layer_object.vizType == "bigNumberPercent"){
-    return(charts.littleNum(layer_object,ws,scale,"percent"))
-  }
-  else if 
-  (layer_object.vizType =="barChart"){
-    return(charts.histByClass(layer_object,scale, ws))
-  }
-}
-
-function hline() {
-  //Makes a horizontal line
-    return(ui.Label({
-        value: 'null',
-        style: {
-            //width:'100%',
-            height: '0px',
-            padding: '0px ',
-            margin: '0px 0px 0px 0px',
-            border: '0.5px solid whitesmoke',
-            stretch: 'horizontal',
-        }
-    }));
-}
-function warning_panel(title,text) {
-  
-  var warningcolor = "#FFF8E6"
-  var warningborder =  "#E6A700"
-  var warningtextcolor = "#4D3800"
-    var line = (ui.Label({
-        value: 'null',
-        style: {
-            //width:'100%',
-           // height: '100%',
-            width:'0px',
-            padding: '0px ',
-            margin: '0px 0px 0px 0px',
-            backgroundColor:"#E6A700" ,
-            border: '3.5px solid #E6A700',
-            stretch: 'vertical',
-        }
-    }));
-    
-    var panel = ui.Panel({layout:ui.Panel.Layout.flow('horizontal'),style:{padding: '0px ',
-            margin: '0px 0px 0px 0px',backgroundColor:warningcolor,border:'0.2px solid'+warningborder}})
-            
-    //Title 
-    // var symbol = ui.Label({value:"⚠",style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px",
-    // fontSize :'24px'}})
-
-
-
-    var title = ui.Label({value:title,style:{backgroundColor:warningcolor,color:warningtextcolor,fontWeight:'600',padding:"0px",fontSize:'18px'}})        
-    var textbox = ui.Label({value:text,style:{backgroundColor:warningcolor,color:warningtextcolor,padding:"0px"}})        
-  
-    var textPanel = 
-    ui.Panel({style:{stretch:'both',backgroundColor:warningcolor}}).add(
-    ui.Panel({
-      // widgets:[symbol,title],
-      widgets:title,
-      style:{stretch:'both',backgroundColor:warningcolor},
-      layout:ui.Panel.Layout.flow('horizontal')
-    })).
-    add(textbox)
-    
-    
-    
   panel.add(line).add(textPanel)
 
-return(panel)
-    
+  return panel
 }
 
-function sigFigs(n, sig) {
-    var mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1);
-    return Math.round(n * mult) / mult;
+function sigFigs (n, sig) {
+  var mult = Math.pow(10, sig - Math.floor(Math.log(n) / Math.LN10) - 1)
+  return Math.round(n * mult) / mult
 }
 exports.sigFigs = sigFigs
 
-
-
 // //var chart = make_chart(layer_object.Imperviousness,geometry,30)//,"percent")
-exports.make_chart = make_chart 
+exports.make_chart = make_chart
 exports.make_docs_link = make_docs_link
 exports.make_tnc_map = make_tnc_map
-exports.clear_map_add_layer = clear_map_add_layer 
+exports.clear_map_add_layer = clear_map_add_layer
 exports.addObject = addObject
 exports.removeObject = removeObject
 exports.makeLegend = makeLegend
@@ -300,6 +316,3 @@ exports.info_panel = info_panel
 exports.makeMainPanel = makeMainPanel
 exports.hline = hline
 exports.warning_panel = warning_panel
-//exports.make_chart = make_chart
-//make_tnc_map()
-
