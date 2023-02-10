@@ -96,12 +96,29 @@ function generateCocLayer(cocName) {
 
 // Apply the convolution and clamping to the predictors
 var clampedConvolvedPredictors = convolveAndClamp(predictors);
-var coc_dict = ee.Dictionary({"copper": "cu_concentration_ug_per_L", 
-"p":"p_concentration_ug_per_L",
-"tss":"tss_concentration_mg_per_L", 
-"tkn": "tkn_concentration_ug_per_L",
-"zinc":"zinc_concentration_ug_per_L"});
-var cocNames = coc_dict.keys()
+var dict = ee.Dictionary({
+  "copper": "cu_concentration_ug_per_L",
+  "p": "p_concentration_ug_per_L",
+  "tss": "tss_concentration_mg_per_L",
+  "tkn": "tkn_concentration_ug_per_L",
+  "zinc": "zinc_concentration_ug_per_L"
+})
+var cocNames = [
+  "copper",
+  "p",
+  "tkn",
+  "tss",
+  "zinc"
+]
+print(cocNames)
+var lay_names = [
+  "cu_concentration_ug_per_L",
+  "p_concentration_ug_per_L",
+  "tkn_concentration_ug_per_L",
+  "tss_concentration_mg_per_L",
+  "zinc_concentration_ug_per_L"
+]
+print(lay_names)
 var cocimg = ee.Image()
 for (var i = 0; i < cocNames.length; i++) {
   var cocName = cocNames[i];
@@ -110,22 +127,27 @@ for (var i = 0; i < cocNames.length; i++) {
   var cocConcConvolved = convolve_circle(cocConcentration);
   cocimg = cocimg.addBands(cocConcConvolved.rename(cocName)) 
 }
+print(cocimg.bandNames())
 cocimg = cocimg.select(cocNames).where(water_areas,0).clip(PugetSound)
 
-Map.addLayer(cocimg)
-var lay_names = coc_dict.values()
-print(lay_names)
-for (var i = 0; i < cocimg.bandNames().length; i++) {
+
+for (var i = 0; i < cocNames.length; i++) {
+var img = cocimg.select(i)
+export_to_cloud(img,cocNames[i])
+Map.addLayer(img,{},cocNames[i],0)
+}
+
+function export_to_cloud(img,description){
   Export.image.toCloudStorage({
-        image: cocimg.select(i),
-        description: lay_names[i], 
+        image: img,
+        description: description, 
         bucket:'swhm-image-exports',
         maxPixels: 1e13,
         shardSize: 128, 
         scale: 10,
         region: PugetSound,
-        fileNamePrefix: lay_names[i]+"/" +
-            lay_names[i], 
+        fileNamePrefix: description+"/" +
+            description, 
         fileFormat: 'GeoTIFF',
         formatOptions: {
             cloudOptimized: true
