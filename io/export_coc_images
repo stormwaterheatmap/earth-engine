@@ -1,6 +1,11 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var PugetSound = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/PugetSound_WA"),
+    water_mask = ee.Image("projects/ee-stormwaterheatmap/assets/water_mask");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // Start of imports
-var PugetSound = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/PugetSound_WA");
 
+ 
+var water_areas = water_mask.neq(1)
 // Import the pre-processed predictors from the "coc_layers" asset
 var predictors = require("users/stormwaterheatmap/coc_layers:scaled_predictors").scaled_predictors;
 var traffic_band = predictors.select("sqrt_traffic");
@@ -91,11 +96,39 @@ function generateCocLayer(cocName) {
 
 // Apply the convolution and clamping to the predictors
 var clampedConvolvedPredictors = convolveAndClamp(predictors);
-var cocTypes = ["copper", "p", "tss", "tkn", "zinc"];
-for (var i = 0; i < cocTypes.length; i++) {
-  var cocName = cocTypes[i];
+var coc_dict = ee.Dictionary({"copper": "cu_concentration_ug_per_L", 
+"p":"p_concentration_ug_per_L",
+"tss":"tss_concentration_mg_per_L", 
+"tkn": "tkn_concentration_ug_per_L",
+"zinc":"zinc_concentration_ug_per_L"});
+var cocNames = coc_dict.keys()
+var cocimg = ee.Image()
+for (var i = 0; i < cocNames.length; i++) {
+  var cocName = cocNames[i];
   var cocLayer = generateCocLayer(cocName);
   var cocConcentration = cocLayer(clampedConvolvedPredictors)
   var cocConcConvolved = convolve_circle(cocConcentration);
-  Map.addLayer(cocConcConvolved, {}, cocName);
+  cocimg = cocimg.addBands(cocConcConvolved.rename(cocName)) 
+}
+cocimg = cocimg.select(cocNames).where(water_areas,0).clip(PugetSound)
+
+Map.addLayer(cocimg)
+var lay_names = coc_dict.values()
+print(lay_names)
+for (var i = 0; i < cocimg.bandNames().length; i++) {
+  Export.image.toCloudStorage({
+        image: cocimg.select(i),
+        description: lay_names[i], 
+        bucket:'swhm-image-exports',
+        maxPixels: 1e13,
+        shardSize: 128, 
+        scale: 10,
+        region: PugetSound,
+        fileNamePrefix: lay_names[i]+"/" +
+            lay_names[i], 
+        fileFormat: 'GeoTIFF',
+        formatOptions: {
+            cloudOptimized: true
+        }
+    })
 }
