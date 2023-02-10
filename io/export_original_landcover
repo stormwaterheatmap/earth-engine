@@ -256,18 +256,16 @@ var psHUC04 = ee.FeatureCollection(
         'USGS/WBD/2017/HUC04')
     .filter(ee.Filter.eq('name',
         'Puget Sound'))
-Map.addLayer(psHUC04, {},
-    'Puget Sound HUC04', 0);
+
 var nedE = ee.Image('USGS/NED')
 var e0 = nedE.updateMask(nedE.gt(0))
-Map.addLayer(e0, {}, 'elev gt 0', 0)
+
 var huc12 = ee.FeatureCollection(
     'USGS/WBD/2017/HUC12')
-Map.addLayer(huc12, {}, 'huc12', 0)
+
 var ecoregions = ee.FeatureCollection(
     'EPA/Ecoregions/2013/L4')
-Map.addLayer(ecoregions, {},
-    'ecoregions', 0)
+
 //----dilate function
 var dilate = function (img, distance) {
     var d = img
@@ -285,9 +283,7 @@ var dilate = function (img, distance) {
 var waterbods_fc = ee.FeatureCollection(
     'users/jrobertson2000/shapefiles/wa_waterbodiesWDNR'
 );
-Map.addLayer(waterbods_fc, {
-    palette: 'blue'
-}, 'waterbodies_fc', 0);
+
 var waterbods_fc = waterbods_fc.filter(
     ee.Filter.and(
         ee.Filter.eq('WB_HYDR_FT',
@@ -317,36 +313,27 @@ var erode = function (img, distance) {
     return img.updateMask(d.gt(
         distance))
 }
-Map.addLayer(erode(waterbods, 10), {
-    palette: 'blue'
-}, 'waterbodies', 0);
+
 var bridge = ee.FeatureCollection(
         maskTacomaNarrows)
     .reduceToImage({
         properties: ['type'],
         reducer: ee.Reducer.first()
     });
-Map.addLayer(bridge, {
-        palette: 'blue'
-    }, 'Tacoma Narrows bridge mask',
-    0);
+
 var waterLayer = waterbods.blend(
     bridge);
-Map.addLayer(waterLayer, {
-    palette: 'blue'
-}, 'water layer', 0);
-Map.addLayer(erode(e0, 5), {
-    palette: 'black'
-}, 'elevation shoreline?', 0);
+
+
 // Import shorelines (Esri) and reduce to image using the FID
 var shorelines_fc = ee
     .FeatureCollection(
         'users/jrobertson2000/shapefiles/wa_shorelineEsri'
     );
-Map.addLayer(shorelines_fc, {},
-    'shorelines_fc', 0);
+
 var shorelines_fc = shorelines_fc
     .filter(ee.Filter.eq('CODE', 0));
+    
 var intShorelines = shorelines_fc.map(
     function (feature) {
         return feature.set({
@@ -363,14 +350,11 @@ var shorelines = intShorelines
     .select(['first'], [
         'label'
     ]);
-Map.addLayer(shorelines, {
-    palette: 'blue'
-}, 'shorelines', 0);
+
 var ps_au_ecy = ee.FeatureCollection(
     'users/jrobertson2000/shapefiles/WatChar_PS_AU_ECY'
 )
-Map.addLayer(ps_au_ecy, {}, 'PS AU ECY',
-    0)
+
 //----------- end Waterbodies and Shorelines ------------//
 //----------- start Roads, OWSs, and Rooftops ------------//
 // Import TIGER roads
@@ -458,9 +442,7 @@ var roads = ee.ImageCollection([roads1,
         roads2, roads3
     ])
     .mosaic(); //combine roads back into an image collection
-Map.addLayer(roads, {
-    palette: 'black'
-}, 'roads', 0);
+
 var roadsDirt = roads_fcDirt
     .filter(ee.Filter.neq('type', null))
     .reduceToImage({
@@ -578,7 +560,6 @@ var conimage = function (image) {
 var collection = ee.ImageCollection(
     "USDA/NAIP/DOQQ");
 var naip = collection
-    //  .filterDate(new Date("2015-01-01"), new Date("2017-01-01"))
     .filterDate(new Date("2009-01-01"),
         new Date("2019-01-01"))
     .filterBounds(aoi)
@@ -612,7 +593,7 @@ var msavi = naip.expression(
         'NIR': naip.select('N'),
         'RED': naip.select('R'),
     }
-) //.select(['constant'],['msavi']);
+) 
 var msaviBin = msavi.gte(0.5)
     .and(msavi
         .lt(0.9))
@@ -764,7 +745,7 @@ var classifierlc = ee.Classifier
         features: traininglc,
         classProperty: lcClass,
     });
-//print(classifierlc)
+print(classifierlc.explain(),'explained')
 // Apply the classifier to the original composite.
 var result = combined.classify(
     classifierlc
