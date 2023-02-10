@@ -43,52 +43,44 @@ var predictors = predictors.where(
 var soils = ee.Image("users/stormwaterheatmap/soilsunmask5m");
 var water_mask = ee.Image(0).blend(soils.neq(4).byte());
 
-//var watermask = landcover.neq(9)
-//predictors = predictors.mask(water_mask)
-/** Total Zinc:
-ln(total zinc) = 4.10 + 
-0.36 * sqrt_traffic + 
-0.69 * paved
-**/
-/** TSS 
-ln(TSS) = 10.17 
-+ 0.19*rain 
-+ 0.26*sqrt_traffic 
-+ 0.30*paved
-**/
 
-/** P 
-ln(phosphorus) = 
-4.38 
-– 0.09*rain 
-+ 0.60*summer 
-+ 0.83*grass 
-+ 0.97*paved 
-+ 0.20*sqrt_CO2_road)
-**/
-/** 
- * Copper 
- * 
-ln(copper) = 
-2.22 
-– 0.14*rain 
-+ 0.41*summer 
-+ 0.34*sqrt_traffic 
-+ 0.56*devAge2 
-+ 0.75*pm25_na 
-– 0.07*rain:pm25_na
-
-**/
+/* List of Equations for pollutant concentrations 
+* COPPER:
+* ln(Copper) = 2.332 - 0.179*rain + 0.375*summer + 0.427*sqrt_traffic + 0.457*devAge2 + epsilon
+* (rain = 21-day cumulative rainfall, standardized)
+*  
+* TSS:
+* ln(TSS) = 10.294 + 0.159*rain + 0.381*sqrt_traffic + 0.320*devAge2 + epsilon
+* (rain = 1-day cumulative rainfall, standardized)
+*  
+* TKN:
+* ln(TKN) = 6.618 - 0.180*rain + 0.554*summer + 0.232*sqrt_traffic + 0.220*devAge2 + epsilon
+* (rain = 14-day cumulative rainfall, standardized)
+*  
+* Total Zinc:
+* ln(total Zinc) = 4.10 + 0.36 * sqrt_traffic + 0.69 * paved
+*  
+* Phosphorus:
+* ln(P) = 4.554 - 0.147*rain + 0.507*summer + 0.299*sqrt_CO2_road + epsilon
+* (rain = 21-day cumulative rainfall, standardized)
+|coc| intercept      | devage2 | grass | paved| pm25_na|  sqrt_CO2_road |  sqrt traffic|
+| ----------- | ----------- | ----------- | -----------| ----------- | -----------| ----------- | 
+|Copper| 2.332      | 0.457       | 0          | 0        | 0           | 0             | 0.427        | 
+|TSS   | 10.294     | 0.320       | 0          | 0        | 0           | 0             | 0.381        |
+|TKN   | 6.618      | 0.220       | 0          | 0        | 0           | 0             | 0.232        | 
+|Zinc  | 4.10       | 0           | 0          | 0.69     | 0           | 0             | 0.36         |
+|P     | 4.554      | 0.299       | 0          | 0        | 0           | 0.507         | 0            |
+*/ 
 
 var regression_coefficients = {
-  //            intercept,      devage2,     grass,
+  // intercept,      devage2,     grass,
   //paved,  pm25_na,  sqrt_CO2_road,  sqrt traffic
-  copper: [2.22, 0.56, 0, 0, 0.75, 0, 0.34],
-  tss: [10.17, 0, 0, 0.3, 0, 0, 0.26],
-  p: [4.38, 0, 0.83, 0.97, 0, 0.2, 0],
-  tkn: [6.52, 0.22, 0, 0, 0, 0.28, 0],
-  zinc: [4.1, 0, 0, 0.69, 0, 0, 0.36],
-};
+  copper: [2.332, 0.457, 0, 0, 0, 0.427, 0],
+    tss: [10.294, 0.320, 0, 0, 0, 0, 0.381],
+    tkn: [6.618, 0.220, 0, 0, 0, 0, 0.232],
+    zinc: [4.10, 0, 0, 0.69, 0, 0, 0.36],
+    p: [4.554, 0.299, 0, 0, 0, 0.507, 0]};
+  
 
 var bandNames = [
   "intercept",
