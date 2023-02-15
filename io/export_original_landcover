@@ -2,21 +2,109 @@
 var snohomish = 
     /* color: #d63000 */
     /* shown: false */
-    ee.Geometry.Polygon(
-        [[[-122.40692138671875, 48.28684818710906],
-          [-122.3602294921875, 48.23747967660676],
-          [-122.3876953125, 48.177075627796114],
-          [-122.24761962890625, 48.00830020485928],
-          [-122.40966796875, 47.78917089079264],
-          [-121.1297607421875, 47.787325537803106],
-          [-121.1187744140625, 47.81499895328108],
-          [-121.22589111328125, 47.89056441663248],
-          [-121.168212890625, 48.00278733106709],
-          [-121.19293212890625, 48.0542179068944],
-          [-121.00067138671875, 48.109265147494874],
-          [-120.9759521484375, 48.16058943132621],
-          [-120.95123291015625, 48.175244089902144],
-          [-121.05010986328125, 48.27770946754798]]]),
+    /* displayProperties: [
+      {
+        "type": "polygon"
+      },
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry({
+      "type": "GeometryCollection",
+      "geometries": [
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -122.40692138671875,
+                48.28684818710906
+              ],
+              [
+                -122.3602294921875,
+                48.23747967660676
+              ],
+              [
+                -122.3876953125,
+                48.177075627796114
+              ],
+              [
+                -122.24761962890625,
+                48.00830020485928
+              ],
+              [
+                -122.40966796875,
+                47.78917089079264
+              ],
+              [
+                -121.1297607421875,
+                47.787325537803106
+              ],
+              [
+                -121.1187744140625,
+                47.81499895328108
+              ],
+              [
+                -121.22589111328125,
+                47.89056441663248
+              ],
+              [
+                -121.168212890625,
+                48.00278733106709
+              ],
+              [
+                -121.19293212890625,
+                48.0542179068944
+              ],
+              [
+                -121.00067138671875,
+                48.109265147494874
+              ],
+              [
+                -120.9759521484375,
+                48.16058943132621
+              ],
+              [
+                -120.95123291015625,
+                48.175244089902144
+              ],
+              [
+                -121.05010986328125,
+                48.27770946754798
+              ]
+            ]
+          ],
+          "evenOdd": true
+        },
+        {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -125.0044934765378,
+                49.00439068607665
+              ],
+              [
+                -125.0044934765378,
+                46.59928613475357
+              ],
+              [
+                -120.5550305859128,
+                46.59928613475357
+              ],
+              [
+                -120.5550305859128,
+                49.00439068607665
+              ]
+            ]
+          ],
+          "geodesic": false,
+          "evenOdd": true
+        }
+      ],
+      "coordinates": []
+    }),
     region_WSno = 
     /* color: #d63000 */
     /* shown: false */
@@ -247,51 +335,45 @@ var snohomish =
           "type": 5,
           "system:index": "0"
         }),
-    table2 = ee.FeatureCollection("users/cnilsen/PugetSound_boundary");
+    table2 = ee.FeatureCollection("users/cnilsen/PugetSound_boundary"),
+    geometry3 = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-125.00309422541096, 49.11237903155496],
+          [-125.00309422541096, 46.508626391241144],
+          [-120.65250828791096, 46.508626391241144],
+          [-120.65250828791096, 49.11237903155496]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 //OUTPUTS
 
-var paletteOutput = ['lightgreen',
-    'green', 'darkgreen', 'yellow',
-    'blue', 'black'
-];
-var psLandCover_1m = ee.Image(
-    'users/jrobertson2000/psLandCover_1m'
-)
-Map.addLayer(psLandCover_1m, {
-    min: 0,
-    max: 6,
-    palette: paletteOutput,
-    opacity: 1.0
-}, 'near final PS LC mosaic', 1);
-var psLandCover_1m_fin = ee.Image(
-    'users/jrobertson2000/psLandCover_1m_fin'
-)
-Map.addLayer(psLandCover_1m_fin, {
-    min: 0,
-    max: 6,
-    palette: paletteOutput,
-    opacity: 1.0
-}, 'final PS LC mosaic', 1);
-var psLandCover_1m_finPS_1500m = ee
-    .Image(
-        'users/jrobertson2000/psLandCover_1m_finPS_1500m'
-    );
 var paletteInput2 = ['white', '#b6bc5f',
     'darkgreen', '#004e00',
     'beige', 'black', 'pink',
     'brown'
 ] //,'cyan']; //more true color
-Map.addLayer(psLandCover_1m_finPS_1500m
+
+
+var psLandcover_roofs = 
+ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs").byte().
+reproject({crs:'EPSG:3857'})
+print(psLandcover_roofs)
+Map.addLayer(psLandcover_roofs
     .focal_mode(), {
         min: 0,
         max: 7,
         palette: paletteInput2,
         opacity: 1.0
     }, 'final exported', 1);
+
 var grid = table2.geometry()
     .coveringGrid(table2.geometry()
-        .projection(), 100000)
+        .projection(), 140000)
     .randomColumn()
 Map.addLayer(grid)
 for(var i = 0; i < grid.size()
@@ -301,8 +383,8 @@ for(var i = 0; i < grid.size()
                 grid.size())
             .get(i))
         .geometry()
-    var img = psLandCover_1m_finPS_1500m
-    var scale = 0.5
+    var img = psLandcover_roofs
+    var scale = 1
     var layer_description = "Landcover"
         .replace(/\s/g, '_')
         .replace(/\)/g, '')
@@ -316,7 +398,8 @@ for(var i = 0; i < grid.size()
         maxPixels: 1e13,
         scale: scale,
         region: region,
-        fileNamePrefix: layer_description +
+        skipEmptyTiles: true, 
+        fileNamePrefix: "lulc/"+layer_description +
             "/" +
             layer_description +
             "_" + i,
