@@ -1,9 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var table = ee.FeatureCollection("users/cnilsen/PugetSound_boundary");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 //OUTPUTS
 
 var paletteInput2 = ['white', '#b6bc5f',
@@ -14,8 +11,8 @@ var paletteInput2 = ['white', '#b6bc5f',
 
 
 var psLandcover_roofs = 
-ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs").byte()
-//reproject({crs:'EPSG:3857'})
+ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs").int()
+//.reproject({crs:'EPSG:4326'})
 print(psLandcover_roofs)
 Map.addLayer(psLandcover_roofs
     .focal_mode(), {
@@ -24,7 +21,7 @@ Map.addLayer(psLandcover_roofs
         palette: paletteInput2,
         opacity: 1.0
     }, 'final exported', 1);
-
+print(table.geometry().projection())
 var grid = table.geometry()
     .coveringGrid(table.geometry()
         .projection(), 140000)
