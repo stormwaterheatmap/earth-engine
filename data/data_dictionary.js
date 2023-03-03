@@ -196,7 +196,7 @@ var rasters = {
             }
         }
     },
-    "Precipitation": {
+    "Precipitation (mm)": {
         "discrete": "FALSE",
         "sourceName": "Salathé et al 2019",
         "sourceUrl": "https://cig.uw.edu/our-work/applied-research/heavy-precip-and-stormwater/",
@@ -207,7 +207,7 @@ var rasters = {
         "safe_name": "precipitation_mm",
         "layer": {
             "eeObject": "eeObject",
-            "name": "Precipitation",
+            "name": "Precipitation (mm)",
             "visParams": {
                 "min": 500,
                 "max": 3800,
@@ -229,7 +229,7 @@ var rasters = {
                         " dadaeb"
                     ],
                 "opacity": 0.8,
-                "_row": "Precipitation"
+                "_row": "Precipitation (mm)"
             }
         }
     },
@@ -376,7 +376,7 @@ var layerSources = {
     "Population Density": data.population_density.rename('population_density'), //.mask(data.population),
     //"Precipitation (in)":data.precip.divide(
     //                ee.Image(25.4)),
-    "Precipitation": data.precip,
+    "Precipitation (mm)": data.precip,
     //"Runoff (in)":data.mean_annual_runoff.divide(ee.Image(25.4)).rename('mean_annual_runoff_inches'),
     "Runoff (mm)": data.mean_annual_runoff.rename(
         'mean_annual_runoff_mm'),
