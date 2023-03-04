@@ -1,0 +1,22 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("projects/ee-swhm/assets/production_layers/Age_of_Imperviousness"),
+    image2 = ee.Image("projects/ee-swhm/assets/production_layers/Flow_Duration_Index");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var assets = ee.data.listAssets(
+  'projects/ee-swhm/assets/production_layers/')
+print(assets)
+
+var i = 0 
+var f = ee.Image(assets['assets'][i]['id'])
+
+var j = f.toDictionary().getInfo()
+
+var rasters = {}
+
+j['layer'] = {} 
+//j['layer']['eeObject'] = ee.Image(assets['assets'][i])
+rasters[j.pretty_name] = f
+
+print(rasters)
+
+
