@@ -101,10 +101,10 @@ exports.landuse_img = ee.Image(
   )
   ///this has some weird slivers that look to be artifacts (coded as 8 in the shapefile)
   //making these 0 and remapping the rest
-  .remap(
-    [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    [0, 1, 2, 3, 4, 5, 6, 0, 7, 8, 9, 10, 11, 12, 13, 14]
-  )
+ // .remap(
+   // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+    //[0, 1, 2, 3, 4, 5, 6, 0, 7, 8, 9, 10, 11, 12, 13, 14]
+  //)
   .rename("Land Use")
   .rename("land_use_code")
 // This function computes the feature's geometry area and adds it as a property.
