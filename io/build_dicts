@@ -1,22 +1,23 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var image = ee.Image("projects/ee-swhm/assets/production_layers/Age_of_Imperviousness"),
-    image2 = ee.Image("projects/ee-swhm/assets/production_layers/Flow_Duration_Index");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
+// This line lists all assets under the specified Earth Engine path.
 var assets = ee.data.listAssets(
-  'projects/ee-swhm/assets/production_layers/')
-print(assets)
+    'projects/ee-swhm/assets/production_layers/'
+).assets
 
-var i = 0 
-var f = ee.Image(assets['assets'][i]['id'])
-
-var j = f.toDictionary().getInfo()
-
+// This creates an empty dictionary to hold the rasters.
 var rasters = {}
 
-j['layer'] = {} 
-//j['layer']['eeObject'] = ee.Image(assets['assets'][i])
-rasters[j.pretty_name] = f
+// This loops through each asset in the list of assets.
+for(var i = 0; i < assets.length; i++) {
+    // This gets the current asset's ID as a dictionary.
+    var dict = ee.Image(assets[i]['id'])
+    
+    // This gets the pretty_name property from the dictionary 
+    var lay_name = dict.get('pretty_name').getInfo()
+    
+    // This adds the current asset's dictionary to the rasters dictionary
+    // with its pretty name as the key.
+    rasters[lay_name] = dict
+}
 
-print(rasters)
-
-
+// This prints the rasters dictionary to the console as an ee.Dictionary object.
+print(ee.Dictionary(rasters))
