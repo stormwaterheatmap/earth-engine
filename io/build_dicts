@@ -2,7 +2,7 @@
 var assets = ee.data.listAssets(
     'projects/ee-swhm/assets/production_layers/'
 ).assets
-
+print(assets)
 // This creates an empty dictionary to hold the rasters.
 var rasters = {}
 
