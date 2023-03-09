@@ -1,7 +1,9 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image2 = ee.Image("users/stormwaterheatmap/landcover"),
     s8_sheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/s8_watersheds_v5"),
-    image = ee.Image("users/cnilsen/newMask2m");
+    image = ee.Image("users/cnilsen/newMask2m"),
+    image3 = ee.Image("users/cnilsen/PSRaster2"),
+    image4 = ee.Image("users/cnilsen/PSRaster_no_mask");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
 predictors = predictors.scaled_predictors
