@@ -1,21 +1,45 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image2 = ee.Image("users/stormwaterheatmap/landcover"),
-    landcover = ee.Image("users/stormwaterheatmap/hspf_landCover"),
-    s8_sheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/s8_watersheds_v5");
+    s8_sheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/s8_watersheds_v5"),
+    image = ee.Image("users/cnilsen/newMask2m");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
 predictors = predictors.scaled_predictors
 var pred_bands = predictors.bandNames()
-var watermask = landcover.neq(9)
-predictors = predictors.mask(watermask)
+//var watermask = landcover.neq(9)
+//predictors = predictors.mask(watermask)
  
+/*  
+COPPER:
+ln(Copper) = 2.332 - 0.179*rain + 0.375*summer + 0.427*sqrt_traffic + 0.457*devAge2 + epsilon
+(rain = 21-day cumulative rainfall, standardized)
+
+TSS:
+ln(TSS) = 10.294 + 0.159*rain + 0.381*sqrt_traffic + 0.320*devAge2 + epsilon
+(rain = 1-day cumulative rainfall, standardized)
+
+TKN:
+ln(TKN) = 6.618 - 0.180*rain + 0.554*summer + 0.232*sqrt_traffic + 0.220*devAge2 + epsilon
+(rain = 14-day cumulative rainfall, standardized)
+
+Total Zinc:
+ln(total Zinc) = 4.10 + 0.36 * sqrt_traffic + 0.69 * paved
+(rain = 14-day cumulative rainfall, standardized)
+
+Phosphorus:
+ln(P) = 4.554 - 0.147*rain + 0.507*summer + 0.299*sqrt_CO2_road + epsilon
+(rain = 21-day cumulative rainfall, standardized)
+
+*/ 
+
 var regression_coefficients = {
-    //            intercept,      devage2,     grass,     paved,  pm25_na,  sqrt_CO2_road,  traffic
-    'copper': [2.25, 0.56, 0, 0, 0.66, 0, 0.35],
-    'tss': [10.17, 0, 0, 0.28, 0, 0, 0.21],
-    'p': [4.38, 0, 0.83, 0.97, 0, 0.2, 0], 
-  'tkn': [6.52, 0.22, 0, 0, 0, 0.28, 0], 
-    'zinc': [4.09, 0, 0, 0.55, 0.33, 0, 0.29]
+  
+    //      intercept,devage2,grass,paved,pm25_na,sqrt_CO2_road,sqrttraffic
+  'copper': [2.332,   0.457,  0,    0,     0.66,    0,            0.427],
+  'tss':    [10.294,  0.320,  0,    0.28,  0,       0,            0.381],
+  'p':      [4.554,   0,      0,    0,     0,       0.299,        0], 
+  'tkn':    [6.618,   0.220,  0,    0,     0,       0,            0.232], 
+  'zinc':   [4.10,    0,      0,    0.69,  0,       0,            0.36]
 }
 
 var bandNames = [
@@ -38,9 +62,9 @@ function convolve_clamp_predictors(image) {
     reduceNeighborhood({
         skipMasked: true,
         reducer: ee.Reducer.mean(),
-        kernel: ee.Kernel.gaussian({
+        kernel: ee.Kernel.circle({
             radius: 100,
-            sigma: 80,
+            //sigma: 50,
             units: 'meters'
         })
     })
