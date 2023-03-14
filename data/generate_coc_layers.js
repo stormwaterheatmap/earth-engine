@@ -1,17 +1,15 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var image2 = ee.Image("users/stormwaterheatmap/landcover"),
-    s8_sheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/s8_watersheds_v5"),
-    image = ee.Image("users/cnilsen/newMask2m"),
-    image3 = ee.Image("users/cnilsen/PSRaster2"),
-    image4 = ee.Image("users/cnilsen/PSRaster_no_mask");
+
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
 predictors = predictors.scaled_predictors
-var pred_bands = predictors.bandNames()
-//var watermask = landcover.neq(9)
-//predictors = predictors.mask(watermask)
+
  
-/*  
+/** 
+    * Updated regression parameters 
+    * March 2023
+*/ 
+/* 
 COPPER:
 ln(Copper) = 2.332 - 0.179*rain + 0.375*summer + 0.427*sqrt_traffic + 0.457*devAge2 + epsilon
 (rain = 21-day cumulative rainfall, standardized)
@@ -74,16 +72,13 @@ function convolve_clamp_predictors(image) {
     var convolved_clamped = convolved_predictors.clamp(-3, 3) //clamp to 3 standard deviations 
     return convolved_clamped
 }
-
+ 
 /**
  * Main function. Generates heatmap layer for a specific coc. 
  * Takes a coc name and generates a single band image. 
  */
 function generate_coc_layer(coc_name, predictor_image) {
-    // var regression_dict = ee.Dictionary.fromLists({
-    //     keys: pred_bands,
-    //     values: regression_coefficients[coc_name]
-    // })
+
 
     //Get the regression parameters 
     var coc_parameters =  ee.Image.constant(regression_coefficients[coc_name]).rename(bandNames)
@@ -93,16 +88,11 @@ function generate_coc_layer(coc_name, predictor_image) {
             .reduce('sum')
         .rename(coc_name+"_concentration_ug_per_L")
 
-    //transform back from log values  
-    var coc_ug_L = coc_ug_L_scaled.exp()//.setDefaultProjection({
-    //     crs: 'EPSG:3857'
-    // }).reduceResolution({
-    //     reducer: ee.Reducer.mean(),
-    //     bestEffort: true
-    // }).reproject({
-    //     scale: 30,
-    //     crs: 'EPSG:3857'
-    // }) //reproject at a 30m scale to smooth out image 
+    //Make a two band image: first band is concentration, second band is log concentration 
+    var coc_ug_L = ee.Image.cat(
+        coc_ug_L_scaled.exp(), 
+        coc_ug_L_scaled.rename(coc_name+'_log_concentration_ug_per_L'))
+    
 
     return (coc_ug_L)
 }
@@ -119,11 +109,4 @@ print(all_cocs.toDictionary())
 
 var zinc_tkn = zinc.addBands(tkn)
 
-var palettes = require('users/gena/packages:palettes');
-var pal = palettes.kovesi.linear_bgyw_15_100_c67[7]
 
-Map.addLayer(tkn,{},'tkn')
-//Map.addLayer(copper.reduce('sum'),{},'copper sum')
-
-var PugetSound = ee.FeatureCollection(
-    "users/stormwaterheatmap/tables/PugetSound")
