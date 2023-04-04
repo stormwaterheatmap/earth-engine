@@ -29,7 +29,15 @@ for (var i = 0; i < layers.length; i++) {
         bucket:'live_data_layers',
         writePublicTiles: true, 
         region: PugetSound,
-        mapsApiKey: "AIzaSyALEa2NDTMuUyg_SLClGOnlHCxaVKVWMBw"
+        mapsApiKey: "AIzaSyALEa2NDTMuUyg_SLClGOnlHCxaVKVWMBw", 
+        bucketCorsUris: [
+          'https://code.earthengine.google.com',
+          'https://*.earthengine.app',
+          'https://earth.google.com', 
+          'https://*.stormwaterheatmap.org', 
+          'https://*.stormwaterheatmap.com', 
+          'https://*.tacomawatersheds.com' 
+        ]
     })
 }
 
