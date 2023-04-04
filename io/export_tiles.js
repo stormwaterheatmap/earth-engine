@@ -5,7 +5,7 @@ var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var rasters = data.rasters
 
 var PugetSound = data.vectors.PugetSound
-var watermask = ee.Image("projects/ee-stormwaterheatmap/assets/water_mask");
+
 var layers = Object.keys(rasters)
 
 for (var i = 0; i < layers.length; i++) {
@@ -18,22 +18,18 @@ for (var i = 0; i < layers.length; i++) {
     .replace(/\s/g, '_')
     .replace(/\)/g, '')
     .replace(/\(/g, '')
-  print(layer_description)
 
-  Export.image.toCloudStorage({
+
+    Export.map.toCloudStorage(image, description, bucket, fileFormat, path, writePublicTiles, maxZoom, scale,
+       minZoom, region, skipEmptyTiles, mapsApiKey, bucketCorsUris)
+
+  Export.map.toCloudStorage({
         image: img,
         description: layer_description, 
-        bucket:'swhm-image-exports',
-        maxPixels: 1e13,
-        shardSize: 128, 
-        scale: scale/2,
+        bucket:'live_data_layers',
+        writePublicTiles: true, 
         region: PugetSound,
-        fileNamePrefix: layer_description+"/" +
-            layer_description, 
-        fileFormat: 'GeoTIFF',
-        formatOptions: {
-            cloudOptimized: true
-        }
+        mapsApiKey: "AIzaSyALEa2NDTMuUyg_SLClGOnlHCxaVKVWMBw"
     })
 }
 

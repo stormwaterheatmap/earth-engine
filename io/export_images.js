@@ -1,17 +1,19 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var table = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/PugetSound_WA");
+var roi = ee.FeatureCollection("users/cnilsen/PugetSound_boundary");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var grid = table.geometry().coveringGrid(table.geometry().projection(), 200000).randomColumn()
-
 var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var rasters = data.rasters
-var lay = rasters["Land Cover"]
 
-for (var i = 0; i < grid.size().getInfo(); i++) {
-  print('step',i)
-var region = ee.Feature(grid.toList(grid.size()).get(i)).geometry()
-var img = lay.layer.eeObject//.mask(watermask)
+var PugetSound = data.vectors.PugetSound
+
+var layers = Object.keys(rasters)
+
+for (var i = 0; i < layers.length; i++) {
+  var lay = rasters[layers[i]]
+  var img = lay.layer.eeObject.clip(roi)
   var scale = lay.scale
+
+  Map.addLayer(img,lay.layer.visParams,lay.layer.name)
   var layer_description = lay.layer.name
     .replace(/\s/g, '_')
     .replace(/\)/g, '')
@@ -20,13 +22,14 @@ var img = lay.layer.eeObject//.mask(watermask)
 
   Export.image.toCloudStorage({
         image: img,
-        description: i+'_'+layer_description, 
+        description: layer_description, 
         bucket:'swhm-image-exports',
         maxPixels: 1e13,
-        scale: scale,
-        region: region,
+        shardSize: 128, 
+        scale: scale/2,
+        region: PugetSound,
         fileNamePrefix: layer_description+"/" +
-            layer_description+"_"+i, 
+            layer_description, 
         fileFormat: 'GeoTIFF',
         formatOptions: {
             cloudOptimized: true
@@ -34,8 +37,3 @@ var img = lay.layer.eeObject//.mask(watermask)
     })
 }
 
-var ids = grid.toDictionary(['id'])
-print(grid.limit(3,'random'))
-print(grid.toList(3).get(1))
-print(grid)
-Map.addLayer(grid)
