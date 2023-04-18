@@ -8,10 +8,22 @@ var PugetSound = data.vectors.PugetSound
 
 var layers = Object.keys(rasters)
 
+
+
 for (var i = 0; i < layers.length; i++) {
   var lay = rasters[layers[i]]
-  print(lay)
-  var img = lay.layer.eeObject.clip(roi).float()
+  //determine if layer should be exported as byte (categorized) or double (continuous )
+  switch (lay.discrete) {
+    case 'TRUE':
+      var img = lay.layer.eeObject.clip(roi).byte()
+      break;
+    case 'FALSE':
+      var img = lay.layer.eeObject.clip(roi).double()
+      break; 
+    default: 
+      print('error')
+  }
+  
   var scale = lay.scale
 
   Map.addLayer(img,lay.layer.visParams,lay.layer.name,0)
