@@ -12,6 +12,7 @@ var layers = Object.keys(rasters)
 
 for (var i = 0; i < layers.length; i++) {
   var lay = rasters[layers[i]]
+
   //determine if layer should be exported as byte (categorized) or double (continuous )
   switch (lay.discrete) {
     case 'TRUE':
@@ -31,8 +32,8 @@ for (var i = 0; i < layers.length; i++) {
     .replace(/\s/g, '_')
     .replace(/\)/g, '')
     .replace(/\(/g, '')
-  print(layer_description)
-
+  print(layer_description,img)
+  print(lay)
   Export.image.toCloudStorage({
         image: img,
         description: layer_description, 
