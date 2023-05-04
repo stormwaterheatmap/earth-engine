@@ -367,20 +367,20 @@ var rasters = {
  */
 var data = require('users/stormwaterheatmap/apps:data/data_raw')
 
-data.Flow_Duration_Index
-data.HSPF_Land_Cover_Type
-data.Hydrologic_Response_Units
-data.Imperviousness
-data.Land_Cover
-data.Land_Use
-data.Population_Density
-data.Precipitation_mm
-data.Runoff_mm
-data.Slope
-data.Slope_Categories
-data.Soils
+// data.Flow_Duration_Index
+// data.HSPF_Land_Cover_Type
+// data.Hydrologic_Response_Units
+// data.Imperviousness
+// data.Land_Cover
+// data.Land_Use
+// data.Population_Density
+// data.Precipitation_mm
+// data.Runoff_mm
+// data.Slope
+// data.Slope_Categories
+// data.Soils
 
-data.Traffic
+// data.Traffic
 var layerSources = {
     "Age of Imperviousness": data.Age_of_Imperviousness.rename('age_of_impervious_surface'),
     "HSPF Land Cover Type": data.HSPF_Land_Cover_Type.rename('hspf_landcover_categories'),
