@@ -1,6 +1,6 @@
-/* 
- * @fileoverview bring in data from data_raw and oither sources. 
- * Creates a dictionary of images and metadata for display and analysis. 
+/*
+ * @fileoverview bring in data from data_raw and oither sources.
+ * Creates a dictionary of images and metadata for display and analysis.
  */
 
 var rasters = {
@@ -159,8 +159,8 @@ var rasters = {
             "visParams": {
                 "min": 0,
                 "max": 14,
-                "palette": ["#394B59", "#669C42", "#EFD09E", "#14774C", "#9E2B0E", "#F4A691", 
-                "#2778AC", "#6E8387", "#8EB8B3", "#D17257", "#7C497B", "#554180", "#66CDAB", 
+                "palette": ["#394B59", "#669C42", "#EFD09E", "#14774C", "#9E2B0E", "#F4A691",
+                "#2778AC", "#6E8387", "#8EB8B3", "#D17257", "#7C497B", "#554180", "#66CDAB",
                 "#9FABA2", "#BF93BE"],
                 "opacity": 0.8,
                 "_row": "Land Use"
@@ -363,31 +363,44 @@ var rasters = {
     }
 }
 /**
- * Bring in data, renam and add sources to dictionary  
+ * Bring in data, renam and add sources to dictionary
  */
 var data = require('users/stormwaterheatmap/apps:data/data_raw')
+
+data.Flow_Duration_Index
+data.HSPF_Land_Cover_Type
+data.Hydrologic_Response_Units
+data.Imperviousness
+data.Land_Cover
+data.Land_Use
+data.Population_Density
+data.Precipitation_mm
+data.Runoff_mm
+data.Slope
+data.Slope_Categories
+data.Soils
+
+data.Traffic
 var layerSources = {
-    "Age of Imperviousness": data.age_of_development.rename('age_of_impervious_surface'),
-    "HSPF Land Cover Type": data.hspf_landcover.rename('hspf_landcover_categories'),
-    "Imperviousness": data.imperviousness.rename('imperviousness'),
-    "Land Cover": data.tncLC.rename('landcover'),
-    "Land Use": data.landuse_img.rename('Land Use'),
-    //"Population":data.population.rename('population_count'),
-    "Population Density": data.population_density.rename('population_density'), //.mask(data.population),
-    //"Precipitation (in)":data.precip.divide(
-    //                ee.Image(25.4)),
+    "Age of Imperviousness": data.Age_of_Imperviousness.rename('age_of_impervious_surface'),
+    "HSPF Land Cover Type": data.HSPF_Land_Cover_Type.rename('hspf_landcover_categories'),
+    "Imperviousness": data.Imperviousness.rename('imperviousness'),
+    "Land Cover": data.Land_Cover.rename('landcover'),
+    "Land Use": data.Land_Use.rename('Land Use'),
+
+    "Population Density": data.Population_Density.rename('population_density'), //.mask(data.population),
+
     "Precipitation (mm)": data.precip,
-    //"Runoff (in)":data.mean_annual_runoff.divide(ee.Image(25.4)).rename('mean_annual_runoff_inches'),
-    "Runoff (mm)": data.mean_annual_runoff.rename(
+
+    "Runoff (mm)": data.Runoff_mm.rename(
         'mean_annual_runoff_mm'),
-    "Slope Categories": data.slope.rename('slope_categories'),
-    "Slope": data.slope_cont.rename('slope'),
-    "Soils": data.soils.rename('soils'),
-    "Traffic": data.traffic.rename('traffic_AADT'), //.focal_max(2).focal_min(1),//.focal_mean(1).mask(data.traffic.exp().gt(1)), 
-    "Flow Duration Index": data.fdr.rename('flow_duration_index'),
-    "Hydrologic Response Units": data.hrus
-    //"Total Suspended Solids Concentration": data.tss_concentration, 
-    //"Total Suspended Solids Load": data.tss_load
+    "Slope": data.Slope.rename('slope'),
+    "Slope Categories": data.Slope_Categories.rename('slope_categories'),
+    "Soils": data.Soils.rename('soils'),
+    "Traffic": data.Traffic.rename('traffic_AADT'), //.focal_max(2).focal_min(1),//.focal_mean(1).mask(data.traffic.exp().gt(1)),
+    "Flow Duration Index": data.Flow_Duration_Index.rename('flow_duration_index'),
+    "Hydrologic Response Units": data.Hydrologic_Response_Units
+
 }
 var layNames = Object.keys(layerSources)
 /**
@@ -398,15 +411,19 @@ for (var i = 0; i < layNames.length; i++) {
     rasters[thisLayer].layer.eeObject = layerSources[thisLayer]
 }
 /**
- * Bring in coc data and create a seperate data dictionary 
+ * Bring in coc data and create a separate data dictionary
  */
-var coc_layers = require("users/stormwaterheatmap/apps:data/serve_coc_data")
-//Common palette for all cocs: 
+//var coc_layers = require("users/stormwaterheatmap/apps:data/serve_coc_data")
+
 var coc_pal = ["042333", "2c3395", "744992", "b15f82", "eb7958", "fbb43d", "e8fa5b", "ffffff"]
 
 var load_pal = ["000000", "440154", "433982", "30678d", "218f8b", "36b677", "8ed542", "fde725"]
 
-//Coc data dictionary 
+data.Total_Kjeldahl_Nitrogen_Concentration
+
+
+
+//Coc data dictionary
 var cocs = {
     "Total Suspended Solids Concentration": {
         "discrete": "FALSE",
@@ -419,7 +436,7 @@ var cocs = {
         "description": "Predicted Total Suspended Solids Concentration",
         "safe_name": "pollutant_concentration",
         "layer": {
-            "eeObject": coc_layers.tss,
+            "eeObject": data.Total_Suspended_Solids_Concentration,
             "name": "Total Suspended Solids",
             "visParams": {
                 "bands": "log_tss_concentration_mg_per_L",
@@ -430,27 +447,27 @@ var cocs = {
             }
         }
     },
-    "Total Suspended Solids Load": {
-        "discrete": "FALSE",
-        "log_transformed_viz": "FALSE",
-        "sourceName": "The Nature Conservancy",
-        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_load",
-        "units": "g/m² per year",
-        "scale": 30,
-        "default_reduction": "mean",
-        "description": "Predicted Total Suspended Solids Load",
-        "safe_name": "pollutant_load",
-        "layer": {
-            "eeObject": coc_layers.tss_load,
-            "name": "Total Suspended Solids Load",
-            "visParams": {
-                "min": 0,
-                "max": 30,
-                "palette": load_pal,
-                "opacity": 0.8
-            }
-        }
-    },
+    // "Total Suspended Solids Load": {
+    //     "discrete": "FALSE",
+    //     "log_transformed_viz": "FALSE",
+    //     "sourceName": "The Nature Conservancy",
+    //     "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_suspended_solids_load",
+    //     "units": "g/m² per year",
+    //     "scale": 30,
+    //     "default_reduction": "mean",
+    //     "description": "Predicted Total Suspended Solids Load",
+    //     "safe_name": "pollutant_load",
+    //     "layer": {
+    //         "eeObject": coc_layers.tss_load,
+    //         "name": "Total Suspended Solids Load",
+    //         "visParams": {
+    //             "min": 0,
+    //             "max": 30,
+    //             "palette": load_pal,
+    //             "opacity": 0.8
+    //         }
+    //     }
+    // },
     "Total Copper Concentration": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE",
@@ -462,7 +479,7 @@ var cocs = {
         "description": "Predicted Total Copper Concentration",
         "safe_name": "pollutant_concentration",
         "layer": {
-            "eeObject": coc_layers.copper,
+            "eeObject": data.Total_Copper_Concentration,
             "name": "Total Copper",
             "visParams": {
                 "bands": "log_copper_concentration_ug_per_L",
@@ -473,27 +490,27 @@ var cocs = {
             }
         }
     },
-    "Total Copper Load": {
-        "discrete": "FALSE",
-        "log_transformed_viz": "FALSE",
-        "sourceName": "The Nature Conservancy",
-        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_load",
-        "units": "mg/m² per year",
-        "scale": 30,
-        "default_reduction": "mean",
-        "description": "Predicted Total Copper Load",
-        "safe_name": "pollutant_load",
-        "layer": {
-            "eeObject": coc_layers.copper_load,
-            "name": "Total Copper Load",
-            "visParams": {
-                "min": 0,
-                "max": 16,
-                "palette": load_pal,
-                "opacity": 0.8
-            }
-        }
-    },
+    // "Total Copper Load": {
+    //     "discrete": "FALSE",
+    //     "log_transformed_viz": "FALSE",
+    //     "sourceName": "The Nature Conservancy",
+    //     "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_copper_load",
+    //     "units": "mg/m² per year",
+    //     "scale": 30,
+    //     "default_reduction": "mean",
+    //     "description": "Predicted Total Copper Load",
+    //     "safe_name": "pollutant_load",
+    //     "layer": {
+    //         "eeObject": coc_layers.copper_load,
+    //         "name": "Total Copper Load",
+    //         "visParams": {
+    //             "min": 0,
+    //             "max": 16,
+    //             "palette": load_pal,
+    //             "opacity": 0.8
+    //         }
+    //     }
+    // },
     "Total Phosphorus Concentration": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE",
@@ -505,7 +522,7 @@ var cocs = {
         "description": "Predicted Total Phosphorus Concentration",
         "safe_name": "pollutant_concentration",
         "layer": {
-            "eeObject": coc_layers.p,
+            "eeObject": data.Total_Phosphorus_Concentration,
             "name": "Total Phosphorus",
             "visParams": {
                 "bands": "log_p_concentration_ug_per_L",
@@ -516,27 +533,27 @@ var cocs = {
             }
         }
     },
-    "Total Phosphorus Load": {
-        "discrete": "FALSE",
-        "log_transformed_viz": "FALSE",
-        "sourceName": "The Nature Conservancy",
-        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_load",
-        "units": "mg/m² per year",
-        "scale": 30,
-        "default_reduction": "mean",
-        "description": "Predicted Total Phosphorus Load",
-        "safe_name": "pollutant_load",
-        "layer": {
-            "eeObject": coc_layers.p_load,
-            "name": "Total Phosphorus Load",
-            "visParams": {
-                "min": 0,
-                "max": 100,
-                "palette": load_pal,
-                "opacity": 0.8
-            }
-        }
-    },
+    // "Total Phosphorus Load": {
+    //     "discrete": "FALSE",
+    //     "log_transformed_viz": "FALSE",
+    //     "sourceName": "The Nature Conservancy",
+    //     "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_phosphorus_load",
+    //     "units": "mg/m² per year",
+    //     "scale": 30,
+    //     "default_reduction": "mean",
+    //     "description": "Predicted Total Phosphorus Load",
+    //     "safe_name": "pollutant_load",
+    //     "layer": {
+    //         "eeObject": coc_layers.p_load,
+    //         "name": "Total Phosphorus Load",
+    //         "visParams": {
+    //             "min": 0,
+    //             "max": 100,
+    //             "palette": load_pal,
+    //             "opacity": 0.8
+    //         }
+    //     }
+    // },
     "Total Zinc Concentration": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE",
@@ -548,7 +565,7 @@ var cocs = {
         "description": "Predicted Total Zinc Concentration",
         "safe_name": "pollutant_concentration",
         "layer": {
-            "eeObject": coc_layers.zinc,
+            "eeObject": data.Total_Zinc_Concentration,
             "name": "Total Zinc",
             "visParams": {
                 "bands": "log_zinc_concentration_ug_per_L",
@@ -559,27 +576,27 @@ var cocs = {
             }
         }
     },
-    "Total Zinc Load": {
-        "discrete": "FALSE",
-        "log_transformed_viz": "FALSE",
-        "sourceName": "The Nature Conservancy",
-        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_zinc_load",
-        "units": "mg/m² per year",
-        "scale": 30,
-        "default_reduction": "mean",
-        "description": "Predicted Total Zinc Load",
-        "safe_name": "pollutant_load",
-        "layer": {
-            "eeObject": coc_layers.zinc_load,
-            "name": "Total Zinc Load",
-            "visParams": {
-                "min": 0,
-                "max": 100,
-                "palette": load_pal,
-                "opacity": 0.8
-            }
-        }
-    },
+    // "Total Zinc Load": {
+    //     "discrete": "FALSE",
+    //     "log_transformed_viz": "FALSE",
+    //     "sourceName": "The Nature Conservancy",
+    //     "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/total_zinc_load",
+    //     "units": "mg/m² per year",
+    //     "scale": 30,
+    //     "default_reduction": "mean",
+    //     "description": "Predicted Total Zinc Load",
+    //     "safe_name": "pollutant_load",
+    //     "layer": {
+    //         "eeObject": coc_layers.zinc_load,
+    //         "name": "Total Zinc Load",
+    //         "visParams": {
+    //             "min": 0,
+    //             "max": 100,
+    //             "palette": load_pal,
+    //             "opacity": 0.8
+    //         }
+    //     }
+    // },
     "Total Kjeldahl Nitrogen Concentration": {
         "discrete": "FALSE",
         "log_transformed_viz": "TRUE",
@@ -591,7 +608,7 @@ var cocs = {
         "description": "Predicted Total Kjeldahl Nitrogen Concentration",
         "safe_name": "pollutant_concentration",
         "layer": {
-            "eeObject": coc_layers.tkn,
+            "eeObject": data.Total_Kjeldahl_Nitrogen_Concentration,
             "name": "Total Kjeldahl Nitrogen",
             "visParams": {
                 "bands": "log_tkn_concentration_ug_per_L",
@@ -601,32 +618,32 @@ var cocs = {
                 "opacity": 0.8
             }
         }
-    },
-    "Total Kjeldahl Nitrogen Load": {
-        "discrete": "FALSE",
-        "log_transformed_viz": "FALSE",
-        "sourceName": "The Nature Conservancy",
-        "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/tkn_load",
-        "units": "mg/m² per year",
-        "scale": 30,
-        "default_reduction": "mean",
-        "description": "Predicted Kjeldahl Nitrogen Load",
-        "safe_name": "pollutant_load",
-        "layer": {
-            "eeObject": coc_layers.tkn_load,
-            "name": "Total Kjeldahl Nitrogen Load",
-            "visParams": {
-                "min": 0,
-                "max": 800,
-                "palette": load_pal,
-                "opacity": 0.8
-            }
-        }
+    // },
+    // "Total Kjeldahl Nitrogen Load": {
+    //     "discrete": "FALSE",
+    //     "log_transformed_viz": "FALSE",
+    //     "sourceName": "The Nature Conservancy",
+    //     "sourceUrl": "https://www.stormwaterheatmap.dev/docs/Data%20Layers/tkn_load",
+    //     "units": "mg/m² per year",
+    //     "scale": 30,
+    //     "default_reduction": "mean",
+    //     "description": "Predicted Kjeldahl Nitrogen Load",
+    //     "safe_name": "pollutant_load",
+    //     "layer": {
+    //         "eeObject": data.,
+    //         "name": "Total Kjeldahl Nitrogen Load",
+    //         "visParams": {
+    //             "min": 0,
+    //             "max": 800,
+    //             "palette": load_pal,
+    //             "opacity": 0.8
+    //         }
+    //     }
     }
 }
 
 
-exports.vectors = { //for legacy functions 
+exports.vectors = { //for legacy functions
     counties: data.counties,
     HUC12: data.HUC12,
     HUC10: data.HUC10,
@@ -663,12 +680,12 @@ var vector_dict = {
 
 
 var display_imgs = {"psau": data.psau_shed_img
-  
+
 }
-exports.display_imgs = display_imgs 
+exports.display_imgs = display_imgs
 
 exports.vector_dict = vector_dict
 exports.rasters = rasters
 exports.cocs = cocs
 
-print(cocs)
+//print(cocs)

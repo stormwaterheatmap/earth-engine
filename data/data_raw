@@ -1,193 +1,158 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var table = ee.FeatureCollection("users/stormwaterheatmap/WRIA_Bounds"),
+var
     census = ee.FeatureCollection("TIGER/2010/Blocks"),
-    image = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode"),
-    imageVisParam = {"opacity":1,"bands":["tss_kg_m2_yr"],"max":0.14183858512625483,"palette":["000000","0000ff","ffff00","ffffff"]},
-    imageVisParam2 = {"opacity":1,"bands":["tss_mg_m2_yr"],"min":2572.7889242624424,"max":25450.068148609607,"palette":["0000ff","ffff00","ffffff"]},
-    imageVisParam3 = {"opacity":1,"bands":["tss_mg_m2_yr"],"max":50000,"palette":["352a87","056ede","089bce","33b7a0","a3bd6a","f9bd3f","f9fb0e"]},
-    table2 = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits"),
-    cityLimits = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits"),
-    table3 = ee.FeatureCollection("USGS/WBD/2017/HUC12"),
-    table4 = ee.FeatureCollection("USGS/WBD/2017/HUC10"),
-    table5 = ee.FeatureCollection("USGS/WBD/2017/HUC02"),
-    table6 = ee.FeatureCollection("USGS/WBD/2017/HUC04");
+    cityLimits = ee.FeatureCollection(
+        "users/stormwaterheatmap/tables/cityLimits")
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /* ---------------------------
-* Author: Christian Nilsen, Geosyntec Consultants 
+* Author: Christian Nilsen, Geosyntec Consultants
 * Email: cnilsen@geosyntec.com
 * Date Created: 2021-07-16
 *---------------------------
 
-/*---------------------------
-Vectors
-*/
+/**
+ * Vectors
+ *---------------------------
+ */
+
 var PugetSound = ee.FeatureCollection(
-  "users/stormwaterheatmap/tables/PugetSound");
+    "users/stormwaterheatmap/tables/PugetSound");
 exports.PugetSound = PugetSound
-exports.hrus = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode")
 
 exports.cityLimits = cityLimits.filterBounds(
     PugetSound)
-    
+
 exports.counties = ee.FeatureCollection(
-    "TIGER/2018/Counties")
-  .filterBounds(
-    PugetSound)
+        "TIGER/2018/Counties")
+    .filterBounds(
+        PugetSound)
 exports.HUC12 = ee.FeatureCollection(
-   "projects/ee-stormwaterheatmap/assets/huc12");
+    "projects/ee-stormwaterheatmap/assets/huc12");
 exports.HUC10 = ee.FeatureCollection(
-    "USGS/WBD/2017/HUC10")
-  .filterBounds(
-    PugetSound);
+        "USGS/WBD/2017/HUC10")
+    .filterBounds(
+        PugetSound);
 exports.HUC08 = ee.FeatureCollection(
-    "USGS/WBD/2017/HUC08")
-  .filterBounds(
-    PugetSound);
-exports.NHDPlus = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/NHDPlus_High_Resolution_Watershed_Dataset_string"
+        "USGS/WBD/2017/HUC08")
+    .filterBounds(
+        PugetSound);
+exports.NHDPlus = ee.FeatureCollection(
+    "projects/ee-stormwaterheatmap/assets/NHDPlus_High_Resolution_Watershed_Dataset_string"
 );
 exports.PS_AU = ee.FeatureCollection(
- "projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units_string")
+    "projects/ee-stormwaterheatmap/assets/Puget_Sound_Assessment_Units_string"
+)
 exports.WRIA = ee.FeatureCollection(
-    "users/stormwaterheatmap/WRIA_Bounds"
-  )
-  .filterBounds(PugetSound);
+        "users/stormwaterheatmap/WRIA_Bounds"
+    )
+    .filterBounds(PugetSound);
 exports.MS4 = ee.FeatureCollection(
-    "users/stormwaterheatmap/MS4_bounds"
-  )
-  .filterBounds(PugetSound)
+        "users/stormwaterheatmap/MS4_bounds"
+    )
+    .filterBounds(PugetSound)
+
 /*---------------------------
-Earth Engine Catalog Data 
-*/
-var NED = ee.Image("USGS/3DEP/10m").focal_mean({radius:10,units:'meters'});
-//Slope
-//Slope Categories: 
-var thresholds = ee.Image([5.0, 15,
-  100
-]);
-var slopeZone = ee.Terrain.slope(NED)
-  .gt(thresholds)
-  .reduce('sum')
-  .clip(PugetSound).toInt();
-exports.slope = slopeZone;
-//Slope continuous 
-exports.slope_cont = ee.Terrain
-  .slope(NED)
-  .rename('slope')
-/*---------------------------
-Stormwaterheatmap Vector Assets 
+Stormwaterheatmap Vector Assets
 */
 exports.counties = ee.FeatureCollection(
-    "TIGER/2018/Counties")
-  .filterBounds(
-    PugetSound);
+  "TIGER/2018/Counties")
+.filterBounds(
+  PugetSound);
 exports.traffic = ee.Image(0)
-  .blend(ee.Image(
-    "users/cnilsen/trafficExport")).focal_max().selfMask()
-//Watersheds     
+.blend(ee.Image(
+  "users/cnilsen/trafficExport"))
+.focal_max()
+.selfMask()
+//Watersheds
 exports.PS_AU = ee.FeatureCollection(
-  'users/cnilsen/PS_AU')
+'users/cnilsen/PS_AU')
 /*---------------------------
-Stormwaterheatmap Image Assets 
+Earth Engine Catalog Data
 */
-var population = census.filterBounds(PugetSound)
-  .reduceToImage(
-  {
-    properties: ["pop10"],
-    reducer: ee.Reducer.first()
-  })
-exports.population = population.selfMask()
-exports.landuse_img = ee.Image(
-    "projects/ee-stormwaterheatmap/assets/lu5m"
-  )
-  ///this has some weird slivers that look to be artifacts (coded as 8 in the shapefile)
-  //making these 0 and remapping the rest
- // .remap(
-   // [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
-    //[0, 1, 2, 3, 4, 5, 6, 0, 7, 8, 9, 10, 11, 12, 13, 14]
-  //)
-  .rename("Land Use")
-  .rename("land_use_code")
-// This function computes the feature's geometry area and adds it as a property.
-// var calc_density = function (feature)
-// {
-//   return feature.set(
-//   {
-//     population_density: feature.get('pop10')
-//       .divide(feature.geometry()
-//         .area()
-//         .divide(100 * 100))
-//   });
-// };
-var HRSL = ee.ImageCollection("projects/sat-io/open-datasets/hrsl/hrslpop");
+
+exports.hrus = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode")
+
+v
+exports.slope = slopeZone;
+
+exports.slope_cont = ee.Terrain
+    .slope(NED)
+    .rename('slope')
 
 
-var HRSL =  ee.Image("projects/ee-stormwaterheatmap/assets/meta_population_200m")
-// var population_density = ee.Image(0).blend(
-//   HRSL.mosaic().divide(0.09))//.focal_mode().focal_mean()) //people per hectare
-// //Map.addLayer(population_density.focal_mode(2).focal_max().focal_min(),{},'focal_mode')
-
-
-
-exports.population_density = HRSL.focal_mean()
-// Map the area getting function over the FeatureCollection.
-
-//Soils 
-exports.soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
-  .clip(PugetSound)
-  .selfMask()
-//imperviousnessation
-exports.population_per_ha = ee.Image(
-  "users/stormwaterheatmap/population_per_ha");
-//Precipitation 
-exports.precip = ee.Image("users/stormwaterheatmap/CigP2500");
-//Landcover 
-var tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs");
-exports.tncLC = tncLC
-//Imperviousness
-var imperviousness = tncLC.eq(6)
-  .or(tncLC.eq(7))
-//exports.imperviousness = imperviousness
-//var water = ee.Image(0).blend(tncLC.eq(0).or(tncLC.eq(5)))
-
-var water = ee.Image("JRC/GSW1_3/GlobalSurfaceWater").select('occurrence')
-
-var watermask = ee.Image(1).blend(water.eq(0))
-//Map.addLayer(imperviousness.mask(watermask))
-exports.imperviousness = imperviousness.mask(watermask)
-//updated 6/22/2021
-var imperviousAge = ee.Image("users/stormwaterheatmap/1m_cluster_age_v2").remap(
-  [3,4,5,6],[3,4,5,5]).focal_mode() //remaps the ages to just three categories 
-//age of development 
-exports.age_of_development = imperviousAge
 /*---------------------------
-// Import HSPF Layers 
+Stormwaterheatmap Image Assets
 */
-var hspfLayers = require('users/stormwaterheatmap/source_data:hspfLayers');
-//runoff 
-var mean_annual_runoff = hspfLayers.mean_annual_runoff.focal_mean(1)
-exports.mean_annual_runoff = mean_annual_runoff
-//Flow Duration Index 
-exports.fdr = hspfLayers.fdr
-exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
-  'hspf_landcover_categories')
-  
-var lc_watermask =  ee.ImageCollection("JAXA/ALOS/AW3D30/V3_2").select('MSK').mode().unmask().neq(3)
-var psau_shed_img = ee.Image("projects/ee-stormwaterheatmap/assets/pasuv2").select(0).gt(0).byte().focal_max(1) 
-exports.psau_shed_img = psau_shed_img 
 
-// //
-// // Pollutant Concentrations 
-// //
-// //// TSS
-// var tss_ugL = ee.Image("projects/ee-stormwaterheatmap/assets/concentrations/TSS_ug_L")///.resample()
-// .mask(lc_watermask).selfMask()
-// var ugL_convert = 1e-3 // multiply ug/L * mm/yr to get mg/m2/yr 
-// var pal = ["#352a87","#056ede","#089bce","#33b7a0","#a3bd6a","#f9bd3f","#f9fb0e"]
 
-// var tss_mg_yr = tss_ugL.multiply(ugL_convert).multiply(mean_annual_runoff.focal_mean(2)).
-// rename('tss_mg_m2_yr').selfMask()//.addBands((ee.Image.pixelArea()).rename('pixelArea'))
+exports.Age_of_Imperviousness = ee.Image("projects/ee-swhm/assets/production_layers/Age_of_Imperviousness")
+exports.Flow_Duration_Index = ee.Image("projects/ee-swhm/assets/production_layers/Flow_Duration_Index")
+exports.HSPF_Land_Cover_Type = ee.Image("projects/ee-swhm/assets/production_layers/HSPF_Land_Cover_Type")
+exports.Hydrologic_Response_Units = ee.Image("projects/ee-swhm/assets/production_layers/Hydrologic_Response_Units")
+exports.Imperviousness = ee.Image("projects/ee-swhm/assets/production_layers/Imperviousness")
+exports.Land_Cover = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover")
+exports.Land_Use = ee.Image("projects/ee-swhm/assets/production_layers/Land_Use")
+exports.Population_Density = ee.Image("projects/ee-swhm/assets/production_layers/Population_Density")
+exports.Precipitation_mm = ee.Image("projects/ee-swhm/assets/production_layers/Precipitation_mm")
+exports.Runoff_mm = ee.Image("projects/ee-swhm/assets/production_layers/Runoff_mm")
+exports.Slope = ee.Image("projects/ee-swhm/assets/production_layers/Slope")
+exports.Slope_Categories = ee.Image("projects/ee-swhm/assets/production_layers/Slope_Categories")
+exports.Soils = ee.Image("projects/ee-swhm/assets/production_layers/Soils")
+exports.Total_Copper_Concentration = ee.Image("projects/ee-swhm/assets/production_layers/Total_Copper_Concentration")
+exports.Total_Kjeldahl_Nitrogen_Concentration = ee.Image("projects/ee-swhm/assets/production_layers/Total_Kjeldahl_Nitrogen_Concentration")
+exports.Total_Phosphorus_Concentration = ee.Image("projects/ee-swhm/assets/production_layers/Total_Phosphorus_Concentration")
+exports.Total_Suspended_Solids_Concentration = ee.Image("projects/ee-swhm/assets/production_layers/Total_Suspended_Solids_Concentration")
+exports.Total_Zinc_Concentration = ee.Image("projects/ee-swhm/assets/production_layers/Total_Zinc_Concentration")
+exports.Traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic")
 
-// //Map.addLayer(tss_mg_yr,{bands: "tss_mg_m2_yr", min:0, max:5e4, palette: pal})
-// exports.tss_concentration = tss_ugL
-// exports.tss_load = tss_mg_yr
-// Map.addLayer(tss_mg_yr)
+// exports.population = population.selfMask()
+// exports.landuse_img = ee.Image(
+//         "projects/ee-stormwaterheatmap/assets/lu5m"
+//     )
+//     .rename("Land Use")
+//     .rename("land_use_code")
+
+
+
+// exports.population_density = HRSL.focal_mean()
+// // Map the area getting function over the FeatureCollection.
+
+// //Soils
+// exports.soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
+//     .clip(PugetSound)
+//     .selfMask()
+// //imperviousnessation
+// exports.population_per_ha = ee.Image(
+//     "users/stormwaterheatmap/population_per_ha");
+// //Precipitation
+// exports.precip = ee.Image("users/stormwaterheatmap/CigP2500");
+// //Landcover
+
+// exports.tncLC = tncLC
+// //Imperviousness
+
+// var water = ee.Image("JRC/GSW1_3/GlobalSurfaceWater")
+//     .select('occurrence')
+
+// var watermask = ee.Image(1)
+//     .blend(water.eq(0))
+// //Map.addLayer(imperviousness.mask(watermask))
+// exports.imperviousness = imperviousness.mask(watermask)
+// //updated 6/22/2021
+
+// exports.age_of_development = imperviousAge
+// /*---------------------------
+// // Import HSPF Layers
+// */
+
+// exports.fdr = hspfLayers.fdr
+// exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
+//     'hspf_landcover_categories')
+
+
+var psau_shed_img = ee.Image("projects/ee-stormwaterheatmap/assets/pasuv2")
+    .select(0)
+    .gt(0)
+    .byte()
+    .focal_max(1)
+exports.psau_shed_img = psau_shed_img
