@@ -97,11 +97,12 @@ exports.Slope_Categories = ee.Image("projects/ee-swhm/assets/production_layers/S
 exports.Soils = ee.Image("projects/ee-swhm/assets/production_layers/Soils")
 
 exports.Total_Copper_Concentration = 
-ee.Image("projects/ee-swhm/assets/production_layers/Total_Copper_Concentration").
-rename("log_tss_concentration_mg_per_L")
+ee.Image("projects/ee-swhm/assets/production_layers/Total_Copper_Concentration")
 exports.Total_Kjeldahl_Nitrogen_Concentration = ee.Image("projects/ee-swhm/assets/production_layers/Total_Kjeldahl_Nitrogen_Concentration")
 exports.Total_Phosphorus_Concentration = ee.Image("projects/ee-swhm/assets/production_layers/Total_Phosphorus_Concentration")
-exports.Total_Suspended_Solids_Concentration = ee.Image("projects/ee-swhm/assets/production_layers/Total_Suspended_Solids_Concentration")
+exports.Total_Suspended_Solids_Concentration = 
+ee.Image("projects/ee-swhm/assets/production_layers/Total_Suspended_Solids_Concentration").
+rename("log_tss_concentration_mg_per_L")
 exports.Total_Zinc_Concentration = ee.Image("projects/ee-swhm/assets/production_layers/Total_Zinc_Concentration")
 exports.Traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic")
 
