@@ -1,9 +1,8 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var
-    census = ee.FeatureCollection("TIGER/2010/Blocks"),
-    cityLimits = ee.FeatureCollection(
-        "users/stormwaterheatmap/tables/cityLimits")
+var census = ee.FeatureCollection("TIGER/2010/Blocks"),
+    cityLimits = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+
 /* ---------------------------
 * Author: Christian Nilsen, Geosyntec Consultants
 * Email: cnilsen@geosyntec.com
@@ -72,12 +71,10 @@ Earth Engine Catalog Data
 
 exports.hrus = ee.Image("users/stormwaterheatmap/public/hrusJan2020Mode")
 
-v
-exports.slope = slopeZone;
 
-exports.slope_cont = ee.Terrain
-    .slope(NED)
-    .rename('slope')
+//exports.slope = slopeZone;
+
+
 
 
 /*---------------------------
