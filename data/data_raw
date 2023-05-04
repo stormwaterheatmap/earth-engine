@@ -122,16 +122,16 @@ zinc  = add_log_band(zinc).rename(['zinc_concentration_ug_per_L', 'log_zinc_conc
 
 //convert tss Band 1 to mg/L 
 tss = tss.select(0).addBands(tss.select(0).divide(1000).log())
-Map.addLayer(tss)
 
 
 
-// exports.Total_Copper_Concentration = 
 
-// exports.Total_Kjeldahl_Nitrogen_Concentration = 
-// exports.Total_Phosphorus_Concentration =
-// exports.Total_Suspended_Solids_Concentration = 
-// exports.Total_Zinc_Concentration = 
+exports.Total_Copper_Concentration = copper
+exports.Total_Phosphorus_Concentration = p 
+exports.Total_Kjeldahl_Nitrogen_Concentration = tkn  
+exports.Total_Suspended_Solids_Concentration = tss
+exports.Total_Zinc_Concentration = zinc
+
 // exports.population = population.selfMask()
 // exports.landuse_img = ee.Image(
 //         "projects/ee-stormwaterheatmap/assets/lu5m"
