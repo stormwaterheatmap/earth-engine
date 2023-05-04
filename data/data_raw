@@ -121,7 +121,8 @@ tss   = add_log_band(tss).rename(['tss_concentration_ug_per_L', 'log_tss_concent
 zinc  = add_log_band(zinc).rename(['zinc_concentration_ug_per_L', 'log_zinc_concentration_ug_per_L']);
 
 //convert tss Band 1 to mg/L 
-tss = tss.select(0).addBands(tss.select(0).divide(1000).log())
+tss = tss.select(0).addBands(
+  tss.select(0).divide(1000).log().rename("log_tss_concentration_mg_per_L"))
 
 
 
