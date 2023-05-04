@@ -526,7 +526,7 @@ var cocs = {
             "name": "Total Phosphorus",
             "visParams": {
                 "bands": "log_p_concentration_ug_per_L",
-                "min": 0,
+                "min": 2,
                 "max": 5.298,
                 "palette": coc_pal,
                 "opacity": 0.8
