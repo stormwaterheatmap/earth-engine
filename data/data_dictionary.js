@@ -440,7 +440,7 @@ var cocs = {
             "name": "Total Suspended Solids",
             "visParams": {
                 "bands": "log_tss_concentration_mg_per_L",
-                "min": 2.5,
+                "min": 1.9,
                 "max": 3.6,
                 "palette": coc_pal,
                 "opacity": 0.8
@@ -484,7 +484,7 @@ var cocs = {
             "visParams": {
                 "bands": "log_copper_concentration_ug_per_L",
                 "min": 0,
-                "max": 1.8862809976457808,
+                "max": 3.43,
                 "palette": coc_pal,
                 "opacity": 0.8
             }
@@ -570,7 +570,7 @@ var cocs = {
             "visParams": {
                 "bands": "log_zinc_concentration_ug_per_L",
                 "min": 2.357235987186432,
-                "max": 5.56,
+                "max": 4.9,
                 "palette": coc_pal,
                 "opacity": 0.8
             }
@@ -612,7 +612,7 @@ var cocs = {
             "name": "Total Kjeldahl Nitrogen",
             "visParams": {
                 "bands": "log_tkn_concentration_ug_per_L",
-                "min": 5.68,
+                "min": 5.6,
                 "max": 6.72,
                 "palette": coc_pal,
                 "opacity": 0.8
