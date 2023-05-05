@@ -570,7 +570,7 @@ var cocs = {
             "visParams": {
                 "bands": "log_zinc_concentration_ug_per_L",
                 "min": 2.357235987186432,
-                "max": 5.75,
+                "max": 5.56,
                 "palette": coc_pal,
                 "opacity": 0.8
             }
