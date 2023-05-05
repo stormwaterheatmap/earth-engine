@@ -483,7 +483,7 @@ var cocs = {
             "name": "Total Copper",
             "visParams": {
                 "bands": "log_copper_concentration_ug_per_L",
-                "min": -1.521630074620247,
+                "min": 0,
                 "max": 1.8862809976457808,
                 "palette": coc_pal,
                 "opacity": 0.8
