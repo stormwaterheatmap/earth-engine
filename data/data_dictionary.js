@@ -113,8 +113,17 @@ var rasters = {
             "name": "Imperviousness",
             "visParams": {
                 "min": 0,
-                "max": 1,
-                "palette": ["#002564", "#fce644"],
+                "max": 100,
+                "palette": [
+  "#0C0405",
+  "#2E1D3D",
+  "#423D7B",
+  "#38659E",
+  "#358FA7",
+  "#41B7AD",
+  "#8AD9B1",
+  "#DEF5E5",
+  ],
                 "opacity": 0.8,
                 "_row": "Imperviousness"
             }
