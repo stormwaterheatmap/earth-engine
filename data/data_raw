@@ -1,6 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var census = ee.FeatureCollection("TIGER/2010/Blocks"),
-    cityLimits = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits");
+    cityLimits = ee.FeatureCollection("users/stormwaterheatmap/tables/cityLimits"),
+    PugetMask = ee.Image("projects/ee-swhm/assets/helper_layers/PugetSoundMask");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 
 /* ---------------------------
@@ -82,20 +83,20 @@ Stormwaterheatmap Image Assets
 */
 
 
-exports.Age_of_Imperviousness = ee.Image("projects/ee-swhm/assets/production_layers/Age_of_Imperviousness").clip(PugetSound)
-exports.Flow_Duration_Index = ee.Image("projects/ee-swhm/assets/production_layers/Flow_Duration_Index").clip(PugetSound)
-exports.HSPF_Land_Cover_Type = ee.Image("projects/ee-swhm/assets/production_layers/HSPF_Land_Cover_Type").clip(PugetSound)
-exports.Hydrologic_Response_Units = ee.Image("projects/ee-swhm/assets/production_layers/Hydrologic_Response_Units").clip(PugetSound)
-exports.Imperviousness = ee.Image("projects/ee-swhm/assets/production_layers/Imperviousness").clip(PugetSound)
-exports.Land_Cover = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover").clip(PugetSound)
-exports.Land_Use = ee.Image("projects/ee-swhm/assets/production_layers/Land_Use").clip(PugetSound)
-exports.Population_Density = ee.Image("projects/ee-swhm/assets/production_layers/Population_Density").clip(PugetSound)
-exports.Precipitation_mm = ee.Image("projects/ee-swhm/assets/production_layers/Precipitation_mm").clip(PugetSound)
-exports.Runoff_mm = ee.Image("projects/ee-swhm/assets/production_layers/Runoff_mm").clip(PugetSound)
-exports.Slope = ee.Image("projects/ee-swhm/assets/production_layers/Slope").clip(PugetSound)
-exports.Slope_Categories = ee.Image("projects/ee-swhm/assets/production_layers/Slope_Categories").clip(PugetSound)
-exports.Soils = ee.Image("projects/ee-swhm/assets/production_layers/Soils").clip(PugetSound)
-exports.Traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic").clip(PugetSound)
+exports.Age_of_Imperviousness = ee.Image("projects/ee-swhm/assets/production_layers/Age_of_Imperviousness").mask(PugetMask)
+exports.Flow_Duration_Index = ee.Image("projects/ee-swhm/assets/production_layers/Flow_Duration_Index").mask(PugetMask)
+exports.HSPF_Land_Cover_Type = ee.Image("projects/ee-swhm/assets/production_layers/HSPF_Land_Cover_Type").mask(PugetMask)
+exports.Hydrologic_Response_Units = ee.Image("projects/ee-swhm/assets/production_layers/Hydrologic_Response_Units").mask(PugetMask)
+exports.Imperviousness = ee.Image("projects/ee-swhm/assets/production_layers/Imperviousness").mask(PugetMask)
+exports.Land_Cover = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover").mask(PugetMask)
+exports.Land_Use = ee.Image("projects/ee-swhm/assets/production_layers/Land_Use").mask(PugetMask)
+exports.Population_Density = ee.Image("projects/ee-swhm/assets/production_layers/Population_Density").mask(PugetMask)
+exports.Precipitation_mm = ee.Image("projects/ee-swhm/assets/production_layers/Precipitation_mm").mask(PugetMask)
+exports.Runoff_mm = ee.Image("projects/ee-swhm/assets/production_layers/Runoff_mm").mask(PugetMask)
+exports.Slope = ee.Image("projects/ee-swhm/assets/production_layers/Slope").mask(PugetMask)
+exports.Slope_Categories = ee.Image("projects/ee-swhm/assets/production_layers/Slope_Categories").mask(PugetMask)
+exports.Soils = ee.Image("projects/ee-swhm/assets/production_layers/Soils").mask(PugetMask)
+exports.Traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic").mask(PugetMask)
 
 
 
@@ -147,7 +148,7 @@ exports.Total_Zinc_Concentration = zinc
 
 // //Soils
 // exports.soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
-//     .clip(PugetSound)
+//     .mask(PugetMask)
 //     .selfMask()
 // //imperviousnessation
 // exports.population_per_ha = ee.Image(
