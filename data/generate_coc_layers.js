@@ -109,4 +109,4 @@ print(all_cocs.toDictionary())
 
 var zinc_tkn = zinc.addBands(tkn)
 
-
+Map.addLayer(all_cocs)
