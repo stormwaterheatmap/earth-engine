@@ -483,8 +483,8 @@ var cocs = {
             "name": "Total Copper",
             "visParams": {
                 "bands": "log_copper_concentration_ug_per_L",
-                "min": 0,
-                "max": 3.7,
+                "min": -1.521630074620247,
+                "max": 1.8862809976457808,
                 "palette": coc_pal,
                 "opacity": 0.8
             }
@@ -526,7 +526,7 @@ var cocs = {
             "name": "Total Phosphorus",
             "visParams": {
                 "bands": "log_p_concentration_ug_per_L",
-                "min": 2,
+                "min": 3.929908473491669,
                 "max": 5.298,
                 "palette": coc_pal,
                 "opacity": 0.8
@@ -569,7 +569,7 @@ var cocs = {
             "name": "Total Zinc",
             "visParams": {
                 "bands": "log_zinc_concentration_ug_per_L",
-                "min": 1.75,
+                "min": 2.357235987186432,
                 "max": 5.75,
                 "palette": coc_pal,
                 "opacity": 0.8
@@ -612,8 +612,8 @@ var cocs = {
             "name": "Total Kjeldahl Nitrogen",
             "visParams": {
                 "bands": "log_tkn_concentration_ug_per_L",
-                "min": 5.27,
-                "max": 6.5,
+                "min": 5.68,
+                "max": 6.72,
                 "palette": coc_pal,
                 "opacity": 0.8
             }
