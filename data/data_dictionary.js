@@ -179,17 +179,16 @@ var rasters = {
         "layer": {
             "eeObject": "eeObject",
             "name": "Population Density",
-            "visParams": {
-                "min": 0,
-                "max": 50,
-                "palette": [
-                    "042333",
-                    "2c3395",
-                    "b15f82",
-                    "eb7958",
-                    "fbb43d",
-                    "e8fa5b",
-                    "ffffff"
+            "visParams": 
+                {min:5,max:45,palette:
+  ["#03051A",
+  "#36193E",
+  "#701F57",
+  "#AE1B59",
+  "#E03342",
+  "#F27651",
+  "#F6B48E",
+  "#FAEBDD"
                 ],
                 "opacity": 0.8,
                 "_row": "Population Density"
