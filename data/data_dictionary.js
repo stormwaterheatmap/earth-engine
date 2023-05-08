@@ -398,7 +398,7 @@ var layerSources = {
 
     "Population Density": data.Population_Density.rename('population_density'), //.mask(data.population),
 
-    "Precipitation (mm)": data.precip,
+    "Precipitation (mm)": data.Precipitation_mm,
 
     "Runoff (mm)": data.Runoff_mm.rename(
         'mean_annual_runoff_mm'),
