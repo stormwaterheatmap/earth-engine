@@ -91,7 +91,15 @@ exports.Imperviousness = ee.Image("projects/ee-swhm/assets/production_layers/Imp
 exports.Land_Cover = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover").mask(PugetMask)
 exports.Land_Use = ee.Image("projects/ee-swhm/assets/production_layers/Land_Use").mask(PugetMask)
 exports.Population_Density = ee.Image("projects/ee-swhm/assets/production_layers/Population_Density").mask(PugetMask)
-exports.Precipitation_mm = ee.Image("projects/ee-swhm/assets/production_layers/Precipitation_mm").mask(PugetMask)
+
+
+var Precipitation_mm = ee.Image("projects/ee-swhm/assets/production_layers/Precipitation_mm").mask(PugetMask)
+
+//need to mask out zeros for precip
+Precipitation_mm = Precipitation_mm.selfMask() 
+exports.Precipitation_mm = Precipitation_mm
+
+
 exports.Runoff_mm = ee.Image("projects/ee-swhm/assets/production_layers/Runoff_mm").mask(PugetMask)
 exports.Slope = ee.Image("projects/ee-swhm/assets/production_layers/Slope").mask(PugetMask)
 exports.Slope_Categories = ee.Image("projects/ee-swhm/assets/production_layers/Slope_Categories").mask(PugetMask)
@@ -133,51 +141,6 @@ exports.Total_Phosphorus_Concentration = p
 exports.Total_Kjeldahl_Nitrogen_Concentration = tkn  
 exports.Total_Suspended_Solids_Concentration = tss
 exports.Total_Zinc_Concentration = zinc
-
-// exports.population = population.selfMask()
-// exports.landuse_img = ee.Image(
-//         "projects/ee-stormwaterheatmap/assets/lu5m"
-//     )
-//     .rename("Land Use")
-//     .rename("land_use_code")
-
-
-
-// exports.population_density = HRSL.focal_mean()
-// // Map the area getting function over the FeatureCollection.
-
-// //Soils
-// exports.soils = ee.Image("users/stormwaterheatmap/soilsunmask5m")
-//     .mask(PugetMask)
-//     .selfMask()
-// //imperviousnessation
-// exports.population_per_ha = ee.Image(
-//     "users/stormwaterheatmap/population_per_ha");
-// //Precipitation
-// exports.precip = ee.Image("users/stormwaterheatmap/CigP2500");
-// //Landcover
-
-// exports.tncLC = tncLC
-// //Imperviousness
-
-// var water = ee.Image("JRC/GSW1_3/GlobalSurfaceWater")
-//     .select('occurrence')
-
-// var watermask = ee.Image(1)
-//     .blend(water.eq(0))
-// //Map.addLayer(imperviousness.mask(watermask))
-// exports.imperviousness = imperviousness.mask(watermask)
-// //updated 6/22/2021
-
-// exports.age_of_development = imperviousAge
-// /*---------------------------
-// // Import HSPF Layers
-// */
-
-// exports.fdr = hspfLayers.fdr
-// exports.hspf_landcover = hspfLayers.hspf_landcover.rename(
-//     'hspf_landcover_categories')
-
 
 var psau_shed_img = ee.Image("projects/ee-stormwaterheatmap/assets/pasuv2")
     .select(0)
