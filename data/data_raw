@@ -92,7 +92,6 @@ exports.Land_Cover = ee.Image("projects/ee-swhm/assets/production_layers/Land_Co
 exports.Land_Use = ee.Image("projects/ee-swhm/assets/production_layers/Land_Use").mask(PugetMask)
 exports.Population_Density = ee.Image("projects/ee-swhm/assets/production_layers/Population_Density").mask(PugetMask)
 
-
 var Precipitation_mm = ee.Image("projects/ee-swhm/assets/production_layers/Precipitation_mm").mask(PugetMask)
 
 //need to mask out zeros for precip
