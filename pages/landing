@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("projects/ee-swhm/assets/production_layers/Precipitation_mm");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 
 
 ui.root.setLayout(ui.Panel.Layout.absolute());
@@ -18,7 +21,7 @@ layer_types["Input Data Layers"] = {
   "Land Cover": rasters["Land Cover"],
   "Land Use": rasters["Land Use"],
   "Population Density": rasters["Population Density"],
-  "Precipitation": rasters["Precipitation"],
+  "Precipitation": rasters["Precipitation (mm)"],
   Slope: rasters["Slope"],
   "Slope Categories": rasters["Slope Categories"],
   Traffic: rasters["Traffic"],
