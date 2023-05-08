@@ -221,21 +221,21 @@ var rasters = {
                 "max": 3800,
                 "palette":
                     //["#781c81", "#3f60ae", "#539eb6", "#6db388", "#cab843", "#e78532", "#d92120"],
-                    ["ffffff",
-                        "fdef9a",
-                        "aad85c",
-                        "5ab978",
-                        "3c9387",
-                        "206e8b",
-                        "14439c",
-                        "2a186c",
-                        "4a1486",
-                        "6a51a3",
-                        " 807dba",
-                        " 9e9ac8",
-                        " bcbddc",
-                        " dadaeb"
-                    ],
+                    [
+  "#FFFFFF",
+  "#F7FCF0",
+  "#E0F3DB",
+  "#CCEBC5",
+  "#A8DDB5",
+  "#7BCCC4",
+  "#4EB3D3",
+  "#2B8CBE",
+  "#0868AC",
+  "#084081",
+  "#00203E"
+]
+                 
+                 ,
                 "opacity": 0.8,
                 "_row": "Precipitation (mm)"
             }
