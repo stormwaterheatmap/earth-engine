@@ -19,6 +19,10 @@ var PugetSound = ee.FeatureCollection(
     "users/stormwaterheatmap/tables/PugetSound");
 exports.PugetSound = PugetSound
 
+
+var PugetSoundWA = ee.FeatureCollection(
+    "projects/ee-swhm/assets/production_feature_collections/PugetSoundWA")
+exports.PugetSoundWA = PugetSoundWA
 exports.cityLimits = cityLimits.filterBounds(
     PugetSound)
 
