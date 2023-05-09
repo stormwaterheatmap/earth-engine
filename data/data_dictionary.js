@@ -659,7 +659,7 @@ exports.vectors = { //for legacy functions
     NHDPlus: data.NHDPlus,
     PS_AU: data.PS_AU,
     PugetSound: data.PugetSound,
-    PugetSoundWa: data.PugetSoundWA, 
+    PugetSoundWA: data.PugetSoundWA, 
     WRIA: data.WRIA,
     MS4: data.MS4,
     Cities: data.cityLimits
