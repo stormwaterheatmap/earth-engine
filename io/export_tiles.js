@@ -1,10 +1,8 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var roi = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/PugetSoundWA");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var rasters = data.rasters
-print(rasters)
+print(data)
 var PugetSound = data.vectors.PugetSound
+var roi = data.vectors.PugetSoundWA
 
 var layers = Object.keys(rasters)
 
