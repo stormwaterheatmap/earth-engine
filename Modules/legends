@@ -24,7 +24,7 @@ function undoColorStretch(val) {
 
   
 
-var barLegend = function (layerObj,hml=false) {
+var barLegend = function (layerObj,hml) {
   var title_label = 
     ui.Label({value: layerObj.layer.name,
     style: {
