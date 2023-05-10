@@ -1,0 +1,67 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/psau"),
+    table2 = ee.FeatureCollection("projects/ee-swhm/assets/staging/psau_results_wgs84");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var table = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/psau"),
+    table2 = ee.FeatureCollection("projects/ee-swhm/assets/staging/psau_results_wgs84");
+    
+table = table2
+var psau_props = {
+  copper: [
+    "Total_Copper_p50",
+    "Total_Copper_p10",
+    "Total_Copper_p90",
+    ],
+  p: [
+    "Total_Phosphorus_p50",
+    "Total_Phosphorus_p10",
+    "Total_Phosphorus_p90",
+    ],
+  tkn:[
+    "Total_Kjeldahl_Nitrogen_p50",
+    "Total_Kjeldahl_Nitrogen_p10",
+    "Total_Kjeldahl_Nitrogen_p90",
+    ],
+  tss: [
+     "Total_Suspended_Solids_p50",
+     "Total_Suspended_Solids_p10",
+     "Total_Suspended_Solids_p90",
+    ],
+  zinc: [
+  "Total_Zinc_p50", 
+  "Total_Zinc_p10",
+  "Total_Zinc_p90",
+    ]
+}
+
+function extract_coc(fc_in,prop_sel){
+  return (fc_in.select({propertySelectors: prop_sel, 
+    newProperties: ['p50','p10','p90']
+  }))
+}
+
+// Define property rename function
+function renameProperties(prop_sel) {
+  return prop_sel.map(function(name) {
+    return name.replace('Total_', '');
+  });
+}
+
+//function to export features as shapefile 
+function export_fcs(fc,desc){
+  Export.table.toCloudStorage({
+    collection:fc, description:desc, 
+    bucket:"swhm-table-exports",
+    fileNamePrefix:'psau/'+desc, fileFormat:"shp"})
+}
+// Add coc layers to map
+var coc_fc = ee.FeatureCollection([]);
+for (var coc in psau_props) {
+  var prop_sel = psau_props[coc];
+  var coc_sel = table.select(prop_sel,renameProperties(prop_sel));
+  coc_fc = coc_fc.merge(coc_sel);
+  export_fcs(coc_sel,coc)
+  Map.addLayer(coc_sel);
+}
+
+
