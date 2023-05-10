@@ -24,15 +24,19 @@ function undoColorStretch(val) {
 
   
 
-var barLegend = function (layerObj) {
+var barLegend = function (layerObj,hml=false) {
   var title_label = 
     ui.Label({value: layerObj.layer.name,
     style: {
             fontWeight: 'bold',
             fontSize: '18px',
-            // margin: '0 0 4px 0',
-            // padding: '0'
+
         }})
+if(hml){
+  var low = 'low'; 
+  var high = 'high'; 
+  var mid = 'medium'; 
+} else {
   if(layerObj.log_transformed_viz == "TRUE"){
 
 var   low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
@@ -44,7 +48,7 @@ var   low = 0; //Math.exp(ee.Number(layerObj.layer.visParams.min).getInfo())
    low = (layerObj.layer.visParams.min)
    high = (layerObj.layer.visParams.max)
    mid = (ee.Number(high).subtract(low)).divide(2).getInfo()
-  }
+  }}
   
   var labelPanel = ui.Panel(
       [
