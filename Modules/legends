@@ -36,7 +36,7 @@ var barLegend = function (layerObj,hml) {
 if(hml){
   var low = 'low'; 
   var high = 'high'; 
-  var mid = 'medium'; 
+  var mid = ''; 
 } else {
   if(layerObj.log_transformed_viz == "TRUE"){
 
