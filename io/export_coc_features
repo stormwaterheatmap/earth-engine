@@ -66,6 +66,7 @@ for (var coc in psau_props) {
 // Export the WDPA FeatureCollection as a FeatureView asset.
 Export.table.toFeatureView({
   collection: table2,
+  maxFeaturesPerTile: 2000,
   assetId: 'psau_cocs',
   description: 'psau_cocs',
 });
