@@ -1,11 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var table = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/psau"),
-    table2 = ee.FeatureCollection("projects/ee-swhm/assets/staging/psau_results_wgs84");
+var table2 = ee.FeatureCollection("projects/ee-swhm/assets/staging/psau_results_wgs84");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var table = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/psau"),
-    table2 = ee.FeatureCollection("projects/ee-swhm/assets/staging/psau_results_wgs84");
-    
-table = table2
+
 var psau_props = {
   copper: [
     "Total_Copper_p50",
@@ -58,10 +54,36 @@ function export_fcs(fc,desc){
 var coc_fc = ee.FeatureCollection([]);
 for (var coc in psau_props) {
   var prop_sel = psau_props[coc];
-  var coc_sel = table.select(prop_sel,renameProperties(prop_sel));
+  var coc_sel = table2.select(prop_sel,renameProperties(prop_sel));
   coc_fc = coc_fc.merge(coc_sel);
   export_fcs(coc_sel,coc)
   Map.addLayer(coc_sel);
 }
 
 
+
+
+// Export the WDPA FeatureCollection as a FeatureView asset.
+Export.table.toFeatureView({
+  collection: table2,
+  assetId: 'psau_cocs',
+  description: 'psau_cocs',
+});
+
+
+// Create an empty image into which to paint the features, cast to byte.
+var empty = ee.Image().byte();
+
+// Paint all the polygon edges with the same number and width, display.
+var outline = empty.paint({
+  featureCollection: table2,
+  color: 1,
+  width: 3
+});
+// Paint the interior of the polygons with different colors.
+var fills = empty.paint({
+  featureCollection: table2,
+  color: 'Total_Copper_p50',
+});
+var palette = ['FF0000', '00FF00', '0000FF'];
+Map.addLayer(fills, {palette: palette, max: 14}, 'colored fills');
