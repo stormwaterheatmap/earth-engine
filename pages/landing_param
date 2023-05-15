@@ -5,6 +5,8 @@ var image = ee.Image("projects/ee-swhm/assets/production_layers/Precipitation_mm
 
 ui.root.setLayout(ui.Panel.Layout.absolute());
 
+
+
 // data
 var data = require("users/stormwaterheatmap/apps:data/data_dictionary.js");
 var Style = require("users/stormwaterheatmap/apps:Modules/Style");
@@ -111,12 +113,20 @@ panel.widgets().set(1, select_layer_type);
 panel.widgets().set(2, layer_label);
 panel.widgets().set(3, secondname_select);
 
+var which_type = ui.url.get(type, 'coc')
+var which_layer = ui.url.get(layer, 'Total Suspended Solids Concentration')
+
 var map_init = function (map) {
   var m = map || Map;
   legendPanel.style().set({ shown: true });
-
+if(which_type == 'coc'){
+  var init_layer = coc_data['which_layer']
+} else {
+  init_layer = rasters['which_layer']
+}
   helpers.clear_map_add_layer(
-    coc_data["Total Suspended Solids Concentration"],
+    init_layer,
+    //coc_data["Total Suspended Solids Concentration"],
     legendPanel
   );
 };
