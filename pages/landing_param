@@ -125,7 +125,6 @@ if(which_type == 'coc'){
 var map_init = function (map,which_type,which_layer) {
   var m = map || Map;
   legendPanel.style().set({ shown: true });
-
   helpers.clear_map_add_layer(
     init_layer,
     legendPanel
