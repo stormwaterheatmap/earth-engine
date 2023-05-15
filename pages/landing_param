@@ -115,14 +115,20 @@ panel.widgets().set(3, secondname_select);
 
 var which_type = ui.url.get('layer_type', 'coc')
 var which_layer = ui.url.get('layer', 'Total Suspended Solids Concentration')
-
+print(which_layer)
 var map_init = function (map) {
   var m = map || Map;
   legendPanel.style().set({ shown: true });
 if(which_type == 'coc'){
   var init_layer = coc_data['which_layer']
+  
 } else {
   init_layer = rasters['which_layer']
+    helpers.clear_map_add_layer(
+    init_layer,
+    //coc_data["Total Suspended Solids Concentration"],
+    legendPanel
+  );
 }
   helpers.clear_map_add_layer(
     init_layer,
