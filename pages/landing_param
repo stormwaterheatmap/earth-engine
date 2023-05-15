@@ -113,8 +113,8 @@ panel.widgets().set(1, select_layer_type);
 panel.widgets().set(2, layer_label);
 panel.widgets().set(3, secondname_select);
 
-var which_type = ui.url.get(type, 'coc')
-var which_layer = ui.url.get(layer, 'Total Suspended Solids Concentration')
+var which_type = ui.url.get('layer_type', 'coc')
+var which_layer = ui.url.get('layer', 'Total Suspended Solids Concentration')
 
 var map_init = function (map) {
   var m = map || Map;
