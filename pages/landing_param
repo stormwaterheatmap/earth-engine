@@ -1,6 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var image = ee.Image("projects/ee-swhm/assets/production_layers/Precipitation_mm");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
  
 
 ui.root.setLayout(ui.Panel.Layout.absolute());
@@ -121,7 +118,7 @@ if(which_type == 'coc'){
    init_layer = coc_data[which_layer]
 } else {
   init_layer = rasters[which_layer]
-}
+} 
 var map_init = function (map,which_type,which_layer) {
   var m = map || Map;
   legendPanel.style().set({ shown: true });
