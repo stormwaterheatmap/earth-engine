@@ -1,9 +1,4 @@
- 
-
 ui.root.setLayout(ui.Panel.Layout.absolute());
-
-
-
 // data
 var data = require("users/stormwaterheatmap/apps:data/data_dictionary.js");
 var Style = require("users/stormwaterheatmap/apps:Modules/Style");
