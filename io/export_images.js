@@ -7,8 +7,11 @@ var rasters = data.rasters
 var PugetSound = data.vectors.PugetSound
 
 var layers = Object.keys(rasters)
+var traffic = ee.Image('users/jrobertson2000/psRds_aadt_fin2m1')
+//var viz = {min:10, max:50000, palette: ['magenta','black']}
+//Map.addLayer(traffic.unmask().resample().focal_max(), viz, "original traffic raster")
 
-
+rasters.Traffic.layer.eeObject = traffic
 
 for (var i = 0; i < layers.length; i++) {
   var lay = rasters[layers[i]]
