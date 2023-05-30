@@ -3,17 +3,7 @@ var roi = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_colle
     image = ee.Image("MODIS/MOD44W/MOD44W_005_2000_02_24"),
     image2 = ee.Image("projects/ee-swhm/assets/production_layers/Imperviousness");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+var landcover = require('users/stormwaterheatmap/apps:data/layer_generation/landcover.js').landcover 
 
-
-Map.addLayer(image.select('water_mask'))
-
-var watermask = image.select('water_mask')
-//jamie robertson landcover image 
-var Land_Cover = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover")
-var lc_na = Land_Cover.eq(0)
-
-var to_update = Land_Cover.eq(0).and(watermask)
-var lc_updated = Land_Cover.where(to_update,5)
- 
-Map.addLayer(lc_updated,{min:0,max:7})
-exports.landcover = lc_updated 
+var imperv = landcover.gte(6).multiply(100).float()
+Map.addLayer(imperv)
