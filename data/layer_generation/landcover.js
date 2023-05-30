@@ -7,7 +7,7 @@ var roi = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_colle
 Map.addLayer(image.select('water_mask'))
 
 var watermask = image.select('water_mask')
-
+//jamie robertson landcover image 
 var Land_Cover = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover")
 var lc_na = Land_Cover.eq(0)
 
