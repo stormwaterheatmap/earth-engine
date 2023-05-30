@@ -1,17 +1,25 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var roi = ee.FeatureCollection("users/cnilsen/PugetSound_boundary");
+var roi = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/PugetSoundWA"),
+    image = ee.Image("MODIS/MOD44W/MOD44W_005_2000_02_24");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var rasters = data.rasters
-
+Map.addLayer(roi)
 var PugetSound = data.vectors.PugetSound
-
+Map.addLayer(image.select('water_mask'))
 var layers = Object.keys(rasters)
 var traffic = ee.Image('users/jrobertson2000/psRds_aadt_fin2m1')
-//var viz = {min:10, max:50000, palette: ['magenta','black']}
-//Map.addLayer(traffic.unmask().resample().focal_max(), viz, "original traffic raster")
+var watermask = image.select('water_mask')
 
+var Land_Cover = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover")
+var lc_na = Land_Cover.eq(0)
+
+var to_update = Land_Cover.eq(0).and(watermask)
+var lc_updated = Land_Cover.where(to_update,5)
+
+//update certain layers
 rasters.Traffic.layer.eeObject = traffic
+rasters["Land Cover"].layer.eeObject = lc_updated
 
 for (var i = 0; i < layers.length; i++) {
   var lay = rasters[layers[i]]
