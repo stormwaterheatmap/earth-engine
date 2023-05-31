@@ -6,6 +6,5 @@ var roi = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_colle
 var landcover = require('users/stormwaterheatmap/apps:data/layer_generation/landcover.js').landcover 
 
 var imperv = landcover.gte(6).multiply(100).float()
-Map.addLayer(imperv.focal_min({kernelType: 'diamond',radius:2,units:'meters'}).
-focal_max({kernelType: 'diamond',radius:2,units:'meters'}))
+
 exports.imperviousness = imperv
