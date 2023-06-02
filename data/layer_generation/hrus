@@ -1,8 +1,10 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var roi = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/PugetSoundWA"),
-    image = ee.Image("MODIS/MOD44W/MOD44W_005_2000_02_24"),
     image2 = ee.Image("projects/ee-swhm/assets/production_layers/Imperviousness"),
-    imageCollection = ee.ImageCollection("USDA/NASS/CDL");
+    imageCollection = ee.ImageCollection("USDA/NASS/CDL"),
+    soils = ee.Image("projects/ee-swhm/assets/production_layers/Soils"),
+    image5 = ee.Image("users/cnilsen/soilRasterExport2band"),
+    elevation = ee.Image("USGS/SRTMGL1_003");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var landcover = require('users/stormwaterheatmap/apps:data/layer_generation/landcover.js').landcover 
 // Label	Raster value	Colors
@@ -12,7 +14,7 @@ var landcover = require('users/stormwaterheatmap/apps:data/layer_generation/land
 // Water	3	#b3caff#b3caff
 // Impervious-roof	4	#844c8b#844c8b
 // Impervious-nonRoof	5	#ead1ff#ead1ff
-
+Map.addLayer(elevation,{},'elevation')
 // reclass for hspf landcover types 
 var cropland = ee.Image('USDA/NASS/CDL/2020').select('cultivated').eq(2)//gt(0)
 var hspf_land_cover = landcover.remap([0,1,2,3,4,5,6,7],[9,2,2,0,2,3,5,5])
@@ -21,6 +23,11 @@ hspf_land_cover = hspf_land_cover.updateMask(hspf_mask)
 hspf_land_cover = hspf_land_cover.where(cropland,1)
 Map.addLayer(hspf_land_cover)
 
-
+Map.addLayer(soils,{},'soils')
+//var slope = 
 var imperv = landcover.gte(6).multiply(100).float()
 exports.imperviousness = imperv
+var soilmask = image5.select('NRCS').eq(0)
+Map.addLayer(soilmask)
+var newimgreplace = soils.eq(3).and(soilmask)//.and(elevation.gt(650))
+soils = soils.where(newimgreplace,1)
