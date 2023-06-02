@@ -15,7 +15,7 @@ var soils = soilLanduseSlope.soils
 var hspf_land_cover = soilLanduseSlope.hspf_land_cover 
 var slope = soilLanduseSlope.slope 
 var slope_zone = soilLanduseSlope.zones 
-
+var imperviousness = require('users/stormwaterheatmap/apps:data/layer_generation/imperviousness.js')
 
 
 
@@ -24,20 +24,30 @@ var slope_zone = soilLanduseSlope.zones
 //Map.addLayer(traffic.unmask().resample().focal_max(), viz, "original traffic raster")
 
 rasters.Traffic.layer.eeObject = traffic
+print(Object.keys(rasters))
+rasters['HSPF Land Cover Type'].layer.eeObject = hspf_land_cover
+rasters['Hydrologic Response Units'].layer.eeObject = hrus
+//rasters['Imperviousness'].layer.eeObject = imperviousness
+//rasters['Land Cover'].layer.eeObject = 
+rasters['Slope'].layer.eeObject = slope
+rasters['Slope Categories'].layer.eeObject = slope_zone
+rasters['Soils'].layer.eeObject = soils
 
+
+print(slope_zone)
 for (var i = 0; i < layers.length; i++) {
   var lay = rasters[layers[i]]
 
   //determine if layer should be exported as byte (categorized) or double (continuous )
   switch (lay.discrete) {
     case 'TRUE':
-      var img = lay.layer.eeObject.clip(roi).byte()
+      var img = lay.layer.eeObject.byte()
       break;
     case 'FALSE':
-      var img = lay.layer.eeObject.clip(roi).double()
+      var img = lay.layer.eeObject.double()
       break; 
     default: 
-      print('error')
+      var img = lay.layer.eeObject
   }
   
   var scale = lay.scale
