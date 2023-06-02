@@ -109,4 +109,4 @@ exports.hrus = hrus
 exports.soils = soils 
 exports.hspf_land_cover = hspf_land_cover 
 exports.slope = slope 
-exports.slope_zone = zones 
+exports.zones = zones 
