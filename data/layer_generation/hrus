@@ -20,82 +20,76 @@ var roi = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_colle
           [-121.86337044073304, 47.82138882276389],
           [-121.86337044073304, 47.96871330055091]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var landcover = require('users/stormwaterheatmap/apps:data/layer_generation/landcover.js').landcover 
-// Label	Raster value	Colors
-// Forest/Trees	0	#55775e#55775e
-// Pasture	1	#dacd7f#dacd7f
-// Grass	2	#7e9e87#7e9e87
-// Water	3	#b3caff#b3caff
-// Impervious-roof	4	#844c8b#844c8b
-// Impervious-nonRoof	5	#ead1ff#ead1ff
-Map.addLayer(elevation,{},'elevation',0)
-// reclass for hspf landcover types 
-var cropland = ee.Image('USDA/NASS/CDL/2020').select('cultivated').eq(2)//gt(0)
+/ Import the landcover module
+var landcover = require('users/stormwaterheatmap/apps:data/layer_generation/landcover.js').landcover;
+
+// Define cropland using the USDA/NASS/CDL image, selecting 'cultivated' and setting it equal to 2
+var cropland = ee.Image('USDA/NASS/CDL/2020').select('cultivated').eq(2);
+
+// Define the HSPF land cover types and remap the original classes to new ones
 var hspf_land_cover = landcover.remap(
-  [0,1,2,3,4,5,6,7],
-  [9,2,2,0,2,3,5,5])
-//mask out water or na areas 
-var hspf_mask = landcover.neq(0).or(hspf_land_cover.eq(3))
-hspf_land_cover = hspf_land_cover.updateMask(hspf_mask)
-hspf_land_cover = hspf_land_cover.where(cropland,1)
-Map.addLayer(hspf_land_cover,{},'hspf lc',0)
+  [0, 1, 2, 3, 4, 5, 6, 7],
+  [9, 2, 2, 0, 2, 3, 5, 5]
+);
 
-Map.addLayer(soils,{},'soils',0)
-//var slope = 
-var imperv = landcover.gte(6).multiply(100).float()
-exports.imperviousness = imperv
-var soilmask = image5.select('NRCS').eq(0)
-//Map.addLayer(soilmask)
-var newimgreplace = soils.eq(3).and(soilmask)//.and(elevation.gt(650))
-soils = soils.where(newimgreplace,1)
+// Mask out water or Not Available (NA) areas
+var hspf_mask = landcover.neq(0).or(hspf_land_cover.eq(3));
+hspf_land_cover = hspf_land_cover.updateMask(hspf_mask);
 
-/** 
- * Slopes 
-*/ 
+// Assign cropland values to the HSPF land cover map
+hspf_land_cover = hspf_land_cover.where(cropland, 1);
 
-var slope = ee.Terrain.slope(elevation)
-Map.addLayer(slope,{},'slope',0)
+// Add the HSPF land cover layer to the map
+Map.addLayer(hspf_land_cover, {}, 'hspf lc', 0);
 
-//get average slope associated with overland flow plane
-var k = ee.Kernel.circle({radius:(400/3.2808),units:'meters'})
-var minmax = elevation.reduceNeighborhood({reducer:ee.Reducer.minMax(),kernel:k})
-var slope = ee.Terrain.slope(elevation).reduceNeighborhood({reducer:ee.Reducer.median(),kernel:k})
+// Add the soils layer to the map
+Map.addLayer(soils, {}, 'soils', 0);
 
-//minmax.select('elevation_max').subtract(minmax.select('elevation_min')).divide(120)
+// Calculate the percentage of impervious surface based on land cover types
+var imperv = landcover.gte(6).multiply(100).float();
+exports.imperviousness = imperv;
 
+// Create a soil mask
+var soilmask = image5.select('NRCS').eq(0);
 
+// Replace specific values in the soils image
+var newimgreplace = soils.eq(3).and(soilmask);
+soils = soils.where(newimgreplace, 1);
+
+// Calculate slope using elevation data
+var slope = ee.Terrain.slope(elevation);
+Map.addLayer(slope, {}, 'slope', 0);
+
+// Define a circular kernel for neighborhood operations
+var k = ee.Kernel.circle({ radius: (400 / 3.2808), units: 'meters' });
+
+// Calculate median slope within the neighborhood defined by the kernel
+var slope = ee.Terrain.slope(elevation).reduceNeighborhood({ reducer: ee.Reducer.median(), kernel: k });
+
+// Set thresholds for slope
 var thresholds = ee.Image([5.0, 15, 100]);
+
+// Count the number of zones based on slope thresholds
 var zones = slope.gt(thresholds).reduce('sum');
 
+// Calculate soil component
+var soilcomp = soils.selfMask().subtract(ee.Image(1)).multiply(100);
 
-var soilcomp = soils.selfMask().subtract(ee.Image(1)).multiply(100)
+// Modify land cover component based on HSPF land cover values
+var hspf_land_cover = hspf_land_cover.where(hspf_land_cover.eq(3), 0);
+var lccomp = hspf_land_cover.multiply(10);
+soilcomp = soilcomp.where(hspf_land_cover.eq(5), 200);
 
-var hspf_land_cover = hspf_land_cover.where(hspf_land_cover.eq(3),0)
-var lccomp = hspf_land_cover.multiply(10)
-soilcomp = soilcomp.where(hspf_land_cover.eq(5),200)
-// replace roof tops with flat slope 
-var slopecomp = zones.where(landcover.eq(7),0)
+// Replace roof tops with flat slope
+var slopecomp = component.where(landcover.eq(7), 0);
+Map.addLayer(slopecomp, {}, 'slopecomp', 0);
 
-Map.addLayer(slopecomp,{},'slopecomp',0)
+// Combine soil component, land cover component, and slope component, and mask out water areas
+var hrus = soilcomp.add(lccomp).add(slopecomp).mask(soils.neq(4));
 
-// add soils, slope, and soils together and mask out water areas 
-var hrus = soilcomp.add(lccomp).add(slopecomp).mask(soils.neq(4))
-
-//Map.addLayer(slopecomp)
-//Map.addLayer(hrus)
-//var check = image.subtract(hrus).abs()
-//Map.addLayer(check)
-/** Issues 
- * 
- * 
- */  
-//count up individual hrus 
-var counthrus = hrus.reduceRegion({reducer:ee.Reducer.countDistinct(),
-  geometry:geometry,scale:30, maxPixels:1e11
-})
-
-var hruMask = landcover.neq(0).and(landcover.neq(5))
-Map.addLayer(hruMask)
+// Define the HRU mask
+var hruMask = landcover.neq(0).and(landcover.neq(5));
+Map.addLayer(hruMask);
 
 hrus = hrus.updateMask(hruMask)
 Map.addLayer(hrus)
@@ -105,9 +99,13 @@ var counthrus = hrus.reduceRegion({reducer:ee.Reducer.countDistinct(),
   geometry:geometry,scale:30, maxPixels:1e11
 })
 
-//count up individual hrus 
+//count up individual hrus  `
 var listHrus = hrus.reduceRegion({reducer:ee.Reducer.count().group(0),
   geometry:geometry,scale:30, maxPixels:1e11
 })
 
-print(listHrus)
+print(listHrus.get('groups'))
+
+exports.hrus = hrus 
+exports.soils = soils 
+exports.hspf_land_cover = hspf_land_cover 
