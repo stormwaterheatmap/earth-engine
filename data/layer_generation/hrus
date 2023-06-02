@@ -54,8 +54,9 @@ Map.addLayer(zones)
 
 var soilcomp = soils.subtract(ee.Image(1)).multiply(100)
 var lccomp = hspf_land_cover.multiply(10)
+soilcomp = soilcomp.where(hspf_land_cover.eq(5),200)
 var slopecomp = zones 
 
 var hrus = soilcomp.add(lccomp).add(slopecomp).add(zones).mask(soils.neq(4))
-
+Map.addLayer(slopecomp)
 Map.addLayer(hrus)
