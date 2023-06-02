@@ -71,7 +71,7 @@ var thresholds = ee.Image([5.0, 15, 100]);
 
 // Count the number of zones based on slope thresholds
 var zones = slope.gt(thresholds).reduce('sum');
-
+Map.addLayer(zones,{},'zones',0)
 // Calculate soil complexity
 var soilcomp = soils.selfMask().subtract(ee.Image(1)).multiply(100);
 
