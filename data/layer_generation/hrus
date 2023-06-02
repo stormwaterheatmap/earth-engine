@@ -14,20 +14,48 @@ var landcover = require('users/stormwaterheatmap/apps:data/layer_generation/land
 // Water	3	#b3caff#b3caff
 // Impervious-roof	4	#844c8b#844c8b
 // Impervious-nonRoof	5	#ead1ff#ead1ff
-Map.addLayer(elevation,{},'elevation')
+Map.addLayer(elevation,{},'elevation',0)
 // reclass for hspf landcover types 
 var cropland = ee.Image('USDA/NASS/CDL/2020').select('cultivated').eq(2)//gt(0)
 var hspf_land_cover = landcover.remap([0,1,2,3,4,5,6,7],[9,2,2,0,2,3,5,5])
 var hspf_mask = landcover.neq(0)
 hspf_land_cover = hspf_land_cover.updateMask(hspf_mask)
 hspf_land_cover = hspf_land_cover.where(cropland,1)
-Map.addLayer(hspf_land_cover)
+Map.addLayer(hspf_land_cover,{},'hspf lc',0)
 
-Map.addLayer(soils,{},'soils')
+Map.addLayer(soils,{},'soils',0)
 //var slope = 
 var imperv = landcover.gte(6).multiply(100).float()
 exports.imperviousness = imperv
 var soilmask = image5.select('NRCS').eq(0)
-Map.addLayer(soilmask)
+//Map.addLayer(soilmask)
 var newimgreplace = soils.eq(3).and(soilmask)//.and(elevation.gt(650))
 soils = soils.where(newimgreplace,1)
+
+/** 
+ * Slopes 
+*/ 
+
+var slope = ee.Terrain.slope(elevation)
+Map.addLayer(slope,{},'slope')
+
+//get average slope associated with overland flow plane
+var k = ee.Kernel.circle({radius:(400/3.2808),units:'meters'})
+var minmax = elevation.reduceNeighborhood({reducer:ee.Reducer.minMax(),kernel:k})
+var slope = ee.Terrain.slope(elevation).reduceNeighborhood({reducer:ee.Reducer.median(),kernel:k})
+
+//minmax.select('elevation_max').subtract(minmax.select('elevation_min')).divide(120)
+Map.addLayer(slope)
+
+var thresholds = ee.Image([5.0, 15, 100]);
+var zones = slope.gt(thresholds).reduce('sum');
+
+Map.addLayer(zones)
+
+var soilcomp = soils.subtract(ee.Image(1)).multiply(100)
+var lccomp = hspf_land_cover.multiply(10)
+var slopecomp = zones 
+
+var hrus = soilcomp.add(lccomp).add(slopecomp).mask(soils.neq(4))
+
+Map.addLayer(hrus)
