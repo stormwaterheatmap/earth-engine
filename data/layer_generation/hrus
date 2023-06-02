@@ -93,9 +93,9 @@ Map.addLayer(hruMask);
 
 hrus = hrus.updateMask(hruMask)
 Map.addLayer(hrus)
-var hrus = hrus.addBands(ee.Image(1).rename('count'))
+//var hrus = hrus.addBands(ee.Image(1).rename('count'))
 //count up individual hrus 
-var counthrus = hrus.reduceRegion({reducer:ee.Reducer.countDistinct(),
+var counthrus = hrus.addBands(ee.Image(1).rename('count')).reduceRegion({reducer:ee.Reducer.countDistinct(),
   geometry:geometry,scale:30, maxPixels:1e11
 })
 
