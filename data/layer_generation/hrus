@@ -4,7 +4,21 @@ var roi = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_colle
     imageCollection = ee.ImageCollection("USDA/NASS/CDL"),
     soils = ee.Image("projects/ee-swhm/assets/production_layers/Soils"),
     image5 = ee.Image("users/cnilsen/soilRasterExport2band"),
-    elevation = ee.Image("USGS/SRTMGL1_003");
+    elevation = ee.Image("USGS/SRTMGL1_003"),
+    image = ee.Image("projects/ee-swhm/assets/production_layers/Hydrologic_Response_Units"),
+    geometry = 
+    /* color: #d63000 */
+    /* shown: false */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.Polygon(
+        [[[-122.84115364385804, 47.96871330055091],
+          [-122.84115364385804, 47.82138882276389],
+          [-121.86337044073304, 47.82138882276389],
+          [-121.86337044073304, 47.96871330055091]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var landcover = require('users/stormwaterheatmap/apps:data/layer_generation/landcover.js').landcover 
 // Label	Raster value	Colors
@@ -17,8 +31,11 @@ var landcover = require('users/stormwaterheatmap/apps:data/layer_generation/land
 Map.addLayer(elevation,{},'elevation',0)
 // reclass for hspf landcover types 
 var cropland = ee.Image('USDA/NASS/CDL/2020').select('cultivated').eq(2)//gt(0)
-var hspf_land_cover = landcover.remap([0,1,2,3,4,5,6,7],[9,2,2,0,2,3,5,5])
-var hspf_mask = landcover.neq(0)
+var hspf_land_cover = landcover.remap(
+  [0,1,2,3,4,5,6,7],
+  [9,2,2,0,2,3,5,5])
+//mask out water or na areas 
+var hspf_mask = landcover.neq(0).or(hspf_land_cover.eq(3))
 hspf_land_cover = hspf_land_cover.updateMask(hspf_mask)
 hspf_land_cover = hspf_land_cover.where(cropland,1)
 Map.addLayer(hspf_land_cover,{},'hspf lc',0)
@@ -37,7 +54,7 @@ soils = soils.where(newimgreplace,1)
 */ 
 
 var slope = ee.Terrain.slope(elevation)
-Map.addLayer(slope,{},'slope')
+Map.addLayer(slope,{},'slope',0)
 
 //get average slope associated with overland flow plane
 var k = ee.Kernel.circle({radius:(400/3.2808),units:'meters'})
@@ -45,18 +62,52 @@ var minmax = elevation.reduceNeighborhood({reducer:ee.Reducer.minMax(),kernel:k}
 var slope = ee.Terrain.slope(elevation).reduceNeighborhood({reducer:ee.Reducer.median(),kernel:k})
 
 //minmax.select('elevation_max').subtract(minmax.select('elevation_min')).divide(120)
-Map.addLayer(slope)
+
 
 var thresholds = ee.Image([5.0, 15, 100]);
 var zones = slope.gt(thresholds).reduce('sum');
 
-Map.addLayer(zones)
 
-var soilcomp = soils.subtract(ee.Image(1)).multiply(100)
+var soilcomp = soils.selfMask().subtract(ee.Image(1)).multiply(100)
+
+var hspf_land_cover = hspf_land_cover.where(hspf_land_cover.eq(3),0)
 var lccomp = hspf_land_cover.multiply(10)
 soilcomp = soilcomp.where(hspf_land_cover.eq(5),200)
-var slopecomp = zones 
+// replace roof tops with flat slope 
+var slopecomp = zones.where(landcover.eq(7),0)
 
-var hrus = soilcomp.add(lccomp).add(slopecomp).add(zones).mask(soils.neq(4))
-Map.addLayer(slopecomp)
+Map.addLayer(slopecomp,{},'slopecomp',0)
+
+// add soils, slope, and soils together and mask out water areas 
+var hrus = soilcomp.add(lccomp).add(slopecomp).mask(soils.neq(4))
+
+//Map.addLayer(slopecomp)
+//Map.addLayer(hrus)
+//var check = image.subtract(hrus).abs()
+//Map.addLayer(check)
+/** Issues 
+ * 
+ * 
+ */  
+//count up individual hrus 
+var counthrus = hrus.reduceRegion({reducer:ee.Reducer.countDistinct(),
+  geometry:geometry,scale:30, maxPixels:1e11
+})
+
+var hruMask = landcover.neq(0).and(landcover.neq(5))
+Map.addLayer(hruMask)
+
+hrus = hrus.updateMask(hruMask)
 Map.addLayer(hrus)
+var hrus = hrus.addBands(ee.Image(1).rename('count'))
+//count up individual hrus 
+var counthrus = hrus.reduceRegion({reducer:ee.Reducer.countDistinct(),
+  geometry:geometry,scale:30, maxPixels:1e11
+})
+
+//count up individual hrus 
+var listHrus = hrus.reduceRegion({reducer:ee.Reducer.count().group(0),
+  geometry:geometry,scale:30, maxPixels:1e11
+})
+
+print(listHrus)
