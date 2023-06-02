@@ -95,15 +95,15 @@ hrus = hrus.updateMask(hruMask)
 Map.addLayer(hrus)
 //var hrus = hrus.addBands(ee.Image(1).rename('count'))
 //count up individual hrus 
-var counthrus = hrus.addBands(ee.Image(1).rename('count')).reduceRegion({reducer:ee.Reducer.countDistinct(),
-  geometry:geometry,scale:30, maxPixels:1e11
-})
+// var counthrus = hrus.addBands(ee.Image(1).rename('count')).reduceRegion({reducer:ee.Reducer.countDistinct(),
+//   geometry:geometry,scale:30, maxPixels:1e11
+// })
 
-//count up individual hrus  `
-var listHrus = hrus.reduceRegion({reducer:ee.Reducer.count().group(0),
-  geometry:geometry,scale:30, maxPixels:1e11
-})
-print(listHrus.get('groups'))
+// //count up individual hrus  `
+// var listHrus = hrus.reduceRegion({reducer:ee.Reducer.count().group(0),
+//   geometry:geometry,scale:30, maxPixels:1e11
+// })
+// print(listHrus.get('groups'))
 
 exports.hrus = hrus 
 exports.soils = soils 
