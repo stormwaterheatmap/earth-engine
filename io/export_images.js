@@ -3,11 +3,23 @@ var roi = ee.FeatureCollection("users/cnilsen/PugetSound_boundary");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
 var rasters = data.rasters
-
 var PugetSound = data.vectors.PugetSound
 
 var layers = Object.keys(rasters)
 var traffic = ee.Image('users/jrobertson2000/psRds_aadt_fin2m1')
+
+/** Import data from layer_generation folder */
+var soilLanduseSlope  = require('users/stormwaterheatmap/apps:data/layer_generation/hrus')
+var hrus = soilLanduseSlope.hrus 
+var soils = soilLanduseSlope.soils 
+var hspf_land_cover = soilLanduseSlope.hspf_land_cover 
+var slope = soilLanduseSlope.slope 
+var slope_zone = soilLanduseSlope.zones 
+
+
+
+
+
 //var viz = {min:10, max:50000, palette: ['magenta','black']}
 //Map.addLayer(traffic.unmask().resample().focal_max(), viz, "original traffic raster")
 
