@@ -27,7 +27,7 @@ rasters.Traffic.layer.eeObject = traffic
 print(Object.keys(rasters))
 rasters['HSPF Land Cover Type'].layer.eeObject = hspf_land_cover
 rasters['Hydrologic Response Units'].layer.eeObject = hrus
-//rasters['Imperviousness'].layer.eeObject = imperviousness
+rasters['Imperviousness'].layer.eeObject = imperviousness.imperviousness
 //rasters['Land Cover'].layer.eeObject = 
 rasters['Slope'].layer.eeObject = slope
 rasters['Slope Categories'].layer.eeObject = slope_zone
