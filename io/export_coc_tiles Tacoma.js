@@ -14,8 +14,8 @@ var geometry =
           [-121.69930292678093, 47.52055514553819]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
-var rasters = data.rasters
-print(data)
+var cocimg = data.cocs
+
 
 var tacoma_bbox = ee.Geometry.BBox(-122.7, 47.05, -121.8,  47.45);
 
@@ -24,21 +24,21 @@ var tacoma_bbox = ee.Geometry.BBox(-122.7, 47.05, -121.8,  47.45);
 
 var roi = tacoma_bbox.buffer(10000)//data.vectors.PugetSoundWA
 
-var layers = Object.keys(rasters)
-var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
-print(data)
+var cocNames = Object.keys(cocimg)
+//var data  = require('users/stormwaterheatmap/apps:data/data_dictionary.js')
+var lay1 = (cocNames[1])
+var img = cocimg[lay1].layer.eeObject
+Map.addLayer(img)
 
+make_tiles()
 
 function make_tiles(){
 for (var i = 0; i < cocNames.length; i++) {
-var img = cocimg.select(i)
-  
- 
- 
-  var lay = rasters[layers[i]]
-  var img = lay.layer.eeObject
+ var layname = cocNames[i]
+ var lay = cocimg[layname]
+  var img = lay.layer.eeObject.select(1)
   var scale = lay.scale
-  var visMin = lay.layer.visParams.min 
+  var visMin = lay.layer.visParams.min
   var visMax = lay.layer.visParams.max
   var visPalette = lay.layer.visParams.palette 
   var img_rbg = img.unmask().visualize({
@@ -76,5 +76,4 @@ var img = cocimg.select(i)
           'https://*.tacomawatersheds.com' 
         ]
     })
-}
-
+}}
