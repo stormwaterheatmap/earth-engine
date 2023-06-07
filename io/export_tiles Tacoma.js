@@ -18,12 +18,11 @@ var rasters = data.rasters
 print(data)
 
 var tacoma_bbox = ee.Geometry.BBox(-122.7, 47.05, -121.8,  47.45);
-var tbbx2 = tacoma_bbox.buffer(10000)
-Map.addLayer(tacoma_bbox)
-Map.addLayer(tbbx2)
+
+
 //var PugetSound = tbbx2//data.vectors.PugetSound
 
-var roi = tbbx2//data.vectors.PugetSoundWA
+var roi = tacoma_bbox.buffer(10000)//data.vectors.PugetSoundWA
 
 var layers = Object.keys(rasters)
 
