@@ -36,7 +36,7 @@ function make_tiles(){
 for (var i = 0; i < cocNames.length; i++) {
  var layname = cocNames[i]
  var lay = cocimg[layname]
-  var img = lay.layer.eeObject.select(1)
+  var img = lay.layer.eeObject.select(1).resample()
   var scale = lay.scale
   var visMin = lay.layer.visParams.min
   var visMax = lay.layer.visParams.max
