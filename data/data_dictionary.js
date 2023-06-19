@@ -428,14 +428,9 @@ for (var i = 0; i < layNames.length; i++) {
 /**
  * Bring in coc data and create a separate data dictionary
  */
-//var coc_layers = require("users/stormwaterheatmap/apps:data/serve_coc_data")
 
 var coc_pal = ["042333", "2c3395", "744992", "b15f82", "eb7958", "fbb43d", "e8fa5b", "ffffff"]
-
 var load_pal = ["000000", "440154", "433982", "30678d", "218f8b", "36b677", "8ed542", "fde725"]
-
-
-
 
 //Coc data dictionary
 var cocs = {
@@ -681,7 +676,6 @@ var rename_vector = function (fc, col_name) {
     return (DataRenamed)
 }
 
-
 var vector_dict = {
     "County Boundaries": rename_vector(data.counties, "NAMELSAD"),
     "HUC12: USGS Watershed Boundary Dataset": rename_vector(data.HUC12, "name"),
@@ -693,14 +687,9 @@ var vector_dict = {
     "City Boundaries": data.cityLimits
 }
 
+var display_imgs = {"psau": data.psau_shed_img}
 
-var display_imgs = {"psau": data.psau_shed_img
-
-}
 exports.display_imgs = display_imgs
-
 exports.vector_dict = vector_dict
 exports.rasters = rasters
 exports.cocs = cocs
-
-//print(cocs)
