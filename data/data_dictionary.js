@@ -414,9 +414,16 @@ var layNames = Object.keys(layerSources)
 /**
  * add data to layer dictionary
  */
+ 
+/**
+ * Add a consistent mask for data 
+ */ 
+var mask_outline = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/PugetSoundWA"); 
+var mask_img = ee.Image(0).paint(mask_outline,1) 
+
 for (var i = 0; i < layNames.length; i++) {
     var thisLayer = (layNames[i]);
-    rasters[thisLayer].layer.eeObject = layerSources[thisLayer]
+    rasters[thisLayer].layer.eeObject = layerSources[thisLayer].mask(mask_img)
 }
 /**
  * Bring in coc data and create a separate data dictionary
@@ -427,7 +434,6 @@ var coc_pal = ["042333", "2c3395", "744992", "b15f82", "eb7958", "fbb43d", "e8fa
 
 var load_pal = ["000000", "440154", "433982", "30678d", "218f8b", "36b677", "8ed542", "fde725"]
 
-data.Total_Kjeldahl_Nitrogen_Concentration
 
 
 
