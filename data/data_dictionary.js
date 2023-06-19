@@ -345,7 +345,7 @@ var rasters = {
                 "max": 100000,
                 "palette":
                     [
-                        "1A3399",
+                        "000000",
                         "3B7CB8",
                         "5EBAD1",
                         "ABE5D4",
