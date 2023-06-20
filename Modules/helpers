@@ -14,7 +14,9 @@ function make_docs_link (layer_object) {
 
 var makeLegend = function (layerObject) {
   var legend
-  if (layerObject.discrete == 'TRUE') {
+  if (layerObject.safeName == 'pollutant_concentration') {
+    legend = barLegend(layerObject,true)
+    } else if(layerObject.discrete == 'TRUE') {
     legend = legends.discreteLegend(layerObject) //gets the first band of the image
     // call the histogram function print('histogram')
   } else {
