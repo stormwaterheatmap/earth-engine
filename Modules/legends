@@ -26,6 +26,11 @@ function undoColorStretch(val) {
 
 var barLegend = function (layerObj,hml) {
   hml = hml|false
+  if(layerObj.safe_name == "pollutant_concentration"){
+    hml = true
+  }
+  // if it is a coc concentration, make it low, high and 
+  // don't show units 
   var title_label = 
     ui.Label({value: layerObj.layer.name,
     style: {
