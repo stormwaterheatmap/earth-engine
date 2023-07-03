@@ -1,7 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var predictors = require('users/stormwaterheatmap/coc_layers:scaled_predictors')
+var predictors = require('users/stormwaterheatmap/apps:data/generate_coc_layers.js')
 predictors = predictors.scaled_predictors
 
  
