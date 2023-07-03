@@ -3,10 +3,9 @@ var pm25_na = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH3
     ghsl = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1"),
     s8 = ee.FeatureCollection("users/stormwaterheatmap/revised_s8_watersheds_v4"),
     vulcan_onroad = ee.Image("users/stormwaterheatmap/Vulcan_onroad"),
-    traffic_image2 = ee.Image("users/cnilsen/traffic_raw"),
     tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs"),
-    wsdot = ee.Image("users/stormwaterheatmap/WSDOT_AADT"),
-    vulcan_total = ee.Image("users/stormwaterheatmap/Vulcan_total");
+    vulcan_total = ee.Image("users/stormwaterheatmap/Vulcan_total"),
+    traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /** 
  * @fileoverview  Generates scaled and centered predictors for use in 
@@ -84,19 +83,6 @@ var scale_and_center_image = function(image) {
         .rename(predictor_names)
     ) //
 }
-/** 
- * For the clamped list, returns the maximum value in each watershed 
- */
-// function get_clamped_scaled(band) {
-//     clamped_list[band] =
-//         centered_scaled_predictors
-//         .reduceRegion({
-//             reducer: ee.Reducer
-//                 .max(),
-//             geometry: watersheds, 
-//             scale: scale
-//         })
-// }
 
 //Get and stack predictor images -----------------------------------------------------------
 /** 
@@ -133,9 +119,7 @@ var sqrt_CO2_total = vulcan_total
 
 // Traffic 
 // ** updated - Traffic is sqrt transformed
-var traffic = ee.Image(0)
-  .blend(ee.Image(
-    "users/cnilsen/trafficExport")).sqrt()
+var traffic = traffic.sqrt()
 
 var predictor_names = ['devAge2',
     'grass', 'paved', 'pm25_na',
@@ -192,8 +176,8 @@ var centered_scaled_predictors = (
 centered_scaled_predictors = ee.Image.cat(
   ee.Image(1).rename('0_intercept'), 
   centered_scaled_predictors)
-//print(centered_scaled_predictors)
 
+Map.addLayer(centered_scaled_predictors)
 
 exports.scaled_predictors =
     centered_scaled_predictors
