@@ -57,7 +57,7 @@ var bandNames = [
  * Takes a coc name and generates a single band image. 
  */
 function convolve_clamp_predictors(image) {
-    var convolved_predictors = image.//unmask().
+    var convolved_predictors = image.
     reduceNeighborhood({
         skipMasked: true,
         reducer: ee.Reducer.mean(),
