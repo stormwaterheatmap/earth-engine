@@ -8,27 +8,26 @@ predictors = predictors.scaled_predictors
 /** 
     * Updated regression parameters 
     * March 2023
-*/ 
-/* 
-COPPER:
-ln(Copper) = 2.332 - 0.179*rain + 0.375*summer + 0.427*sqrt_traffic + 0.457*devAge2 + epsilon
-(rain = 21-day cumulative rainfall, standardized)
-
-TSS:
-ln(TSS) = 10.294 + 0.159*rain + 0.381*sqrt_traffic + 0.320*devAge2 + epsilon
-(rain = 1-day cumulative rainfall, standardized)
-
-TKN:
-ln(TKN) = 6.618 - 0.180*rain + 0.554*summer + 0.232*sqrt_traffic + 0.220*devAge2 + epsilon
-(rain = 14-day cumulative rainfall, standardized)
-
-Total Zinc:
-ln(total Zinc) = 4.10 + 0.36 * sqrt_traffic + 0.69 * paved
-(rain = 14-day cumulative rainfall, standardized)
-
-Phosphorus:
-ln(P) = 4.554 - 0.147*rain + 0.507*summer + 0.299*sqrt_CO2_road + epsilon
-(rain = 21-day cumulative rainfall, standardized)
+    * 
+      COPPER:
+      ln(Copper) = 2.332 - 0.179*rain + 0.375*summer + 0.427*sqrt_traffic + 0.457*devAge2 + epsilon
+      (rain = 21-day cumulative rainfall, standardized)
+      
+      TSS:
+      ln(TSS) = 10.294 + 0.159*rain + 0.381*sqrt_traffic + 0.320*devAge2 + epsilon
+      (rain = 1-day cumulative rainfall, standardized)
+      
+      TKN:
+      ln(TKN) = 6.618 - 0.180*rain + 0.554*summer + 0.232*sqrt_traffic + 0.220*devAge2 + epsilon
+      (rain = 14-day cumulative rainfall, standardized)
+      
+      Total Zinc:
+      ln(total Zinc) = 4.10 + 0.36 * sqrt_traffic + 0.69 * paved
+      (rain = 14-day cumulative rainfall, standardized)
+      
+      Phosphorus:
+      ln(P) = 4.554 - 0.147*rain + 0.507*summer + 0.299*sqrt_CO2_road + epsilon
+      (rain = 21-day cumulative rainfall, standardized)
 
 */ 
 
