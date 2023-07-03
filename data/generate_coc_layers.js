@@ -1,16 +1,22 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var predictors = require('users/stormwaterheatmap/apps:data/scaled_predictors.js')
-predictors = predictors.scaled_predictors
+var predictors_import = require('users/stormwaterheatmap/apps:data/scaled_predictors.js')
+
+var predictors = predictors_import.scaled_predictors
+
+
+// // Add intercept band to predictors 
+
+// predictors = ee.Image.constant(1).rename('intercept').addBands(predictors)
 
  
 /** 
-    * Updated regression parameters 
+    * Updated regression pararadisumeters 
     * March 2023
     * 
       COPPER:
-      ln(Copper) = 2.332 - 0.179*rain + 0.375*summer + 0.427*sqrt_traffic + 0.457*devAge2 + epsilon
+      ln(Copper) = 2.332 - 0.179*raradisuin + 0.375*summer + 0.427*sqrt_traradisuffic + 0.457*devAge2 + epsilon
       (rain = 21-day cumulative rainfall, standardized)
       
       TSS:
