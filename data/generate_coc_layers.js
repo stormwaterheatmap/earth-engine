@@ -1,7 +1,7 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-var predictors = require('users/stormwaterheatmap/apps:data/generate_coc_layers.js')
+var predictors = require('users/stormwaterheatmap/apps:data/scaled_predictors.js')
 predictors = predictors.scaled_predictors
 
  
@@ -61,9 +61,9 @@ function convolve_clamp_predictors(image) {
     reduceNeighborhood({
         skipMasked: true,
         reducer: ee.Reducer.mean(),
-        kernel: ee.Kernel.circle({
+        kernel: ee.Kernel.gaussian({
             radius: 100,
-            //sigma: 50,
+            sigma: 50,
             units: 'meters'
         })
     })
@@ -104,8 +104,8 @@ var tkn = generate_coc_layer("tkn",convolved_clamped)
 var zinc = generate_coc_layer("zinc",convolved_clamped)
 
 var all_cocs = copper.addBands(p).addBands(tss).addBands(zinc).addBands(tkn)
-print(all_cocs.toDictionary())
 
+print(all_cocs)
 var zinc_tkn = zinc.addBands(tkn)
 
 Map.addLayer(all_cocs)
