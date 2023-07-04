@@ -1,11 +1,11 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var pm25_na = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH35-NoNegs"),
-    ghsl = ee.Image("JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1"),
     s8 = ee.FeatureCollection("users/stormwaterheatmap/revised_s8_watersheds_v4"),
     vulcan_onroad = ee.Image("users/stormwaterheatmap/Vulcan_onroad"),
     tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs"),
     vulcan_total = ee.Image("users/stormwaterheatmap/Vulcan_total"),
-    traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic");
+    traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic"),
+    ghsl = ee.Image("projects/ee-swhm/assets/staging/built_up_remapped");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /** 
  * @fileoverview  Generates scaled and centered predictors for use in 
@@ -93,9 +93,9 @@ var scale_and_center_image = function(image) {
  
 //Age of Development
 //print(ghsl.select(0).projection())
-var devAge2 = ghsl.remap(
-  [2, 3, 4, 5, 6], 
-  [0, 1, 2, 3, 4])
+var devAge2 = ghsl//.remap(
+//  [2, 3, 4, 5, 6], 
+  //[0, 1, 2, 3, 4])
     .pow(2)
     .rename('devAge2')
 
