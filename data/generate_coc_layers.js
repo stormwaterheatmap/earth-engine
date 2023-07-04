@@ -118,7 +118,7 @@ print(all_cocs)
 var zinc_tkn = zinc.addBands(tkn)
 Map.addLayer(all_cocs.select(1),{min:0,max:5})
 var coc_concentrations = all_cocs.select(
-  ["cu_concentration_ug_per_L",
+  ["copper_concentration_ug_per_L",
   "p_concentration_ug_per_L",
   "tkn_concentration_ug_per_L",
   "tss_concentration_mg_per_L",
