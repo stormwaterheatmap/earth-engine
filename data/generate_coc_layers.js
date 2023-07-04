@@ -70,8 +70,8 @@ function convolve_clamp_predictors(image) {
         skipMasked: true,
         reducer: ee.Reducer.mean(),
         kernel: ee.Kernel.gaussian({
-            radius: 90,
-            sigma: 30,
+            radius: 30,
+            sigma: 10,
             units: 'meters'
         })
     })
@@ -116,3 +116,5 @@ var all_cocs = copper.addBands(p).addBands(tss).addBands(zinc).addBands(tkn)
 
 print(all_cocs)
 var zinc_tkn = zinc.addBands(tkn)
+Map.addLayer(all_cocs.select(1),{min:0,max:5})
+exports.all_cocs = all_cocs
