@@ -5,7 +5,7 @@ var pm25_na = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH3
     tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs"),
     vulcan_total = ee.Image("users/stormwaterheatmap/Vulcan_total"),
     traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic"),
-    ghsl = ee.Image("projects/ee-swhm/assets/staging/built_up_remapped");
+    ghsl = ee.Image("projects/ee-swhm/assets/staging/builtup");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /** 
  * @fileoverview  Generates scaled and centered predictors for use in 
@@ -93,9 +93,9 @@ var scale_and_center_image = function(image) {
  
 //Age of Development
 //print(ghsl.select(0).projection())
-var devAge2 = ghsl//.remap(
-//  [2, 3, 4, 5, 6], 
-  //[0, 1, 2, 3, 4])
+var devAge2 = ghsl.remap(
+ [2, 3, 4, 5, 6], 
+ [0, 1, 2, 3, 4])
     .pow(2)
     .rename('devAge2')
 
@@ -165,8 +165,8 @@ var reduced_predictors =
     reducePredictors(
         predictor_stack_raw
     ) 
-    
-//print('reduced predictors', reduced_predictors)
+
+print('reduced predictors', reduced_predictors)
 
 // Center and scale raw predictors 
 var centered_scaled_predictors = (
