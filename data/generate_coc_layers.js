@@ -121,6 +121,7 @@ var coc_concentrations = all_cocs.select(
   ["copper_concentration_ug_per_L",
   "p_concentration_ug_per_L",
   "tkn_concentration_ug_per_L",
-  "tss_concentration_mg_per_L",
+  "tss_concentration_ug_per_L",
   "zinc_concentration_ug_per_L"])
+Map.addLayer(coc_concentrations)
 exports.coc_concentrations = coc_concentrations
