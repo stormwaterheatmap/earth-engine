@@ -35,7 +35,7 @@ var PugetSound = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/Puge
 // var bandNames = [  "intercept",  "devage2",  "grass",  "paved",  "pm25_na",  "sqrt_CO2_road",  "traffic"];
 
 
-// function convolve_circle(image) {
+// function tss_concentration_ug_per_L_circle(image) {
 //     var kernel = ee.Kernel.gaussian({
 //         radius: 50, sigma: 10
 //             ,
@@ -57,13 +57,13 @@ var PugetSound = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/Puge
 // * @param {ee.Image} image - The input image.
 // * @returns {ee.Image} - The image after convolution and clamping.
 // */
-// function convolveAndClamp(image) {
-//   // Calculate the convolved image
-//   var convolvedImage = image.focal_mean();
+// function tss_concentration_ug_per_LAndClamp(image) {
+//   // Calculate the tss_concentration_ug_per_Ld image
+//   var tss_concentration_ug_per_LdImage = image.focal_mean();
 
 //   // Clamp the values to +/- 3 standard deviations
-//   var clampedImage = convolvedImage.where(
-//     convolvedImage.gt(clamped_img_max),
+//   var clampedImage = tss_concentration_ug_per_LdImage.where(
+//     tss_concentration_ug_per_LdImage.gt(clamped_img_max),
 //     clamped_img_max
 //   );
 
@@ -94,43 +94,29 @@ var PugetSound = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/Puge
 // }
 
 // // Apply the convolution and clamping to the predictors
-// var clampedConvolvedPredictors = convolveAndClamp(predictors);
+// var clampedtss_concentration_ug_per_LdPredictors = tss_concentration_ug_per_LAndClamp(predictors);
 var cocimg = require("users/stormwaterheatmap/apps:data/generate_coc_layers.js").coc_concentrations;
-print(cocimg)
+
 var dict = ee.Dictionary({
   "copper": "cu_concentration_ug_per_L",
   "p": "p_concentration_ug_per_L",
-  "tss": "tss_concentration_mg_per_L",
+  "tss": "tss_concentration_ug_per_L",
   "tkn": "tkn_concentration_ug_per_L",
   "zinc": "zinc_concentration_ug_per_L"
 })
-var cocNames = [
-  "copper",
-  "p",
-  "tkn",
-  "tss",
-  "zinc"
-]
-print(cocNames)
-var lay_names = [
-  "cu_concentration_ug_per_L",
-  "p_concentration_ug_per_L",
-  "tkn_concentration_ug_per_L",
-  "tss_concentration_mg_per_L",
-  "zinc_concentration_ug_per_L"
-]
-print(lay_names)
+var cocNames = cocimg.bandNames().getInfo()
+print(cocNames,'cocNames')
 // var cocimg = ee.Image()
 // for (var i = 0; i < cocNames.length; i++) {
 //   var cocName = cocNames[i];
 //   var cocLayer = generateCocLayer(cocName);
-//   var cocConcentration = cocLayer(clampedConvolvedPredictors)
-//   var cocConcConvolved = convolve_circle(cocConcentration);
-//   cocimg = cocimg.addBands(cocConcConvolved.rename(cocName)) 
+//   var cocConcentration = cocLayer(clampedtss_concentration_ug_per_LdPredictors)
+//   var cocConctss_concentration_ug_per_Ld = tss_concentration_ug_per_L_circle(cocConcentration);
+//   cocimg = cocimg.addBands(cocConctss_concentration_ug_per_Ld.rename(cocName)) 
 // }
-print(cocimg.bandNames())
-cocimg = cocimg.select(cocNames).where(image,0).clip(PugetSound)
 
+cocimg = cocimg.select(cocNames).where(image.eq(0),0).clip(PugetSound)
+Map.addLayer(cocimg)
 
 for (var i = 0; i < cocNames.length; i++) {
 var img = cocimg.select(i)
