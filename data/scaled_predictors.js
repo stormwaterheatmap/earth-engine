@@ -178,7 +178,7 @@ centered_scaled_predictors = ee.Image.cat(
   centered_scaled_predictors)
 
 
-
+Map.addLayer(centered_scaled_predictors)
 exports.scaled_predictors =
     centered_scaled_predictors
 
