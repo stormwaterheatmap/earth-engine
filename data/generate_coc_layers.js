@@ -2,7 +2,6 @@
 
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var predictors_import = require('users/stormwaterheatmap/apps:data/scaled_predictors.js')
-
 var predictors = predictors_import.scaled_predictors
 
 
@@ -102,7 +101,7 @@ function generate_coc_layer(coc_name, predictor_image) {
     return (coc_ug_L)
 }
 
-var convolved_clamped = convolve_clamp_predictors(predictors)
+var convolved_clamped = predictors.clamp(-3, 3)//convolve_clamp_predictors(predictors)
 var copper = generate_coc_layer("copper",convolved_clamped)
 var p = generate_coc_layer("p",convolved_clamped)
 var tss = generate_coc_layer("tss",convolved_clamped)
