@@ -1,8 +1,11 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var msk = ee.Image("projects/ee-swhm/assets/staging/detailed_mask_image");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
 
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var predictors_import = require('users/stormwaterheatmap/apps:data/scaled_predictors.js')
-var predictors = predictors_import.scaled_predictors
+var predictors = predictors_import.scaled_predictors.mask(msk)
 
 
 // // Add intercept band to predictors 
@@ -67,8 +70,8 @@ function convolve_clamp_predictors(image) {
         skipMasked: true,
         reducer: ee.Reducer.mean(),
         kernel: ee.Kernel.gaussian({
-            radius: 100,
-            sigma: 50,
+            radius: 90,
+            sigma: 30,
             units: 'meters'
         })
     })
@@ -101,7 +104,8 @@ function generate_coc_layer(coc_name, predictor_image) {
     return (coc_ug_L)
 }
 
-var convolved_clamped = predictors.clamp(-3, 3)//convolve_clamp_predictors(predictors)
+var convolved_clamped = //predictors.clamp(-3, 3)//
+convolve_clamp_predictors(predictors)
 var copper = generate_coc_layer("copper",convolved_clamped)
 var p = generate_coc_layer("p",convolved_clamped)
 var tss = generate_coc_layer("tss",convolved_clamped)
@@ -112,5 +116,3 @@ var all_cocs = copper.addBands(p).addBands(tss).addBands(zinc).addBands(tkn)
 
 print(all_cocs)
 var zinc_tkn = zinc.addBands(tkn)
-
-Map.addLayer(all_cocs)
