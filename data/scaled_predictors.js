@@ -5,7 +5,46 @@ var pm25_na = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH3
     tncLC = ee.Image("users/jrobertson2000/psLandCover_1m_finPS_roofs"),
     vulcan_total = ee.Image("users/stormwaterheatmap/Vulcan_total"),
     traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic"),
-    ghsl = ee.Image("projects/ee-swhm/assets/staging/builtup");
+    ghsl = ee.Image("projects/ee-swhm/assets/staging/builtup"),
+    geometry = 
+    /* color: #d63000 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.MultiPolygon(
+        [[[[-122.23290423234053, 47.39521267899464],
+           [-122.23290423234053, 47.31799671554192],
+           [-122.22741106827803, 47.31799671554192],
+           [-122.22741106827803, 47.39521267899464]]],
+         [[[-122.31118182023116, 47.410084694147],
+           [-122.31118182023116, 47.26210757514687],
+           [-122.1875856288249, 47.26210757514687],
+           [-122.1875856288249, 47.410084694147]]]], null, false),
+    geometry2 = 
+    /* color: #98ff00 */
+    /* displayProperties: [
+      {
+        "type": "rectangle"
+      },
+      {
+        "type": "rectangle"
+      }
+    ] */
+    ee.Geometry.MultiPolygon(
+        [[[[-122.3029420741374, 47.44817507045482],
+           [-122.3029420741374, 47.33754396261769],
+           [-122.21367815812178, 47.33754396261769],
+           [-122.21367815812178, 47.44817507045482]]],
+         [[[-122.3029420741374, 47.44353137847432],
+           [-122.3029420741374, 47.307754794283746],
+           [-122.2095582850749, 47.307754794283746],
+           [-122.2095582850749, 47.44353137847432]]]], null, false),
+    PugetSound = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/PugetSoundWA");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /** 
  * @fileoverview  Generates scaled and centered predictors for use in 
@@ -174,13 +213,20 @@ var centered_scaled_predictors = (
 
 //Add intercept as the first band
 centered_scaled_predictors = ee.Image.cat(
-  ee.Image(1).rename('0_intercept'), 
+  ee.Image(1).rename('intercept'), 
   centered_scaled_predictors)
 
 
-Map.addLayer(centered_scaled_predictors)
+Map.addLayer(centered_scaled_predictors.focal_mean())
 exports.scaled_predictors =
     centered_scaled_predictors
 
 
+var roi = ee.FeatureCollection("projects/ee-swhm/assets/staging/ps_detailed_bounds");
 
+var samps = centered_scaled_predictors.sample({
+  region:geometry2, scale:30, numPixels:4000, seed:55, 
+  dropNulls:true, geometries:false})
+print(centered_scaled_predictors)
+Export.image.toAsset({image:centered_scaled_predictors,
+scale:10,maxPixels:1e12,region:PugetSound} )
