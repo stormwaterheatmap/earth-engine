@@ -1,12 +1,11 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var msk = ee.Image("projects/ee-swhm/assets/staging/detailed_mask_image");
+var msk = ee.Image("projects/ee-swhm/assets/staging/detailed_mask_image"),
+    image = ee.Image("projects/ee-swhm/assets/staging/predictors");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
 
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
-var predictors_import = require('users/stormwaterheatmap/apps:data/scaled_predictors.js')
-var predictors = predictors_import.scaled_predictors.mask(msk)
-
+//var predictors_import = require('users/stormwaterheatmap/apps:data/scaled_predictors.js')
+//var predictors = predictors_import.scaled_predictors.mask(msk)
+var predictors = image
 
 // // Add intercept band to predictors 
 
@@ -70,8 +69,8 @@ function convolve_clamp_predictors(image) {
         skipMasked: true,
         reducer: ee.Reducer.mean(),
         kernel: ee.Kernel.gaussian({
-            radius: 30,
-            sigma: 10,
+            radius: 45,
+            sigma: 15,
             units: 'meters'
         })
     })
