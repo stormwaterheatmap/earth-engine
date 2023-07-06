@@ -221,12 +221,14 @@ Map.addLayer(centered_scaled_predictors.focal_mean())
 exports.scaled_predictors =
     centered_scaled_predictors
 
+var to_sample = centered_scaled_predictors.addBands(
+  predictor_stack_raw)
 
 var roi = ee.FeatureCollection("projects/ee-swhm/assets/staging/ps_detailed_bounds");
 
-var samps = centered_scaled_predictors.sample({
-  region:geometry2, scale:30, numPixels:4000, seed:55, 
+var samps = to_sample.sample({
+  region:geometry2, scale:100, numPixels:10000, seed:55, 
   dropNulls:true, geometries:false})
-print(centered_scaled_predictors)
+Export.table.toDrive(samps)
 Export.image.toAsset({image:centered_scaled_predictors,
 scale:10,maxPixels:1e12,region:PugetSound} )
