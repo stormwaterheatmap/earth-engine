@@ -8,6 +8,7 @@ var pm25_na = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH3
     ghsl = ee.Image("projects/ee-swhm/assets/staging/builtup"),
     geometry = 
     /* color: #d63000 */
+    /* shown: false */
     /* displayProperties: [
       {
         "type": "rectangle"
@@ -45,12 +46,14 @@ var pm25_na = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH3
            [-122.3029420741374, 47.307754794283746],
            [-122.2095582850749, 47.307754794283746],
            [-122.2095582850749, 47.44353137847432]]]], null, false),
-    PugetSound = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/PugetSoundWA");
+    PugetSound = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/PugetSoundWA"),
+    image = ee.Image("projects/ee-swhm/assets/staging/builtup");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 /** 
  * @fileoverview  Generates scaled and centered predictors for use in 
  * heatmap layers
  */
+ \]
 
 //Helpers, etc. 
 var palettes = require(
@@ -134,8 +137,8 @@ var scale_and_center_image = function(image) {
 //Age of Development
 //print(ghsl.select(0).projection())
 var devAge2 = ghsl.remap(
- [2, 3, 4, 5, 6], 
- [0, 1, 2, 3, 4])
+ [1,2, 3, 4, 5, 6], 
+ [99,0, 1, 2, 3, 4])
     .pow(2)
     .rename('devAge2')
 
@@ -143,7 +146,7 @@ var devAge2 = ghsl.remap(
 var grass = tncLC.eq(1)
 
 //Paved
-var paved = tncLC.eq(6)//.blend(wsdot_roads)
+var paved = tncLC.eq(6).resample().reproject({crs:"EPSG:4326",scale:500}).sqrt()//.blend(wsdot_roads)
 
 //PM 2.5 (pm25_na)
 //resample to twice nominal resolution
@@ -163,21 +166,10 @@ var traffic = traffic.sqrt()
 
 var predictor_names = ['devAge2',
     'grass', 'paved', 'pm25_na',
-    'sqrt_CO2_road', //'sqrt_CO2_total', 
+    'sqrt_CO2_road',  
     'sqrt_traffic'
 ]
 
-// var clamp_values = ee.Dictionary
-//     .fromLists(predictor_names, [99999,
-//         1, 1, 99999, 99999, 31397
-//     ]) //unscaled clamp values 
-
-// //
-
-//unscaled image stack of clamped values 
-// var clamped_image = clamp_values
-//     .toImage(predictor_names)
-    
 //Generate an image stack of predictors
 var predictor_stack_raw = ee.Image(0).blend(
     ee.Image.cat(
@@ -190,60 +182,6 @@ var predictor_stack_raw = ee.Image(0).blend(
         traffic.rename('traffic')
     )).float()
 
-//print(predictor_stack_raw)
-// Compare to monitoring data   
-var watersheds = s8.filter(ee.Filter
-    .inList('Location_N', [
-        'PIEHIRES_OUT',
-        'POSOUTFALL_60',
-        'PIELORES_OUT'
-    ])
-    .not())
-
-// generate a summary per watershed for QC
-var reduced_predictors =
-    reducePredictors(
-        predictor_stack_raw
-    ) 
-
-print('reduced predictors', reduced_predictors)
-
-var chart = ui.Chart.feature.byFeature({
-  features:reduced_predictors,yProperties:['paved']})
-  print(chart)
-
-// Center and scale raw predictors 
-var centered_scaled_predictors = (
-    scale_and_center_image(predictor_stack_raw));
-    
-print(centered_scaled_predictors)
-Map.addLayer(centered_scaled_predictors)
-
-//Add intercept as the first band
-centered_scaled_predictors = ee.Image.cat(
-  ee.Image(1).rename('intercept'), 
-  centered_scaled_predictors)
-
-
-Map.addLayer(centered_scaled_predictors.focal_mean())
-exports.scaled_predictors =
-    centered_scaled_predictors
-exports.predictors_raw = predictor_stack_raw
-
-var to_sample = centered_scaled_predictors.addBands(
-  predictor_stack_raw)
-
-var roi = ee.FeatureCollection("projects/ee-swhm/assets/staging/ps_detailed_bounds");
-
-var samps = to_sample.sample({
-  region:geometry2, scale:100, numPixels:10000, seed:55, 
-  dropNulls:true, geometries:false})
-Export.table.toDrive(samps)
-Export.image.toAsset({image:centered_scaled_predictors,
-scale:10,maxPixels:1e12,region:PugetSound} )
-
-var hist = ui.Chart.image.histogram({
-  image:centered_scaled_predictors, scale:100, maxRaw:1e6, 
-maxPixels:1e7,region:geometry})
-
-print(hist)
+Map.addLayer(predictor_stack_raw)
+var chart = ui.Chart.image.histogram({image:image.focal_mean(),region:geometry,scale:200,maxRaw:1e6})
+print(chart)
