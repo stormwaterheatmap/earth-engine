@@ -17,7 +17,7 @@ var predictors = image
     * March 2023
     * 
       COPPER:
-      ln(Copper) = 2.332 - 0.179*raradisuin + 0.375*summer + 0.427*sqrt_traradisuffic + 0.457*devAge2 + epsilon
+      ln(Copper) = 2.332 - 0.179*rain + 0.375*summer + 0.427*sqrt_traffic + 0.457*devAge2 + epsilon
       (rain = 21-day cumulative rainfall, standardized)
       
       TSS:
@@ -41,7 +41,7 @@ var predictors = image
 var regression_coefficients = {
   
     //      intercept,devage2,grass,paved,pm25_na,sqrt_CO2_road,sqrttraffic
-  'copper': [2.332,   0.457,  0,    0,     0.66,    0,            0.427],
+  'copper': [2.332,   0.457,  0,    0,     0,    0,            0.427],
   'tss':    [10.294,  0.320,  0,    0.28,  0,       0,            0.381],
   'p':      [4.554,   0,      0,    0,     0,       0.299,        0], 
   'tkn':    [6.618,   0.220,  0,    0,     0,       0,            0.232], 
