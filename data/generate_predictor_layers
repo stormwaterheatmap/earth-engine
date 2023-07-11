@@ -1,0 +1,37 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var ghsl = ee.Image("projects/ee-swhm/assets/staging/builtup"),
+    tncLC = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+function convolve_clamp_predictors(img) {
+    var convolved_predictors = img.
+    reduceNeighborhood({
+        skipMasked: true,
+        reducer: ee.Reducer.mean(),
+        kernel: ee.Kernel.circle({
+            radius: 100,
+            units: 'meters'
+        })
+    })
+    return convolved_predictors
+}
+
+var devAge = ghsl.remap(
+ [1,2, 3, 4, 5, 6], 
+ [99,0, 1, 2, 3, 4])
+ 
+devAge = devAge.updateMask(ghsl.neq(1))
+
+function reduce_res(image,scale){
+  
+var red = convolve_clamp_predictors(image).reduceResolution({reducer:ee.Reducer.mean(),
+  bestEffort:true
+}).reproject({crs:'EPSG:3857',scale:scale})
+
+return red
+}
+
+
+var paved = tncLC.eq(6).resample().reproject({crs:"EPSG:4326",scale:500}).sqrt()//.blend(wsdot_roads)
+Map.addLayer(paved)
+
+Map.addLayer(red,{min:0,max:4})
