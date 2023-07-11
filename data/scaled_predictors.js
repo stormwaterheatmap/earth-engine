@@ -220,6 +220,7 @@ centered_scaled_predictors = ee.Image.cat(
 Map.addLayer(centered_scaled_predictors.focal_mean())
 exports.scaled_predictors =
     centered_scaled_predictors
+exports.predictors_raw = predictor_stack_raw
 
 var to_sample = centered_scaled_predictors.addBands(
   predictor_stack_raw)
