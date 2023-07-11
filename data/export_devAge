@@ -1,0 +1,56 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("users/cnilsen/WSDOT_AADT"),
+    table = ee.FeatureCollection("projects/ee-swhm/assets/production_feature_collections/PugetSoundWA"),
+    tnclc = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var dataset = ee.Image('JRC/GHSL/P2016/BUILT_LDSMT_GLOBE_V1');
+var visParams = {
+  min: 1.0,
+  max: 6.0,
+  palette: ['0c1d60', '000000', '448564', '70daa4', '83ffbf', 'ffffff'],
+};
+Map.addLayer(dataset.select('built'), visParams, 'Built-Up Multitemporal');
+//Map.addLayer(tnclc)
+Map.addLayer(image.unmask().gt(0))
+var wsdot = image.gt(0)//.unmask().gt(0)
+
+Map.addLayer(wsdot,{},'wsdot')
+print(dataset.select('built').projection())
+var builtUpMultitemporal = dataset.select('built')//.resample();
+
+
+var timg1 = builtUpMultitemporal.eq(1).or(builtUpMultitemporal.eq(2))
+Map.addLayer(timg1,{},'timg1')
+
+
+var timg3 = tnclc.eq(6).or(tnclc.eq(5)).and(wsdot.gt(0)).unmask()
+
+var finimg = timg1.and(timg3).focal_max({radius:38,units:'meters'})
+
+Map.addLayer(finimg,{},'finimg')
+//if ghsl = 2 or 1 and its a bridge, make it 6 
+
+builtUpMultitemporal = builtUpMultitemporal.where(
+finimg.eq(1),6)
+
+
+
+
+
+var builtUpMultitemporal2= builtUpMultitemporal//.//resample()
+//.reduceResolution(
+  // {reducer: ee.Reducer.max(), maxPixels: 65536, 
+   //bestEffort:false})
+.reproject({crs:"EPSG:3857", 
+scale:20})
+//Map.setCenter(8.9957, 45.5718, 12);
+Map.addLayer(builtUpMultitemporal
+, visParams, 'Built-Up Multitemporal');
+Map.addLayer(builtUpMultitemporal2
+, visParams, 'Built-Up Multitemporal2');
+
+
+Export.image.toAsset({
+  image:builtUpMultitemporal,
+ //pyramidingPolicy:'mode',
+region:table, scale:20,maxPixels:1e13})
