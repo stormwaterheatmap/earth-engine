@@ -2,36 +2,56 @@
 var ghsl = ee.Image("projects/ee-swhm/assets/staging/builtup"),
     tncLC = ee.Image("projects/ee-swhm/assets/production_layers/Land_Cover");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
-function convolve_clamp_predictors(img) {
+function convolve_clamp_predictors(img,radius) {
     var convolved_predictors = img.
     reduceNeighborhood({
-        skipMasked: true,
+        skipMasked: false,
         reducer: ee.Reducer.mean(),
         kernel: ee.Kernel.circle({
-            radius: 100,
+            radius: 30,
             units: 'meters'
         })
     })
     return convolved_predictors
 }
 
-var devAge = ghsl.remap(
- [1,2, 3, 4, 5, 6], 
- [99,0, 1, 2, 3, 4])
- 
-devAge = devAge.updateMask(ghsl.neq(1))
 
-function reduce_res(image,scale){
-  
-var red = convolve_clamp_predictors(image).reduceResolution({reducer:ee.Reducer.mean(),
-  bestEffort:true
-}).reproject({crs:'EPSG:3857',scale:scale})
 
-return red
+function reduce_res(image, scale) {
+    var red = image
+        .reduceResolution({
+            reducer: ee.Reducer.mean(),
+            bestEffort: true
+        })
+        .reproject({
+            crs: 'EPSG:3857',
+            scale: scale
+        })
+    return red
 }
 
+var devAge = ghsl.remap(
+    [1, 2, 3, 4, 5, 6],
+    [99, 0, 1, 2, 3, 4])
 
-var paved = tncLC.eq(6).resample().reproject({crs:"EPSG:4326",scale:500}).sqrt()//.blend(wsdot_roads)
+devAge = devAge.updateMask(ghsl.neq(1))
+
+
+
+var paved = tncLC.eq(6)//.updateMask(tncLC.neq(5))
+
+var pred = convolve_clamp_predictors(ee.Image.cat(paved),30)
+//  ee.Image.cat(paved,devAge),30)
+   
+Map.addLayer(pred)
+
+var pred2 = reduce_res(pred,30)
+Map.addLayer(pred2)
+
+var pred3 = reduce_res(paved,30)
+Map.addLayer(pred3)
+
+var pred4 = convolve_clamp_predictors(pred3,30)
+Map.addLayer(pred4)
+
 Map.addLayer(paved)
-
-Map.addLayer(red,{min:0,max:4})
