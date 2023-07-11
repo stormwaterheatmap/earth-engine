@@ -34,9 +34,6 @@ builtUpMultitemporal = builtUpMultitemporal.where(
 finimg.eq(1),6)
 
 
-
-
-
 var builtUpMultitemporal2= builtUpMultitemporal//.//resample()
 //.reduceResolution(
   // {reducer: ee.Reducer.max(), maxPixels: 65536, 
