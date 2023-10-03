@@ -75,7 +75,7 @@ function convolve_clamp_predictors(image) {
         })
     })
 
-    var convolved_clamped = convolved_predictors.clamp(-4, 4) //clamp to 3 standard deviations 
+    var convolved_clamped = convolved_predictors.clamp(-3, 3) //clamp to 3 standard deviations 
     return convolved_clamped
 }
  
