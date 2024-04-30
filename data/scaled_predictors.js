@@ -205,7 +205,11 @@ var reduced_predictors =
         predictor_stack_raw
     ) 
 
+
+
 print('reduced predictors', reduced_predictors)
+
+Export.table.toDrive(reduced_predictors)
 
 // Center and scale raw predictors 
 var centered_scaled_predictors = (
@@ -230,6 +234,10 @@ var roi = ee.FeatureCollection("projects/ee-swhm/assets/staging/ps_detailed_boun
 var samps = to_sample.sample({
   region:geometry2, scale:100, numPixels:10000, seed:55, 
   dropNulls:true, geometries:false})
+
+/*
 Export.table.toDrive(samps)
 Export.image.toAsset({image:centered_scaled_predictors,
 scale:10,maxPixels:1e12,region:PugetSound} )
+
+*/ 
