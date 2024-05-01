@@ -132,11 +132,17 @@ var scale_and_center_image = function(image) {
  
 //Age of Development
 //print(ghsl.select(0).projection())
-var devAge2 = ghsl.remap(
+var devAge = ghsl.remap(
  [2, 3, 4, 5, 6], 
  [0, 1, 2, 3, 4])
-    .pow(2)
-    .rename('devAge2')
+   // .pow(2)
+    .rename('devAge')
+    
+var devAge2 = devAge.pow(2)
+    
+
+var devAge = 4*dev_pre_1975 + 3*dev_1975_1990 + 2*dev_1990_2000 + 1*dev_2000_2014
+
 
 //Grass
 var grass = tncLC.eq(1)
@@ -150,8 +156,10 @@ var pm25_na = pm25_na.resample().reproject({crs:"EPSG:4326",scale:500})
 
 
 //resample to twice nominal resolution
-var sqrt_CO2_road = vulcan_onroad
-    .reduce('mean').resample().reproject({crs:"EPSG:4326",scale:500}).sqrt()
+var CO2_road = vulcan_onroad
+    .reduce('mean').resample().reproject({crs:"EPSG:4326",scale:500})
+
+var sqrt_CO2_road = CO2_road.sqrt()
 
 var sqrt_CO2_total = vulcan_total
 .reduce('mean').resample().reproject({crs:"EPSG:4326",scale:500}).sqrt()
@@ -159,11 +167,18 @@ var sqrt_CO2_total = vulcan_total
 // Traffic 
 // ** updated - Traffic is sqrt transformed
 var traffic = traffic.sqrt()
+var traffic_raw = traffic.pow(2)
+
+// var predictor_names = ['devAge2',
+//     'grass', 'paved', 'pm25_na',
+//     'sqrt_CO2_road', //'sqrt_CO2_total', 
+//     'sqrt_traffic'
+// ]
 
 var predictor_names = ['devAge2',
     'grass', 'paved', 'pm25_na',
-    'sqrt_CO2_road', //'sqrt_CO2_total', 
-    'sqrt_traffic'
+    'CO2_road', //'sqrt_CO2_total', 
+    'traffic_raw'
 ]
 
 // var clamp_values = ee.Dictionary
@@ -184,9 +199,11 @@ var predictor_stack_raw = ee.Image(0).blend(
         grass.rename('grass'),
         paved.rename('paved'),
         pm25_na.rename('pm25_na'),
-        sqrt_CO2_road.rename('sqrt_CO2_road'),
+        CO2_road.rename('CO2_road'),
+        //sqrt_CO2_road.rename('sqrt_CO2_road'),
        // sqrt_CO2_total.rename('sqrt_CO2_total'),
-        traffic.rename('traffic')
+        traffic_raw.rename('traffic_raw')
+        //traffic.rename('traffic')
     ))
 
 //print(predictor_stack_raw)
