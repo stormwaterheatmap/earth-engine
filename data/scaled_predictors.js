@@ -55,7 +55,7 @@ var pm25_na = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH3
 var palettes = require(
     'users/gena/packages:palettes');
 var scale = 30
-var radius = 1000
+//var radius = 1000
 var PugetSound = ee.FeatureCollection(
     "users/stormwaterheatmap/tables/PugetSound"
 )
@@ -139,9 +139,9 @@ var devAge = ghsl.remap(
     .rename('devAge')
     
 var devAge2 = devAge.pow(2)
-    
+Map.addLayer(devAge)
 
-var devAge = 4*dev_pre_1975 + 3*dev_1975_1990 + 2*dev_1990_2000 + 1*dev_2000_2014
+//var devAge = 4*dev_pre_1975 + 3*dev_1975_1990 + 2*dev_1990_2000 + 1*dev_2000_2014
 
 
 //Grass
@@ -195,7 +195,8 @@ var predictor_names = ['devAge2',
 //Generate an image stack of predictors
 var predictor_stack_raw = ee.Image(0).blend(
     ee.Image.cat(
-        devAge2.rename('devAge2'),
+        //devAge2.rename('devAge2'),
+        devAge.rename('devAge'),
         grass.rename('grass'),
         paved.rename('paved'),
         pm25_na.rename('pm25_na'),
