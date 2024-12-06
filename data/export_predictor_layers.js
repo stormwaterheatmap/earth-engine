@@ -53,7 +53,7 @@ var pm25_na = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH3
  * @fileoverview  Generates scaled and centered predictors for use in 
  * heatmap layers
  */
- \]
+ //\]
 
 //Helpers, etc. 
 var palettes = require(
@@ -154,15 +154,17 @@ var pm25_na = pm25_na.resample().reproject({crs:"EPSG:4326",scale:500})
 
 
 //resample to twice nominal resolution
-var sqrt_CO2_road = vulcan_onroad
-    .reduce('mean').resample().reproject({crs:"EPSG:4326",scale:500}).sqrt()
+var CO2_road = vulcan_onroad
+    .reduce('mean').resample().reproject({crs:"EPSG:4326",scale:500})
+    
+var sqrt_CO2_road =  CO2_road.sqrt().rename('sqrt_CO2_road')
 
 var sqrt_CO2_total = vulcan_total
 .reduce('mean').resample().reproject({crs:"EPSG:4326",scale:500}).sqrt()
 
 // Traffic 
 // ** updated - Traffic is sqrt transformed
-var traffic = traffic.sqrt()
+var sqrt_traffic = traffic.sqrt()
 
 var predictor_names = ['devAge2',
     'grass', 'paved', 'pm25_na',
@@ -179,6 +181,7 @@ var predictor_stack_raw = ee.Image(0).blend(
         pm25_na.rename('pm25_na'),
         sqrt_CO2_road.rename('sqrt_CO2_road'),
        // sqrt_CO2_total.rename('sqrt_CO2_total'),
+       sqrt_traffic.rename('sqrt_traffic'),
         traffic.rename('traffic')
     )).float()
 
