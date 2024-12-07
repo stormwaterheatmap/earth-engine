@@ -1,0 +1,14 @@
+var preds = require('users/stormwaterheatmap/apps:data/export_predictor_layers.js')
+
+var predictor_stack_raw=preds.predictor_stack_raw
+
+Map.addLayer(predictor_stack_raw)
+
+function reduce_to_sheds(shedFc){
+var reduced_predictors = predictors.reduceRegions({
+    reducer: ee.Reducer.mean(),
+    scale: 10,
+    collection: shedFc, // featureCollection of watersheds 
+})
+return reduced_predictors
+}
