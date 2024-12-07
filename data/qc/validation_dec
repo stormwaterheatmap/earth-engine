@@ -2,7 +2,7 @@
 var sheds = ee.FeatureCollection("projects/ee-swhm/assets/model_validation/validation_sheds_rev");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var preds = require('users/stormwaterheatmap/apps:data/export_predictor_layers.js')
-
+print(sheds)
 var predictors=preds.predictor_stack_raw
 
 Map.addLayer(predictors) 
@@ -10,7 +10,7 @@ Map.addLayer(predictors)
 var convolved_predictors = convolve_predictors(predictors) 
 Map.addLayer(convolved_predictors)
 
-print(convolved_predictors.bandNames())
+//print(convolved_predictors.bandNames())
 function reduce_to_sheds(shedFc){
 var reduced_predictors = convolved_predictors.reduceRegions({
     reducer: ee.Reducer.mean(),
@@ -36,6 +36,23 @@ function convolve_predictors(image) {
     return convolved_predictors
 }
 
-var results = sheds.map(reduce_to_sheds )
-print(results.first())
+var results = reduce_to_sheds(sheds)
+//print(results.first())
+var keep_props = 
+  [
+  "CO2_road_mean",
+  "devAge2_mean",
+  "grass_mean",
+  "paved_mean",
+  "pm25_na_mean",
+  "sqrt_CO2_road_mean",
+  "sqrt_traffic_mean",
+  "traffic_mean"
+]
 
+print(results)
+
+var filtered_results = ee.FeatureCollection(results).map(function(f){return f.select(keep_props)})
+
+print(filtered_results)
+Export.table.toDrive(filtered_results)
