@@ -40,6 +40,8 @@ var results = reduce_to_sheds(sheds)
 //print(results.first())
 var keep_props = 
   [
+    "Name",
+    "layer",
   "CO2_road_mean",
   "devAge2_mean",
   "grass_mean",
