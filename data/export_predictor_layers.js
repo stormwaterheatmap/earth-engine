@@ -128,11 +128,7 @@ var scale_and_center_image = function(image) {
 }
 
 //Get and stack predictor images -----------------------------------------------------------
-/** 
- * Note that two of the predictors were transformed prior to 
- * standardization: devAge2 is devAge^2, and sqrt_CO2_road is 
- * sqrt(CO2_road).  
- */ 
+
  
 //Age of Development
 //print(ghsl.select(0).projection())
@@ -166,11 +162,11 @@ var sqrt_CO2_total = vulcan_total
 // ** updated - Traffic is sqrt transformed
 var sqrt_traffic = traffic.sqrt()
 
-var predictor_names = ['devAge2',
-    'grass', 'paved', 'pm25_na',
-    'sqrt_CO2_road',  
-    'sqrt_traffic'
-]
+// var predictor_names = ['devAge2',
+//     'grass', 'paved', 'pm25_na',
+//     'sqrt_CO2_road',  
+//     'sqrt_traffic'
+// ]
 
 //Generate an image stack of predictors
 var predictor_stack_raw = ee.Image(0).blend(
@@ -179,6 +175,7 @@ var predictor_stack_raw = ee.Image(0).blend(
         grass.rename('grass'),
         paved.rename('paved'),
         pm25_na.rename('pm25_na'),
+        CO2_road.rename('CO2_road'),
         sqrt_CO2_road.rename('sqrt_CO2_road'),
        // sqrt_CO2_total.rename('sqrt_CO2_total'),
        sqrt_traffic.rename('sqrt_traffic'),
