@@ -185,6 +185,8 @@ var predictor_stack_raw = ee.Image(0).blend(
         traffic.rename('traffic')
     )).float()
 
-Map.addLayer(predictor_stack_raw)
+//Map.addLayer(predictor_stack_raw)
 var chart = ui.Chart.image.histogram({image:image.focal_mean(),region:geometry,scale:200,maxRaw:1e6})
-print(chart)
+//print(chart)
+
+exports.predictor_stack_raw = predictor_stack_raw
