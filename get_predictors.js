@@ -10,10 +10,10 @@
 //                2025-01-14, cwn - converted to javascript. 
 // Copyright (c) Geosyntec Consultants, 2021
 
-// Load required datasets from Google Earth Engine
+// Load  datasets from Google Earth Engine
 
 // Watersheds
-var watersheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/merged_validation_polygons");
+var watersheds = ee.FeatureCollection("projects/ee-swhm/assets/model_validation/validation_sheds");
 
 // Tree cover
 var tree_cover = ee.Image("USGS/NLCD/NLCD2016").select("percent_tree_cover");
