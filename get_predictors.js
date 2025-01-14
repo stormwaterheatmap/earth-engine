@@ -1,7 +1,7 @@
 // Header ---------------------------
 // Script name: get_predictors.js
 // Abstract: This script is used to get landscape predictors from Google Earth Engine
-// for use in stormwaterheatmap regressions.
+// for use to develop stormwaterheatmap regressions. This provides raw predictors (not scaled, centered, or convolved).  
 // Author: Christian Nilsen, Geosyntec Consultants
 // Email: cnilsen@geosyntec.com
 
@@ -91,10 +91,15 @@ var ee_stats = predictors.reduceRegions({
   scale: 30
 });
 
+//drop the geometries 
+ee_stats = ee_stats.map(function(feature) {
+  return feature.setGeometry(null)})
+  
 // Evaluate and print the results
 ee_stats.evaluate(function(result) {
   print(result);
 });
+
 
 // Map a specific predictor (example: Vulcan emissions)
 var map_image = predictors; // Replace with the desired predictor
