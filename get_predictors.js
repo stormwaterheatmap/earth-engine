@@ -6,6 +6,7 @@
 // Email: cnilsen@geosyntec.com
 // Date Created: 2021-01-24, Christian Nilsen
 // Date Modified: 2023-01-04, EDJ - added Vulcan_rail and Vulcan_cmv to saved csv file
+//                2025-01-14, cwn - converted to javascript. 
 // Copyright (c) Geosyntec Consultants, 2021
 
 // Load required datasets from Google Earth Engine
