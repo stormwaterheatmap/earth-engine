@@ -138,6 +138,12 @@ var devAge2 = ghsl.remap(
     .pow(2)
     .rename('devAge2')
 
+var devAge = ghsl.remap(
+ [1,2, 3, 4, 5, 6], 
+ [99,0, 1, 2, 3, 4])
+    //.pow(2)
+    .rename('devAge')
+
 //Grass
 var grass = tncLC.eq(1)
 
@@ -171,6 +177,7 @@ var sqrt_traffic = traffic.sqrt()
 //Generate an image stack of predictors
 var predictor_stack_raw = ee.Image(0).blend(
     ee.Image.cat(
+        devAge.
         devAge2.rename('devAge2'),
         grass.rename('grass'),
         paved.rename('paved'),
@@ -187,3 +194,5 @@ var chart = ui.Chart.image.histogram({image:image.focal_mean(),region:geometry,s
 //print(chart)
 
 exports.predictor_stack_raw = predictor_stack_raw
+
+Map.addLayer(predictor_stack_raw)
