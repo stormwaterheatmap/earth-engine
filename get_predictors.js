@@ -4,6 +4,7 @@
 // for use in stormwaterheatmap regressions.
 // Author: Christian Nilsen, Geosyntec Consultants
 // Email: cnilsen@geosyntec.com
+
 // Date Created: 2021-01-24, Christian Nilsen
 // Date Modified: 2023-01-04, EDJ - added Vulcan_rail and Vulcan_cmv to saved csv file
 //                2025-01-14, cwn - converted to javascript. 
@@ -12,7 +13,7 @@
 // Load required datasets from Google Earth Engine
 
 // Watersheds
-var watersheds = ee.FeatureCollection("projects/ee-swhm/assets/model_validation/validation_sheds_rev");
+var watersheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/merged_validation_polygons");
 
 // Tree cover
 var tree_cover = ee.Image("USGS/NLCD/NLCD2016").select("percent_tree_cover");
@@ -72,7 +73,7 @@ var percent_roofs_AG = roofs_landuse.eq(1).rename("roof_AG");
 // CO Emissions
 var Vulcan_total = ee.Image("users/stormwaterheatmap/Vulcan_total").reduce('mean').rename("CO_emissions_total");
 var Vulcan_cmv = ee.Image("users/stormwaterheatmap/Vulcan_cmv").reduce('mean').rename("CO_emissions_cmv");
-var Vulcan_onroad = ee.Image("users/stormwaterheatmap/Vulcan_onroad").reduce('mean').rename("CO_emissions_onroad")
+var Vulcan_onroad = ee.Image("users/stormwaterheatmap/Vulcan_onroad").reduce('mean').rename("CO_emissions_onroad").unmask()
 // PM 2.5 for specific regions
 var v4_pm25 = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH35-NoNegs").rename("PM25_NA");
 var sa = ee.Image("users/stormwaterheatmap/surface_area").rename("particulate_surface_area");
@@ -96,11 +97,11 @@ ee_stats.evaluate(function(result) {
 });
 
 // Map a specific predictor (example: Vulcan emissions)
-var map_image = Vulcan_cmv; // Replace with the desired predictor
-var map_viz = {min: 2, max: 7, palette: ['black', 'yellow', 'red'], opacity: 0.5};
+var map_image = predictors; // Replace with the desired predictor
+//var map_viz = {min: 2, max: 7, palette: ['black', 'yellow', 'red'], opacity: 0.5};
 Map.centerObject(watersheds, 7);
-Map.addLayer(map_image, map_viz);
-Map.addLayer(watersheds,{},'watersheds');
+Map.addLayer(map_image, {},'predictors');
+Map.addLayer(watersheds,{color:'red'},'watersheds');
 
 // Saving output as CSV (This would need server-side export in a real-world scenario)
 Export.table.toDrive({
