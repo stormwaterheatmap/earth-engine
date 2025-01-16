@@ -22,7 +22,7 @@ var watersheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/merg
 var tree_cover = ee.Image("USGS/NLCD/NLCD2016").select("percent_tree_cover");
 
 // Traffic
-var traffic = ee.Image(0).blend(ee.Image("users/cnilsen/traffic_raw")).rename("traffic");
+var traffic = ee.Image("projects/ee-swhm/assets/production_layers/Traffic").rename("traffic");
 
 // Population density
 var population = ee.Image("users/stormwaterheatmap/population_per_ha");
@@ -118,3 +118,6 @@ Export.table.toDrive({
   fileFormat: 'CSV'
 });
 print(Map.getScale())
+
+var chart = ui.Chart.feature.byProperty(ee_stats)
+print(chart)
