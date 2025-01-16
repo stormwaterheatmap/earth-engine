@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var watersheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/merged_validation_polygons");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // Header ---------------------------
 // Script name: get_predictors.js
 // Abstract: This script is used to get landscape predictors from Google Earth Engine
@@ -13,7 +16,7 @@
 // Load  datasets from Google Earth Engine
 
 // Watersheds
-var watersheds = ee.FeatureCollection("projects/ee-swhm/assets/model_validation/validation_sheds");
+
 
 // Tree cover
 var tree_cover = ee.Image("USGS/NLCD/NLCD2016").select("percent_tree_cover");
@@ -88,7 +91,7 @@ var predictors = ee.Image.cat([traffic,
 var ee_stats = predictors.reduceRegions({
   collection: watersheds,
   reducer: ee.Reducer.mean(),
-  scale: 30
+  scale: 1
 });
 
 //drop the geometries 
@@ -104,8 +107,8 @@ ee_stats.evaluate(function(result) {
 // Map a specific predictor (example: Vulcan emissions)
 var map_image = predictors; // Replace with the desired predictor
 //var map_viz = {min: 2, max: 7, palette: ['black', 'yellow', 'red'], opacity: 0.5};
-Map.centerObject(watersheds, 7);
-Map.addLayer(map_image, {},'predictors');
+//Map.centerObject(watersheds, 7);
+Map.addLayer(map_image.select('traffic').selfMask().focal_max(), {},'predictors');
 Map.addLayer(watersheds,{color:'red'},'watersheds');
 
 // Saving output as CSV (This would need server-side export in a real-world scenario)
@@ -114,3 +117,4 @@ Export.table.toDrive({
   description: 'Predictors_Export',
   fileFormat: 'CSV'
 });
+print(Map.getScale())
