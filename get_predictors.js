@@ -11,13 +11,14 @@ var watersheds = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/merg
 // Date Created: 2021-01-24, Christian Nilsen
 // Date Modified: 2023-01-04, EDJ - added Vulcan_rail and Vulcan_cmv to saved csv file
 //                2025-01-14, cwn - converted to javascript. 
+//                2025-04-28, cwn - Greenery extract for s8 sheds 
 // Copyright (c) Geosyntec Consultants, 2021
 
 // Load  datasets from Google Earth Engine
 
 // Watersheds
 
-
+var watersheds = ee.FeatureCollection("users/stormwaterheatmap/revised_s8_watersheds_v4").select(["Location_N", "Location"])
 // Tree cover
 var tree_cover = ee.Image("USGS/NLCD/NLCD2016").select("percent_tree_cover");
 
@@ -82,11 +83,13 @@ var v4_pm25 = ee.Image("users/stormwaterheatmap/V4NA03_PM25_NA_201001_201012-RH3
 var sa = ee.Image("users/stormwaterheatmap/surface_area").rename("particulate_surface_area");
 
 // Combine predictors into a single image
-var predictors = ee.Image.cat([traffic,
-  imp_ground, age_2000_2014, age_1990_2000, age_1975_1990, age_pre_1975,
-  Vulcan_onroad
-]);
+// var predictors = ee.Image.cat([traffic,
+//   imp_ground, age_2000_2014, age_1990_2000, age_1975_1990, age_pre_1975,
+//   Vulcan_onroad
+// ]);
 
+var predictors = tnc_landcover.eq(4); // bare earth 
+ 
 // Reduce regions to get statistics for each watershed
 var ee_stats = predictors.reduceRegions({
   collection: watersheds,
@@ -108,7 +111,7 @@ ee_stats.evaluate(function(result) {
 var map_image = predictors; // Replace with the desired predictor
 //var map_viz = {min: 2, max: 7, palette: ['black', 'yellow', 'red'], opacity: 0.5};
 //Map.centerObject(watersheds, 7);
-Map.addLayer(map_image.select('traffic').selfMask().focal_max(), {},'predictors');
+//Map.addLayer(map_image.select('traffic').selfMask().focal_max(), {},'predictors');
 Map.addLayer(watersheds,{color:'red'},'watersheds');
 
 // Saving output as CSV (This would need server-side export in a real-world scenario)
