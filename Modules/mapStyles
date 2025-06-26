@@ -25,14 +25,14 @@ exports.GRAYMAP = [
 ];
 
 
-
+//#052335
 exports.Dark = [
     {
         "featureType": "all",
         "elementType": "geometry.fill",
         "stylers": [
             {
-                "color": "#4d6059"
+                "color": "#052335"
             }
         ]
     },
