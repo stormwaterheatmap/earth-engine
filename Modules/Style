@@ -688,7 +688,7 @@ var mapStyles = {
             "featureType": "all",
             "elementType": "geometry.fill",
             "stylers": [{
-                "color": "#052335"//updated from 4d6059
+                "color": "#000001"//updated from 4d6059
             }]
         },
         {
