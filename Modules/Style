@@ -924,6 +924,6 @@ var mapStyles = {
 
 exports.mapStyles = mapStyles
 
-Map.setOptions('Light', mapStyles)
+Map.setOptions('Dark', mapStyles)
 
 //print(charts) 
