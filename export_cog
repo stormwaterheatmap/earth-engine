@@ -1,0 +1,31 @@
+// Import the layer data dictionary
+var data = require('users/stormwaterheatmap/apps:data/public')
+
+// To view data dictionary, print to the console:
+print('Data:', data)
+
+//Get this layer from the layer data dictionary: 
+var layer_name = data.rasters["Age of Imperviousness"]
+var raw_image = layer_name.layer.eeObject.selfMask()
+Map.addLayer(raw_image,{},'Age of Imperviousness')
+
+//Export to databucket 
+//formatOptions (ImageExportFormatConfig, optional):
+//A dictionary of string keys to format-specific options. For 'GeoTIFF': 'cloudOptimized'
+
+//(Boolean), 'noData' (float). 
+var bucket = 'swhm-ee-exports' 
+
+var asset_name = layer_name.safe_name
+var scale = raw_image.projection().nominalScale()
+var prefix = 'staging/'+'asset_name'+'/'+asset_name
+print(prefix)
+
+var formatOptions = {cloudOptimized: true, noData: 0}
+
+Export.image.toCloudStorage({
+  image:raw_image, 
+  bucket: bucket, 
+  scale:scale, 
+  fileFormat: 'GeoTIFF', 
+  formatOptions: formatOptions})
