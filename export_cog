@@ -1,31 +1,44 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("projects/ee-stormwaterheatmap/assets/PugetSound_WA"),
+    psMask = ee.Image("projects/ee-stormwaterheatmap/assets/PugetSoundMask");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // Import the layer data dictionary
 var data = require('users/stormwaterheatmap/apps:data/public')
+var layers = data.rasters
+var layerNames =Object.keys(layers);
 
-// To view data dictionary, print to the console:
-print('Data:', data)
+layerNames = layerNames.slice(3,4)
 
-//Get this layer from the layer data dictionary: 
-var layer_name = data.rasters["Age of Imperviousness"]
-var raw_image = layer_name.layer.eeObject.selfMask()
-Map.addLayer(raw_image,{},'Age of Imperviousness')
-
-//Export to databucket 
-//formatOptions (ImageExportFormatConfig, optional):
-//A dictionary of string keys to format-specific options. For 'GeoTIFF': 'cloudOptimized'
-
-//(Boolean), 'noData' (float). 
-var bucket = 'swhm-ee-exports' 
-
-var asset_name = layer_name.safe_name
-var scale = raw_image.projection().nominalScale()
-var prefix = 'staging/'+'asset_name'+'/'+asset_name
-print(prefix)
-
+print(layerNames)
 var formatOptions = {cloudOptimized: true, noData: 0}
+var bucket = 'swhm-ee-exports' 
+// Optionally print each name individually
+
+layerNames.forEach(function(lay) {
+  var obj = layers[lay]
+  var display_name = lay 
+  var scale = obj.scale 
+  var safe_name = obj.safe_name 
+  var img = obj.layer.eeObject.mask(psMask).rename(safe_name)
+  obj.layer.eeObject = img
+  var asset_name = display_name
+  var prefix = 'staging/'+asset_name+'/'+asset_name
+
+
+
+
 
 Export.image.toCloudStorage({
-  image:raw_image, 
+  image:img, 
+  description: asset_name,
   bucket: bucket, 
+  skipEmptyTiles: true, 
+  maxPixels: 1e10,
+  region: table, 
   scale:scale, 
   fileFormat: 'GeoTIFF', 
+  fileNamePrefix: prefix,
   formatOptions: formatOptions})
+  
+  
+});
